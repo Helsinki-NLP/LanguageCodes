@@ -20,6 +20,7 @@ my %WriteMakefileArgs = (
         #'ABC'              => '1.6',
         #'Foo::Bar::Module' => '5.0401',
     },
+    EXE_FILES => [ 'bin/iso639' ],
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'ISO-639_3-*' },
 );

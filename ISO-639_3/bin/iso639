@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!perl
 #-*-perl-*-
 #
 # convert between 2-letter and 3-letter language codes
