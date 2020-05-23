@@ -17,8 +17,10 @@ my %WriteMakefileArgs = (
         'Test::More' => '0',
     },
     PREREQ_PM => {
-        #'ABC'              => '1.6',
-        #'Foo::Bar::Module' => '5.0401',
+	'utf8'        => 0,
+	'Getopt::Std' => 0,
+	'open'        => 0,
+	'Exporter'    => 0,
     },
     EXE_FILES => [ 'bin/iso639' ],
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
