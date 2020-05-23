@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+#-*-perl-*-
+#
+# convert between 2-letter and 3-letter language codes
+#
+# USAGE: ./iso639 [-2|-3|-m] [langcode]*
+#
+# convert to 3-letter-code if 2-letter code is given and vice versa
+# -2 ... print 2-letter code (even if the input is a 2-letter code)
+# -3 ... print 3-letter code (even if the input is a 3-letter code)
+# -m ... print macro language instead of local language variants
+# -n ... don't print a final new-line
+#
+
+# use 5.006;
+use strict;
+use warnings;
+
+use lib 'lib';
+use ISO::639_3 qw/:all/;
+
+use open ':locale';
+use vars qw($opt_2 $opt_3 $opt_m $opt_n);
+use Getopt::Std;
+
+&getopts('23mn');
+
+my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
+my @converted = map($_ = convert_iso639($type,$_), @ARGV);
+if ($type eq 'name' and @converted){
+    print '"',join('" "',@converted),'"';
+}
+else{
+    print join(' ',@converted);
+}
+print "\n" unless ($opt_n);

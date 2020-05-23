@@ -1,0 +1,368 @@
+#!/usr/bin/env perl
+#-*-perl-*-
+#
+# convert between 2-letter and 3-letter language codes
+#
+# USAGE: ./iso639 [-2|-3|-m] [langcode]*
+#
+# convert to 3-letter-code if 2-letter code is given and vice versa
+# -2 ... print 2-letter code (even if the input is a 2-letter code)
+# -3 ... print 3-letter code (even if the input is a 3-letter code)
+# -m ... print macro language instead of local language variants
+# -n ... don't print a final new-line
+#
+
+## make this a module
+package ISO::639_3;
+
+# use 5.006;
+use strict;
+use warnings;
+
+use utf8;
+use open ':locale';
+use vars qw($opt_2 $opt_3 $opt_m $opt_n);
+use Getopt::Std;
+
+=head1 NAME
+
+ISO::639_3 - The great new ISO::639_3!
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION      = '0.01';
+
+use Exporter 'import';
+our @EXPORT = qw(
+    convert_iso639
+    get_iso639_1
+    get_iso639_3
+    get_macro_language
+    get_language_name
+);
+our %EXPORT_TAGS = ( all => \@EXPORT );
+
+
+=head1 SYNOPSIS
+
+The module provides simple functions for retrieving language names and codes from the ISO-639 standards. The main purpose is to convert between different variants of codes and to get the English names of languages from codes. The module contains basic functions. There is no object-oriented interface. All functions can be exported.
+
+    use ISO::639_3 qw/:all/;
+
+    print convert_iso639( 'iso639-1', 'fra' );
+    print convert_iso639( 'iso639-3', 'de' );
+    print convert_iso639( 'name', 'fa' );
+
+    print get_iso639_1( 'deu' );
+    print get_iso639_3( 'de' );
+    print get_language_name( 'de' );
+    print get_language_name( 'eng' );
+    print get_macro_language( 'yue' );
+
+The module can be run as a script:
+
+  perl ISO/639_3.pm [OPTIONS] LANGCODE*
+
+This converts all language codes given as LANGCODE to corresponding language names. OPTIONS can be set to convert between different variants of language codes or to convert from language names to codes.
+
+=head2 OPTIONS
+
+  -2: convert to two-letter code (ISO 639-1)
+  -3: convert to three-letter code (ISO 639-3)
+  -m: convert to three-letter code but return the macro-language if available (ISO 639-3)
+
+=back
+
+=cut
+
+our %TwoToThree   = ();
+our %ThreeToTwo   = ();
+our %ThreeToThree = ();
+our %ThreeToMacro = ();
+our %NameToTwo    = ();
+our %NameToThree  = ();
+our %TwoToName    = ();
+our %ThreeToName  = ();
+
+&_read_iso639_codes;
+
+## run the script if not called as a module
+__PACKAGE__->run() unless caller();
+
+## function to run if this is used as a script
+sub run{
+    &getopts('23mn');
+    my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
+    my @converted = map($_ = convert_iso639($type,$_), @ARGV);
+    if ($type eq 'name' and @converted){
+	print '"',join('" "',@converted),'"';
+    }
+    else{
+	print join(' ',@converted);
+    }
+    print "\n" unless ($opt_n);
+}
+
+
+=head1 SUBROUTINES
+
+=head2 $converted = convert_iso639( $type, $id )
+
+Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name. Regional codes are stripped from the input language ID.
+
+=cut
+
+sub convert_iso639{
+    my $code = lc($_[1]);
+    $code=~s/[\-\_].*$//;
+    return get_iso639_1($code)       if ($_[0] eq 'iso639-1');
+    return get_iso639_3($code)       if ($_[0] eq 'iso639-3');
+    return get_macro_language($code) if ($_[0] eq 'macro');
+    return get_language_name($code);
+}
+
+
+=head2 $iso639_1 = get_iso639_1( $id )
+
+Return the ISO 639-1 code for a given language or three-letter code. Returns the same code if it is a ISO 639-1 code or 'xx' if it is not recognized.
+
+=cut
+
+sub get_iso639_1{
+    return $ThreeToTwo{$_[0]}    if (exists $ThreeToTwo{$_[0]});
+    return $NameToTwo{lc($_[0])} if (exists $NameToTwo{lc($_[0])});
+    return $_[0]                 if (exists $TwoToThree{$_[0]});
+    ## TODO: is it OK to fallback to macro language in this conversion?
+    ##       (should we add some regional code?)
+    if (exists $ThreeToMacro{$_[0]}){
+	return $ThreeToTwo{$ThreeToMacro{$_[0]}} 
+	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
+    }
+    return 'xx';
+}
+
+=head2 $iso639_3 = get_iso639_3( $id )
+
+Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx' if the code is not recognized.
+
+=cut
+
+sub get_iso639_3{
+    return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
+    return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
+    return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
+    return 'xxx';
+}
+
+
+=head2 $macro_language = get_macro_language( $id )
+
+Return the ISO 639-3 code of the macro language for a given language or any ISO 639 code. Returns 'xxx' if the code is not recognized.
+
+=cut
+
+
+sub get_macro_language{
+    my $code = get_iso639_3($_[0]);
+    return $ThreeToMacro{$code} if (exists $ThreeToMacro{$code});
+    return $code;
+}
+
+=head2 $language = get_language_name( $id )
+
+Return the name of the language that corresponds to the given language code (any ISO639 code)
+
+=cut
+
+sub get_language_name{
+    return $TwoToName{$_[0]}   if (exists $TwoToName{$_[0]});
+    return $ThreeToName{$_[0]} if (exists $ThreeToName{$_[0]});
+    return $_[0]               if (exists $NameToThree{$_[0]});
+    return 'unknown';
+}
+
+
+
+
+
+
+
+
+####################################
+# internal functions that
+# read all codes from the data part
+####################################
+
+## read all codes
+sub _read_iso639_codes{
+    while (<DATA>){
+	chomp;
+	next unless($_);
+	my @f = split(/\t/);
+	if ($f[1] eq 'Part2B'){
+	    &_read_main_code_table();
+	}
+	elsif ($f[0] eq 'M_Id'){
+	    &_read_macrolanguage_table();
+	}
+	elsif ($f[0] eq 'NS_Id'){
+	    &_read_nonstandard_code_table();
+	}
+	elsif ($f[4] eq 'Ret_Remedy'){
+	    &_read_retired_code_table();
+	}
+    }
+}
+
+
+sub _read_retired_code_table{    
+    ## retired codes
+    # print STDERR "read retired";
+    while (<DATA>){
+	chomp;
+	last unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	unless (exists $ThreeToThree{$f[0]}){
+	    $ThreeToName{$f[0]} = $f[1];
+	    $ThreeToThree{$f[0]} = $f[2] ? $f[2] : $f[0];
+	}
+    }
+}
+
+sub _read_macrolanguage_table{    
+    ## macro-languages
+    # print STDERR "read macrolanguages";
+    while (<DATA>){
+	chomp;
+	last unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	$ThreeToThree{$f[1]} = $f[1];
+	$ThreeToMacro{$f[1]} = $f[0];
+    }
+}
+
+
+sub _read_nonstandard_code_table{    
+    ## non-standard codes
+    # print STDERR "read non-standard codes";
+    while (<DATA>){
+	chomp;
+	last unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	unless (exists $ThreeToThree{$f[0]}){
+	    $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
+	    if ($f[2]){
+		$ThreeToTwo{$f[0]}   = $f[2];
+		$TwoToThree{$f[2]}   = $f[0];
+	    }
+	    $ThreeToMacro{$f[0]} = $f[3] if ($f[3]);
+	    if ($f[4]){
+		$ThreeToName{$f[0]}     = $f[4];
+		$NameToThree{lc($f[4])} = $f[0];
+		$NameToTwo{lc($f[4])}   = $f[2] if ($f[2]);
+	    }
+	}
+    }
+}
+
+
+sub _read_main_code_table{
+    while (<DATA>){
+	chomp;
+	return unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	$ThreeToName{$f[0]} = $f[6];
+	$ThreeToThree{$f[0]} = $f[0];
+	$NameToThree{lc($f[6])} = $f[0];
+	if ($f[3]){
+	    $ThreeToTwo{$f[0]}    = $f[3];
+	    $TwoToThree{$f[3]}    = $f[0];
+	    $TwoToName{$f[3]}     = $f[6];
+	    $NameToTwo{lc($f[6])} = $f[3];
+	}
+	if ($f[1]){
+	    $ThreeToThree{$f[1]} = $f[0];
+	    $ThreeToName{$f[1]} = $f[6];
+	    if ($f[3]){
+		$ThreeToTwo{$f[1]} = $f[3];
+	    }
+	}
+	if ($f[2]){
+	    $ThreeToThree{$f[2]} = $f[0];
+	    $ThreeToName{$f[2]} = $f[6];
+	    if ($f[3]){
+		$ThreeToTwo{$f[2]} = $f[3];
+	    }
+	}
+    }
+}
+
+=head1 AUTHOR
+
+Joerg Tiedemann, C<< <tiedemann at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-iso-639_3 at rt.cpan.org>, or through
+the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=ISO-639_3>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc ISO::639_3
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=ISO-639_3>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ISO-639_3>
+
+=item * CPAN Ratings
+
+L<https://cpanratings.perl.org/d/ISO-639_3>
+
+=item * Search CPAN
+
+L<https://metacpan.org/release/ISO-639_3>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+The language codes are taken from SIL International L<https://iso639-3.sil.org>. Please, check the terms of use listed at L<https://iso639-3.sil.org/code_tables/download_tables>. The current version uses the UTF-8 tables distributed in C< iso-639-3_Code_Tables_20200130.zip> from that website. This module adds some non-standard codes that are not specified in the original tables to be compatible with some ad-hoc solutions in some resources and tools.
+
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is Copyright (c) 2020 by Joerg Tiedemann.
+
+This is free software, licensed under:
+
+  The Artistic License 2.0 (GPL Compatible)
+
+
+=cut
+
+1; # End of ISO::639_3
+
+__DATA__
+
