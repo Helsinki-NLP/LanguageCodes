@@ -26,7 +26,7 @@ use Getopt::Std;
 
 =head1 NAME
 
-ISO::639_3 - The great new ISO::639_3!
+ISO::639_3 - Language codes and names from ISO::639
 
 =head1 VERSION
 
