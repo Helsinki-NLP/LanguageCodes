@@ -8,7 +8,7 @@ my %WriteMakefileArgs = (
     AUTHOR           => q{Joerg Tiedemann <tiedemann@cpan.org>},
     VERSION_FROM     => 'lib/ISO/639_3.pm',
     ABSTRACT_FROM    => 'lib/ISO/639_3.pm',
-    LICENSE          => 'artistic_2',
+    LICENSE          => 'MIT',
     MIN_PERL_VERSION => '5.006',
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => '0',
@@ -17,10 +17,11 @@ my %WriteMakefileArgs = (
         'Test::More' => '0',
     },
     PREREQ_PM => {
-	'utf8'        => 0,
+	'Exporter'    => 0,
 	'Getopt::Std' => 0,
 	'open'        => 0,
-	'Exporter'    => 0,
+	'Pod::Usage'  => 0,
+	'utf8'        => 0,
     },
     EXE_FILES => [ 'bin/iso639' ],
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

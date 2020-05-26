@@ -21,8 +21,9 @@ use warnings;
 
 use utf8;
 use open ':locale';
-use vars qw($opt_2 $opt_3 $opt_m $opt_n);
+use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n);
 use Getopt::Std;
+use Pod::Usage;
 
 =head1 NAME
 
@@ -74,8 +75,7 @@ This converts all language codes given as LANGCODE to corresponding language nam
   -2: convert to two-letter code (ISO 639-1)
   -3: convert to three-letter code (ISO 639-3)
   -m: convert to three-letter code but return the macro-language if available (ISO 639-3)
-
-=back
+  -n: don't print a final new line
 
 =cut
 
@@ -95,7 +95,10 @@ __PACKAGE__->run() unless caller();
 
 ## function to run if this is used as a script
 sub run{
-    &getopts('23mn');
+    &getopts('23hmn');
+    # pod2usage( { -verbose => 2 } ) if ($opt_h);
+    pod2usage if ($opt_h);
+
     my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
     my @converted = map($_ = convert_iso639($type,$_), @ARGV);
     if ($type eq 'name' and @converted){
@@ -353,12 +356,27 @@ The language codes are taken from SIL International L<https://iso639-3.sil.org>.
 
 =head1 LICENSE AND COPYRIGHT
 
-This software is Copyright (c) 2020 by Joerg Tiedemann.
+ ---------------------------------------------------------------------------
+ Copyright (c) 2020 Joerg Tiedemann
 
-This is free software, licensed under:
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-  The Artistic License 2.0 (GPL Compatible)
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ ---------------------------------------------------------------------------
 
 =cut
 
