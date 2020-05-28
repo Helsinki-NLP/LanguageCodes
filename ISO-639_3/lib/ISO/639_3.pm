@@ -77,6 +77,7 @@ This converts all language codes given as LANGCODE to corresponding language nam
   -3: convert to three-letter code (ISO 639-3)
   -m: convert to three-letter code but return the macro-language if available (ISO 639-3)
   -n: don't print a final new line
+  -k: keep original code if no mapping is found
 
 =cut
 
