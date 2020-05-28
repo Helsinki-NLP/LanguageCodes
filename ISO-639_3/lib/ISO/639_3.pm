@@ -10,6 +10,7 @@
 # -3 ... print 3-letter code (even if the input is a 3-letter code)
 # -m ... print macro language instead of local language variants
 # -n ... don't print a final new-line
+# -k ... keep original code if no mapping is found
 #
 
 ## make this a module
@@ -21,7 +22,7 @@ use warnings;
 
 use utf8;
 use open ':locale';
-use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n);
+use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
 use Getopt::Std;
 use Pod::Usage;
 
@@ -95,12 +96,12 @@ __PACKAGE__->run() unless caller();
 
 ## function to run if this is used as a script
 sub run{
-    &getopts('23hmn');
+    &getopts('23hkmn');
     # pod2usage( { -verbose => 2 } ) if ($opt_h);
     pod2usage if ($opt_h);
 
     my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
-    my @converted = map($_ = convert_iso639($type,$_), @ARGV);
+    my @converted = map($_ = convert_iso639($type,$_,$opt_k), @ARGV);
     if ($type eq 'name' and @converted){
 	print '"',join('" "',@converted),'"';
     }
@@ -122,9 +123,9 @@ Convert the language code or language name given in C<$id>. The C<$type> specifi
 sub convert_iso639{
     my $code = lc($_[1]);
     # $code=~s/[\-\_].*$//;
-    return get_iso639_1($code)       if ($_[0] eq 'iso639-1');
-    return get_iso639_3($code)       if ($_[0] eq 'iso639-3');
-    return get_macro_language($code) if ($_[0] eq 'macro');
+    return get_iso639_1($code,$_[2])       if ($_[0] eq 'iso639-1');
+    return get_iso639_3($code,$_[2])       if ($_[0] eq 'iso639-3');
+    return get_macro_language($code,$_[2]) if ($_[0] eq 'macro');
     return get_language_name($code);
 }
 
@@ -146,7 +147,9 @@ sub get_iso639_1{
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
     ## try without regional extension
-    return &get_iso639_1($_[0]) if ($_[0]=~s/[\-\_].*$//);
+    my $code = $_[0];
+    return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
+    return $_[0] if ($_[1]);
     return 'xx';
 }
 
@@ -160,7 +163,10 @@ sub get_iso639_3{
     return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
     return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
     return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
-    return &get_iso639_3($_[0])    if ($_[0]=~s/[\-\_].*$//);
+
+    my $code = $_[0];
+    return &get_iso639_3($code)    if ($code=~s/[\-\_].*$//);
+    return $_[0] if ($_[1]);
     return 'xxx';
 }
 
@@ -173,7 +179,7 @@ Return the ISO 639-3 code of the macro language for a given language or any ISO 
 
 
 sub get_macro_language{
-    my $code = get_iso639_3($_[0]);
+    my $code = get_iso639_3($_[0],$_[1]);
     return $ThreeToMacro{$code} if (exists $ThreeToMacro{$code});
     return $code;
 }

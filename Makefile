@@ -54,5 +54,21 @@ OPUSLANGS = fi sv fr es de ar he cmn cn yue zhs zht zh ze_zh zh_cn zh_CN zh_HK z
 
 test: iso639
 	@echo '${OPUSLANGS}' | tr ' ' "\n"  | grep . > tt1
-	@./iso639 -3 ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@./iso639 ${OPUSLANGS} | tr ' ' "\n"  > tt2
 	@paste tt1 tt2
+
+test-2: iso639
+	@echo '${OPUSLANGS}' | tr ' ' "\n"  | grep . > tt1
+	@./iso639 -2 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@paste tt1 tt2
+
+test-3: iso639
+	@echo '${OPUSLANGS}' | tr ' ' "\n"  | grep . > tt1
+	@./iso639 -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@paste tt1 tt2
+
+test-m: iso639
+	@echo '${OPUSLANGS}' | tr ' ' "\n"  | grep . > tt1
+	@./iso639 -m -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@paste tt1 tt2
+
