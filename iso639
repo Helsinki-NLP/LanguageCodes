@@ -115,13 +115,13 @@ sub run{
 
 =head2 $converted = convert_iso639( $type, $id )
 
-Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name. Regional codes are stripped from the input language ID.
+Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name.
 
 =cut
 
 sub convert_iso639{
     my $code = lc($_[1]);
-    $code=~s/[\-\_].*$//;
+    # $code=~s/[\-\_].*$//;
     return get_iso639_1($code)       if ($_[0] eq 'iso639-1');
     return get_iso639_3($code)       if ($_[0] eq 'iso639-3');
     return get_macro_language($code) if ($_[0] eq 'macro');
@@ -145,6 +145,8 @@ sub get_iso639_1{
 	return $ThreeToTwo{$ThreeToMacro{$_[0]}} 
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
+    ## try without regional extension
+    return &get_iso639_1($_[0]) if ($_[0]=~s/[\-\_].*$//);
     return 'xx';
 }
 
@@ -158,6 +160,7 @@ sub get_iso639_3{
     return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
     return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
     return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
+    return &get_iso639_3($_[0])    if ($_[0]=~s/[\-\_].*$//);
     return 'xxx';
 }
 
@@ -182,9 +185,10 @@ Return the name of the language that corresponds to the given language code (any
 =cut
 
 sub get_language_name{
-    return $TwoToName{$_[0]}   if (exists $TwoToName{$_[0]});
-    return $ThreeToName{$_[0]} if (exists $ThreeToName{$_[0]});
-    return $_[0]               if (exists $NameToThree{$_[0]});
+    return $TwoToName{$_[0]}         if (exists $TwoToName{$_[0]});
+    return $ThreeToName{$_[0]}       if (exists $ThreeToName{$_[0]});
+    return $_[0]                     if (exists $NameToThree{$_[0]});
+    return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
     return 'unknown';
 }
 
@@ -215,6 +219,9 @@ sub _read_iso639_codes{
 	elsif ($f[0] eq 'NS_Id'){
 	    &_read_nonstandard_code_table();
 	}
+	elsif ($f[0] eq 'C_Id'){
+	    &_read_collective_language_table();
+	}
 	elsif ($f[4] eq 'Ret_Remedy'){
 	    &_read_retired_code_table();
 	}
@@ -232,7 +239,7 @@ sub _read_retired_code_table{
 	next unless ($f[0]);
 	unless (exists $ThreeToThree{$f[0]}){
 	    $ThreeToName{$f[0]} = $f[1];
-	    $ThreeToThree{$f[0]} = $f[2] ? $f[2] : $f[0];
+	    $ThreeToThree{$f[0]} = $f[3] ? $f[3] : $f[0];
 	}
     }
 }
@@ -250,6 +257,31 @@ sub _read_macrolanguage_table{
     }
 }
 
+sub _read_collective_language_table{
+    ## collective languages from ISO639-2
+    # print STDERR "read collective language codes";
+    while (<DATA>){
+	chomp;
+	last unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	unless (exists $ThreeToThree{$f[0]}){
+	    $ThreeToThree{$f[0]} = $f[0];
+	    if ($f[1]){
+		$ThreeToTwo{$f[0]} = $f[1];
+		$TwoToThree{$f[1]} = $f[0];
+		if ($f[2]){
+		    $TwoToName{$f[1]} = $f[2];
+		    $NameToTwo{$f[2]} = $f[1];
+		}
+	    }
+	    if ($f[2]){
+		$ThreeToName{$f[0]} = $f[2];
+		$NameToThree{$f[2]} = $f[0];
+	    }
+	}
+    }
+}
 
 sub _read_nonstandard_code_table{    
     ## non-standard codes
@@ -263,13 +295,22 @@ sub _read_nonstandard_code_table{
 	    $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
 	    if ($f[2]){
 		$ThreeToTwo{$f[0]}   = $f[2];
-		$TwoToThree{$f[2]}   = $f[0];
 	    }
 	    $ThreeToMacro{$f[0]} = $f[3] if ($f[3]);
 	    if ($f[4]){
 		$ThreeToName{$f[0]}     = $f[4];
-		$NameToThree{lc($f[4])} = $f[0];
-		$NameToTwo{lc($f[4])}   = $f[2] if ($f[2]);
+	    }
+	}
+	if ($f[4]){
+	    $NameToThree{lc($f[4])} = $f[0] unless (exists $NameToThree{$f[4]});
+	    if ($f[2]){
+		$NameToTwo{lc($f[4])} = $f[2] unless (exists $NameToTwo{$f[4]});
+	    }
+	}
+	if ($f[2]){
+	    $TwoToThree{$f[2]} = $f[0] unless (exists $TwoToThree{$f[2]});
+	    if ($f[4]){
+		$TwoToName{$f[2]} = $f[4] unless (exists $TwoToName{$f[2]});
 	    }
 	}
     }
@@ -8710,6 +8751,20 @@ zza	kiu	A
 
 NS_Id	Id	Part1	M_Id	Ref_Name
 pob		pt_br	por	Brazilian Portuguese
+cmn-hans		zh_cn	zho	Chinese Mandarin (simplified)
+cmn-hant		zh_tw	zho	Chinese Mandarin (traditional)
+yue-hant		zh_hk	zho	Cantonese
+eng-simple		simple	eng	Simplified English
+ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles
+jpn		jp	jpn	Japanese	# misspelled 2-letter code
+ces		cz	ces	Czech	# misspelled 2-letter code
+zhs		zh_cn	zho	Chinese (simplified)
+zht		zh_tw	zho	Chinese (traditional)
+gre		gr	ell	Greek
+cycl				Cyc Language
+cnr		me	cnr	Montenegrin
+mol		mo	ron	Moldavian
+toki				Toki Pona
 
 
 Id	Ref_Name	Ret_Reason	Change_To	Ret_Remedy	Effective
@@ -9065,3 +9120,70 @@ tbb	Tapeba	N			2020-01-23
 xrq	Karranga	M	dmw		2020-01-23
 xtz	Tasmanian	S		Split into [xpv] Northern Tasman,  [xph] North Midlands Tasman, [xpb] Northeastern Tasman, [xpd] Oyster Bay Tasmanian, [xpf] Southeast Tasma, [xpx] Southwestern Tasman, [xpw] Northwestern Tasman., [xpl] Port Sorell Tasman. and [xpz] Bruny Island Tasman.	2020-01-23
 zir	Ziriya	D	scv		2020-01-23
+
+C_Id	Part1	Ref_name
+afa		Afro-Asiatic languages
+alg		Algonquian languages
+apa		Apache languages
+art		artificial languages
+ath		Athapascan languages
+aus		Australian languages
+bad		Banda languages
+bai		Bamileke languages
+bat		Baltic languages
+ber		Berber languages
+bih	bh	Bihari languages
+bnt		Bantu languages
+btk		Batak languages
+cai		Central American Indian languages
+cau		Caucasian languages
+cel		Celtic languages
+cmc		Chamic languages
+cpe		creoles and pidgins, English-based
+cpf		creoles and pidgins, French-based
+cpp		creoles and pidgins, Portuguese-based
+crp		creoles and pidgins
+cus		Cushitic languages
+day		Land Dayak languages
+dra		Dravidian languages
+fiu		Finno-Ugrian languages
+gem		Germanic languages
+ijo		Ijo languages
+inc		Indic languages
+ine		Indo-European languages
+ira		Iranian languages
+iro		Iroquoian languages
+kar		Karen languages
+khi		Khoisan languages
+kro		Kru languages
+map		Austronesian languages
+mkh		Mon–Khmer languages
+mno		Manobo languages
+mun		Munda languages
+myn		Mayan languages
+nah		Nahuatl languages
+nai		North American Indian languages
+nic		Niger-Kordofanian languages
+nub		Nubian languages
+oto		Otomian languages
+paa		Papuan languages
+phi		Philippine languages
+pra		Prakrit languages
+roa		Romance languages
+sai		South American Indian languages
+sal		Salishan languages
+sem		Semitic languages
+sgn		sign languages
+sio		Siouan languages
+sit		Sino-Tibetan languages
+sla		Slavic languages
+smi		Sami languages
+son		Songhai languages
+ssa		Nilo-Saharan languages
+tai		Tai languages
+tup		Tupi languages
+tut		Altaic languages
+wak		Wakashan languages
+wen		Sorbian languages
+ypk		Yupik languages
+znd		Zande languages

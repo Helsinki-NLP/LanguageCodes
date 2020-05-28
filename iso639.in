@@ -115,13 +115,13 @@ sub run{
 
 =head2 $converted = convert_iso639( $type, $id )
 
-Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name. Regional codes are stripped from the input language ID.
+Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name.
 
 =cut
 
 sub convert_iso639{
     my $code = lc($_[1]);
-    $code=~s/[\-\_].*$//;
+    # $code=~s/[\-\_].*$//;
     return get_iso639_1($code)       if ($_[0] eq 'iso639-1');
     return get_iso639_3($code)       if ($_[0] eq 'iso639-3');
     return get_macro_language($code) if ($_[0] eq 'macro');
@@ -145,6 +145,8 @@ sub get_iso639_1{
 	return $ThreeToTwo{$ThreeToMacro{$_[0]}} 
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
+    ## try without regional extension
+    return &get_iso639_1($_[0]) if ($_[0]=~s/[\-\_].*$//);
     return 'xx';
 }
 
@@ -158,6 +160,7 @@ sub get_iso639_3{
     return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
     return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
     return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
+    return &get_iso639_3($_[0])    if ($_[0]=~s/[\-\_].*$//);
     return 'xxx';
 }
 
@@ -182,9 +185,10 @@ Return the name of the language that corresponds to the given language code (any
 =cut
 
 sub get_language_name{
-    return $TwoToName{$_[0]}   if (exists $TwoToName{$_[0]});
-    return $ThreeToName{$_[0]} if (exists $ThreeToName{$_[0]});
-    return $_[0]               if (exists $NameToThree{$_[0]});
+    return $TwoToName{$_[0]}         if (exists $TwoToName{$_[0]});
+    return $ThreeToName{$_[0]}       if (exists $ThreeToName{$_[0]});
+    return $_[0]                     if (exists $NameToThree{$_[0]});
+    return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
     return 'unknown';
 }
 
@@ -215,6 +219,9 @@ sub _read_iso639_codes{
 	elsif ($f[0] eq 'NS_Id'){
 	    &_read_nonstandard_code_table();
 	}
+	elsif ($f[0] eq 'C_Id'){
+	    &_read_collective_language_table();
+	}
 	elsif ($f[4] eq 'Ret_Remedy'){
 	    &_read_retired_code_table();
 	}
@@ -232,7 +239,7 @@ sub _read_retired_code_table{
 	next unless ($f[0]);
 	unless (exists $ThreeToThree{$f[0]}){
 	    $ThreeToName{$f[0]} = $f[1];
-	    $ThreeToThree{$f[0]} = $f[2] ? $f[2] : $f[0];
+	    $ThreeToThree{$f[0]} = $f[3] ? $f[3] : $f[0];
 	}
     }
 }
@@ -250,6 +257,31 @@ sub _read_macrolanguage_table{
     }
 }
 
+sub _read_collective_language_table{
+    ## collective languages from ISO639-2
+    # print STDERR "read collective language codes";
+    while (<DATA>){
+	chomp;
+	last unless ($_);
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	unless (exists $ThreeToThree{$f[0]}){
+	    $ThreeToThree{$f[0]} = $f[0];
+	    if ($f[1]){
+		$ThreeToTwo{$f[0]} = $f[1];
+		$TwoToThree{$f[1]} = $f[0];
+		if ($f[2]){
+		    $TwoToName{$f[1]} = $f[2];
+		    $NameToTwo{$f[2]} = $f[1];
+		}
+	    }
+	    if ($f[2]){
+		$ThreeToName{$f[0]} = $f[2];
+		$NameToThree{$f[2]} = $f[0];
+	    }
+	}
+    }
+}
 
 sub _read_nonstandard_code_table{    
     ## non-standard codes
@@ -263,13 +295,22 @@ sub _read_nonstandard_code_table{
 	    $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
 	    if ($f[2]){
 		$ThreeToTwo{$f[0]}   = $f[2];
-		$TwoToThree{$f[2]}   = $f[0];
 	    }
 	    $ThreeToMacro{$f[0]} = $f[3] if ($f[3]);
 	    if ($f[4]){
 		$ThreeToName{$f[0]}     = $f[4];
-		$NameToThree{lc($f[4])} = $f[0];
-		$NameToTwo{lc($f[4])}   = $f[2] if ($f[2]);
+	    }
+	}
+	if ($f[4]){
+	    $NameToThree{lc($f[4])} = $f[0] unless (exists $NameToThree{$f[4]});
+	    if ($f[2]){
+		$NameToTwo{lc($f[4])} = $f[2] unless (exists $NameToTwo{$f[4]});
+	    }
+	}
+	if ($f[2]){
+	    $TwoToThree{$f[2]} = $f[0] unless (exists $TwoToThree{$f[2]});
+	    if ($f[4]){
+		$TwoToName{$f[2]} = $f[4] unless (exists $TwoToName{$f[2]});
 	    }
 	}
     }
