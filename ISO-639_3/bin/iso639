@@ -41,7 +41,7 @@ use lib 'lib';
 use ISO::639_3 qw/:all/;
 
 use open ':locale';
-use vars qw($opt_2 $opt_3 $opt_m $opt_n $opt_k);
+use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
 use Getopt::Std;
 use Pod::Usage;
 

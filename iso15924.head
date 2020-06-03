@@ -1,0 +1,69 @@
+#!/usr/bin/env perl
+#-*-perl-*-
+#
+#
+
+## make this a module
+package ISO::15924;
+
+# use 5.006;
+use strict;
+use warnings;
+
+use utf8;
+use open ':locale';
+use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
+use Getopt::Std;
+use Pod::Usage;
+
+=head1 NAME
+
+ISO::15924 - Language scripts
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION      = '0.01';
+
+use Exporter 'import';
+our @EXPORT = qw(
+    script_name
+    script_code
+    language_scripts
+    default_script
+    languages_with_script
+    language_territories
+    default_territory
+    primary_territories
+    secondary_territories
+    primary_languages_with_script
+    secondary_languages_with_script
+);
+our %EXPORT_TAGS = ( all => \@EXPORT );
+
+
+=head1 SYNOPSIS
+
+    use ISO::15924 qw/:all/;
+
+=cut
+
+our $ScriptCode2ScriptName;
+our $ScriptCode2ScriptId;
+our $ScriptName2ScriptCode;
+our $ScriptId2ScriptCode;
+
+
+our $Lang2Territory;
+our $Lang2Script;
+our $Territory2Lang;
+our $Script2Lang;
+our $DefaultScript;
+our $DefaultTerritory;
+
+
+
+

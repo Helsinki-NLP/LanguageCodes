@@ -19,6 +19,12 @@ ISO-639_3:
 ISO-639_3/lib/ISO/639_3.pm: iso639
 	cp $< $@
 
+ISO-639_3/lib/ISO/15924.pm: iso15924.head iso15924.data iso15924.tail
+	cat $^ > $@
+
+iso15924.data: make-script-table.pl
+	perl $< > $@
+
 ## NOTE: tables ond with newline! need to add them one-by-one
 iso639: iso639.in ${ISO639_TABLES}
 	cat $<    > $@
