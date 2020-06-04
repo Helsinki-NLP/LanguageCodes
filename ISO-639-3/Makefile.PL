@@ -4,10 +4,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-    NAME             => 'ISO::639_3',
+    NAME             => 'ISO::639::3',
     AUTHOR           => q{Joerg Tiedemann <tiedemann@cpan.org>},
-    VERSION_FROM     => 'lib/ISO/639_3.pm',
-    ABSTRACT_FROM    => 'lib/ISO/639_3.pm',
+    VERSION_FROM     => 'lib/ISO/639/3.pm',
+    ABSTRACT_FROM    => 'lib/ISO/639/3.pm',
     LICENSE          => 'MIT',
     MIN_PERL_VERSION => '5.006',
     CONFIGURE_REQUIRES => {
@@ -25,7 +25,7 @@ my %WriteMakefileArgs = (
     },
     EXE_FILES => [ 'bin/iso639' ],
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean => { FILES => 'ISO-639_3-*' },
+    clean => { FILES => 'ISO-639-3-*' },
 );
 
 # Compatibility with old versions of ExtUtils::MakeMaker
