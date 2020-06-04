@@ -80,7 +80,7 @@ while (<>){
 	}
 
 	$DefaultRegion = &default_territory($opt_l) || "" if ($opt_L);
-	my $region = $opt_l && ($opt_r || $opt_R) ? &language_territory($opt_l, $opt_R) : undef;
+	my $region = $opt_l && ($opt_r || $opt_R) ? &language_territory($opt_l, $opt_R) || "XX" : undef;
 	if ( not ( $opt_D && (($region eq $DefaultRegion) || ($region eq 'XX'))) ){
 	    push(@output, $region) if ($region);
 	}
