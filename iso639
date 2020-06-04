@@ -14,7 +14,7 @@
 #
 
 ## make this a module
-package ISO::639_3;
+package ISO::639::3;
 
 # use 5.006;
 use strict;
@@ -28,7 +28,7 @@ use Pod::Usage;
 
 =head1 NAME
 
-ISO::639_3 - Language codes and names from ISO::639
+ISO::639::3 - Language codes and names from ISO::639
 
 =head1 VERSION
 
@@ -53,7 +53,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 
 The module provides simple functions for retrieving language names and codes from the ISO-639 standards. The main purpose is to convert between different variants of codes and to get the English names of languages from codes. The module contains basic functions. There is no object-oriented interface. All functions can be exported.
 
-    use ISO::639_3 qw/:all/;
+    use ISO::639::3 qw/:all/;
 
     print convert_iso639( 'iso639-1', 'fra' );
     print convert_iso639( 'iso639-3', 'de' );
@@ -67,7 +67,7 @@ The module provides simple functions for retrieving language names and codes fro
 
 The module can be run as a script:
 
-  perl ISO/639_3.pm [OPTIONS] LANGCODE*
+  perl ISO/639/3.pm [OPTIONS] LANGCODE*
 
 This converts all language codes given as LANGCODE to corresponding language names. OPTIONS can be set to convert between different variants of language codes or to convert from language names to codes.
 
@@ -362,8 +362,8 @@ Joerg Tiedemann, C<< <tiedemann at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-iso-639_3 at rt.cpan.org>, or through
-the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=ISO-639_3>.  I will be notified, and then you'll
+Please report any bugs or feature requests to C<bug-iso-639-3 at rt.cpan.org>, or through
+the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=ISO-639-3>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 
@@ -371,7 +371,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc ISO::639_3
+    perldoc ISO::639::3
 
 
 You can also look for information at:
@@ -380,19 +380,19 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker (report bugs here)
 
-L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=ISO-639_3>
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=ISO-639-3>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/ISO-639_3>
+L<http://annocpan.org/dist/ISO-639-3>
 
 =item * CPAN Ratings
 
-L<https://cpanratings.perl.org/d/ISO-639_3>
+L<https://cpanratings.perl.org/d/ISO-639-3>
 
 =item * Search CPAN
 
-L<https://metacpan.org/release/ISO-639_3>
+L<https://metacpan.org/release/ISO-639-3>
 
 =back
 
@@ -428,7 +428,7 @@ The language codes are taken from SIL International L<https://iso639-3.sil.org>.
 
 =cut
 
-1; # End of ISO::639_3
+1; # End of ISO::639-3
 
 __DATA__
 

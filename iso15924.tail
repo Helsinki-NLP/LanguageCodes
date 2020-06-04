@@ -1,0 +1,263 @@
+#-*-perl-*-
+
+
+our $UnicodeScripts = &Unicode::UCD::charscripts();
+our $UnicodeAliases = {};
+our $UnicodeScriptCode = {};
+foreach my $s (keys %{$UnicodeScripts}){
+    my $ScriptCode = exists $$ScriptName2ScriptCode{$s} ? $$ScriptName2ScriptCode{$s} : undef;
+    foreach my $a (Unicode::UCD::prop_value_aliases('script', $s)){
+	$$UnicodeAliases{$a} = $s;
+	unless ($ScriptCode){
+	    $ScriptCode = $a if (exists $$ScriptCode2ScriptName{$a});
+	}
+    }
+    if ($ScriptCode){
+	$$UnicodeScriptCode{$s} = $ScriptCode; 
+	$$UnicodeScriptCode{$ScriptCode} = $ScriptCode; 
+    }
+}
+
+
+=head1 SUBROUTINES
+
+=head2 $val = contains_script( $script, $string [, $count]  )
+
+Returns 1 if the string in $string contains a valid Unicode character from script $script.
+If $count is set to 1 then it returns the number of matching characters.
+
+=cut
+
+
+sub contains_script{
+    if ((exists $$UnicodeScripts{$_[0]}) || (exists $$UnicodeAliases{$_[0]})){
+	my $regex = "\\p\{$_[0]\}";
+	if ($_[1]=~/\p{$_[0]}/){
+	    if ($_[2]){
+		my $count = 0;
+		while ($_[1] =~ m/\p{$_[0]}/gs) {$count++};
+		return $count;
+	    }
+	    return 1;
+	}
+	return 0;
+    }
+    print STDERR "unsupported script $_[0]\n";
+    return undef;
+}
+
+
+=head2 script_of_string( $string [, $lang]  )
+
+Returns 1 if the string in $string contains a valid Unicode character from script $script.
+If $count is set to 1 then it returns the number of matching characters.
+
+=cut
+
+
+sub script_of_string{
+    my ($str, $lang) = @_;
+
+    my @scripts = language_scripts($lang) if ($lang);
+    @scripts = keys %{$UnicodeScripts} unless (@scripts);
+
+    my %char = ();
+    my $covered = 0;
+    ## always include common characters
+    push(@scripts, 'Zyyy') unless (grep ($_ eq 'Zyyy',@scripts));
+    foreach my $s (@scripts){
+	if (my $count = contains_script($s, $str, 1)){
+	    $char{$$UnicodeScriptCode{$s}} = $count;
+	    $covered += $count;
+	}
+    }
+
+    ## if we have matched less characters than length of the string
+    ## then continue looking for other kinds of scripts
+    ## TODO: this is an approximate condition as we can have property overlaps!
+    if ($covered < length($str)){
+	foreach my $s (keys %{$UnicodeScripts}){
+	    unless (grep($_ eq $s, @scripts)){
+		if (my $count = contains_script($s, $str, 1)){
+		    $char{$$UnicodeScriptCode{$s}} = $count;
+		    $covered += $count;
+		}
+	    }
+	    ## TODO: should we continue anyway?
+	    last if ($covered >= length($str));
+	}
+    }
+
+    ## return all counts
+    return %char if (wantarray);
+    
+    ## skip common characters if there are other ones detected
+    delete $char{'Zyyy'} if ( (exists $char{'Zyyy'}) && (scalar keys %char > 1) );
+
+    ## return the most frequently present script
+    my ($MostFreq) = sort { $char{$b} <=> $char{$a} } keys %char;
+    return $MostFreq
+}
+
+
+
+sub script_code{
+    return $$ScriptName2ScriptCode{$_[0]} if (exists $$ScriptName2ScriptCode{$_[0]});
+    print STDERR "unknown script $_[0]\n";
+    return undef;
+}
+
+sub script_name{
+    return $$ScriptCode2ScriptName{$_[0]} if (exists $$ScriptCode2ScriptName{$_[0]});
+    print STDERR "unknown script $_[0]\n";
+    return undef;
+}
+
+sub language_scripts{
+    return sort keys %{$$Lang2Script{$_[0]}} if (exists $$Lang2Script{$_[0]});
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return ();
+}
+
+sub default_script{
+    return $$DefaultScript{$_[0]} if (exists $$DefaultScript{$_[0]});
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return undef;
+}
+
+sub languages_with_script{
+    return sort keys %{$$Script2Lang{$_[0]}} if (exists $$Script2Lang{$_[0]});
+    my $code = script_code($_[0]);
+    return sort keys %{$$Script2Lang{$code}} if (exists $$Script2Lang{$code});
+    print STDERR "unknown script $_[0]\n";
+    return ();
+}
+
+sub primary_languages_with_script{
+    if (exists $$Script2Lang{$_[0]}){
+	return grep($$Script2Lang{$_[0]}{$_} == 1, keys %{$$Script2Lang{$_[0]}});
+    }
+    my $code = script_code($_[0]);
+    if (exists $$Script2Lang{$code}){
+	return grep($$Script2Lang{$code}{$_} == 1, keys %{$$Script2Lang{$code}});
+    }
+    print STDERR "unknown script $_[0]\n";
+    return ();
+}
+
+sub secondary_languages_with_script{
+    if (exists $$Script2Lang{$_[0]}){
+	return grep($$Script2Lang{$_[0]}{$_} == 2, keys %{$$Script2Lang{$_[0]}});
+    }
+    my $code = script_code($_[0]);
+    if (exists $$Script2Lang{$code}){
+	return grep($$Script2Lang{$code}{$_} == 2, keys %{$$Script2Lang{$code}});
+    }
+    print STDERR "unknown script $_[0]\n";
+    return ();
+}
+
+
+
+sub language_territories{
+    return keys %{$$Lang2Territory{$_[0]}} if (exists $$Lang2Territory{$_[0]});
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return undef;
+}
+
+sub default_territory{
+    return $$DefaultTerritory{$_[0]} if (exists $$DefaultTerritory{$_[0]});
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return undef;
+}
+
+sub primary_territories{
+    if (exists $$Lang2Territory{$_[0]}){
+	return grep($$Lang2Territory{$_[0]}{$_} == 1, keys %{$$Lang2Territory{$_[0]}});
+    }
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return ();
+}
+
+sub secondary_territories{
+    if (exists $$Lang2Territory{$_[0]}){
+	return grep($$Lang2Territory{$_[0]}{$_} == 2, keys %{$$Lang2Territory{$_[0]}});
+    }
+    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    return ();
+}
+
+
+=head1 AUTHOR
+
+Joerg Tiedemann, C<< <tiedemann at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-iso-15924 at rt.cpan.org>, or through
+the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=ISO-15924>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc ISO::15924
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=ISO-15924>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ISO-15924>
+
+=item * CPAN Ratings
+
+L<https://cpanratings.perl.org/d/ISO-15924>
+
+=item * Search CPAN
+
+L<https://metacpan.org/release/ISO-15924>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+ ---------------------------------------------------------------------------
+ Copyright (c) 2020 Joerg Tiedemann
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ ---------------------------------------------------------------------------
+
+=cut
+
+1; # End of ISO::15924
+
+

@@ -9,15 +9,27 @@ ISO639_TABLES = iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
 		collective-language-codes.tab
 
 
-all: ISO-639_3/lib/ISO/639_3.pm
+all: ISO-639-3/lib/ISO/639/3.pm ISO-15924/lib/ISO/15924.pm
 
-ISO-639_3:
-	module-starter --module=ISO::639_3 \
+ISO-639-3:
+	module-starter --module=ISO::639::3 \
 		--author="Joerg Tiedemann" \
 		--email=tiedemann@cpan.org
 
-ISO-639_3/lib/ISO/639_3.pm: iso639
+ISO-15924:
+	module-starter --module=ISO::15924 \
+		--author="Joerg Tiedemann" \
+		--email=tiedemann@cpan.org
+
+ISO-639-3/lib/ISO/639/3.pm: iso639
+	mkdir -p ${dir $@}
 	cp $< $@
+
+ISO-15924/lib/ISO/15924.pm: iso15924.head iso15924.data iso15924.tail
+	cat $^ > $@
+
+iso15924.data: make-script-table.pl
+	perl $< > $@
 
 ## NOTE: tables ond with newline! need to add them one-by-one
 iso639: iso639.in ${ISO639_TABLES}
