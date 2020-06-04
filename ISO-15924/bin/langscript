@@ -43,8 +43,8 @@ use Pod::Usage;
 
 &pod2usage if ($opt_h);
 
-my $DefaultScript = $opt_l ? &default_script($opt_l) : undef;
-my $DefaultRegion = $opt_l ? &default_territory($opt_l) : 'XX';
+my $DefaultScript = $opt_l ? &default_script($opt_l) || "" : "";
+my $DefaultRegion = $opt_l ? &default_territory($opt_l) || 'XX' : 'XX';
 
 while (<>){
     chomp;
@@ -68,7 +68,7 @@ while (<>){
 	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
 	}
 
-	$DefaultScript = &default_script($opt_l) if ($opt_L);
+	$DefaultScript = &default_script($opt_l) || "" if ($opt_L);
 	my $script = &script_of_string($_, $opt_l) || $DefaultScript;
 	if ( not ( $opt_D && ($script eq $DefaultScript)) ){
 	    if ($opt_n){
@@ -79,7 +79,7 @@ while (<>){
 	    }
 	}
 
-	$DefaultRegion = &default_territory($opt_l) if ($opt_L);
+	$DefaultRegion = &default_territory($opt_l) || "" if ($opt_L);
 	my $region = $opt_l && ($opt_r || $opt_R) ? &language_territory($opt_l, $opt_R) : undef;
 	if ( not ( $opt_D && (($region eq $DefaultRegion) || ($region eq 'XX'))) ){
 	    push(@output, $region) if ($region);

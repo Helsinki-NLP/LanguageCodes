@@ -129,7 +129,6 @@ sub default_script{
     return $$DefaultScript{$_[0]} if (exists $$DefaultScript{$_[0]});
     my $langcode = ISO::639::3::get_iso639_3($_[0],1);
     return $$DefaultScript{$langcode} if (exists $$DefaultScript{$langcode});
-    print STDERR "unknown language $_[0]\n";
     return undef;
 }
 
@@ -197,8 +196,7 @@ sub default_territory{
     return $$DefaultTerritory{$_[0]} if (exists $$DefaultTerritory{$_[0]});
     my $langcode = ISO::639::3::get_iso639_3($_[0],1);
     return $$DefaultTerritory{$langcode} if (exists $$DefaultTerritory{$langcode});
-    print STDERR "unknown language $_[0]\n";
-    return undef;
+    return 'XX';
 }
 
 sub primary_territories{

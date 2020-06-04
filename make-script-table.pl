@@ -24,6 +24,8 @@ read_cldr_data($DataParser,$cldrData);
 my $MetaDataParser = new XML::Parser(Handlers => {Start => \&cldrMetaDataTag});
 read_cldr_data($MetaDataParser,$cldrMetaData);
 
+set_default_scripts();
+set_default_territories();
 
 $Data::Dumper::Indent = 1;       # mild pretty print
 
@@ -70,6 +72,23 @@ sub read_iso15924{
 	$CodeId{$code} = $id;
 	$Name2Code{$name} = $code;
 	$Id2Code{$id} = $code;
+    }
+}
+
+
+sub set_default_territories{
+    foreach my $l (keys %Lang2Territory){
+	next if (exists $DefaultTerritory{$l});
+	my @regions = keys %{$Lang2Territory{$l}};
+	if ($#regions == 0){ $DefaultTerritory{$l} = $regions[0]; }
+    }
+}
+
+sub set_default_scripts{
+    foreach my $l (keys %Lang2Script){
+	next if (exists $DefaultScript{$l});
+	my @scripts = keys %{$Lang2Scripts{$l}};
+	if ($#scripts == 0){ $DefaultScripts{$l} = $scripts[0]; }
     }
 }
 
