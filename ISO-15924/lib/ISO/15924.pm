@@ -9760,12 +9760,17 @@ sub script_of_string{
 	    $char{$$UnicodeScriptCode{$s}} = $count;
 	    $covered += $count;
 	}
+	## stop if we know enough
+	unless (wantarray){
+	    last if ($covered >= length($str)/2 );
+	}
     }
 
     ## if we have matched less characters than length of the string
     ## then continue looking for other kinds of scripts
     ## TODO: this is an approximate condition as we can have property overlaps!
-    if ($covered < length($str)){
+    if ( (wantarray && ($covered < length($str))) || 
+	 ((not wantarray) && ($covered >= length($str)/2)) ){
 	foreach my $s (keys %{$UnicodeScripts}){
 	    unless (grep($_ eq $s, @scripts)){
 		if (my $count = contains_script($s, $str, 1)){
