@@ -19,3 +19,8 @@ common/supplemental/supplementalData.xml
 
 FAQ on ISO language codes
 http://www.loc.gov/standards/iso639-2/faq.html#24
+
+
+language script detection:
+https://en.wikipedia.org/wiki/Wikipedia:Language_recognition_chart
+https://www.regular-expressions.info/unicode.html
