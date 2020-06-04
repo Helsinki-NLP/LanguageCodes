@@ -1,0 +1,91 @@
+#!perl
+#-*-perl-*-
+=head1 NAME
+
+find_script - detect characters from various scripts
+
+=head1 SYNOPSIS
+
+  find_script [OPTIONS] < input.txt > script-codes.txt
+
+Find the script of a text and print the script codes line by line.
+
+=head2 OPTIONS
+
+  -a ............ print all scripts found in each line
+  -l <langid> ... language hint (start by looking at language-specific scripts first)
+  -L ............ two-column input (langid <TAB> text)
+  -n ............ print script names instead of script codes
+  -h ............ print usage information
+
+=cut
+
+
+# use 5.006;
+use strict;
+use warnings;
+
+use lib 'lib';
+use ISO::15924 qw/:all/;
+
+use open ':locale';
+use vars qw($opt_a $opt_h $opt_l $opt_L $opt_n);
+use Getopt::Std;
+use Pod::Usage;
+
+&getopts('ahl:Ln');
+
+&pod2usage if ($opt_h);
+
+while (<>){
+    chomp;
+    ($opt_l,$_) = split(/\t/) if ($opt_L);
+    if ($opt_a){
+	my %scripts = script_of_string($_, $opt_l);
+	foreach (sort { $scripts{$b} <=> $scripts{$a} } keys %scripts ){
+	    if ($opt_n){
+		print script_name($_)," ($scripts{$_}) ";
+	    }
+	    else{
+		print "$_ ($scripts{$_}) ";
+	    }
+	}
+	print "\n";
+    }
+    else{
+	my $script = &script_of_string($_, $opt_l) || "";
+	if ($opt_n){ print script_name($script),"\n"; }
+	else{ print $script,"\n"; }
+    }
+}
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+
+=head1 LICENSE AND COPYRIGHT
+
+ ---------------------------------------------------------------------------
+ Copyright (c) 2020 Joerg Tiedemann
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ ---------------------------------------------------------------------------
+
+=cut

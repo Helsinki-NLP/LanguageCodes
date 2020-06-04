@@ -12,9 +12,8 @@ use warnings;
 
 use utf8;
 use open ':locale';
-use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
-use Getopt::Std;
 use Pod::Usage;
+use Unicode::UCD;
 
 =head1 NAME
 
@@ -32,6 +31,8 @@ use Exporter 'import';
 our @EXPORT = qw(
     script_name
     script_code
+    script_of_string
+    contains_script
     language_scripts
     default_script
     languages_with_script
@@ -52,9 +53,14 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 =cut
 
 our $ScriptCode2ScriptName;
-our $ScriptCode2ScriptId;
 our $ScriptName2ScriptCode;
 our $ScriptId2ScriptCode;
+our $ScriptCode2EnglishName;
+our $ScriptCode2FrenchName;
+
+our $ScriptCodeId;
+our $ScriptCodeVersion;
+our $ScriptCodeDate;
 
 
 our $Lang2Territory;
@@ -63,7 +69,6 @@ our $Territory2Lang;
 our $Script2Lang;
 our $DefaultScript;
 our $DefaultTerritory;
-
 
 
 

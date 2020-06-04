@@ -28,10 +28,13 @@ read_cldr_data($MetaDataParser,$cldrMetaData);
 $Data::Dumper::Indent = 1;       # mild pretty print
 
 print Data::Dumper->Dump([\%Code2Name],        ['ScriptCode2ScriptName']);
-print Data::Dumper->Dump([\%Code2Id],          ['ScriptCode2ScriptId']);
 print Data::Dumper->Dump([\%Name2Code],        ['ScriptName2ScriptCode']);
 print Data::Dumper->Dump([\%Id2Code],          ['ScriptId2ScriptCode']);
-
+print Data::Dumper->Dump([\%Code2English],     ['ScriptCode2EnglishName']);
+print Data::Dumper->Dump([\%Code2French],      ['ScriptCode2FrenchName']);
+print Data::Dumper->Dump([\%CodeVersion],      ['ScriptCodeVersion']);
+print Data::Dumper->Dump([\%CodeDate],         ['ScriptCodeDate']);
+print Data::Dumper->Dump([\%CodeId],           ['ScriptCodeId']);
 
 print Data::Dumper->Dump([\%Lang2Territory],   ['Lang2Territory']);
 print Data::Dumper->Dump([\%Lang2Script],      ['Lang2Script']);
@@ -58,9 +61,13 @@ sub read_iso15924{
     while (<F>){
 	next if (/^\#/);
 	next unless (/\S/);
-	my ($code, $id, $name) = split(/\;/);
+	my ($code, $id, $english, $french, $name, $version, $date) = split(/\;/);
+	$Code2English{$code} = $english;
+	$Code2French{$code} = $french;
 	$Code2Name{$code} = $name;
-	$Code2Id{$code} = $id;
+	$CodeVersion{$code} = $version;
+	$CodeDate{$code} = $date;
+	$CodeId{$code} = $id;
 	$Name2Code{$name} = $code;
 	$Id2Code{$id} = $code;
     }
