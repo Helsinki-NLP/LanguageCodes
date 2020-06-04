@@ -14,6 +14,7 @@ use utf8;
 use open ':locale';
 use Pod::Usage;
 use Unicode::UCD;
+use ISO::639::3;
 
 =head1 NAME
 
@@ -36,6 +37,7 @@ our @EXPORT = qw(
     language_scripts
     default_script
     languages_with_script
+    language_territory
     language_territories
     default_territory
     primary_territories

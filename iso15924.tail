@@ -102,30 +102,39 @@ sub script_of_string{
 
 
 sub script_code{
+    return undef unless(@_);
     return $$ScriptName2ScriptCode{$_[0]} if (exists $$ScriptName2ScriptCode{$_[0]});
     print STDERR "unknown script $_[0]\n";
     return undef;
 }
 
 sub script_name{
+    return undef unless(@_);
     return $$ScriptCode2ScriptName{$_[0]} if (exists $$ScriptCode2ScriptName{$_[0]});
     print STDERR "unknown script $_[0]\n";
     return undef;
 }
 
 sub language_scripts{
+    return () unless(@_);
     return sort keys %{$$Lang2Script{$_[0]}} if (exists $$Lang2Script{$_[0]});
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    return sort keys %{$$Lang2Script{$langcode}} if (exists $$Lang2Script{$langcode});
+    print STDERR "unknown language $_[0]\n";
     return ();
 }
 
 sub default_script{
+    return undef unless(@_);
     return $$DefaultScript{$_[0]} if (exists $$DefaultScript{$_[0]});
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    return $$DefaultScript{$langcode} if (exists $$DefaultScript{$langcode});
+    print STDERR "unknown language $_[0]\n";
     return undef;
 }
 
 sub languages_with_script{
+    return () unless(@_);
     return sort keys %{$$Script2Lang{$_[0]}} if (exists $$Script2Lang{$_[0]});
     my $code = script_code($_[0]);
     return sort keys %{$$Script2Lang{$code}} if (exists $$Script2Lang{$code});
@@ -134,6 +143,7 @@ sub languages_with_script{
 }
 
 sub primary_languages_with_script{
+    return () unless(@_);
     if (exists $$Script2Lang{$_[0]}){
 	return grep($$Script2Lang{$_[0]}{$_} == 1, keys %{$$Script2Lang{$_[0]}});
     }
@@ -146,6 +156,7 @@ sub primary_languages_with_script{
 }
 
 sub secondary_languages_with_script{
+    return () unless(@_);
     if (exists $$Script2Lang{$_[0]}){
 	return grep($$Script2Lang{$_[0]}{$_} == 2, keys %{$$Script2Lang{$_[0]}});
     }
@@ -160,30 +171,59 @@ sub secondary_languages_with_script{
 
 
 sub language_territories{
+    return undef unless(@_);
     return keys %{$$Lang2Territory{$_[0]}} if (exists $$Lang2Territory{$_[0]});
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    return sort keys %{$$Lang2Territory{$langcode}} if (exists $$Lang2Territory{$langcode});
+    print STDERR "unknown language $_[0]\n";
     return undef;
 }
 
+sub language_territory{
+    return undef unless(@_);
+    if ($_[0]=~/\_([a-zA-Z]{2})$/){
+	my $region = uc($1);
+	return $region if (exists $$Territory2Lang{$region});
+    }
+    ## if there is only one region 
+    my @regions = language_territories($_[0]);
+    return $regions[0] if ($#regions == 0);
+    return default_territory($_[0]) if ($_[1]);
+    return 'XX';
+}
+
 sub default_territory{
+    return undef unless(@_);
     return $$DefaultTerritory{$_[0]} if (exists $$DefaultTerritory{$_[0]});
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    return $$DefaultTerritory{$langcode} if (exists $$DefaultTerritory{$langcode});
+    print STDERR "unknown language $_[0]\n";
     return undef;
 }
 
 sub primary_territories{
+    return () unless(@_);
     if (exists $$Lang2Territory{$_[0]}){
 	return grep($$Lang2Territory{$_[0]}{$_} == 1, keys %{$$Lang2Territory{$_[0]}});
     }
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    if (exists $$Lang2Territory{$langcode}){
+	return grep($$Lang2Territory{$langcode}{$_} == 1, keys %{$$Lang2Territory{$langcode}});
+    }
+    print STDERR "unknown language $_[0]\n";
     return ();
 }
 
 sub secondary_territories{
+    return () unless(@_);
     if (exists $$Lang2Territory{$_[0]}){
 	return grep($$Lang2Territory{$_[0]}{$_} == 2, keys %{$$Lang2Territory{$_[0]}});
     }
-    print STDERR "unknown language $_[0] (require ISO-639-3 code)\n";
+    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    if (exists $$Lang2Territory{$langcode}){
+	return grep($$Lang2Territory{$langcode}{$_} == 2, keys %{$$Lang2Territory{$langcode}});
+    }
+    print STDERR "unknown language $_[0]\n";
     return ();
 }
 

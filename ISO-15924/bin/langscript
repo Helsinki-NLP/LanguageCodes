@@ -17,6 +17,11 @@ Find the script of a text and print the script codes line by line.
   -L ............ two-column input (langid <TAB> text)
   -n ............ print script names instead of script codes
   -h ............ print usage information
+  -r ............ also print region/territory
+  -R ............ like -r but print default region if no other region found
+  -D ............ surpress default script codes
+  -1 ............ also print ISO-639-1 code
+  -3 ............ also print ISO-639-3 code
 
 =cut
 
@@ -27,15 +32,19 @@ use warnings;
 
 use lib 'lib';
 use ISO::15924 qw/:all/;
+use ISO::639::3 qw/:all/;
 
 use open ':locale';
-use vars qw($opt_a $opt_h $opt_l $opt_L $opt_n);
+use vars qw($opt_a $opt_D $opt_h $opt_l $opt_L $opt_n $opt_r $opt_R $opt_1 $opt_3);
 use Getopt::Std;
 use Pod::Usage;
 
-&getopts('ahl:Ln');
+&getopts('aDhl:LnrR13');
 
 &pod2usage if ($opt_h);
+
+my $DefaultScript = $opt_l ? &default_script($opt_l) : undef;
+my $DefaultRegion = $opt_l ? &default_territory($opt_l) : 'XX';
 
 while (<>){
     chomp;
@@ -53,9 +62,30 @@ while (<>){
 	print "\n";
     }
     else{
-	my $script = &script_of_string($_, $opt_l) || "";
-	if ($opt_n){ print script_name($script),"\n"; }
-	else{ print $script,"\n"; }
+	my @output = ();
+	if ($opt_l){
+	    if ($opt_1){ push( @output, &get_iso639_1($opt_l, 1) ); }
+	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
+	}
+
+	$DefaultScript = &default_script($opt_l) if ($opt_L);
+	my $script = &script_of_string($_, $opt_l) || $DefaultScript;
+	if ( not ( $opt_D && ($script eq $DefaultScript)) ){
+	    if ($opt_n){
+		push(@output, script_name($script)) if ($script);
+	    }
+	    else{
+		push(@output, $script) if ($script);
+	    }
+	}
+
+	$DefaultRegion = &default_territory($opt_l) if ($opt_L);
+	my $region = $opt_l && ($opt_r || $opt_R) ? &language_territory($opt_l, $opt_R) : undef;
+	if ( not ( $opt_D && (($region eq $DefaultRegion) || ($region eq 'XX'))) ){
+	    push(@output, $region) if ($region);
+	}
+
+	print join('_', @output),"\n";
     }
 }
 
