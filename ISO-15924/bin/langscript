@@ -2,11 +2,11 @@
 #-*-perl-*-
 =head1 NAME
 
-find_script - detect characters from various scripts
+langscript - detect characters from various scripts
 
 =head1 SYNOPSIS
 
-  find_script [OPTIONS] < input.txt > script-codes.txt
+  langscript [OPTIONS] < input.txt > script-codes.txt
 
 Find the script of a text and print the script codes line by line.
 
@@ -140,6 +140,7 @@ sub get_default_script{
 
 =head1 ACKNOWLEDGEMENTS
 
+The official ISO 15924 code list is taken from Unicode L<https://www.unicode.org/iso15924/iso15924.txt.zip> and the additional information about connections between languages, scripts and territories is extracted from the Unicode CLDR project at L<http://cldr.unicode.org>.
 
 
 =head1 LICENSE AND COPYRIGHT
