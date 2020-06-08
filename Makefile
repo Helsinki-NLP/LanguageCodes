@@ -2,11 +2,11 @@
 
 ISO639_DOWNLOADS = https://iso639-3.sil.org/sites/iso639-3/files/downloads
 
-ISO639_TABLES = iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
-		iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab \
-		non-standard.tab \
-		iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab \
-		collective-language-codes.tab
+ISO639_TABLES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
+		data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab \
+		data/non-standard.tab \
+		data/iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab \
+		data/collective-language-codes.tab
 
 
 all: ISO-639-3/lib/ISO/639/3.pm ISO-15924/lib/ISO/15924.pm
@@ -28,7 +28,7 @@ ISO-639-3/lib/ISO/639/3.pm: iso639
 ISO-15924/lib/ISO/15924.pm: iso15924.head iso15924.data iso15924.tail
 	cat $^ > $@
 
-iso15924.data: make-script-table.pl
+iso15924.data: scripts/make-script-table.pl
 	perl $< > $@
 
 ## NOTE: tables ond with newline! need to add them one-by-one
@@ -49,15 +49,15 @@ iso639: iso639.in ${ISO639_TABLES}
 	@tr -d "\r" < $(word 6,$^) >> $@
 	chmod +x $@
 
-iso-639-3_Code_Tables_20200130:
+data/iso-639-3_Code_Tables_20200130:
 	wget ${ISO639_DOWNLOADS}/$@.zip
 	unzip $@.zip
 	rm -f $@.zip
 
-iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab:
+data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab:
 	${MAKE} iso-639-3_Code_Tables_20200130
 
-iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab: iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab
+data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab data/iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab: data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab
 	@echo ""
 
 

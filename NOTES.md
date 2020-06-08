@@ -32,3 +32,5 @@ https://perldoc.perl.org/perlunicode.html
 complete list:
 https://perldoc.perl.org/perluniprops.html
 
+
+https://en.wikipedia.org/wiki/Unicode_character_property

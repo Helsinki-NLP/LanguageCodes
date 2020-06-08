@@ -12,9 +12,9 @@ use XML::Parser;
 
 # binmode(STDOUT,":utf8");
 
-my $iso15924     = shift(@ARGV) || 'iso15924-utf8-20200424.txt';
-my $cldrData     = shift(@ARGV) || 'cldr/common/supplemental/supplementalData.xml';
-my $cldrMetaData = shift(@ARGV) || 'cldr/common/supplemental/supplementalMetadata.xml';
+my $iso15924     = shift(@ARGV) || 'data/iso15924-utf8-20200424.txt';
+my $cldrData     = shift(@ARGV) || 'data/cldr/common/supplemental/supplementalData.xml';
+my $cldrMetaData = shift(@ARGV) || 'data/cldr/common/supplemental/supplementalMetadata.xml';
 
 read_iso15924($iso15924);
 
