@@ -9877,8 +9877,8 @@ sub language_territories{
     return sort keys %{$$Lang2Territory{$langcode}} if (exists $$Lang2Territory{$langcode});
     $langcode = ISO::639::3::get_macro_language($langcode,1);
     return sort keys %{$$Lang2Territory{$langcode}} if (exists $$Lang2Territory{$langcode});
-    print STDERR "unknown language $_[0]\n";
-    return undef;
+    # print STDERR "no territory found for language $_[0]\n";
+    return ();
 }
 
 sub language_territory{
@@ -9917,7 +9917,7 @@ sub primary_territories{
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 1, keys %{$$Lang2Territory{$langcode}});
     }
-    print STDERR "unknown language $_[0]\n";
+    # print STDERR "no primary territory found for language $_[0]\n";
     return ();
 }
 
@@ -9934,7 +9934,7 @@ sub secondary_territories{
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 2, keys %{$$Lang2Territory{$langcode}});
     }
-    print STDERR "unknown language $_[0]\n";
+    # print STDERR "no secondary territory found for language $_[0]\n";
     return ();
 }
 

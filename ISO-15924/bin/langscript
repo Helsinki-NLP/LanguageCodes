@@ -2,11 +2,11 @@
 #-*-perl-*-
 =head1 NAME
 
-find_script - detect characters from various scripts
+langscript - detect characters from various scripts
 
 =head1 SYNOPSIS
 
-  find_script [OPTIONS] < input.txt > script-codes.txt
+  langscript [OPTIONS] < input.txt > script-codes.txt
 
 Find the script of a text and print the script codes line by line.
 
@@ -43,8 +43,21 @@ use Pod::Usage;
 
 &pod2usage if ($opt_h);
 
-my $DefaultScript = $opt_l ? &default_script($opt_l) || "" : "";
-my $DefaultRegion = $opt_l ? &default_territory($opt_l) || 'XX' : 'XX';
+
+my %RegionCache = ();
+my %DefaultRegionCache = ();
+my %DefaultScriptCache = ();
+
+my $DefaultScript = "";
+my $DefaultRegion = "XX";
+my $region = "XX";
+
+if ($opt_l){
+    $DefaultScript = &get_default_script($opt_l);
+    $DefaultRegion = &get_default_region($opt_l);
+    $region        = &get_region($opt_l, $opt_R);
+}
+
 
 while (<>){
     chomp;
@@ -68,9 +81,13 @@ while (<>){
 	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
 	}
 
-	$DefaultScript = &default_script($opt_l) || "" if ($opt_L);
+	if ($opt_L){
+	    $DefaultRegion = &get_default_region($opt_l);
+	    $DefaultScript = &get_default_script($opt_l);
+	}
+
 	my $script = &script_of_string($_, $opt_l) || $DefaultScript;
-	if ( not ( $opt_D && ($script eq $DefaultScript)) ){
+	unless ( $opt_D && ( ($script eq $DefaultScript) || ($script eq 'Zyyy') ) ){
 	    if ($opt_n){
 		push(@output, script_name($script)) if ($script);
 	    }
@@ -79,10 +96,12 @@ while (<>){
 	    }
 	}
 
-	$DefaultRegion = &default_territory($opt_l) || "" if ($opt_L);
-	my $region = $opt_l && ($opt_r || $opt_R) ? &language_territory($opt_l, $opt_R) || "XX" : undef;
-	if ( not ( $opt_D && (($region eq $DefaultRegion) || ($region eq 'XX'))) ){
-	    push(@output, $region) if ($region);
+	## update region is we have dynamic language labels
+	if ($opt_l && ($opt_r || $opt_R) ){
+	    $region = &get_region($opt_l, $opt_R) if ($opt_L);
+	    if ( not ( $opt_D && (($region eq $DefaultRegion) || ($region eq 'XX'))) ){
+		push(@output, $region) if ($region);
+	    }
 	}
 
 	print join('_', @output),"\n";
@@ -90,8 +109,38 @@ while (<>){
 }
 
 
+## get region and cache values to avoid looking them up again
+sub get_region{
+    return 'XX' unless ($_[0]);
+    return $RegionCache{$_[0]} if exists ($RegionCache{$_[0]});
+    $region = &language_territory(@_) || "XX";
+    $RegionCache{$_[0]} = $region;
+    return $region;
+}
+
+sub get_default_region{
+    return 'XX' unless ($_[0]);
+    return $DefaultRegionCache{$_[0]} if exists ($DefaultRegionCache{$_[0]});
+    $region = &default_territory($_[0]) || "XX";
+    $DefaultRegionCache{$_[0]} = $region;
+    return $region;
+}
+
+## get script and cache values to avoid looking them up again
+sub get_default_script{
+    return '' unless ($_[0]);
+    return $DefaultScriptCache{$_[0]} if exists ($DefaultScriptCache{$_[0]});
+    my $script = &default_script($_[0]) || "";
+    $DefaultScriptCache{$_[0]} = $script;
+    return $script;
+}
+
+
+
+
 =head1 ACKNOWLEDGEMENTS
 
+The official ISO 15924 code list is taken from Unicode L<https://www.unicode.org/iso15924/iso15924.txt.zip> and the additional information about connections between languages, scripts and territories is extracted from the Unicode CLDR project at L<http://cldr.unicode.org>.
 
 
 =head1 LICENSE AND COPYRIGHT

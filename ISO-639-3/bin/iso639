@@ -45,7 +45,7 @@ use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
 use Getopt::Std;
 use Pod::Usage;
 
-&getopts('23kmn');
+&getopts('23hkmn');
 
 &pod2usage if ($opt_h);
 my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
