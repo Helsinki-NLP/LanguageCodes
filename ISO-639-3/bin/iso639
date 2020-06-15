@@ -10,6 +10,8 @@
 # -3 ... print 3-letter code (even if the input is a 3-letter code)
 # -m ... print macro language instead of local language variants
 # -n ... don't print a final new-line
+# -p ... convert language pairs
+# -P ... convert language pairs and sort alphabetically
 #
 
 =head1 NAME
@@ -41,15 +43,18 @@ use lib 'lib';
 use ISO::639::3 qw/:all/;
 
 use open ':locale';
-use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k);
+use vars qw($opt_2 $opt_3 $opt_h $opt_m $opt_n $opt_k $opt_p $opt_P);
 use Getopt::Std;
 use Pod::Usage;
 
-&getopts('23hkmn');
+&getopts('23hkmnpP');
 
 &pod2usage if ($opt_h);
 my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
-my @converted = map($_ = convert_iso639($type,$_,$opt_k), @ARGV);
+my @converted = ($opt_p || $opt_P) ?
+    map($_ = convert_pairs($type,$_,$opt_P,$opt_k), @ARGV) :
+    map($_ = convert_iso639($type,$_,$opt_k), @ARGV);
+
 if ($type eq 'name' and @converted){
     print '"',join('" "',@converted),'"';
 }
@@ -58,6 +63,15 @@ else{
 }
 print "\n" unless ($opt_n);
 
+
+## convert language pairs instead of single language codes
+## assume that they are joined using a single hyphen
+sub convert_pairs{
+    my ($type, $langs, $sorted, $keep) = @_;
+    my @converted = map($_ = convert_iso639($type,$_,$keep), split(/\-/,$langs));
+    @converted = sort @converted if ($sorted);
+    return join('-',@converted);
+}
 
 =head1 ACKNOWLEDGEMENTS
 
