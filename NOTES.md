@@ -7,6 +7,8 @@ module-starter --module=ISO::639_3 \
 
 
 
+https://stackoverflow.com/questions/4083038/recognizing-text-as-simplified-vs-traditional-chinese
+
 * script codes:
 https://www.unicode.org/iso15924/iso15924.txt.zip
 

@@ -15,6 +15,7 @@ use open ':locale';
 use Pod::Usage;
 use Unicode::UCD;
 use ISO::639::3;
+use Text::Iconv;
 
 =head1 NAME
 
@@ -34,6 +35,8 @@ our @EXPORT = qw(
     script_code
     script_of_string
     contains_script
+    detect_chinese_script
+    simplified_or_traditional_chinese
     language_scripts
     default_script
     languages_with_script
@@ -73,4 +76,16 @@ our $DefaultScript;
 our $DefaultTerritory;
 
 
+## for detecting Chinese scripts (traditional vs simplified)
+
+our $ChineseScriptProportion = 0.8;
+
+my $utf8big5_converter1 = Text::Iconv->new("UTF-8", "big5//TRANSLIT");
+my $utf8big5_converter2 = Text::Iconv->new("UTF-8", "big5//IGNORE");
+
+my $utf8gb2312_converter1 = Text::Iconv->new("UTF-8", "gb2312//TRANSLIT");
+my $utf8gb2312_converter2 = Text::Iconv->new("UTF-8", "gb2312//IGNORE");
+
+my $big5utf8_converter = Text::Iconv->new("big5", "UTF-8");
+my $gb2312utf8_converter = Text::Iconv->new("gb2312", "UTF-8");
 

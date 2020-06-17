@@ -42,7 +42,95 @@ sub contains_script{
 	}
 	return 0;
     }
+    if ($_[0] eq 'Hans' || $_[0] eq 'Hant'){
+	my $script = &simplified_or_traditional_chinese($_[1]);
+	if ($script eq $_[0]){
+	    return contains_script('Han', $_[1], $_[2]) if ($_[2]);
+	    return 1;
+	}
+	return 0;
+    }
     print STDERR "unsupported script $_[0]\n";
+    return undef;
+}
+
+
+=head2 $val = contains_simplified_chinese( $string [, $count] )
+
+Returns 1 if the string in $string contains valid Han characters in its simplified form.
+If $count is set to 1 then it returns the number of matching characters.
+
+=cut
+
+## TODO: is this good enough?
+sub contains_simplified_chinese{
+    my $test1 = $utf8gb2312_converter1->convert($_[0]);
+    # my $test2 = $utf8gb2312_converter2->convert($_[0]);
+    return length($test1);
+}
+
+
+=head2 $val = contains_traditional_chinese( $string [, $count] )
+
+Returns 1 if the string in $string contains valid Han characters in its traditional form.
+If $count is set to 1 then it returns the number of matching characters.
+
+=cut
+
+## TODO: is this good enough?
+sub contains_traditional_chinese{
+    my $test1 = $utf8big5_converter1->convert($_[0]);
+    # my $test2 = $utf8big5_converter2->convert($_[0]);
+    return length($test1);
+}
+
+
+=head2 detect_chinese_script( $string )
+
+Returns the script of some Chinese text (Hans, Hant, ...)
+
+=cut
+
+sub detect_chinese_script{
+
+    my $script = &simplified_or_traditional_chinese($_[0]);
+    return $script if ($script);
+
+    foreach $script (language_scripts('zho')){
+	next if ($script eq 'Hans');
+	next if ($script eq 'Hant');
+	return $script if (contains_script($script, $_[0]));
+    }
+    return 'Zyyy';
+}
+
+
+=head2 simplified_or_traditional_chinese( $string )
+
+Returns the script of some Chinese text (Hans or Hant)
+
+=cut
+
+sub simplified_or_traditional_chinese{
+
+    my $test1 = $utf8big5_converter1->convert($_[0]) || "";
+    my $test2 = $utf8big5_converter2->convert($_[0]) || "";
+
+    return 'Hant' if ($test1 eq $test2);
+
+    my $test3 = $utf8gb2312_converter1->convert($_[0]) || "";
+    my $test4 = $utf8gb2312_converter2->convert($_[0]) || "";
+
+    return 'Hans' if ($test3 eq $test4);
+
+    if ( (length($test3) * $ChineseScriptProportion < length($test4)) || 
+	 (length($test4) * $ChineseScriptProportion < length($test3)) ) {
+	return 'Hans';
+    }
+    elsif ( (length($test1) * $ChineseScriptProportion < length($test2)) || 
+	    (length($test2) * $ChineseScriptProportion < length($test1)) ){
+	return 'Hant';
+    }
     return undef;
 }
 
@@ -68,7 +156,8 @@ sub script_of_string{
     foreach my $s (@scripts){
 	my $count = undef;
 	if ($count = contains_script($s, $str, 1)){
-	    $char{$$UnicodeScriptCode{$s}} = $count;
+	    my $script = exists $$UnicodeScriptCode{$s} ? $$UnicodeScriptCode{$s} : $s;
+	    $char{$script} = $count;
 	    $covered += $count;
 	}
 	# return undef if (not defined $count);
