@@ -1,0 +1,46 @@
+#!/usr/bin/env perl
+#-*-perl-*-
+#
+#
+
+## make this a module
+package ISO::639::5;
+
+# use 5.006;
+use strict;
+use warnings;
+
+use utf8;
+use open ':locale';
+use Pod::Usage;
+use ISO::639::3;
+
+=head1 NAME
+
+ISO::639::5 - Language groups
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION      = '0.01';
+
+use Exporter 'import';
+our @EXPORT = qw(
+    language_group
+    language_parent
+);
+our %EXPORT_TAGS = ( all => \@EXPORT );
+
+
+=head1 SYNOPSIS
+
+    use ISO::639::5 qw/:all/;
+
+=cut
+
+our $LanguageGroup;
+our $LanguageParent;
+

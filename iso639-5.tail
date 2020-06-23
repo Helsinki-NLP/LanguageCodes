@@ -1,0 +1,37 @@
+#-*-perl-*-
+
+=head1 SUBROUTINES
+
+=head2 @langcodes = language_group( $groupcode )
+
+Returns a list of language codes within the given language group.
+
+=cut
+
+
+sub language_group{
+    if (exists $LanguageGroup{$_[0]}){
+	return @{$LanguageGroup{$_[0]}};
+    }
+    print STDERR "unknown language group $_[0]\n";
+    return ();
+}
+
+
+=head2 @parentcode = language_group( $langcode )
+
+Returns the parent language code for the given language.
+
+=cut
+
+
+sub language_parent{
+    if (exists $LanguageParent{$_[0]}){
+	return $LanguageParent{$_[0]};
+    }
+    print STDERR "no parent found for '$_[0]'\n";
+    return undef;
+}
+
+1;
+
