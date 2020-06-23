@@ -70,10 +70,11 @@ sub cldrDataEndTag{
 	    my @group = split(/\s+/,$p->{languageGroup});
 	    my @groupISO = ();
 	    foreach (@group){
-		$LanguageParent{$_} = $parent;
-		push(@groupISO,get_iso639_3($_,1));
-		my $macro = get_macro_language($_,1);
-		$LanguageParent{$macro} = $parent if ($macro ne $_);
+		my $iso = get_iso639_3($_,1);
+		push(@groupISO,$iso);
+		$LanguageParent{$iso} = $parent;
+		my $macro = get_macro_language($iso,1);
+		$LanguageParent{$macro} = $parent if ($macro ne $iso);
 	    }
 	    @{$LanguageGroup{$parent}} = @groupISO;
 	    delete $p->{languageGroupParent};

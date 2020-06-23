@@ -10,8 +10,8 @@ Returns a list of language codes within the given language group.
 
 
 sub language_group{
-    if (exists $LanguageGroup{$_[0]}){
-	return @{$LanguageGroup{$_[0]}};
+    if (exists $$LanguageGroup{$_[0]}){
+	return @{$$LanguageGroup{$_[0]}};
     }
     print STDERR "unknown language group $_[0]\n";
     return ();
@@ -26,8 +26,8 @@ Returns the parent language code for the given language.
 
 
 sub language_parent{
-    if (exists $LanguageParent{$_[0]}){
-	return $LanguageParent{$_[0]};
+    if (exists $$LanguageParent{$_[0]}){
+	return $$LanguageParent{$_[0]};
     }
     print STDERR "no parent found for '$_[0]'\n";
     return undef;

@@ -9,7 +9,7 @@ ISO639_TABLES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
 		data/collective-language-codes.tab
 
 
-all: ISO-639-3/lib/ISO/639/3.pm ISO-639-3/lib/ISO/639/5.pm ISO-15924/lib/ISO/15924.pm
+all: ISO-639-3/lib/ISO/639/3.pm ISO-639-5/lib/ISO/639/5.pm ISO-15924/lib/ISO/15924.pm
 
 ISO-639-3:
 	module-starter --module=ISO::639::3 \
@@ -32,7 +32,7 @@ ISO-639-3/lib/ISO/639/3.pm: iso639
 	cp $< $@
 
 
-ISO-639-3/lib/ISO/639/5.pm: iso639-5.head iso639-5.data iso639-5.tail
+ISO-639-5/lib/ISO/639/5.pm: iso639-5.head iso639-5.data iso639-5.tail
 	mkdir -p ${dir $@}
 	cat $^ > $@
 
