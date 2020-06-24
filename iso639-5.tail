@@ -33,5 +33,34 @@ sub language_parent{
     return undef;
 }
 
+
+## don't need the functions below, just use ISO::639::3
+##
+
+# =head2 $name = language_group_name( $groupcode )
+
+# Returns the name of the language group
+
+# =cut
+
+
+# sub language_group_name{
+#     return ISO::639::3::get_language_name($_[0]);
+# }
+
+
+# =head2 $code = language_group_code( $groupname )
+
+# Returns the name of the language group
+
+# =cut
+
+
+# sub language_group_name{
+#     return ISO::639::3::get_iso639_3($_[0]);
+# }
+
+
+
 1;
 

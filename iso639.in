@@ -229,6 +229,9 @@ sub _read_iso639_codes{
 	elsif ($f[0] eq 'C_Id'){
 	    &_read_collective_language_table();
 	}
+	elsif ($f[0] eq 'URI'){
+	    &_read_iso639_5();
+	}
 	elsif ($f[4] eq 'Ret_Remedy'){
 	    &_read_retired_code_table();
 	}
@@ -284,7 +287,7 @@ sub _read_collective_language_table{
 	    }
 	    if ($f[2]){
 		$ThreeToName{$f[0]} = $f[2];
-		$NameToThree{$f[2]} = $f[0];
+		$NameToThree{lc($f[2])} = $f[0];
 	    }
 	}
     }
@@ -355,6 +358,21 @@ sub _read_main_code_table{
 	}
     }
 }
+
+sub _read_iso639_5{
+    ## collective languages from ISO639-2
+    # print STDERR "read collective language codes";
+    while (<DATA>){
+	chomp;
+	return unless ($_);
+	## URI code English-name French-name
+	my @f = split(/\t/);
+	next unless ($f[0]);
+	$ThreeToName{$f[1]} = $f[2];
+	$NameToThree{lc($f[2])} = $f[1];
+    }
+}
+
 
 =head1 AUTHOR
 

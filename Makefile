@@ -6,7 +6,8 @@ ISO639_TABLES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
 		data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab \
 		data/non-standard.tab \
 		data/iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab \
-		data/collective-language-codes.tab
+		data/collective-language-codes.tab \
+		data/iso639-5.tsv
 
 
 all: ISO-639-3/lib/ISO/639/3.pm ISO-639-5/lib/ISO/639/5.pm ISO-15924/lib/ISO/15924.pm
@@ -64,6 +65,9 @@ iso639: iso639.in ${ISO639_TABLES}
 	@echo "" >> $@
 	@echo "" >> $@
 	@tr -d "\r" < $(word 6,$^) >> $@
+	@echo "" >> $@
+	@echo "" >> $@
+	@tr -d "\r" < $(word 7,$^) >> $@
 	chmod +x $@
 
 data/iso-639-3_Code_Tables_20200130:
@@ -76,6 +80,10 @@ data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab:
 
 data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab data/iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab: data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab
 	@echo ""
+
+## see http://id.loc.gov/vocabulary/iso639-5.html
+data/iso639-5.tsv:
+	wget -O $@ http://id.loc.gov/vocabulary/iso639-5.tsv
 
 iso15924.txt.zip:
 	wget https://www.unicode.org/iso15924/iso15924.txt.zip

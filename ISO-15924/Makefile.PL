@@ -23,7 +23,8 @@ my %WriteMakefileArgs = (
 	'Pod::Usage'   => '0',
 	'utf8'         => '0',
 	'Unicode::UCD' => '0',
-	'Text::Iconv'  => '0'
+	'Text::Iconv'  => '0',
+	'ISO::639::3'  => '0'
     },
     EXE_FILES => [ 'bin/langscript' ],
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

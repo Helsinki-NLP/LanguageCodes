@@ -4,8 +4,8 @@ use utf8;
 use open ':locale';
 
 # use strict;
-use lib 'ISO-639_3/lib';
-use ISO::639_3 qw/:all/;
+use lib 'ISO-639-3/lib';
+use ISO::639::3 qw/:all/;
 use Data::Dumper;
 
 use XML::Parser;
