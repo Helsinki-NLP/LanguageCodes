@@ -47,8 +47,8 @@ if ($opt_p){
 elsif ($opt_g || $opt_G){
     my %groups = ();
     foreach (@ARGV){
-	my $parent = language_parent($_);
-	$parent = language_parent($parent) if ($opt_G);
+	my $parent = language_parent($_) || $_;
+	$parent = language_parent($parent) || $parent if ($opt_G);
 	$groups{$parent}{$_}++;
     }
     foreach (sort keys %groups){
