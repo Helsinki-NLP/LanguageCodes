@@ -14,6 +14,7 @@ langgroup - print language groups according to ISO639-5
 =head2 OPTIONS
 
   -h: help
+  -c: group children
   -g: group languages
   -G: group by grandparent
   -n: don't print final newline
@@ -30,11 +31,11 @@ use lib 'lib';
 use ISO::639::5 qw/:all/;
 
 use open ':locale';
-use vars qw($opt_g $opt_G $opt_h $opt_n $opt_p);
+use vars qw($opt_c $opt_g $opt_G $opt_h $opt_n $opt_p);
 use Getopt::Std;
 use Pod::Usage;
 
-&getopts('gGhnp');
+&getopts('cgGhnp');
 
 &pod2usage if ($opt_h);
 
@@ -63,7 +64,12 @@ elsif ($opt_g || $opt_G){
 }
 else{
     foreach (@ARGV){
-	print join(' ',language_group($_));
+	if ($opt_c){
+	    print join(' ',language_group_children($_));
+	}
+	else{
+	    print join(' ',language_group($_));
+	}
 	print "\n" if ($#ARGV || ! $opt_n);
     }
 }

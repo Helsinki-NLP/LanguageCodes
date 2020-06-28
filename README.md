@@ -103,6 +103,8 @@ This module provides the definitions of language groups according to ISO 639-5. 
 use ISO::639::5 qw/:all/;
 
 print join(' ',language_group('gmw'));
+print join(' ',language_group('gem'));
+print join(' ',language_group_children('gem'));
 print language_parent('afr');
 print language_parent('gmw');
 ```

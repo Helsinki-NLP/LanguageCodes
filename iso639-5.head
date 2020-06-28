@@ -21,16 +21,17 @@ ISO::639::5 - Language groups
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION      = '0.01';
+our $VERSION      = '0.02';
 
 use Exporter 'import';
 our @EXPORT = qw(
     language_group
     language_parent
+    language_group_children
 );
 our %EXPORT_TAGS = ( all => \@EXPORT );
 

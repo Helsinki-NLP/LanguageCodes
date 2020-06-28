@@ -10,6 +10,33 @@ Returns a list of language codes within the given language group.
 
 
 sub language_group{
+    my %children = ();
+    if (exists $$LanguageGroup{$_[0]}){
+	foreach my $l (@{$$LanguageGroup{$_[0]}}){
+	    if (exists $$LanguageGroup{$l}){
+		foreach (&language_group($l)){
+		    $children{$_}++;
+		}
+	    }
+	    else{
+		$children{$l}++;
+	    }
+	}
+    }
+    else{
+	return ($_[0]);
+    }
+    return sort keys %children;
+}
+
+
+=head2 @langcodes = language_group_children( $groupcode )
+
+Returns a list of language codes that are immediate children of the given language group.
+
+=cut
+
+sub language_group_children{
     if (exists $$LanguageGroup{$_[0]}){
 	return @{$$LanguageGroup{$_[0]}};
     }
