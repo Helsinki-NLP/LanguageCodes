@@ -122,7 +122,8 @@ Convert the language code or language name given in C<$id>. The C<$type> specifi
 =cut
 
 sub convert_iso639{
-    my $code = lc($_[1]);
+    my $code = $_[1];
+    # my $code = lc($_[1]);
     # $code=~s/[\-\_].*$//;
     return get_iso639_1($code,$_[2])       if ($_[0] eq 'iso639-1');
     return get_iso639_3($code,$_[2])       if ($_[0] eq 'iso639-3');
@@ -138,6 +139,7 @@ Return the ISO 639-1 code for a given language or three-letter code. Returns the
 =cut
 
 sub get_iso639_1{
+    return $_[0]                 if (exists $TwoToName{$_[0]});
     return $ThreeToTwo{$_[0]}    if (exists $ThreeToTwo{$_[0]});
     return $NameToTwo{lc($_[0])} if (exists $NameToTwo{lc($_[0])});
     return $_[0]                 if (exists $TwoToThree{$_[0]});
@@ -150,6 +152,7 @@ sub get_iso639_1{
     ## try without regional extension
     my $code = $_[0];
     return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
+    return &get_iso639_1(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xx';
 }
@@ -161,12 +164,14 @@ Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx
 =cut
 
 sub get_iso639_3{
+    return $_[0]                   if (exists $ThreeToName{$_[0]});
     return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
     return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
     return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
 
     my $code = $_[0];
-    return &get_iso639_3($code)    if ($code=~s/[\-\_].*$//);
+    return &get_iso639_3($code)     if ($code=~s/[\-\_].*$//);
+    return &get_iso639_3(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xxx';
 }
@@ -196,6 +201,7 @@ sub get_language_name{
     return $ThreeToName{$_[0]}       if (exists $ThreeToName{$_[0]});
     return $_[0]                     if (exists $NameToThree{$_[0]});
     return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
+    return &get_language_name(lc($_[0])) if ($_[0] ne lc($_[0]));
     return 'unknown';
 }
 
