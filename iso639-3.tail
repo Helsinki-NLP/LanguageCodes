@@ -1,0 +1,192 @@
+#-*-perl-*-
+
+## run the script if not called as a module
+__PACKAGE__->run() unless caller();
+
+## function to run if this is used as a script
+sub run{
+    &getopts('23hkmn');
+    # pod2usage( { -verbose => 2 } ) if ($opt_h);
+    pod2usage if ($opt_h);
+
+    my $type = $opt_2 ? 'iso639-1' : $opt_3 ? 'iso639-3' : $opt_m ? 'macro' : 'name';
+    my @converted = map($_ = convert_iso639($type,$_,$opt_k), @ARGV);
+    if ($type eq 'name' and @converted){
+	print '"',join('" "',@converted),'"';
+    }
+    else{
+	print join(' ',@converted);
+    }
+    print "\n" unless ($opt_n);
+}
+
+
+=head1 SUBROUTINES
+
+=head2 $converted = convert_iso639( $type, $id )
+
+Convert the language code or language name given in C<$id>. The C<$type> specifies the output type that is generated. Possible types are C<iso639-1> (two-letter code), C<iso639-3> (three-letter-code), C<macro> (three-letter code of the corresponding macro language) or C<name> (language name). Default is to return the language name.
+
+=cut
+
+sub convert_iso639{
+    my $code = $_[1];
+    # my $code = lc($_[1]);
+    # $code=~s/[\-\_].*$//;
+    return get_iso639_1($code,$_[2])       if ($_[0] eq 'iso639-1');
+    return get_iso639_3($code,$_[2])       if ($_[0] eq 'iso639-3');
+    return get_macro_language($code,$_[2]) if ($_[0] eq 'macro');
+    return get_language_name($code);
+}
+
+
+=head2 $iso639_1 = get_iso639_1( $id )
+
+Return the ISO 639-1 code for a given language or three-letter code. Returns the same code if it is a ISO 639-1 code or 'xx' if it is not recognized.
+
+=cut
+
+sub get_iso639_1{
+    return $_[0]                  if (exists $$TwoToName{$_[0]});
+    return $$ThreeToTwo{$_[0]}    if (exists $$ThreeToTwo{$_[0]});
+    return $$NameToTwo{lc($_[0])} if (exists $$NameToTwo{lc($_[0])});
+    return $_[0]                  if (exists $$TwoToThree{$_[0]});
+    ## TODO: is it OK to fallback to macro language in this conversion?
+    ##       (should we add some regional code?)
+    if (exists $$ThreeToMacro{$_[0]}){
+	return $$ThreeToTwo{$$ThreeToMacro{$_[0]}} 
+	if (exists $$ThreeToTwo{$$ThreeToMacro{$_[0]}});
+    }
+    ## try without regional extension
+    my $code = $_[0];
+    return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
+    return &get_iso639_1(lc($code)) if ($code ne lc($code));
+    return $_[0] if ($_[1]);
+    return 'xx';
+}
+
+=head2 $iso639_3 = get_iso639_3( $id )
+
+Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx' if the code is not recognized.
+
+=cut
+
+sub get_iso639_3{
+    return $_[0]                    if (exists $$ThreeToName{$_[0]});
+    return $$TwoToThree{$_[0]}      if (exists $$TwoToThree{$_[0]});
+    return $$NameToThree{lc($_[0])} if (exists $$NameToThree{lc($_[0])});
+    return $$ThreeToThree{$_[0]}    if (exists $$ThreeToThree{$_[0]});
+
+    my $code = $_[0];
+    return &get_iso639_3($code)     if ($code=~s/[\-\_].*$//);
+    return &get_iso639_3(lc($code)) if ($code ne lc($code));
+    return $_[0] if ($_[1]);
+    return 'xxx';
+}
+
+
+=head2 $macro_language = get_macro_language( $id )
+
+Return the ISO 639-3 code of the macro language for a given language or any ISO 639 code. Returns 'xxx' if the code is not recognized.
+
+=cut
+
+
+sub get_macro_language{
+    my $code = get_iso639_3($_[0],$_[1]);
+    return $$ThreeToMacro{$code} if (exists $$ThreeToMacro{$code});
+    return $code;
+}
+
+=head2 $language = get_language_name( $id )
+
+Return the name of the language that corresponds to the given language code (any ISO639 code)
+
+=cut
+
+sub get_language_name{
+    return $$TwoToName{$_[0]}        if (exists $$TwoToName{$_[0]});
+    return $$ThreeToName{$_[0]}      if (exists $$ThreeToName{$_[0]});
+    return $_[0]                     if (exists $$NameToThree{$_[0]});
+    return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
+    return &get_language_name(lc($_[0])) if ($_[0] ne lc($_[0]));
+    return 'unknown';
+}
+
+
+=head1 AUTHOR
+
+Joerg Tiedemann, C<< <tiedemann at cpan.org> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-iso-639-3 at rt.cpan.org>, or through
+the web interface at L<https://rt.cpan.org/NoAuth/ReportBug.html?Queue=ISO-639-3>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc ISO::639::3
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=ISO-639-3>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ISO-639-3>
+
+=item * CPAN Ratings
+
+L<https://cpanratings.perl.org/d/ISO-639-3>
+
+=item * Search CPAN
+
+L<https://metacpan.org/release/ISO-639-3>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+The language codes are taken from SIL International L<https://iso639-3.sil.org>. Please, check the terms of use listed at L<https://iso639-3.sil.org/code_tables/download_tables>. The current version uses the UTF-8 tables distributed in C< iso-639-3_Code_Tables_20200130.zip> from that website. This module adds some non-standard codes that are not specified in the original tables to be compatible with some ad-hoc solutions in some resources and tools.
+
+
+=head1 LICENSE AND COPYRIGHT
+
+ ---------------------------------------------------------------------------
+ Copyright (c) 2020 Joerg Tiedemann
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ ---------------------------------------------------------------------------
+
+=cut
+
+1; # End of ISO::639-3
+
+__DATA__
+

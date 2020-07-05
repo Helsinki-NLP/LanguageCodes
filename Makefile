@@ -28,9 +28,21 @@ ISO-15924:
 		--email=tiedemann@cpan.org
 
 
+## Alt 1:
+## with plain data read on-the-fly
 ISO-639-3/lib/ISO/639/3.pm: iso639
 	mkdir -p ${dir $@}
 	cp $< $@
+
+## Alt 2:
+## with variables generated from plain data tables
+##
+# ISO-639-3/lib/ISO/639/3.pm: iso639-3.head iso639-3.data iso639-3.tail
+#	mkdir -p ${dir $@}
+#	cat $^ > $@
+
+iso639-3.data: scripts/make-iso639-3.pl
+	perl $< > $@
 
 
 ISO-639-5/lib/ISO/639/5.pm: iso639-5.head iso639-5.data iso639-5.tail
