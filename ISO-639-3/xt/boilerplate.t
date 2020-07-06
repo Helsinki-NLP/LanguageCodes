@@ -50,7 +50,7 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/ISO/639_3.pm');
+  module_boilerplate_ok('lib/ISO/639::3.pm');
 
 
 }
