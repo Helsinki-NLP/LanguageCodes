@@ -1,4 +1,4 @@
-#!perl
+#!/usr/bin/env perl
 #-*-perl-*-
 #
 # convert between 2-letter and 3-letter language codes
@@ -39,6 +39,8 @@ This converts all language codes given as LANGCODE to corresponding language nam
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
 use lib 'lib';
 use ISO::639::3 qw/:all/;
 
