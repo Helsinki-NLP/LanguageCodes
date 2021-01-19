@@ -11,11 +11,15 @@ use Data::Dumper;
 use XML::Parser;
 
 my $cldrLanguageGroups = shift(@ARGV) || 'data/cldr/common/supplemental/languageGroup.xml';
+my $iso639_5_hierarchy = shift(@ARGV) || 'data/iso639-5-hierarchy.tsv';
+my $iso639_5_languages = shift(@ARGV) || 'data/iso639-5-languages.tsv';
 
 my $DataParser = new XML::Parser(Handlers => { Start => \&cldrDataStartTag,
 					       End   => \&cldrDataEndTag,
 					       Char  => \&cldrDataChar });
+
 read_cldr_data($DataParser,$cldrLanguageGroups);
+read_iso639_5($iso639_5_hierarchy,$iso639_5_languages);
 
 
 $Data::Dumper::Indent = 1;       # mild pretty print
@@ -24,6 +28,51 @@ print Data::Dumper->Dump([\%LanguageGroup],    ['LanguageGroup']);
 print Data::Dumper->Dump([\%LanguageParent],   ['LanguageParent']);
 
 
+sub read_iso639_5{
+    my $hierarchy = shift;
+    my $languages = shift;
+    open F,"<$hierarchy" || die "cannot read from $hierarchy!\n";
+    while (<F>){
+	chomp;
+	my @fields = split(/\t/);
+	my $code = $fields[0];
+	my $rel = $fields[5];
+	$rel=~s/ //g;
+	my @parents = split(/\:/,$rel);
+	my $code = pop(@parents);
+	foreach (@parents){
+	    $LanguageParent{$code} = $parent;
+	    my $macro = get_macro_language($code,1);
+	    $LanguageParent{$macro} = $parent if ($macro ne $code);
+	    $code = $parent;
+	}
+    }
+    close F;
+
+    my %langs = ();
+    open F,"<$languages" || die "cannot read from $languages!\n";
+    while (<F>){
+	chomp;
+	my ($code,$langstr) = split(/\t/);
+	my @langs = split(/\s+/,$langstr);
+	foreach (@langs){
+	    $LanguageParent{$_} = $code;
+	    $langs{$code}{$_}++;
+	    my $macro = get_macro_language($_,1);
+	    $LanguageParent{$macro} = $code if ($macro ne $_);
+	}
+    }
+    close F;
+
+    foreach my $c (keys %LanguageGroup){
+	foreach my $i (@{$LanguageGroup{$c}}){
+	    $langs{$c}{$i}++;
+	}
+    }
+    foreach my $c (keys %langs){
+	@{$LanguageGroup{$c}} = sort keys %{$langs{$c}};
+    }
+}
 
 
 
