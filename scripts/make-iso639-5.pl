@@ -31,25 +31,29 @@ print Data::Dumper->Dump([\%LanguageParent],   ['LanguageParent']);
 sub read_iso639_5{
     my $hierarchy = shift;
     my $languages = shift;
+
+    my %langs = ();
     open F,"<$hierarchy" || die "cannot read from $hierarchy!\n";
     while (<F>){
+	$_ = <F>;
 	chomp;
 	my @fields = split(/\t/);
-	my $code = $fields[0];
-	my $rel = $fields[5];
+	my $rel = $fields[1];
 	$rel=~s/ //g;
 	my @parents = split(/\:/,$rel);
 	my $code = pop(@parents);
-	foreach (@parents){
+	while (@parents){
+	    my $parent = pop(@parents);
 	    $LanguageParent{$code} = $parent;
+	    $langs{$parent}{$code}++;
 	    my $macro = get_macro_language($code,1);
 	    $LanguageParent{$macro} = $parent if ($macro ne $code);
 	    $code = $parent;
 	}
+	$LanguageParent{$code} = 'mul';
     }
     close F;
-
-    my %langs = ();
+    
     open F,"<$languages" || die "cannot read from $languages!\n";
     while (<F>){
 	chomp;
