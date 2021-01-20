@@ -35,12 +35,9 @@ sub read_iso639_5{
     my %langs = ();
     open F,"<$hierarchy" || die "cannot read from $hierarchy!\n";
     while (<F>){
-	$_ = <F>;
 	chomp;
-	my @fields = split(/\t/);
-	my $rel = $fields[1];
-	$rel=~s/ //g;
-	my @parents = split(/\:/,$rel);
+	s/ //g;
+	my @parents = split(/\:/);
 	my $code = pop(@parents);
 	while (@parents){
 	    my $parent = pop(@parents);
@@ -56,6 +53,7 @@ sub read_iso639_5{
     
     open F,"<$languages" || die "cannot read from $languages!\n";
     while (<F>){
+	next if (/^#/);
 	chomp;
 	my ($code,$langstr) = split(/\t/);
 	my @langs = split(/\s+/,$langstr);

@@ -1,230 +1,115 @@
-aav 	Austro-Asiatic languages 	austro-asiatiques, langues 	
-	aav 	
-afa 	Afro-Asiatic languages 	afro-asiatiques, langues 	remainder group
-groupe de langues restantes 	afa 	
-alg 	Algonquian languages 	algonquines, langues 	language group
-groupe de langues 	nai : aql : alg 	
-alv 	Atlantic-Congo languages 	atlantique-congo, langues 	
-	nic : alv 	
-apa 	Apache languages 	apaches, langues 	language group
-groupe de langues 	nai : xnd : ath : apa 	
-aqa 	Alacalufan languages 	alacalufanes, langues 	
-	sai : aqa 	
-aql 	Algic languages 	algiques, langues 	
-	nai : aql 	
-art 	Artificial languages 	artificielles, langues 	remainder group
-groupe de langues restantes 	art 	
-ath 	Athapascan languages 	athapascanes, langues 	language group
-groupe de langues 	nai : xnd : ath 	
-auf 	Arauan languages 	arauanes, langues 	
-	sai : awd : auf 	
-aus 	Australian languages 	australiennes, langues 	language group
-groupe de langues 	aus 	
-awd 	Arawakan languages 	arawak, langues 	
-	sai : awd 	
-azc 	Uto-Aztecan languages 	uto-aztèques, langues 	
-	nai : azc 	
-bad 	Banda languages 	banda, langues 	language group
-groupe de langues 	nic : alv : bad 	
-bai 	Bamileke languages 	bamiléké, langues 	language group
-groupe de langues 	nic : alv : bai 	
-bat 	Baltic languages 	baltes, langues 	remainder group
-groupe de langues restantes 	ine : bat 	
-ber 	Berber languages 	berbères, langues 	remainder group
-groupe de langues restantes 	afa : ber 	
-bih 	Bihari languages 	langues biharis 	remainder group
-groupe de langues restantes 	ine : iir : bih 	
-bnt 	Bantu languages 	bantou, langues 	remainder group
-groupe de langues restantes 	nic : alv : bnt 	
-btk 	Batak languages 	batak, langues 	language group
-groupe de langues 	map : poz : pqw : btk 	
-cai 	Central American Indian languages 	amérindiennes de l'Amérique centrale, langues 	remainder group
-groupe de langues restantes 	cai 	
-cau 	Caucasian languages 	caucasiennes, langues 	remainder group
-groupe de langues restantes 	cau 	d
-cba 	Chibchan languages 	chibcha, langues 	
-	sai : cba 	
-ccn 	North Caucasian languages 	caucasiennes du Nord, langues 	
-	cau : ccn 	g
-ccs 	South Caucasian languages 	caucasiennes du Sud, langues 	
-	cau : ccs 	i
-cdc 	Chadic languages 	tchadiques, langues 	
-	afa : cdc 	
-cdd 	Caddoan languages 	caddoanes, langues 	
-	nai : cdd 	
-cel 	Celtic languages 	celtiques, langues; celtes, langues 	remainder group
-groupe de langues restantes 	ine : cel 	
-cmc 	Chamic languages 	chames, langues 	language group
-groupe de langues 	map : poz : pqw : cmc 	
-cpe 	Creoles and pidgins, English‑based 	créoles et pidgins basés sur l'anglais 	remainder group
-groupe de langues restantes 	crp : cpe 	
-cpf 	Creoles and pidgins, French‑based 	créoles et pidgins basés sur le français 	remainder group
-groupe de langues restantes 	crp : cpf 	
-cpp 	Creoles and pidgins, Portuguese-based 	créoles et pidgins basés sur le portugais 	remainder group
-groupe de langues restantes 	crp : cpp 	
-crp 	Creoles and pidgins 	créoles et pidgins 	remainder group
-groupe de langues restantes 	crp 	
-csu 	Central Sudanic languages 	soudaniques centrales, langues 	
-	ssa : csu 	
-cus 	Cushitic languages 	couchitiques, langues 	remainder group
-groupe de langues restantes 	afa : cus 	
-day 	Land Dayak languages 	dayak, langues 	language group
-groupe de langues 	day 	
-dmn 	Mande languages 	mandé, langues 	
-	nic : dmn 	
-dra 	Dravidian languages 	dravidiennes, langues 	remainder group
-groupe de langues restantes 	dra 	
-egx 	Egyptian languages 	égyptiennes, langues 	
-	afa : egx 	
-esx 	Eskimo-Aleut languages 	esquimaudes-aléoutiennes, langues 	
-	esx 	
-euq 	Basque (family) 	basque (famille) 	
-	euq 	c
-fiu 	Finno-Ugrian languages 	finno-ougriennes, langues 	remainder group
-groupe de langues restantes 	urj : fiu 	
-fox 	Formosan languages 	formosanes, langues 	
-	map : fox 	
-gem 	Germanic languages 	germaniques, langues 	remainder group
-groupe de langues restantes 	ine : gem 	
-gme 	East Germanic languages 	germaniques orientales, langues 	
-	ine : gem : gme 	
-gmq 	North Germanic languages 	germaniques septentrionales, langues 	
-	ine : gem : gmq 	
-gmw 	West Germanic languages 	germaniques occidentales, langues 	
-	ine : gem : gmw 	
-grk 	Greek languages 	grecques, langues 	
-	ine : grk 	
-hmx 	Hmong-Mien languages 	hmong-mien, langues 	
-	hmx 	
-hok 	Hokan languages 	hoka, langues 	
-	nai : hok 	
-hyx 	Armenian (family) 	arménien (famille) 	
-	ine : hyx 	b
-iir 	Indo-Iranian languages 	indo-iraniennes, langues 	
-	ine : iir 	
-ijo 	Ijo languages 	ijo, langues 	language group
-groupe de langues 	nic : alv : ijo 	
-inc 	Indic languages 	indo-aryennes, langues 	remainder group
-groupe de langues restantes 	ine : iir : inc 	
-ine 	Indo-European languages 	indo-européennes, langues 	remainder group
-groupe de langues restantes 	ine 	
-ira 	Iranian languages 	iraniennes, langues 	remainder group
-groupe de langues restantes 	ine : iir : ira 	
-iro 	Iroquoian languages 	iroquoises, langues 	language group
-groupe de langues 	nai : iro 	
-itc 	Italic languages 	italiques, langues 	
-	ine : itc 	
-jpx 	Japanese (family) 	japonais (famille) 	
-	jpx 	f
-kar 	Karen languages 	karen, langues 	language group
-groupe de langues 	sit : tbq : kar 	
-kdo 	Kordofanian languages 	kordofaniennes, langues 	
-	nic : kdo 	
-khi 	Khoisan languages 	khoïsan, langues 	remainder group
-groupe de langues restantes 	khi 	
-kro 	Kru languages 	krou, langues 	language group
-groupe de langues 	nic : alv : kro 	
-map 	Austronesian languages 	austronésiennes, langues 	remainder group
-groupe de langues restantes 	map 	
-mkh 	Mon-Khmer languages 	môn-khmer, langues 	remainder group
-groupe de langues restantes 	aav : mkh 	
-mno 	Manobo languages 	manobo, langues 	language group
-groupe de langues 	map : poz : pqw : phi : mno 	
-mun 	Munda languages 	mounda, langues 	language group
-groupe de langues 	aav : mun 	
-myn 	Mayan languages 	maya, langues 	language group
-groupe de langues 	cai : myn 	
-nah 	Nahuatl languages 	nahuatl, langues 	language group
-groupe de langues 	nai : azc : nah 	
-nai 	North American Indian languages 	nord-amérindiennes, langues 	remainder group
-groupe de langues restantes 	nai 	
-ngf 	Trans-New Guinea languages 	trans-nouvelle-guinée, langues 	
-	paa : ngf 	
-nic 	Niger-Kordofanian languages 	nigéro-kordofaniennes, langues 	remainder group
-groupe de langues restantes 	nic 	
-nub 	Nubian languages 	nubiennes, langues 	language group
-groupe de langues 	ssa : sdv : nub 	
-omq 	Oto-Manguean languages 	otomangue, langues 	
-	cai : omq 	
-omv 	Omotic languages 	omotiques, langues 	
-	afa : omv 	
-oto 	Otomian languages 	otomi, langues 	language group
-groupe de langues 	cai : omq : oto 	
-paa 	Papuan languages 	papoues, langues 	remainder group
-groupe de langues restantes 	paa 	
-phi 	Philippine languages 	philippines, langues 	remainder group
-groupe de langues restantes 	map : poz : pqw : phi 	
-plf 	Central Malayo-Polynesian languages 	malayo-polynésiennes centrales, langues 	
-	map : poz : plf 	
-poz 	Malayo-Polynesian languages 	malayo-polynésiennes, langues 	
-	map : poz 	
-pqe 	Eastern Malayo-Polynesian languages 	malayo-polynésiennes orientales, langues 	
-	map : poz : pqe 	
-pqw 	Western Malayo-Polynesian languages 	malayo-polynésiennes occidentales, langues 	
-	map : poz : pqw 	
-pra 	Prakrit languages 	prâkrit, langues 	language group
-groupe de langues 	ine : iir : inc : pra 	
-qwe 	Quechuan (family) 	quechua (famille) 	
-	sai : qwe 	h
-roa 	Romance languages 	romanes, langues 	remainder group
-groupe de langues restantes 	ine : itc : roa 	
-sai 	South American Indian languages 	sud-amérindiennes, langues 	remainder group
-groupe de langues restantes 	sai 	
-sal 	Salishan languages 	salishennes, langues 	language group
-groupe de langues 	nai : sal 	
-sdv 	Eastern Sudanic languages 	soudaniques orientales, langues 	
-	ssa : sdv 	
-sem 	Semitic languages 	sémitiques, langues 	remainder group
-groupe de langues restantes 	afa : sem 	
-sgn 	sign languages 	langues des signes 	language group
-groupe de langues 	sgn 	
-sio 	Siouan languages 	sioux, langues 	language group
-groupe de langues 	nai : sio 	
-sit 	Sino-Tibetan languages 	sino-tibétaines, langues 	remainder group
-groupe de langues restantes 	sit 	
-sla 	Slavic languages 	slaves, langues 	remainder group
-groupe de langues restantes 	ine : sla 	
-smi 	Sami languages 	sames, langues 	remainder group
-groupe de langues restantes 	urj : fiu : smi 	
-son 	Songhai languages 	songhai, langues 	language group
-groupe de langues 	ssa : son 	
-sqj 	Albanian languages 	albanaises, langues 	
-	ine : sqj 	a
-ssa 	Nilo-Saharan languages 	nilo-sahariennes, langues 	remainder group
-groupe de langues restantes 	ssa 	
-syd 	Samoyedic languages 	samoyèdes, langues 	
-	urj : syd 	
-tai 	Tai languages 	tai, langues 	remainder group
-groupe de langues restantes 	tai 	
-tbq 	Tibeto-Burman languages 	tibéto-birmanes, langues 	
-	sit : tbq 	
-trk 	Turkic languages 	turques, langues 	
-	tut : trk 	
-tup 	Tupi languages 	tupi, langues 	language group
-groupe de langues 	sai : tup 	
-tut 	Altaic languages 	altaïques, langues 	remainder group
-groupe de langues restantes 	tut 	
-tuw 	Tungus languages 	toungouses, langues 	
-	tut : tuw 	
-urj 	Uralic languages 	ouraliennes, langues 	
-	urj 	
-wak 	Wakashan languages 	wakashanes, langues 	language group
-groupe de langues 	nai : wak 	
-wen 	Sorbian languages 	sorabes, langues 	language group
-groupe de langues 	ine : sla : zlw : wen 	
-xgn 	Mongolian languages 	mongoles, langues 	
-	tut : xgn 	
-xnd 	Na-Dene languages 	na-déné, langues 	
-	nai : xnd 	
-ypk 	Yupik languages 	yupik, langues 	language group
-groupe de langues 	esx : ypk 	
-zhx 	Chinese (family) 	chinois (famille) 	
-	sit : zhx 	e
-zle 	East Slavic languages 	slaves orientales, langues 	
-	ine : sla : zle 	
-zls 	South Slavic languages 	slaves méridionales, langues 	
-	ine : sla : zls 	
-zlw 	West Slavic languages 	slaves occidentales, langues 	
-	ine : sla : zlw 	
-znd 	Zande languages 	zandé, langues 	language group
-groupe de langues 	nic : alv : znd
+aav 
+afa 
+nai : aql : alg 
+nic : alv 
+nai : xnd : ath : apa 
+sai : aqa 
+nai : aql 
+art 
+nai : xnd : ath 
+sai : awd : auf 
+aus 
+sai : awd 
+nai : azc 
+nic : alv : bad 
+nic : alv : bai 
+ine : bat 
+afa : ber 
+ine : iir : bih 
+nic : alv : bnt 
+map : poz : pqw : btk 
+cai 
+cau 
+sai : cba 
+cau : ccn 
+cau : ccs 
+afa : cdc 
+nai : cdd 
+ine : cel 
+map : poz : pqw : cmc 
+crp : cpe 
+crp : cpf 
+crp : cpp 
+crp 
+ssa : csu 
+afa : cus 
+day 
+nic : dmn 
+dra 
+afa : egx 
+esx 
+euq 
+urj : fiu 
+map : fox 
+ine : gem 
+ine : gem : gme 
+ine : gem : gmq 
+ine : gem : gmw 
+ine : grk 
+hmx 
+nai : hok 
+ine : hyx 
+ine : iir 
+nic : alv : ijo 
+ine : iir : inc 
+ine 
+ine : iir : ira 
+nai : iro 
+ine : itc 
+jpx 
+sit : tbq : kar 
+nic : kdo 
+khi 
+nic : alv : kro 
+map 
+aav : mkh 
+map : poz : pqw : phi : mno 
+aav : mun 
+cai : myn 
+nai : azc : nah 
+nai 
+paa : ngf 
+nic 
+ssa : sdv : nub 
+cai : omq 
+afa : omv 
+cai : omq : oto 
+paa 
+map : poz : pqw : phi 
+map : poz : plf 
+map : poz 
+map : poz : pqe 
+map : poz : pqw 
+ine : iir : inc : pra 
+sai : qwe 
+ine : itc : roa 
+sai 
+nai : sal 
+ssa : sdv 
+afa : sem 
+sgn 
+nai : sio 
+sit 
+ine : sla 
+urj : fiu : smi 
+ssa : son 
+ine : sqj 
+ssa 
+urj : syd 
+tai 
+sit : tbq 
+tut : trk 
+sai : tup 
+tut 
+tut : tuw 
+urj 
+nai : wak 
+ine : sla : zlw : wen 
+tut : xgn 
+nai : xnd 
+esx : ypk 
+sit : zhx 
+ine : sla : zle 
+ine : sla : zls 
+ine : sla : zlw 
+nic : alv : znd
