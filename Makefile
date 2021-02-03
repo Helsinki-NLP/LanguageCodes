@@ -41,7 +41,14 @@ ISO-639-3/lib/ISO/639/3.pm: iso639
 #	mkdir -p ${dir $@}
 #	cat $^ > $@
 
-iso639-3.data: scripts/make-iso639-3.pl
+ISO3_DATA_FILES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
+    data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab \
+    data/non-standard.tab \
+    data/iso-639-3_Code_Tables_20200130/iso-639-3_Retirements_20200130.tab \
+    data/collective-language-codes.tab \
+    data/iso639-5.tsv
+
+iso639-3.data: scripts/make-iso639-3.pl ${ISO3_DATA_FILES}
 	perl $< > $@
 
 
@@ -49,7 +56,11 @@ ISO-639-5/lib/ISO/639/5.pm: iso639-5.head iso639-5.data iso639-5.tail
 	mkdir -p ${dir $@}
 	cat $^ > $@
 
-iso639-5.data: scripts/make-iso639-5.pl
+ISO5_DATA_FILES = data/cldr/common/supplemental/languageGroup.xml \
+		data/iso639-5-hierarchy.tsv \
+		data/iso639-5-languages.tsv
+
+iso639-5.data: scripts/make-iso639-5.pl ${ISO5_DATA_FILES}
 	perl $< > $@
 
 
