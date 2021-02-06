@@ -41,10 +41,11 @@ sub read_iso639_5{
 	my $code = pop(@parents);
 	while (@parents){
 	    my $parent = pop(@parents);
-	    $LanguageParent{$code} = $parent;
+	    $LanguageParent{$code} = $parent unless ($code eq $parent);
 	    $langs{$parent}{$code}++;
 	    my $macro = get_macro_language($code,1);
-	    $LanguageParent{$macro} = $parent if ($macro ne $code);
+	    $LanguageParent{$macro} = $parent
+		if (($macro ne $code) && ($macro ne $parent));
 	    $code = $parent;
 	}
 	$LanguageParent{$code} = 'mul';
@@ -58,10 +59,11 @@ sub read_iso639_5{
 	my ($code,$langstr) = split(/\t/);
 	my @langs = split(/\s+/,$langstr);
 	foreach (@langs){
-	    $LanguageParent{$_} = $code;
+	    $LanguageParent{$_} = $code unless ($code eq $_);
 	    $langs{$code}{$_}++;
 	    my $macro = get_macro_language($_,1);
-	    $LanguageParent{$macro} = $code if ($macro ne $_);
+	    $LanguageParent{$macro} = $code
+		if (($macro ne $_) && ($macro ne $code));
 	}
     }
     close F;
@@ -123,9 +125,10 @@ sub cldrDataEndTag{
 	    foreach (@group){
 		my $iso = get_iso639_3($_,1);
 		push(@groupISO,$iso);
-		$LanguageParent{$iso} = $parent;
+		$LanguageParent{$iso} = $parent unless ($iso eq $parent);
 		my $macro = get_macro_language($iso,1);
-		$LanguageParent{$macro} = $parent if ($macro ne $iso);
+		$LanguageParent{$macro} = $parent
+		    if (($macro ne $iso) && ($macro ne $parent));
 	    }
 	    @{$LanguageGroup{$parent}} = @groupISO;
 	    delete $p->{languageGroupParent};
