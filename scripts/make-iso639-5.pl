@@ -13,13 +13,14 @@ use XML::Parser;
 my $cldrLanguageGroups = shift(@ARGV) || 'data/cldr/common/supplemental/languageGroup.xml';
 my $iso639_5_hierarchy = shift(@ARGV) || 'data/iso639-5-hierarchy.tsv';
 my $iso639_5_languages = shift(@ARGV) || 'data/iso639-5-languages.tsv';
+my $iso639_5_glottolog = shift(@ARGV) || 'data/iso639-5_to_iso639-3.tsv';
 
 my $DataParser = new XML::Parser(Handlers => { Start => \&cldrDataStartTag,
 					       End   => \&cldrDataEndTag,
 					       Char  => \&cldrDataChar });
 
 read_cldr_data($DataParser,$cldrLanguageGroups);
-read_iso639_5($iso639_5_hierarchy,$iso639_5_languages);
+read_iso639_5($iso639_5_hierarchy,$iso639_5_languages,$iso639_5_glottolog);
 
 
 $Data::Dumper::Indent = 1;       # mild pretty print
@@ -31,6 +32,7 @@ print Data::Dumper->Dump([\%LanguageParent],   ['LanguageParent']);
 sub read_iso639_5{
     my $hierarchy = shift;
     my $languages = shift;
+    my $glottolog = shift;
 
     my %langs = ();
     open F,"<$hierarchy" || die "cannot read from $hierarchy!\n";
@@ -68,6 +70,32 @@ sub read_iso639_5{
     }
     close F;
 
+    ## read language list from glottolog
+    if (-e $glottolog){
+	open F,"<$glottolog" || die "cannot read from $glottolog!\n";
+	while (<F>){
+	    next if (/^#/);
+	    chomp;
+	    my ($code,$glottolog,$langstr) = split(/\t/);
+	    my @langs = split(/\s+/,$langstr);
+	    foreach (@langs){
+
+		my $parent = exists $LanguageParent{$_} ?
+		    $LanguageParent{$_} : undef;
+		if ($parent){
+		    next if (is_ancestor($_, $parent));
+		    delete $langs{$parent}{$_};
+		}
+		$LanguageParent{$_} = $code unless ($code eq $_);
+		$langs{$code}{$_}++;
+		my $macro = get_macro_language($_,1);
+		$LanguageParent{$macro} = $code
+		    if (($macro ne $_) && ($macro ne $code));
+	    }
+	}
+	close F;
+    }
+
     foreach my $c (keys %LanguageGroup){
 	foreach my $i (@{$LanguageGroup{$c}}){
 	    $langs{$c}{$i}++;
@@ -78,6 +106,15 @@ sub read_iso639_5{
     }
 }
 
+
+sub is_ancestor{
+    my ($lang1,$lang2) = @_;
+    if (exists $LanguageParent{$lang2}){
+	return 1 if ($LanguageParent{$lang2} eq $lang1);
+	return is_ancestor($lang1,$LanguageParent{$lang2});
+    }
+    return 0;
+}
 
 
 sub read_cldr_data{
