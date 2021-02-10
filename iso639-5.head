@@ -32,6 +32,8 @@ our @EXPORT = qw(
     language_group
     language_parent
     language_group_children
+    iso2glottolog
+    glottolog2iso
 );
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
@@ -44,4 +46,6 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 
 our $LanguageGroup;
 our $LanguageParent;
+our $ISO2Glottolog;
+our $Glottolog2ISO;
 

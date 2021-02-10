@@ -27,6 +27,8 @@ $Data::Dumper::Indent = 1;       # mild pretty print
 
 print Data::Dumper->Dump([\%LanguageGroup],    ['LanguageGroup']);
 print Data::Dumper->Dump([\%LanguageParent],   ['LanguageParent']);
+print Data::Dumper->Dump([\%ISO2Glottolog],    ['ISO2Glottolog']);
+print Data::Dumper->Dump([\%Glottolog2ISO],    ['Glottolog2ISO']);
 
 
 sub read_iso639_5{
@@ -77,13 +79,20 @@ sub read_iso639_5{
 	    next if (/^#/);
 	    chomp;
 	    my ($code,$glottolog,$langstr) = split(/\t/);
+	    if ($glottolog){
+		my @glottoIDs = split(/\s+/,$glottolog);
+		foreach (@glottoIDs){
+		    $ISO2Glottolog{$code} = $_;
+		    $Glottolog2ISO{$_} = $code;
+		}
+	    }
 	    my @langs = split(/\s+/,$langstr);
 	    foreach (@langs){
-
 		my $parent = exists $LanguageParent{$_} ?
 		    $LanguageParent{$_} : undef;
 		if ($parent){
-		    next if (is_ancestor($_, $parent));
+		    next if ($code eq $parent);
+		    next if (is_ancestor($code, $parent));
 		    delete $langs{$parent}{$_};
 		}
 		$LanguageParent{$_} = $code unless ($code eq $_);

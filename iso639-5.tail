@@ -61,6 +61,19 @@ sub language_parent{
 }
 
 
+sub iso2glottolog{
+    return $$ISO2Glottolog{$_[0]} if (exists $$ISO2Glottolog{$_[0]});
+    print STDERR "no glottolog ID found for '$_[0]'\n";
+    return undef;
+}
+
+sub glottolog2iso{
+    return $$Glottolog2ISO{$_[0]} if (exists $$Glottolog2ISO{$_[0]});
+    print STDERR "no ISO639-5 code found for '$_[0]'\n";
+    return undef;
+}
+
+
 ## don't need the functions below, just use ISO::639::3
 ##
 
