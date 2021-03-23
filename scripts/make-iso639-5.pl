@@ -142,9 +142,11 @@ sub read_cldr_data{
     close F;
 
 
-    ## fix a problem in the data: remove creole languages from romance language group
+    ## fix a problem in the data: remove creole language sub-groups from romance language group
+    ## remove xmm (Manado Malay) and srm (Saramaccan) from Portuguese Creole (cpp)
     ## TODO: is there a better way then this hard-coded fix?
     @{$LanguageGroup{'roa'}} = grep ($_!~/^(cpp|cpf)$/,@{$LanguageGroup{'roa'}});
+    @{$LanguageGroup{'cpp'}} = grep ($_!~/^(xmm|srm)$/,@{$LanguageGroup{'cpp'}});
 
 }
 
