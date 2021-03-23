@@ -15,3 +15,7 @@ Revision history for ISO-639-5
 	- removed glottolog IDs in cai
 	- added language lists via glottolog IDs
 	- added conversion to Glottolog IDs
+
+0.06	Tue Mar 23 09:48:21 EET 2021
+	- removed creole languages from roa
+	
