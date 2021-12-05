@@ -19,6 +19,8 @@ langgroup - print language groups according to ISO639-5
   -G: group by grandparent
   -n: don't print final newline
   -p: print parent code of each given language code
+  -P: print parents all the way up the language tree
+  -v: verbose output
 
 =cut
 
@@ -33,18 +35,33 @@ use lib 'lib';
 use ISO::639::5 qw/:all/;
 
 use open ':locale';
-use vars qw($opt_c $opt_g $opt_G $opt_h $opt_n $opt_p);
+use vars qw($opt_c $opt_g $opt_G $opt_h $opt_n $opt_p $opt_P $opt_v);
 use Getopt::Std;
 use Pod::Usage;
 
-&getopts('cgGhnp');
+&getopts('cgGhnpPv');
 
 &pod2usage if ($opt_h);
 
-my @codes = @ARGV;
+$ISO::639::5::VERBOSE = 1 if ($opt_v);
+
 if ($opt_p){
     my @converted = map($_ = language_parent($_), @ARGV);
     print join(' ',@converted);
+    print "\n" unless ($opt_n);
+}
+elsif ($opt_P){
+    my @trees;
+    foreach my $lang (@ARGV){
+	my @parents = ();
+	while (my $p = language_parent($lang)){
+	    push(@parents,$p);
+	    $lang = $p;
+	    last if ($p eq 'mul');
+	}
+	@parents ? push(@trees,join(':',@parents)) : push(@trees,'none');
+    }
+    print join(' ',@trees);
     print "\n" unless ($opt_n);
 }
 elsif ($opt_g || $opt_G){

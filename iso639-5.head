@@ -42,10 +42,15 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 
     use ISO::639::5 qw/:all/;
 
+    # activate warnings and additional messages
+    ISO::639::5::VERBOSE = 1;
+
 =cut
 
 our $LanguageGroup;
 our $LanguageParent;
 our $ISO2Glottolog;
 our $Glottolog2ISO;
+
+our $VERBOSE = 0;
 

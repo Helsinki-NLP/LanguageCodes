@@ -49,6 +49,8 @@ our $LanguageParent;
 our $ISO2Glottolog;
 our $Glottolog2ISO;
 
+our $VERBOSE = 0;
+
 $LanguageGroup = {
   'cmc' => [
     'ace',
@@ -12632,7 +12634,7 @@ sub language_group_children{
     if (exists $$LanguageGroup{$_[0]}){
 	return @{$$LanguageGroup{$_[0]}};
     }
-    print STDERR "unknown language group $_[0]\n";
+    print STDERR "unknown language group $_[0]\n" if ($VERBOSE);
     return ();
 }
 
@@ -12648,20 +12650,20 @@ sub language_parent{
     if (exists $$LanguageParent{$_[0]}){
 	return $$LanguageParent{$_[0]};
     }
-    print STDERR "no parent found for '$_[0]'\n";
+    print STDERR "no parent found for '$_[0]'\n" if ($VERBOSE);
     return undef;
 }
 
 
 sub iso2glottolog{
     return $$ISO2Glottolog{$_[0]} if (exists $$ISO2Glottolog{$_[0]});
-    print STDERR "no glottolog ID found for '$_[0]'\n";
+    print STDERR "no glottolog ID found for '$_[0]'\n" if ($VERBOSE);
     return undef;
 }
 
 sub glottolog2iso{
     return $$Glottolog2ISO{$_[0]} if (exists $$Glottolog2ISO{$_[0]});
-    print STDERR "no ISO639-5 code found for '$_[0]'\n";
+    print STDERR "no ISO639-5 code found for '$_[0]'\n" if ($VERBOSE);
     return undef;
 }
 
