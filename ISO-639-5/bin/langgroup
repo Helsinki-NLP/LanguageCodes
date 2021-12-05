@@ -45,51 +45,66 @@ use Pod::Usage;
 
 $ISO::639::5::VERBOSE = 1 if ($opt_v);
 
-if ($opt_p){
-    my @converted = map($_ = language_parent($_), @ARGV);
-    print join(' ',@converted);
-    print "\n" unless ($opt_n);
-}
-elsif ($opt_P){
-    my @trees;
-    foreach my $lang (@ARGV){
-	my @parents = ();
-	while (my $p = language_parent($lang)){
-	    push(@parents,$p);
-	    $lang = $p;
-	    last if ($p eq 'mul');
-	}
-	@parents ? push(@trees,join(':',@parents)) : push(@trees,'none');
+## read from STDIN or take codes from command line args
+my $CodesAsArg = @ARGV;
+sub get_next{
+    if ($CodesAsArg){
+	my @codes = @ARGV;
+	@ARGV = ();
+	return @codes;
     }
-    print join(' ',@trees);
-    print "\n" unless ($opt_n);
+    my $line = <>;
+    return split(/\s+/,$line) if ($line);
+    return ();
 }
-elsif ($opt_g || $opt_G){
-    my %groups = ();
-    foreach (@ARGV){
-	my $parent = language_parent($_) || $_;
-	$parent = language_parent($parent) || $parent if ($opt_G);
-	$groups{$parent}{$_}++;
+
+while (my @codes = &get_next()){
+    if ($opt_p){
+	my @converted = map($_ = language_parent($_), @codes);
+	print join(' ',@converted);
+	print "\n" unless ($opt_n);
     }
-    foreach (sort keys %groups){
-	if ($opt_n){
-	    print join('+',sort keys %{$groups{$_}}),' ';
+    elsif ($opt_P){
+	my @trees;
+	foreach my $lang (@codes){
+	    my @parents = ();
+	    while (my $p = language_parent($lang)){
+		push(@parents,$p);
+		$lang = $p;
+		last if ($p eq 'mul');
+	    }
+	    @parents ? push(@trees,join(':',@parents)) : push(@trees,'none');
 	}
-	else{
-	    print $_,"\t";
-	    print join(' ',sort keys %{$groups{$_}}),"\n";
+	print join(' ',@trees);
+	print "\n" unless ($opt_n);
+    }
+    elsif ($opt_g || $opt_G){
+	my %groups = ();
+	foreach (@codes){
+	    my $parent = language_parent($_) || $_;
+	    $parent = language_parent($parent) || $parent if ($opt_G);
+	    $groups{$parent}{$_}++;
+	}
+	foreach (sort keys %groups){
+	    if ($opt_n){
+		print join('+',sort keys %{$groups{$_}}),' ';
+	    }
+	    else{
+		print $_,"\t";
+		print join(' ',sort keys %{$groups{$_}}),"\n";
+	    }
 	}
     }
-}
-else{
-    foreach (@ARGV){
-	if ($opt_c){
-	    print join(' ',language_group_children($_));
+    else{
+	foreach (@codes){
+	    if ($opt_c){
+		print join(' ',language_group_children($_));
+	    }
+	    else{
+		print join(' ',language_group($_));
+	    }
+	    print "\n" if ($#ARGV || ! $opt_n);
 	}
-	else{
-	    print join(' ',language_group($_));
-	}
-	print "\n" if ($#ARGV || ! $opt_n);
     }
 }
 
