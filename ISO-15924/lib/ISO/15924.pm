@@ -9756,6 +9756,11 @@ sub contains_script{
 	}
 	return 0;
     }
+    if ($_[0] eq 'Jpan'){
+	return 1 if (contains_script('Hira', $_[1], $_[2]));
+	return 1 if (contains_script('Kana', $_[1], $_[2]));
+	return 1 if (contains_script('Han', $_[1], $_[2]));
+    }
     if ($_[0] eq 'Hans' || $_[0] eq 'Hant'){
 	my $script = &simplified_or_traditional_chinese($_[1]);
 	if ($script eq $_[0]){
