@@ -7,12 +7,15 @@ use ISO::15924 qw/:all/;
 
 
 
-print join(' ',language_scripts('hbs')),"\n";
+print join(' ',default_script('deu')),"\n";
+print join(' ',language_scripts('srp')),"\n";
+print join(' ',language_scripts('srb')),"\n";
+print join(' ',default_script('srb')),"\n";
+print join(' ',language_scripts('zho')),"\n";
 print join(' ',languages_with_script('Latn')),"\n";
 print join(' ',languages_with_script('Arabic')),"\n";
 print join(' ',language_territories('hbs')),"\n";
 print join(' ',language_territories('hrv')),"\n";
-print join(' ',language_scripts('zho')),"\n";
 
 print join(' ',primary_territories('hrv')),"\n";
 print join(' ',secondary_territories('hrv')),"\n";

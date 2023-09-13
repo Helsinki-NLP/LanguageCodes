@@ -23,11 +23,11 @@ ISO::15924 - Language scripts
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION      = '0.01';
+our $VERSION      = '0.02';
 
 use Exporter 'import';
 our @EXPORT = qw(
@@ -9849,7 +9849,7 @@ If $count is set to 1 then it returns the number of matching characters.
 
 
 sub script_of_string{
-    my ($str, $lang) = @_;
+    my ($str, $lang, $allow_non_standard) = @_;
 
     my @scripts = language_scripts($lang) if ($lang);
     @scripts = keys %{$UnicodeScripts} unless (@scripts);
@@ -9870,6 +9870,16 @@ sub script_of_string{
 	unless (wantarray){
 	    last if ($covered >= length($str)/2 );
 	}
+    }
+
+    ## if a language is given return the best acceptable script
+    ## unless we look for all scripts that we can detect
+    ##        or non-standard scripts are also allowed
+    if ((not wantarray) && $lang && (not $allow_non_standard)){
+	## skip common characters if there are other ones detected
+	delete $char{'Zyyy'} if ( (exists $char{'Zyyy'}) && (scalar keys %char > 1) );
+	my ($MostFreq) = sort { $char{$b} <=> $char{$a} } keys %char;
+	return $MostFreq
     }
 
     ## if we have matched less characters than length of the string

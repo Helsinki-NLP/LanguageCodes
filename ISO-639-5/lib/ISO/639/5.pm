@@ -21,7 +21,7 @@ ISO::639::5 - Language groups
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
@@ -41,6 +41,9 @@ our %EXPORT_TAGS = ( all => \@EXPORT );
 =head1 SYNOPSIS
 
     use ISO::639::5 qw/:all/;
+
+    # activate warnings and additional messages
+    ISO::639::5::VERBOSE = 1;
 
 =cut
 
