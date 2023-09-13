@@ -3646,7 +3646,8 @@ $Lang2Script = {
     'Merc' => 2
   },
   'kor' => {
-    'Kore' => 1
+#    'Kore' => 1
+    'Hang' => 1      
   },
   'akk' => {
     'Xsux' => 2
@@ -7966,7 +7967,8 @@ $Script2Lang = {
   'Gujr' => {
     'guj' => 1
   },
-  'Kore' => {
+#  'Kore' => {
+  'Hang' => {      
     'kor' => 1
   },
   'Sarb' => {
@@ -9013,7 +9015,8 @@ $DefaultScript = {
   'ksf' => 'Latn',
   'arn' => 'Latn',
   'awa' => 'Deva',
-  'kor' => 'Kore',
+#  'kor' => 'Kore',
+  'kor' => 'Hang',    
   'hat' => 'Latn',
   'hun' => 'Latn',
   'ful' => 'Latn',
@@ -9736,8 +9739,14 @@ If $count is set to 1 then it returns the number of matching characters.
 
 sub contains_script{
     if ((exists $$UnicodeScripts{$_[0]}) || (exists $$UnicodeAliases{$_[0]})){
-	my $regex = "\\p\{$_[0]\}";
-	if ($_[1]=~/\p{$_[0]}/){
+	# my $regex = "\\p\{$_[0]\}";
+	my $exists = 0;
+	eval { $exists = $_[1]=~/\p{$_[0]}/; };
+	if ($@) {
+	    warn "Something went wrong! [$@]\n";
+	    return 0;
+	}
+	if ($exists){
 	    if ($_[2]){
 		my $count = 0;
 		while ($_[1] =~ m/\p{$_[0]}/gs) {$count++};
