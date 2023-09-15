@@ -8789,10 +8789,9 @@ zza	diq	A
 zza	kiu	A
 
 NS_Id	Id	Part1	M_Id	Ref_Name
-pob		pt_br	por	Brazilian Portuguese
-cmn-hans		zh_cn	zho	Chinese Mandarin (simplified)
-cmn-hant		zh_tw	zho	Chinese Mandarin (traditional)
-yue-hant		zh_hk	zho	Cantonese
+cmn		zh_cn	zho	Chinese Mandarin (simplified)
+cmn		zh_tw	zho	Chinese Mandarin (traditional)
+yue		zh_hk	zho	Cantonese
 eng-simple		simple	eng	Simplified English
 ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles
 jpn		jp	jpn	Japanese	# misspelled 2-letter code

@@ -82,6 +82,9 @@ sub set_default_territories{
 	my @regions = keys %{$Lang2Territory{$l}};
 	if ($#regions == 0){ $DefaultTerritory{$l} = $regions[0]; }
     }
+    ## TODO: why is it going to BR otherwise?
+    $DefaultTerritory{pt} = 'PT';
+    $DefaultTerritory{por} = 'PT';
 }
 
 sub set_default_scripts{
