@@ -9947,9 +9947,9 @@ sub script_name{
 sub language_scripts{
     return () unless(@_);
     return sort keys %{$$Lang2Script{$_[0]}} if (exists $$Lang2Script{$_[0]});
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     return sort keys %{$$Lang2Script{$langcode}} if (exists $$Lang2Script{$langcode});
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     return sort keys %{$$Lang2Script{$langcode}} if (exists $$Lang2Script{$langcode});
     print STDERR "unknown language $_[0]\n" if ($VERBOSE);
     return ();
@@ -9958,9 +9958,9 @@ sub language_scripts{
 sub default_script{
     return undef unless(@_);
     return $$DefaultScript{$_[0]} if (exists $$DefaultScript{$_[0]});
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     return $$DefaultScript{$langcode} if (exists $$DefaultScript{$langcode});
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     return $$DefaultScript{$langcode} if (exists $$DefaultScript{$langcode});
     return undef;
 }
@@ -10005,9 +10005,9 @@ sub secondary_languages_with_script{
 sub language_territories{
     return undef unless(@_);
     return keys %{$$Lang2Territory{$_[0]}} if (exists $$Lang2Territory{$_[0]});
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     return sort keys %{$$Lang2Territory{$langcode}} if (exists $$Lang2Territory{$langcode});
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     return sort keys %{$$Lang2Territory{$langcode}} if (exists $$Lang2Territory{$langcode});
     # print STDERR "no territory found for language $_[0]\n";
     return ();
@@ -10029,9 +10029,9 @@ sub language_territory{
 sub default_territory{
     return undef unless(@_);
     return $$DefaultTerritory{$_[0]} if (exists $$DefaultTerritory{$_[0]});
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     return $$DefaultTerritory{$langcode} if (exists $$DefaultTerritory{$langcode});
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     return $$DefaultTerritory{$langcode} if (exists $$DefaultTerritory{$langcode});
     return 'XX';
 }
@@ -10041,11 +10041,11 @@ sub primary_territories{
     if (exists $$Lang2Territory{$_[0]}){
 	return grep($$Lang2Territory{$_[0]}{$_} == 1, keys %{$$Lang2Territory{$_[0]}});
     }
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 1, keys %{$$Lang2Territory{$langcode}});
     }
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 1, keys %{$$Lang2Territory{$langcode}});
     }
@@ -10058,11 +10058,11 @@ sub secondary_territories{
     if (exists $$Lang2Territory{$_[0]}){
 	return grep($$Lang2Territory{$_[0]}{$_} == 2, keys %{$$Lang2Territory{$_[0]}});
     }
-    my $langcode = ISO::639::3::get_iso639_3($_[0],1);
+    my $langcode = ISO::639::3::get_iso639_3($_[0]);
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 2, keys %{$$Lang2Territory{$langcode}});
     }
-    $langcode = ISO::639::3::get_macro_language($langcode,1);
+    $langcode = ISO::639::3::get_macro_language($langcode);
     if (exists $$Lang2Territory{$langcode}){
 	return grep($$Lang2Territory{$langcode}{$_} == 2, keys %{$$Lang2Territory{$langcode}});
     }
