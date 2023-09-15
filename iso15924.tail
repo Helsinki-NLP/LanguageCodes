@@ -35,7 +35,7 @@ sub contains_script{
 	my $exists = 0;
 	eval { $exists = $_[1]=~/\p{$_[0]}/; };
 	if ($@) {
-	    warn "Something went wrong! [$@]\n";
+	    warn "Something went wrong! [$@]\n" if ($VERBOSE);
 	    return 0;
 	}
 	if ($exists){
