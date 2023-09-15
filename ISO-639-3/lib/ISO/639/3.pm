@@ -32,11 +32,11 @@ ISO::639::3 - Language codes and names from ISO::639
 
 =head1 VERSION
 
-Version 0.04
+Version 0.02
 
 =cut
 
-our $VERSION      = '0.04';
+our $VERSION      = '0.02';
 
 use Exporter 'import';
 our @EXPORT = qw(
@@ -48,7 +48,6 @@ our @EXPORT = qw(
 );
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
-our $VERBOSE = 0;
 
 =head1 SYNOPSIS
 
@@ -156,9 +155,9 @@ sub get_iso639_1{
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
     ## try without regional/script extension
-    if ($_[0]=~s/([\-\_].*)$//){
-	return &get_iso639_1($_[0]).$1 if ($_[1]);
-	return &get_iso639_1($_[0]);
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_iso639_1($1).$2 if ($_[1]);
+	return &get_iso639_1($1);
     }
     return $_[0] if ($_[1]);
     return 'xx';
@@ -180,9 +179,9 @@ sub get_iso639_3{
     return $NameToThree{$lc}        if (exists $NameToThree{$lc});
     return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
 
-    if ($_[0]=~s/([\-\_].*)$//){
-	return &get_iso639_3($_[0]).$1 if ($_[1]);
-	return &get_iso639_3($_[0]);
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_iso639_3($1).$2 if ($_[1]);
+	return &get_iso639_3($1);
     }
     return $_[0] if ($_[1]);
     return 'xxx';
@@ -8793,10 +8792,10 @@ zza	diq	A
 zza	kiu	A
 
 NS_Id	Id	Part1	M_Id	Ref_Name
-kmr		ku_Latn	kur	Northern Kurdish
-ckb		ku_Arab	kur	Central Kurdish
 cmn		zh_cn	zho	Chinese Mandarin (simplified)
 cmn		zh_tw	zho	Chinese Mandarin (traditional)
+kmr		ku_Latn	kur	Northern Kurdish
+ckb		ku_Arab	kur	Central Kurdish
 yue		zh_hk	zho	Cantonese
 eng-simple		simple	eng	Simplified English
 ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles

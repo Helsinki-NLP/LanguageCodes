@@ -155,9 +155,9 @@ sub get_iso639_1{
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
     ## try without regional/script extension
-    if ($_[0]=~s/([\-\_].*)$//){
-	return &get_iso639_1($_[0]).$1 if ($_[1]);
-	return &get_iso639_1($_[0]);
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_iso639_1($1).$2 if ($_[1]);
+	return &get_iso639_1($1);
     }
     return $_[0] if ($_[1]);
     return 'xx';
@@ -179,9 +179,9 @@ sub get_iso639_3{
     return $NameToThree{$lc}        if (exists $NameToThree{$lc});
     return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
 
-    if ($_[0]=~s/([\-\_].*)$//){
-	return &get_iso639_3($_[0]).$1 if ($_[1]);
-	return &get_iso639_3($_[0]);
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_iso639_3($1).$2 if ($_[1]);
+	return &get_iso639_3($1);
     }
     return $_[0] if ($_[1]);
     return 'xxx';
