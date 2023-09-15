@@ -31,8 +31,14 @@ If $count is set to 1 then it returns the number of matching characters.
 
 sub contains_script{
     if ((exists $$UnicodeScripts{$_[0]}) || (exists $$UnicodeAliases{$_[0]})){
-	my $regex = "\\p\{$_[0]\}";
-	if ($_[1]=~/\p{$_[0]}/){
+	# my $regex = "\\p\{$_[0]\}";
+	my $exists = 0;
+	eval { $exists = $_[1]=~/\p{$_[0]}/; };
+	if ($@) {
+	    warn "Something went wrong! [$@]\n";
+	    return 0;
+	}
+	if ($exists){
 	    if ($_[2]){
 		my $count = 0;
 		while ($_[1] =~ m/\p{$_[0]}/gs) {$count++};
@@ -42,6 +48,11 @@ sub contains_script{
 	}
 	return 0;
     }
+    if ($_[0] eq 'Jpan'){
+	return 1 if (contains_script('Hira', $_[1], $_[2]));
+	return 1 if (contains_script('Kana', $_[1], $_[2]));
+	return 1 if (contains_script('Han', $_[1], $_[2]));
+    }
     if ($_[0] eq 'Hans' || $_[0] eq 'Hant'){
 	my $script = &simplified_or_traditional_chinese($_[1]);
 	if ($script eq $_[0]){
@@ -50,7 +61,7 @@ sub contains_script{
 	}
 	return 0;
     }
-    print STDERR "unsupported script $_[0]\n";
+    print STDERR "unsupported script $_[0]\n" if ($VERBOSE);
     return undef;
 }
 
@@ -144,7 +155,7 @@ If $count is set to 1 then it returns the number of matching characters.
 
 
 sub script_of_string{
-    my ($str, $lang) = @_;
+    my ($str, $lang, $allow_non_standard) = @_;
 
     my @scripts = language_scripts($lang) if ($lang);
     @scripts = keys %{$UnicodeScripts} unless (@scripts);
@@ -165,6 +176,16 @@ sub script_of_string{
 	unless (wantarray){
 	    last if ($covered >= length($str)/2 );
 	}
+    }
+
+    ## if a language is given return the best acceptable script
+    ## unless we look for all scripts that we can detect
+    ##        or non-standard scripts are also allowed
+    if ((not wantarray) && $lang && (not $allow_non_standard)){
+	## skip common characters if there are other ones detected
+	delete $char{'Zyyy'} if ( (exists $char{'Zyyy'}) && (scalar keys %char > 1) );
+	my ($MostFreq) = sort { $char{$b} <=> $char{$a} } keys %char;
+	return $MostFreq
     }
 
     ## if we have matched less characters than length of the string
@@ -200,14 +221,14 @@ sub script_of_string{
 sub script_code{
     return undef unless(@_);
     return $$ScriptName2ScriptCode{$_[0]} if (exists $$ScriptName2ScriptCode{$_[0]});
-    print STDERR "unknown script $_[0]\n";
+    print STDERR "unknown script $_[0]\n" if ($VERBOSE);
     return undef;
 }
 
 sub script_name{
     return undef unless(@_);
     return $$ScriptCode2ScriptName{$_[0]} if (exists $$ScriptCode2ScriptName{$_[0]});
-    print STDERR "unknown script $_[0]\n";
+    print STDERR "unknown script $_[0]\n" if ($VERBOSE);
     return undef;
 }
 
@@ -218,7 +239,7 @@ sub language_scripts{
     return sort keys %{$$Lang2Script{$langcode}} if (exists $$Lang2Script{$langcode});
     $langcode = ISO::639::3::get_macro_language($langcode,1);
     return sort keys %{$$Lang2Script{$langcode}} if (exists $$Lang2Script{$langcode});
-    print STDERR "unknown language $_[0]\n";
+    print STDERR "unknown language $_[0]\n" if ($VERBOSE);
     return ();
 }
 
@@ -237,7 +258,7 @@ sub languages_with_script{
     return sort keys %{$$Script2Lang{$_[0]}} if (exists $$Script2Lang{$_[0]});
     my $code = script_code($_[0]);
     return sort keys %{$$Script2Lang{$code}} if (exists $$Script2Lang{$code});
-    print STDERR "unknown script $_[0]\n";
+    print STDERR "unknown script $_[0]\n" if ($VERBOSE);
     return ();
 }
 
@@ -250,7 +271,7 @@ sub primary_languages_with_script{
     if (exists $$Script2Lang{$code}){
 	return grep($$Script2Lang{$code}{$_} == 1, keys %{$$Script2Lang{$code}});
     }
-    print STDERR "unknown script $_[0]\n";
+    print STDERR "unknown script $_[0]\n" if ($VERBOSE);
     return ();
 }
 
@@ -263,7 +284,7 @@ sub secondary_languages_with_script{
     if (exists $$Script2Lang{$code}){
 	return grep($$Script2Lang{$code}{$_} == 2, keys %{$$Script2Lang{$code}});
     }
-    print STDERR "unknown script $_[0]\n";
+    print STDERR "unknown script $_[0]\n" if ($VERBOSE);
     return ();
 }
 

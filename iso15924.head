@@ -23,11 +23,11 @@ ISO::15924 - Language scripts
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION      = '0.01';
+our $VERSION      = '0.02';
 
 use Exporter 'import';
 our @EXPORT = qw(
@@ -49,6 +49,8 @@ our @EXPORT = qw(
     secondary_languages_with_script
 );
 our %EXPORT_TAGS = ( all => \@EXPORT );
+
+our $VERBOSE = 0;
 
 
 =head1 SYNOPSIS

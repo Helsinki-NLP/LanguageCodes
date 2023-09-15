@@ -76,17 +76,26 @@ while (<>){
     }
     else{
 	my @output = ();
-	if ($opt_l){
-	    if ($opt_1){ push( @output, &get_iso639_1($opt_l, 1) ); }
-	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
-	}
-
+	my $langcode = $opt_l;
+	
 	if ($opt_L){
 	    $DefaultRegion = &get_default_region($opt_l);
 	    $DefaultScript = &get_default_script($opt_l);
 	}
 
 	my $script = &script_of_string($_, $opt_l) || $DefaultScript;
+	
+	if ($opt_l){
+	    # if ($opt_1){ push( @output, &get_iso639_1($opt_l, 1) ); }
+	    # elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
+	    if ($opt_l eq 'ku'){
+		$opt_l .= '_'.$script;
+		$DefaultScript = &get_default_script(&get_iso639_3($opt_l));
+	    }
+	    if ($opt_1){ push( @output, &get_iso639_1($opt_l) ); }
+	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l) ); }
+	}
+
 	unless ( $opt_D && ( ($script eq $DefaultScript) || ($script eq 'Zyyy') ) ){
 	    if ($opt_n){
 		push(@output, script_name($script)) if ($script);
@@ -104,7 +113,7 @@ while (<>){
 	    }
 	}
 	
-	&fix_langcodes(\@output);
+#	&fix_langcodes(\@output);
 	print join('_', @output),"\n";
     }
 }

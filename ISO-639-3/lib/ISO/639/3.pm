@@ -32,11 +32,11 @@ ISO::639::3 - Language codes and names from ISO::639
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION      = '0.03';
+our $VERSION      = '0.04';
 
 use Exporter 'import';
 our @EXPORT = qw(
@@ -48,6 +48,7 @@ our @EXPORT = qw(
 );
 our %EXPORT_TAGS = ( all => \@EXPORT );
 
+our $VERBOSE = 0;
 
 =head1 SYNOPSIS
 
@@ -139,10 +140,15 @@ Return the ISO 639-1 code for a given language or three-letter code. Returns the
 =cut
 
 sub get_iso639_1{
-    return $_[0]                 if (exists $TwoToName{$_[0]});
-    return $ThreeToTwo{$_[0]}    if (exists $ThreeToTwo{$_[0]});
-    return $NameToTwo{lc($_[0])} if (exists $NameToTwo{lc($_[0])});
-    return $_[0]                 if (exists $TwoToThree{$_[0]});
+    return $_[0]               if (exists $TwoToName{$_[0]});
+    return $_[0]               if (exists $TwoToThree{$_[0]});
+    return $ThreeToTwo{$_[0]}  if (exists $ThreeToTwo{$_[0]});
+    my $lc = lc($_[0]);
+    return $lc                 if (exists $TwoToName{$lc});
+    return $ThreeToTwo{$lc}    if (exists $ThreeToTwo{$lc});
+    return $NameToTwo{$lc}     if (exists $NameToTwo{$lc});
+    return $lc                 if (exists $TwoToThree{$lc});
+    
     ## TODO: is it OK to fallback to macro language in this conversion?
     ##       (should we add some regional code?)
     if (exists $ThreeToMacro{$_[0]}){
@@ -150,13 +156,10 @@ sub get_iso639_1{
 	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
     }
     ## try without regional/script extension
-    my $code = $_[0];
-#    return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
-    if ($code=~s/([\-\_].*)$//){
-	return &get_iso639_1($code).$1 if ($_[1]);
-	return &get_iso639_1($code);
+    if ($_[0]=~s/([\-\_].*)$//){
+	return &get_iso639_1($_[0]).$1 if ($_[1]);
+	return &get_iso639_1($_[0]);
     }
-    return &get_iso639_1(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xx';
 }
@@ -168,18 +171,19 @@ Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx
 =cut
 
 sub get_iso639_3{
-    return $_[0]                   if (exists $ThreeToName{$_[0]});
-    return $TwoToThree{$_[0]}      if (exists $TwoToThree{$_[0]});
-    return $NameToThree{lc($_[0])} if (exists $NameToThree{lc($_[0])});
-    return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
+    return $_[0]                    if (exists $ThreeToName{$_[0]});
+    return $TwoToThree{$_[0]}       if (exists $TwoToThree{$_[0]});
+    return $ThreeToThree{$_[0]}     if (exists $ThreeToThree{$_[0]});
+    my $lc = lc($_[0]);
+    return $lc                      if (exists $ThreeToName{$lc});
+    return $TwoToThree{$lc}         if (exists $TwoToThree{$lc});
+    return $NameToThree{$lc}        if (exists $NameToThree{$lc});
+    return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
 
-    my $code = $_[0];
-#    return &get_iso639_3($code)    if ($code=~s/[\-\_].*$//);
-    if ($code=~s/([\-\_].*)$//){
-	return &get_iso639_3($code).$1 if ($_[1]);
-	return &get_iso639_3($code);
+    if ($_[0]=~s/([\-\_].*)$//){
+	return &get_iso639_3($_[0]).$1 if ($_[1]);
+	return &get_iso639_3($_[0]);
     }
-    return &get_iso639_3(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xxx';
 }
@@ -8789,10 +8793,10 @@ zza	diq	A
 zza	kiu	A
 
 NS_Id	Id	Part1	M_Id	Ref_Name
-cmn		zh_cn	zho	Chinese Mandarin (simplified)
-cmn		zh_tw	zho	Chinese Mandarin (traditional)
 kmr		ku_Latn	kur	Northern Kurdish
 ckb		ku_Arab	kur	Central Kurdish
+cmn		zh_cn	zho	Chinese Mandarin (simplified)
+cmn		zh_tw	zho	Chinese Mandarin (traditional)
 yue		zh_hk	zho	Cantonese
 eng-simple		simple	eng	Simplified English
 ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles

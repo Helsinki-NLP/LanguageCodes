@@ -99,6 +99,8 @@ sub set_default_scripts{
     ## somehow macro-norwegian is missing
     $DefaultScript{'nor'} = 'Latn';
     $DefaultScript{'no'} = 'Latn';
+    $DefaultScript{'kmr'} = 'Latn';
+    $DefaultScript{'ckb'} = 'Arab';
 }
 
 
