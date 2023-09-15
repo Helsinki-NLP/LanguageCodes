@@ -151,7 +151,11 @@ sub get_iso639_1{
     }
     ## try without regional extension
     my $code = $_[0];
-    return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
+    # return &get_iso639_1($code) if ($code=~s/[\-\_].*$//);
+    if ($code=~s/([\-\_].*)$//){
+	return &get_iso639_1($code).$1 if ($_[1]);
+	return &get_iso639_1($code);
+    }
     return &get_iso639_1(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xx';
@@ -170,7 +174,11 @@ sub get_iso639_3{
     return $ThreeToThree{$_[0]}    if (exists $ThreeToThree{$_[0]});
 
     my $code = $_[0];
-    return &get_iso639_3($code)     if ($code=~s/[\-\_].*$//);
+    # return &get_iso639_3($code)     if ($code=~s/[\-\_].*$//);
+    if ($code=~s/([\-\_].*)$//){
+	return &get_iso639_3($code).$1 if ($_[1]);
+	return &get_iso639_3($code);
+    }
     return &get_iso639_3(lc($code)) if ($code ne lc($code));
     return $_[0] if ($_[1]);
     return 'xxx';

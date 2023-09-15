@@ -1,6 +1,8 @@
 NS_Id	Id	Part1	M_Id	Ref_Name
 cmn		zh_cn	zho	Chinese Mandarin (simplified)
 cmn		zh_tw	zho	Chinese Mandarin (traditional)
+kmr		ku_Latn	kur	Northern Kurdish
+ckb		ku_Arab	kur	Central Kurdish
 yue		zh_hk	zho	Cantonese
 eng-simple		simple	eng	Simplified English
 ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles

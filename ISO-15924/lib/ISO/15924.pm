@@ -3316,6 +3316,9 @@ $Lang2Territory = {
   'nno' => {
     'NO' => 1
   },
+  'nor' => {
+    'NO' => 1
+  },      
   'hif' => {
     'FJ' => 1
   },
@@ -8837,6 +8840,7 @@ $DefaultScript = {
   'nno' => 'Latn',
   'kxp' => 'Arab',
   'nob' => 'Latn',
+  'nor' => 'Latn',    
   'chy' => 'Latn',
   'khq' => 'Latn',
   'rus' => 'Cyrl',
@@ -9458,6 +9462,7 @@ $DefaultTerritory = {
   'bjt' => 'SN',
   'tso' => 'ZA',
   'nob' => 'NO',
+  'nor' => 'NO',    
   'khq' => 'ML',
   'nno' => 'NO',
   'hif' => 'FJ',
@@ -9530,6 +9535,7 @@ $DefaultTerritory = {
   'gon' => 'IN',
   'gez' => 'ET',
   'nb' => 'NO',
+  'no' => 'NO',    
   'asm' => 'IN',
   'ru' => 'RU',
   'kk' => 'KZ',
