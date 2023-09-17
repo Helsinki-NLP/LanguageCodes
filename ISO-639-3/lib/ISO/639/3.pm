@@ -32,11 +32,11 @@ ISO::639::3 - Language codes and names from ISO::639
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION      = '0.02';
+our $VERSION      = '0.03';
 
 use Exporter 'import';
 our @EXPORT = qw(
@@ -81,16 +81,18271 @@ This converts all language codes given as LANGCODE to corresponding language nam
 
 =cut
 
-our %TwoToThree   = ();
-our %ThreeToTwo   = ();
-our %ThreeToThree = ();
-our %ThreeToMacro = ();
-our %NameToTwo    = ();
-our %NameToThree  = ();
-our %TwoToName    = ();
-our %ThreeToName  = ();
+our $TwoToThree   = {};
+our $ThreeToTwo   = {};
+our $TwoToTwo     = {};
+our $ThreeToThree = {};
+our $ThreeToMacro = {};
+our $NameToTwo    = {};
+our $NameToThree  = {};
+our $TwoToName    = {};
+our $ThreeToName  = {};
 
-&_read_iso639_codes;
+$TwoToThree = {
+  'mg' => 'mlg',
+  'xh' => 'xho',
+  'ug' => 'uig',
+  'id' => 'ind',
+  'hy' => 'hye',
+  'ab' => 'abk',
+  'sg' => 'sag',
+  'dz' => 'dzo',
+  'ga' => 'gle',
+  'my' => 'mya',
+  'za' => 'zha',
+  'no' => 'nor',
+  'cs' => 'ces',
+  'tn' => 'tsn',
+  'lu' => 'lub',
+  'simple' => 'eng-simple',
+  'bo' => 'bod',
+  'en' => 'eng',
+  'bi' => 'bis',
+  'ms' => 'msa',
+  'nl' => 'nld',
+  'kn' => 'kan',
+  'ku_Arab' => 'ckb',
+  'ss' => 'ssw',
+  'cy' => 'cym',
+  'ks' => 'kas',
+  'ze_en' => 'eng',
+  'sn' => 'sna',
+  'ty' => 'tah',
+  'es' => 'spa',
+  'is' => 'isl',
+  'mn' => 'mon',
+  'tg' => 'tgk',
+  'ff' => 'ful',
+  'fr' => 'fra',
+  'pl' => 'pol',
+  'nb' => 'nob',
+  'ro' => 'ron',
+  'lt' => 'lit',
+  'ts' => 'tso',
+  'gv' => 'glv',
+  'pi' => 'pli',
+  'ky' => 'kir',
+  'bh' => 'bih',
+  'sd' => 'snd',
+  'kg' => 'kon',
+  'ig' => 'ibo',
+  'bs' => 'bos',
+  'mi' => 'mri',
+  'ng' => 'ndo',
+  'si' => 'sin',
+  'ho' => 'hmo',
+  'th' => 'tha',
+  'so' => 'som',
+  'ze_zh' => 'zho',
+  'ny' => 'nya',
+  'hi' => 'hin',
+  'an' => 'arg',
+  'mo' => 'mol',
+  'fa' => 'fas',
+  'qu' => 'que',
+  'yi' => 'yid',
+  'wa' => 'wln',
+  'sl' => 'slv',
+  'rn' => 'run',
+  'bg' => 'bul',
+  'da' => 'dan',
+  'co' => 'cos',
+  'lv' => 'lav',
+  'ml' => 'mal',
+  'yo' => 'yor',
+  'el' => 'ell',
+  'dv' => 'div',
+  'vo' => 'vol',
+  'la' => 'lat',
+  'ay' => 'aym',
+  'kl' => 'kal',
+  'nn' => 'nno',
+  'to' => 'ton',
+  'ps' => 'pus',
+  'sh' => 'hbs',
+  'os' => 'oss',
+  'zh_TW' => 'zho',
+  'ti' => 'tir',
+  'mh' => 'mah',
+  'vi' => 'vie',
+  'eo' => 'epo',
+  'fj' => 'fij',
+  'de' => 'deu',
+  'io' => 'ido',
+  'gr' => 'ell',
+  'ko' => 'kor',
+  'as' => 'asm',
+  'tl' => 'tgl',
+  'sq' => 'sqi',
+  'gu' => 'guj',
+  'ki' => 'kik',
+  'zu' => 'zul',
+  'ku_Latn' => 'kmr',
+  'ch' => 'cha',
+  'bn' => 'ben',
+  'nd' => 'nde',
+  'ii' => 'iii',
+  'zh_CN' => 'zho',
+  'ar' => 'ara',
+  'af' => 'afr',
+  'wo' => 'wol',
+  'ee' => 'ewe',
+  'ca' => 'cat',
+  'ie' => 'ile',
+  'fi' => 'fin',
+  'bm' => 'bam',
+  'ja' => 'jpn',
+  'fo' => 'fao',
+  'sw' => 'swa',
+  'kj' => 'kua',
+  've' => 'ven',
+  'sa' => 'san',
+  'te' => 'tel',
+  'kv' => 'kom',
+  'ru' => 'rus',
+  'sk' => 'slk',
+  'uk' => 'ukr',
+  'mk' => 'mkd',
+  'ha' => 'hau',
+  'lb' => 'ltz',
+  'or' => 'ori',
+  'om' => 'orm',
+  'gd' => 'gla',
+  'ik' => 'ipk',
+  'tw' => 'twi',
+  'kk' => 'kaz',
+  'az' => 'aze',
+  'ia' => 'ina',
+  'sv' => 'swe',
+  'ce' => 'che',
+  'nr' => 'nbl',
+  'ka' => 'kat',
+  'rm' => 'roh',
+  'li' => 'lim',
+  'pt' => 'por',
+  'jv' => 'jav',
+  'he' => 'heb',
+  'tk' => 'tuk',
+  'kw' => 'cor',
+  'br' => 'bre',
+  'se' => 'sme',
+  'gn' => 'grn',
+  'cv' => 'chv',
+  'lo' => 'lao',
+  'oc' => 'oci',
+  'ta' => 'tam',
+  'me' => 'cnr',
+  'am' => 'amh',
+  'av' => 'ava',
+  'mt' => 'mlt',
+  'gl' => 'glg',
+  'hz' => 'her',
+  'st' => 'sot',
+  'oj' => 'oji',
+  'tr' => 'tur',
+  'uz' => 'uzb',
+  'sc' => 'srd',
+  'ht' => 'hat',
+  'fy' => 'fry',
+  'ba' => 'bak',
+  'ae' => 'ave',
+  'na' => 'nau',
+  'kr' => 'kau',
+  'ln' => 'lin',
+  'sm' => 'smo',
+  'iu' => 'iku',
+  'eu' => 'eus',
+  'cz' => 'ces',
+  'ku' => 'kur',
+  'su' => 'sun',
+  'be' => 'bel',
+  'hr' => 'hrv',
+  'pa' => 'pan',
+  'sr' => 'srp',
+  'km' => 'khm',
+  'tt' => 'tat',
+  'nv' => 'nav',
+  'ur' => 'urd',
+  'mr' => 'mar',
+  'hu' => 'hun',
+  'lg' => 'lug',
+  'cu' => 'chu',
+  'zh' => 'zho',
+  'rw' => 'kin',
+  'ak' => 'aka',
+  'aa' => 'aar',
+  'jp' => 'jpn',
+  'cr' => 'cre',
+  'et' => 'est',
+  'it' => 'ita',
+  'ne' => 'nep'
+};
+$ThreeToTwo = {
+  'lub' => 'lu',
+  'kua' => 'kj',
+  'div' => 'dv',
+  'nno' => 'nn',
+  'hun' => 'hu',
+  'bul' => 'bg',
+  'jav' => 'jv',
+  'lao' => 'lo',
+  'abk' => 'ab',
+  'sun' => 'su',
+  'pan' => 'pa',
+  'baq' => 'eu',
+  'ben' => 'bn',
+  'jpn' => 'ja',
+  'bur' => 'my',
+  'iii' => 'ii',
+  'sqi' => 'sq',
+  'kal' => 'kl',
+  'chi' => 'zh',
+  'glg' => 'gl',
+  'iku' => 'iu',
+  'ces' => 'cs',
+  'nob' => 'nb',
+  'kau' => 'kr',
+  'her' => 'hz',
+  'fre' => 'fr',
+  'gla' => 'gd',
+  'kas' => 'ks',
+  'ndo' => 'ng',
+  'guj' => 'gu',
+  'ava' => 'av',
+  'tgk' => 'tg',
+  'est' => 'et',
+  'ita' => 'it',
+  'alb' => 'sq',
+  'pus' => 'ps',
+  'rus' => 'ru',
+  'hau' => 'ha',
+  'aka' => 'ak',
+  'cym' => 'cy',
+  'zha' => 'za',
+  'yid' => 'yi',
+  'mal' => 'ml',
+  'tel' => 'te',
+  'afr' => 'af',
+  'dut' => 'nl',
+  'fao' => 'fo',
+  'ibo' => 'ig',
+  'ukr' => 'uk',
+  'hye' => 'hy',
+  'mar' => 'mr',
+  'slo' => 'sk',
+  'wol' => 'wo',
+  'spa' => 'es',
+  'may' => 'ms',
+  'geo' => 'ka',
+  'mah' => 'mh',
+  'pli' => 'pi',
+  'zhs' => 'zh_CN',
+  'kom' => 'kv',
+  'kan' => 'kn',
+  'asm' => 'as',
+  'gre' => 'el',
+  'kmr' => 'ku_Latn',
+  'sag' => 'sg',
+  'srp' => 'sr',
+  'nde' => 'nd',
+  'sot' => 'st',
+  'glv' => 'gv',
+  'che' => 'ce',
+  'eng-simple' => 'simple',
+  'slk' => 'sk',
+  'tso' => 'ts',
+  'swa' => 'sw',
+  'arg' => 'an',
+  'ile' => 'ie',
+  'aar' => 'aa',
+  'aym' => 'ay',
+  'nav' => 'nv',
+  'vie' => 'vi',
+  'mlt' => 'mt',
+  'lin' => 'ln',
+  'nep' => 'ne',
+  'bel' => 'be',
+  'ara' => 'ar',
+  'snd' => 'sd',
+  'tur' => 'tr',
+  'nau' => 'na',
+  'lat' => 'la',
+  'nld' => 'nl',
+  'per' => 'fa',
+  'xho' => 'xh',
+  'ido' => 'io',
+  'dzo' => 'dz',
+  'khm' => 'km',
+  'que' => 'qu',
+  'ind' => 'id',
+  'eus' => 'eu',
+  'amh' => 'am',
+  'bod' => 'bo',
+  'hrv' => 'hr',
+  'tah' => 'ty',
+  'fin' => 'fi',
+  'kaz' => 'kk',
+  'kur' => 'ku',
+  'kik' => 'ki',
+  'run' => 'rn',
+  'san' => 'sa',
+  'wln' => 'wa',
+  'som' => 'so',
+  'ven' => 've',
+  'tib' => 'bo',
+  'mri' => 'mi',
+  'bre' => 'br',
+  'lim' => 'li',
+  'ewe' => 'ee',
+  'pol' => 'pl',
+  'cat' => 'ca',
+  'ssw' => 'ss',
+  'mlg' => 'mg',
+  'ton' => 'to',
+  'tam' => 'ta',
+  'ger' => 'de',
+  'por' => 'pt',
+  'tgl' => 'tl',
+  'zho' => 'zh',
+  'urd' => 'ur',
+  'kin' => 'rw',
+  'aze' => 'az',
+  'nbl' => 'nr',
+  'srd' => 'sc',
+  'nya' => 'ny',
+  'uig' => 'ug',
+  'ful' => 'ff',
+  'tha' => 'th',
+  'grn' => 'gn',
+  'hat' => 'ht',
+  'isl' => 'is',
+  'kon' => 'kg',
+  'ckb' => 'ku_Arab',
+  'heb' => 'he',
+  'hin' => 'hi',
+  'nor' => 'no',
+  'cha' => 'ch',
+  'mon' => 'mn',
+  'bos' => 'bs',
+  'oji' => 'oj',
+  'bis' => 'bi',
+  'kat' => 'ka',
+  'rum' => 'ro',
+  'orm' => 'om',
+  'sin' => 'si',
+  'dan' => 'da',
+  'arm' => 'hy',
+  'lit' => 'lt',
+  'smo' => 'sm',
+  'epo' => 'eo',
+  'tat' => 'tt',
+  'hmo' => 'ho',
+  'swe' => 'sv',
+  'zul' => 'zu',
+  'lug' => 'lg',
+  'msa' => 'ms',
+  'ina' => 'ia',
+  'bak' => 'ba',
+  'tir' => 'ti',
+  'tuk' => 'tk',
+  'deu' => 'de',
+  'ice' => 'is',
+  'twi' => 'tw',
+  'wel' => 'cy',
+  'cre' => 'cr',
+  'eng' => 'en',
+  'chu' => 'cu',
+  'bih' => 'bh',
+  'oci' => 'oc',
+  'ipk' => 'ik',
+  'kir' => 'ky',
+  'hbs' => 'sh',
+  'slv' => 'sl',
+  'mya' => 'my',
+  'vol' => 'vo',
+  'oss' => 'os',
+  'kor' => 'ko',
+  'ell' => 'el',
+  'tsn' => 'tn',
+  'ron' => 'ro',
+  'uzb' => 'uz',
+  'fij' => 'fj',
+  'sme' => 'se',
+  'mkd' => 'mk',
+  'fas' => 'fa',
+  'roh' => 'rm',
+  'lav' => 'lv',
+  'cze' => 'cs',
+  'cos' => 'co',
+  'mac' => 'mk',
+  'ltz' => 'lb',
+  'yor' => 'yo',
+  'ori' => 'or',
+  'fra' => 'fr',
+  'cor' => 'kw',
+  'gle' => 'ga',
+  'mao' => 'mi',
+  'zht' => 'zh_TW',
+  'ave' => 'ae',
+  'chv' => 'cv',
+  'mol' => 'mo',
+  'sna' => 'sn',
+  'bam' => 'bm',
+  'fry' => 'fy'
+};
+$ThreeToThree = {
+  'mkd' => 'mkd',
+  'fas' => 'fas',
+  'wal' => 'wal',
+  'gez' => 'gez',
+  'fij' => 'fij',
+  'non' => 'non',
+  'jai' => 'jac',
+  'jrb' => 'jrb',
+  'tzt' => 'tzj',
+  'roh' => 'roh',
+  'cos' => 'cos',
+  'suk' => 'suk',
+  'mad' => 'mad',
+  'mwj' => 'vaj',
+  'anp' => 'anp',
+  'ckj' => 'cak',
+  'yos' => 'zom',
+  'tlw' => 'weo',
+  'kgh' => 'kml',
+  'mac' => 'mkd',
+  'sad' => 'sad',
+  'adp' => 'dzo',
+  'ori' => 'ori',
+  'xia' => 'acn',
+  'ltz' => 'ltz',
+  'bin' => 'bin',
+  'ckc' => 'cak',
+  'mis' => 'mis',
+  'chv' => 'chv',
+  'kzt' => 'dtp',
+  'zht' => 'zho',
+  'war' => 'war',
+  'ckd' => 'cak',
+  'dua' => 'dua',
+  'fra' => 'fra',
+  'phn' => 'phn',
+  'arc' => 'arc',
+  'ilw' => 'gal',
+  'akk' => 'akk',
+  'cad' => 'cad',
+  'fry' => 'fry',
+  'lcq' => 'ppr',
+  'lun' => 'lun',
+  'mos' => 'mos',
+  'pro' => 'pro',
+  'occ' => 'ile',
+  'ice' => 'isl',
+  'tir' => 'tir',
+  'msa' => 'msa',
+  'ina' => 'ina',
+  'aam' => 'aas',
+  'wel' => 'cym',
+  'twi' => 'twi',
+  'gen' => 'mxj',
+  'llo' => 'ngt',
+  'nds' => 'nds',
+  'kxl' => 'kru',
+  'cre' => 'cre',
+  'miv' => 'amj',
+  'eng' => 'eng',
+  'lnt' => 'pse',
+  'ewo' => 'ewo',
+  'mya' => 'mya',
+  'nns' => 'nbr',
+  'tze' => 'tzo',
+  'slv' => 'slv',
+  'pon' => 'pon',
+  'kir' => 'kir',
+  'ron' => 'ron',
+  'sga' => 'sga',
+  'ell' => 'ell',
+  'tsn' => 'tsn',
+  'pmc' => 'huw',
+  'kor' => 'kor',
+  'mga' => 'mga',
+  'xba' => 'cax',
+  'lii' => 'raq',
+  'sam' => 'sam',
+  'tpi' => 'tpi',
+  'nyn' => 'nyn',
+  'nor' => 'nor',
+  'tlh' => 'tlh',
+  'cha' => 'cha',
+  'sco' => 'sco',
+  'oji' => 'oji',
+  'lnc' => 'oci',
+  'chy' => 'chy',
+  'ywm' => 'ywu',
+  'peo' => 'peo',
+  'gli' => 'kzk',
+  'chg' => 'chg',
+  'arm' => 'hye',
+  'lah' => 'lah',
+  'tlz' => 'rob',
+  'smo' => 'smo',
+  'niu' => 'niu',
+  'hmo' => 'hmo',
+  'kab' => 'kab',
+  'epo' => 'epo',
+  'nxu' => 'bpp',
+  'byn' => 'byn',
+  'cke' => 'cak',
+  'aue' => 'ktz',
+  'efi' => 'efi',
+  'swe' => 'swe',
+  'ckk' => 'cak',
+  'bsz' => 'eus',
+  'cat' => 'cat',
+  'myv' => 'myv',
+  'pol' => 'pol',
+  'mlg' => 'mlg',
+  'pou' => 'poc',
+  'dit' => 'dif',
+  'lez' => 'lez',
+  'coy' => 'pij',
+  'srj' => 'pse',
+  'bgh' => 'bbh',
+  'ger' => 'deu',
+  'ton' => 'ton',
+  'mdr' => 'mdr',
+  'lms' => 'oci',
+  'kin' => 'kin',
+  'por' => 'por',
+  'skk' => 'oyb',
+  'tgl' => 'tgl',
+  'sat' => 'sat',
+  'nbl' => 'nbl',
+  'srd' => 'srd',
+  'kzj' => 'dtp',
+  'hat' => 'hat',
+  'tzc' => 'tzo',
+  'grn' => 'grn',
+  'frs' => 'frs',
+  'ogn' => 'pse',
+  'ttx' => 'bsb',
+  'vmo' => 'min',
+  'cnr' => 'cnr',
+  'mak' => 'mak',
+  'sog' => 'sog',
+  'kon' => 'kon',
+  'isl' => 'isl',
+  'mms' => 'mam',
+  'ido' => 'ido',
+  'xho' => 'xho',
+  'dgr' => 'dgr',
+  'nld' => 'nld',
+  'lat' => 'lat',
+  'fon' => 'fon',
+  'bua' => 'bua',
+  'sms' => 'sms',
+  'din' => 'din',
+  'khm' => 'khm',
+  'bod' => 'bod',
+  'nxj' => 'byd',
+  'arn' => 'arn',
+  'bra' => 'bra',
+  'bgm' => 'bcg',
+  'bug' => 'bug',
+  'eus' => 'eus',
+  'chb' => 'chb',
+  'boc' => 'xkl',
+  'fin' => 'fin',
+  'ota' => 'ota',
+  'dyu' => 'dyu',
+  'zir' => 'scv',
+  'kik' => 'kik',
+  'kaa' => 'kaa',
+  'jeg' => 'oyb',
+  'kwq' => 'yam',
+  'eni' => 'pse',
+  'nym' => 'nym',
+  'nfg' => 'nfd',
+  'ven' => 'ven',
+  'san' => 'san',
+  'hva' => 'hus',
+  'man' => 'man',
+  'bas' => 'bas',
+  'kok' => 'kok',
+  'eka' => 'eka',
+  'yuu' => 'yug',
+  'rws' => 'mui',
+  'kgc' => 'tdf',
+  'xal' => 'xal',
+  'kxe' => 'tvd',
+  'mah' => 'mah',
+  'tle' => 'enb',
+  'fri' => 'fry',
+  'uok' => 'ema',
+  'yib' => 'eng',
+  'gre' => 'ell',
+  'srr' => 'srr',
+  'sdd' => 'pse',
+  'kom' => 'kom',
+  'sah' => 'sah',
+  'srp' => 'srp',
+  'zgh' => 'zgh',
+  'nhj' => 'nhi',
+  'pry' => 'prt',
+  'zbl' => 'zbl',
+  'fro' => 'fro',
+  'ppa' => 'bfy',
+  'hrr' => 'jal',
+  'cru' => 'bwi',
+  'slb' => 'loe',
+  'glv' => 'glv',
+  'hup' => 'hup',
+  'tzu' => 'tzo',
+  'aar' => 'aar',
+  'lam' => 'lam',
+  'ile' => 'ile',
+  'afh' => 'afh',
+  'suu' => 'ljp',
+  'men' => 'men',
+  'tmp' => 'tyj',
+  'poj' => 'pkb',
+  'nav' => 'nav',
+  'snd' => 'snd',
+  'mul' => 'mul',
+  'mnc' => 'mnc',
+  'tie' => 'ras',
+  'tzz' => 'tzo',
+  'arp' => 'arp',
+  'est' => 'est',
+  'ita' => 'ita',
+  'skl' => 'knx',
+  'tgk' => 'tgk',
+  'mwr' => 'mwr',
+  'tnf' => 'prs',
+  'xkh' => 'waw',
+  'pus' => 'pus',
+  'yap' => 'yap',
+  'alb' => 'sqi',
+  'hau' => 'hau',
+  'snk' => 'snk',
+  'rus' => 'rus',
+  'kbd' => 'kbd',
+  'afr' => 'afr',
+  'ncp' => 'kdz',
+  'crh' => 'crh',
+  'mal' => 'mal',
+  'gba' => 'gba',
+  'xah' => 'nij',
+  'tmh' => 'tmh',
+  'car' => 'car',
+  'pag' => 'pag',
+  'yio' => 'lpo',
+  'nts' => 'pij',
+  'fao' => 'fao',
+  'mwl' => 'mwl',
+  'slo' => 'slk',
+  'mar' => 'mar',
+  'hsf' => 'hus',
+  'thc' => 'tpo',
+  'fil' => 'fil',
+  'bsd' => 'bsb',
+  'tvl' => 'tvl',
+  'srn' => 'srn',
+  'cnm' => 'cac',
+  'rom' => 'rom',
+  'mtz' => 'mam',
+  'sel' => 'sel',
+  'kua' => 'kua',
+  'krg' => 'khe',
+  'jav' => 'jav',
+  'haw' => 'haw',
+  'hsb' => 'hsb',
+  'nno' => 'nno',
+  'hun' => 'hun',
+  'sun' => 'sun',
+  'grc' => 'grc',
+  'sma' => 'sma',
+  'cjr' => 'mom',
+  'baq' => 'eus',
+  'prv' => 'oci',
+  'bxt' => 'bgk',
+  'koj' => 'kwv',
+  'bqe' => 'eus',
+  'ckw' => 'cak',
+  'pcr' => 'adx',
+  'bik' => 'bik',
+  'glg' => 'glg',
+  'ayx' => 'nun',
+  'sca' => 'hle',
+  'chi' => 'zho',
+  'ixj' => 'ixl',
+  'nnx' => 'ngv',
+  'pmu' => 'phr',
+  'krq' => 'ljp',
+  'sqi' => 'sqi',
+  'her' => 'her',
+  'cun' => 'quc',
+  'arw' => 'arw',
+  'lad' => 'lad',
+  'ccq' => 'rki',
+  'cho' => 'cho',
+  'csb' => 'csb',
+  'guj' => 'guj',
+  'ava' => 'ava',
+  'yma' => 'lrr',
+  'gla' => 'gla',
+  'ndo' => 'ndo',
+  'kas' => 'kas',
+  'plm' => 'mui',
+  'poa' => 'poc',
+  'sme' => 'sme',
+  'quu' => 'quc',
+  'tiv' => 'tiv',
+  'nzi' => 'nzi',
+  'krm' => 'bmf',
+  'yao' => 'yao',
+  'cki' => 'cak',
+  'kpe' => 'kpe',
+  'cze' => 'ces',
+  'egy' => 'egy',
+  'was' => 'was',
+  'lav' => 'lav',
+  'doi' => 'doi',
+  'kum' => 'kum',
+  'hai' => 'hai',
+  'bke' => 'pse',
+  'yor' => 'yor',
+  'hil' => 'hil',
+  'ave' => 'ave',
+  'drh' => 'khk',
+  'tzb' => 'tzh',
+  'mol' => 'ron',
+  'gle' => 'gle',
+  'mao' => 'mri',
+  'cor' => 'cor',
+  'guv' => 'guv',
+  'dar' => 'dar',
+  'mai' => 'mai',
+  'cop' => 'cop',
+  'gsc' => 'oci',
+  'sna' => 'sna',
+  'bam' => 'bam',
+  'tum' => 'tum',
+  'kmb' => 'kmb',
+  'lug' => 'lug',
+  'dsb' => 'dsb',
+  'zul' => 'zul',
+  'umb' => 'umb',
+  'kos' => 'kos',
+  'ain' => 'ain',
+  'szk' => 'ikz',
+  'tuk' => 'tuk',
+  'deu' => 'deu',
+  'ymt' => 'ymt',
+  'bak' => 'bak',
+  'del' => 'del',
+  'mvj' => 'mam',
+  'zen' => 'zen',
+  'lua' => 'lua',
+  'chu' => 'chu',
+  'mpf' => 'mam',
+  'cmk' => 'xch',
+  'inh' => 'inh',
+  'ipk' => 'ipk',
+  'oci' => 'oci',
+  'gaa' => 'gaa',
+  'vai' => 'vai',
+  'kac' => 'kac',
+  'bem' => 'bem',
+  'got' => 'got',
+  'pam' => 'pam',
+  'chr' => 'chr',
+  'mvc' => 'mam',
+  'kut' => 'kut',
+  'nog' => 'nog',
+  'bla' => 'bla',
+  'chp' => 'chp',
+  'acc' => 'acr',
+  'vol' => 'vol',
+  'oss' => 'oss',
+  'uga' => 'uga',
+  'nia' => 'nia',
+  'cqu' => 'quh',
+  'rae' => 'ljp',
+  'uzb' => 'uzb',
+  'gay' => 'gay',
+  'syr' => 'syr',
+  'ckf' => 'cak',
+  'xuf' => 'awn',
+  'tdu' => 'dtp',
+  'aex' => 'eng',
+  'hin' => 'hin',
+  'heb' => 'heb',
+  'zxx' => 'zxx',
+  'ope' => 'peo',
+  'kxg' => 'nij',
+  'bos' => 'bos',
+  'tem' => 'tem',
+  'nfk' => 'nfd',
+  'mon' => 'mon',
+  'lus' => 'lus',
+  'bis' => 'bis',
+  'rum' => 'ron',
+  'kat' => 'kat',
+  'min' => 'min',
+  'bnh' => 'jaa',
+  'zap' => 'zap',
+  'nad' => 'xny',
+  'tyv' => 'tyv',
+  'krc' => 'krc',
+  'sin' => 'sin',
+  'orm' => 'orm',
+  'tog' => 'tog',
+  'smj' => 'smj',
+  'dan' => 'dan',
+  'scc' => 'srp',
+  'osa' => 'osa',
+  'nwc' => 'nwc',
+  'pec' => 'ljp',
+  'lit' => 'lit',
+  'cti' => 'ctu',
+  'drw' => 'prs',
+  'tat' => 'tat',
+  'fan' => 'fan',
+  'tkk' => 'twm',
+  'tig' => 'tig',
+  'ceb' => 'ceb',
+  'bej' => 'bej',
+  'shn' => 'shn',
+  'lim' => 'lim',
+  'bre' => 'bre',
+  'mri' => 'mri',
+  'paj' => 'kpc',
+  'ssw' => 'ssw',
+  'gav' => 'dev',
+  'frr' => 'frr',
+  'ewe' => 'ewe',
+  'ady' => 'ady',
+  'tmx' => 'ybi',
+  'zza' => 'zza',
+  'kha' => 'kha',
+  'ada' => 'ada',
+  'raj' => 'raj',
+  'iba' => 'iba',
+  'fur' => 'fur',
+  'drr' => 'kzk',
+  'tam' => 'tam',
+  'sux' => 'sux',
+  'aze' => 'aze',
+  'zun' => 'zun',
+  'tet' => 'tet',
+  'chn' => 'chn',
+  'bjd' => 'drl',
+  'urd' => 'urd',
+  'zho' => 'zho',
+  'qxi' => 'quc',
+  'uig' => 'uig',
+  'ace' => 'ace',
+  'nya' => 'nya',
+  'den' => 'den',
+  'gmh' => 'gmh',
+  'tha' => 'tha',
+  'moh' => 'moh',
+  'ful' => 'ful',
+  'kam' => 'kam',
+  'ang' => 'ang',
+  'kob' => 'xsu',
+  'kru' => 'kru',
+  'per' => 'fas',
+  'tur' => 'tur',
+  'nau' => 'nau',
+  'scr' => 'hrv',
+  'new' => 'new',
+  'gil' => 'gil',
+  'vot' => 'vot',
+  'ind' => 'ind',
+  'dzo' => 'dzo',
+  'vky' => 'kge',
+  'que' => 'que',
+  'grb' => 'grb',
+  'tah' => 'tah',
+  'hrv' => 'hrv',
+  'amh' => 'amh',
+  'tnj' => 'kxn',
+  'meg' => 'cir',
+  'kaz' => 'kaz',
+  'krl' => 'krl',
+  'run' => 'run',
+  'ast' => 'ast',
+  'kur' => 'kur',
+  'chk' => 'chk',
+  'ggn' => 'gvr',
+  'luo' => 'luo',
+  'nap' => 'nap',
+  'myd' => 'aog',
+  'bal' => 'bal',
+  'syc' => 'syc',
+  'ach' => 'ach',
+  'wln' => 'wln',
+  'som' => 'som',
+  'lui' => 'lui',
+  'gor' => 'gor',
+  'gwi' => 'gwi',
+  'tib' => 'bod',
+  'oun' => 'vaj',
+  'loz' => 'loz',
+  'pun' => 'ljp',
+  'xsk' => 'kho',
+  'zhs' => 'zho',
+  'xrq' => 'dmw',
+  'pli' => 'pli',
+  'mag' => 'mag',
+  'geo' => 'kat',
+  'may' => 'msa',
+  'yus' => 'yua',
+  'rar' => 'rar',
+  'sag' => 'sag',
+  'kan' => 'kan',
+  'asm' => 'asm',
+  'pap' => 'pap',
+  'mni' => 'mni',
+  'nde' => 'nde',
+  'cbm' => 'cak',
+  'rap' => 'rap',
+  'itu' => 'mzu',
+  'chm' => 'chm',
+  'hit' => 'hit',
+  'che' => 'che',
+  'sot' => 'sot',
+  'slk' => 'slk',
+  'tzs' => 'tzo',
+  'tso' => 'tso',
+  'pau' => 'pau',
+  'sus' => 'sus',
+  'dak' => 'dak',
+  'cka' => 'cmr',
+  'aym' => 'aym',
+  'qut' => 'quc',
+  'arg' => 'arg',
+  'fat' => 'fat',
+  'puz' => 'pub',
+  'mus' => 'mus',
+  'bho' => 'bho',
+  'jpr' => 'jpr',
+  'swa' => 'swa',
+  'sdi' => 'liw',
+  'ktr' => 'dtp',
+  'lin' => 'lin',
+  'und' => 'und',
+  'mlt' => 'mlt',
+  'vie' => 'vie',
+  'dat' => 'mhu',
+  'ara' => 'ara',
+  'nqo' => 'nqo',
+  'bel' => 'bel',
+  'nep' => 'nep',
+  'tsi' => 'tsi',
+  'pal' => 'pal',
+  'scn' => 'scn',
+  'sas' => 'sas',
+  'pen' => 'mui',
+  'kvs' => 'gdj',
+  'lmt' => 'mui',
+  'ztc' => 'zty',
+  'mas' => 'mas',
+  'ban' => 'ban',
+  'nyo' => 'nyo',
+  'pob' => 'poh',
+  'jap' => 'jaa',
+  'enm' => 'enm',
+  'dut' => 'nld',
+  'tel' => 'tel',
+  'yid' => 'yid',
+  'zha' => 'zha',
+  'aka' => 'aka',
+  'cym' => 'cym',
+  'hmn' => 'hmn',
+  'gti' => 'nyc',
+  'ibo' => 'ibo',
+  'ukr' => 'ukr',
+  'kaw' => 'kaw',
+  'ahe' => 'knx',
+  'thx' => 'oyb',
+  'kho' => 'kho',
+  'quj' => 'quc',
+  'alt' => 'alt',
+  'hye' => 'hye',
+  'ter' => 'ter',
+  'wol' => 'wol',
+  'tne' => 'kak',
+  'rup' => 'rup',
+  'gon' => 'gon',
+  'sid' => 'sid',
+  'nso' => 'nso',
+  'mic' => 'mic',
+  'ppr' => 'lcq',
+  'spa' => 'spa',
+  'ibi' => 'opa',
+  'smn' => 'smn',
+  'awa' => 'awa',
+  'ilo' => 'ilo',
+  'div' => 'div',
+  'gfx' => 'vaj',
+  'ybd' => 'rki',
+  'mqd' => 'xkl',
+  'lub' => 'lub',
+  'ale' => 'ale',
+  'lao' => 'lao',
+  'lol' => 'lol',
+  'bul' => 'bul',
+  'goh' => 'goh',
+  'auv' => 'oci',
+  'asd' => 'snz',
+  'abk' => 'abk',
+  'udm' => 'udm',
+  'ben' => 'ben',
+  'tkl' => 'tkl',
+  'pan' => 'pan',
+  'myt' => 'mry',
+  'elx' => 'elx',
+  'jbo' => 'jbo',
+  'iii' => 'iii',
+  'lmm' => 'rmx',
+  'bur' => 'mya',
+  'jpn' => 'jpn',
+  'xsj' => 'suj',
+  'mdf' => 'mdf',
+  'iku' => 'iku',
+  'kal' => 'kal',
+  'tli' => 'tli',
+  'tsf' => 'taj',
+  'kau' => 'kau',
+  'nob' => 'nob',
+  'frm' => 'frm',
+  'dum' => 'dum',
+  'ces' => 'ces',
+  'mst' => 'mry',
+  'gsw' => 'gsw',
+  'ixi' => 'ixl',
+  'fre' => 'fra'
+};
+$ThreeToMacro = {
+  'uzn' => 'uzb',
+  'gnw' => 'grn',
+  'jye' => 'jrb',
+  'qux' => 'que',
+  'zaf' => 'zap',
+  'bxm' => 'bua',
+  'zsr' => 'zap',
+  'mku' => 'man',
+  'nle' => 'luy',
+  'plt' => 'mlg',
+  'ttq' => 'tmh',
+  'qvm' => 'que',
+  'zln' => 'zha',
+  'prs' => 'fas',
+  'bjq' => 'mlg',
+  'ors' => 'msa',
+  'lrm' => 'luy',
+  'qxh' => 'que',
+  'dip' => 'din',
+  'esk' => 'ipk',
+  'bcl' => 'bik',
+  'qve' => 'que',
+  'ztx' => 'zap',
+  'mnk' => 'man',
+  'xmv' => 'mlg',
+  'zzj' => 'zha',
+  'gbq' => 'gba',
+  'fub' => 'ful',
+  'rmw' => 'rom',
+  'skr' => 'lah',
+  'nyd' => 'luy',
+  'kvr' => 'msa',
+  'rag' => 'luy',
+  'bhk' => 'bik',
+  'wsg' => 'gon',
+  'hma' => 'hmn',
+  'nno' => 'nor',
+  'kxd' => 'msa',
+  'fuf' => 'ful',
+  'zpx' => 'zap',
+  'enb' => 'kln',
+  'hmg' => 'hmn',
+  'ccy' => 'zha',
+  'hmy' => 'hmn',
+  'fbl' => 'bik',
+  'ojg' => 'oji',
+  'qxn' => 'que',
+  'mww' => 'hmn',
+  'diw' => 'din',
+  'zpi' => 'zap',
+  'lcf' => 'msa',
+  'obk' => 'bnc',
+  'grj' => 'grb',
+  'rml' => 'rom',
+  'pmu' => 'lah',
+  'hmq' => 'hmn',
+  'tuy' => 'kln',
+  'zpo' => 'zap',
+  'zhn' => 'zha',
+  'pbt' => 'pus',
+  'rbk' => 'bnc',
+  'zab' => 'zap',
+  'bxk' => 'luy',
+  'acq' => 'ara',
+  'tkg' => 'mlg',
+  'qvc' => 'que',
+  'qxw' => 'que',
+  'kwy' => 'kon',
+  'tmw' => 'msa',
+  'umu' => 'del',
+  'zai' => 'zap',
+  'tdx' => 'mlg',
+  'hms' => 'hmn',
+  'zao' => 'zap',
+  'mtr' => 'mwr',
+  'aju' => 'jrb',
+  'zpb' => 'zap',
+  'pst' => 'pus',
+  'msi' => 'msa',
+  'zgn' => 'zha',
+  'ojs' => 'oji',
+  'acy' => 'ara',
+  'zax' => 'zap',
+  'scs' => 'den',
+  'quf' => 'que',
+  'ajp' => 'ara',
+  'pes' => 'fas',
+  'zyn' => 'zha',
+  'taq' => 'tmh',
+  'qvj' => 'que',
+  'bvu' => 'msa',
+  'arz' => 'ara',
+  'sdc' => 'srd',
+  'crl' => 'cre',
+  'pnb' => 'lah',
+  'qxl' => 'que',
+  'aii' => 'syr',
+  'qub' => 'que',
+  'mup' => 'raj',
+  'kmr' => 'kur',
+  'rmn' => 'rom',
+  'srp' => 'hbs',
+  'gya' => 'gba',
+  'ory' => 'ori',
+  'hnj' => 'hmn',
+  'auz' => 'ara',
+  'fui' => 'ful',
+  'qxu' => 'que',
+  'kpv' => 'kom',
+  'ydd' => 'yid',
+  'eng-simple' => 'eng',
+  'zpf' => 'zap',
+  'hnd' => 'lah',
+  'nhd' => 'grn',
+  'qxr' => 'que',
+  'gec' => 'grb',
+  'ebk' => 'bnc',
+  'qxp' => 'que',
+  'pse' => 'msa',
+  'swh' => 'swa',
+  'khk' => 'mon',
+  'bxu' => 'bua',
+  'qvl' => 'que',
+  'gkp' => 'kpe',
+  'zpa' => 'zap',
+  'zlj' => 'zha',
+  'mqg' => 'msa',
+  'aec' => 'ara',
+  'rbl' => 'bik',
+  'ccx' => 'zha',
+  'pbu' => 'pus',
+  'hae' => 'orm',
+  'fuv' => 'ful',
+  'zpy' => 'zap',
+  'zpg' => 'zap',
+  'zgm' => 'zha',
+  'blu' => 'hmn',
+  'phr' => 'lah',
+  'bgn' => 'bal',
+  'azb' => 'aze',
+  'zsm' => 'msa',
+  'vkt' => 'msa',
+  'hmi' => 'hmn',
+  'zas' => 'zap',
+  'bmm' => 'mlg',
+  'vkk' => 'msa',
+  'zpq' => 'zap',
+  'bxr' => 'bua',
+  'qvp' => 'que',
+  'xpe' => 'kpe',
+  'czo' => 'zho',
+  'qvw' => 'que',
+  'qxc' => 'que',
+  'als' => 'sqi',
+  'oki' => 'kln',
+  'zav' => 'zap',
+  'zch' => 'zha',
+  'mvf' => 'mon',
+  'thz' => 'tmh',
+  'quy' => 'que',
+  'dik' => 'din',
+  'mwk' => 'man',
+  'coa' => 'msa',
+  'qug' => 'que',
+  'mnp' => 'zho',
+  'zty' => 'zap',
+  'yud' => 'jrb',
+  'mrj' => 'chm',
+  'mly' => 'msa',
+  'ztg' => 'zap',
+  'qws' => 'que',
+  'huj' => 'hmn',
+  'zhd' => 'zha',
+  'pko' => 'kln',
+  'abv' => 'ara',
+  'gun' => 'grn',
+  'cnp' => 'zho',
+  'src' => 'srd',
+  'gbo' => 'grb',
+  'hak' => 'zho',
+  'bhr' => 'mlg',
+  'mlq' => 'man',
+  'gju' => 'raj',
+  'cnr' => 'hbs',
+  'ztq' => 'zap',
+  'wuu' => 'zho',
+  'crj' => 'cre',
+  'gan' => 'zho',
+  'qus' => 'que',
+  'fuq' => 'ful',
+  'dks' => 'din',
+  'qwa' => 'que',
+  'xnr' => 'doi',
+  'gso' => 'gba',
+  'cwd' => 'cre',
+  'emk' => 'man',
+  'bzc' => 'mlg',
+  'bcc' => 'bal',
+  'zts' => 'zap',
+  'lvs' => 'lav',
+  'bln' => 'bik',
+  'sdh' => 'kur',
+  'swc' => 'swa',
+  'apc' => 'ara',
+  'zyj' => 'zha',
+  'zlm' => 'msa',
+  'crk' => 'cre',
+  'qvn' => 'que',
+  'zpv' => 'zap',
+  'zht' => 'zho',
+  'apd' => 'ara',
+  'bbz' => 'ara',
+  'jax' => 'msa',
+  'bgp' => 'bal',
+  'bto' => 'bik',
+  'qxt' => 'que',
+  'ggo' => 'gon',
+  'aat' => 'sqi',
+  'bve' => 'msa',
+  'yue' => 'zho',
+  'myq' => 'man',
+  'kng' => 'kon',
+  'zps' => 'zap',
+  'gaz' => 'orm',
+  'crm' => 'cre',
+  'npi' => 'nep',
+  'zaq' => 'zap',
+  'twi' => 'aka',
+  'kiu' => 'zza',
+  'aae' => 'sqi',
+  'qvh' => 'que',
+  'sdn' => 'srd',
+  'acx' => 'ara',
+  'ojb' => 'oji',
+  'rmc' => 'rom',
+  'zaa' => 'zap',
+  'ubl' => 'bik',
+  'zqe' => 'zha',
+  'hrm' => 'hmn',
+  'sfm' => 'hmn',
+  'qvz' => 'que',
+  'dty' => 'nep',
+  'ajt' => 'jrb',
+  'ida' => 'luy',
+  'dhd' => 'mwr',
+  'hdn' => 'hai',
+  'hoj' => 'raj',
+  'zmi' => 'msa',
+  'xmw' => 'mlg',
+  'ztc' => 'zap',
+  'muq' => 'hmn',
+  'lbl' => 'bik',
+  'qxa' => 'que',
+  'otw' => 'oji',
+  'liw' => 'msa',
+  'cmn' => 'zho',
+  'qud' => 'que',
+  'mfa' => 'msa',
+  'ars' => 'ara',
+  'xhe' => 'lah',
+  'cld' => 'syr',
+  'spy' => 'kln',
+  'acw' => 'ara',
+  'zam' => 'zap',
+  'nan' => 'zho',
+  'zae' => 'zap',
+  'yhd' => 'jrb',
+  'zpc' => 'zap',
+  'zlq' => 'zha',
+  'swv' => 'mwr',
+  'bjn' => 'msa',
+  'zpd' => 'zap',
+  'czh' => 'zho',
+  'lce' => 'msa',
+  'zat' => 'zap',
+  'lko' => 'luy',
+  'hmh' => 'hmn',
+  'wbr' => 'raj',
+  'cqd' => 'hmn',
+  'unm' => 'del',
+  'fue' => 'ful',
+  'gui' => 'grn',
+  'koi' => 'kom',
+  'nob' => 'nor',
+  'hmz' => 'hmn',
+  'ffm' => 'ful',
+  'zpj' => 'zap',
+  'ayc' => 'aym',
+  'hml' => 'hmn',
+  'bdt' => 'gba',
+  'msc' => 'man',
+  'cts' => 'bik',
+  'ind' => 'msa',
+  'knc' => 'kau',
+  'hea' => 'hmn',
+  'hrv' => 'hbs',
+  'zte' => 'zap',
+  'spv' => 'ori',
+  'ztm' => 'zap',
+  'zac' => 'zap',
+  'zpk' => 'zap',
+  'lri' => 'luy',
+  'zad' => 'zap',
+  'qvi' => 'que',
+  'pel' => 'msa',
+  'cjy' => 'zho',
+  'orn' => 'msa',
+  'rmy' => 'rom',
+  'gax' => 'orm',
+  'hmp' => 'hmn',
+  'lkb' => 'luy',
+  'avl' => 'ara',
+  'adf' => 'ara',
+  'qvo' => 'que',
+  'uzs' => 'uzb',
+  'zpt' => 'zap',
+  'gda' => 'raj',
+  'mmr' => 'hmn',
+  'gmm' => 'gba',
+  'sgc' => 'kln',
+  'zhs' => 'zho',
+  'arq' => 'ara',
+  'qwc' => 'que',
+  'hmw' => 'hmn',
+  'zyg' => 'zha',
+  'vbk' => 'bnc',
+  'esi' => 'ipk',
+  'zpm' => 'zap',
+  'cdo' => 'zho',
+  'hno' => 'lah',
+  'skg' => 'mlg',
+  'diq' => 'zza',
+  'zpe' => 'zap',
+  'lto' => 'luy',
+  'gbp' => 'gba',
+  'eyo' => 'kln',
+  'fat' => 'aka',
+  'ary' => 'ara',
+  'ztt' => 'zap',
+  'fuc' => 'ful',
+  'quk' => 'que',
+  'mdo' => 'gba',
+  'rwr' => 'mwr',
+  'ojw' => 'oji',
+  'vro' => 'est',
+  'hmc' => 'hmn',
+  'ldi' => 'kon',
+  'bos' => 'hbs',
+  'ikt' => 'iku',
+  'gry' => 'grb',
+  'zar' => 'zap',
+  'hmd' => 'hmn',
+  'qvs' => 'que',
+  'min' => 'msa',
+  'lwg' => 'luy',
+  'ekk' => 'est',
+  'zph' => 'zap',
+  'gug' => 'grn',
+  'csp' => 'zho',
+  'dgo' => 'doi',
+  'pga' => 'ara',
+  'txy' => 'mlg',
+  'zoo' => 'zap',
+  'ayh' => 'ara',
+  'ztn' => 'zap',
+  'zpz' => 'zap',
+  'hmj' => 'hmn',
+  'ojc' => 'oji',
+  'kvb' => 'msa',
+  'zyb' => 'zha',
+  'lts' => 'luy',
+  'kby' => 'kau',
+  'jak' => 'msa',
+  'cpx' => 'zho',
+  'quh' => 'que',
+  'yih' => 'yid',
+  'rmf' => 'rom',
+  'zgb' => 'zha',
+  'sro' => 'srd',
+  'mui' => 'msa',
+  'dup' => 'msa',
+  'ayn' => 'ara',
+  'jat' => 'lah',
+  'zca' => 'zap',
+  'xmm' => 'msa',
+  'acm' => 'ara',
+  'quz' => 'que',
+  'zaw' => 'zap',
+  'zpn' => 'zap',
+  'ike' => 'iku',
+  'arb' => 'ara',
+  'afb' => 'ara',
+  'csw' => 'cre',
+  'lbk' => 'bnc',
+  'dib' => 'din',
+  'aao' => 'ara',
+  'mve' => 'mwr',
+  'bgq' => 'raj',
+  'qxo' => 'que',
+  'ckb' => 'kur',
+  'gom' => 'kok',
+  'zpw' => 'zap',
+  'max' => 'msa',
+  'urk' => 'msa',
+  'ltg' => 'lav',
+  'orc' => 'orm',
+  'ztl' => 'zap',
+  'hmm' => 'hmn',
+  'ztu' => 'zap',
+  'qul' => 'que',
+  'hme' => 'hmn',
+  'qwh' => 'que',
+  'lzh' => 'zho',
+  'hax' => 'hai',
+  'tec' => 'kln',
+  'qup' => 'que',
+  'esg' => 'gon',
+  'knn' => 'kok',
+  'mol' => 'ron',
+  'fuh' => 'ful',
+  'wry' => 'mwr',
+  'zeh' => 'zha',
+  'hsn' => 'zho',
+  'mfb' => 'msa',
+  'btj' => 'msa',
+  'grv' => 'grb',
+  'qur' => 'que',
+  'ztp' => 'zap',
+  'mhr' => 'chm',
+  'azj' => 'aze',
+  'niq' => 'kln',
+  'zpl' => 'zap',
+  'aeb' => 'ara',
+  'ayp' => 'ara',
+  'qva' => 'que',
+  'ayr' => 'aym',
+  'thv' => 'tmh',
+  'quw' => 'que',
+  'ssh' => 'ara',
+  'msh' => 'mlg',
+  'zpu' => 'zap',
+  'ciw' => 'oji',
+  'xsl' => 'den',
+  'rmo' => 'rom',
+  'krt' => 'kau',
+  'hji' => 'msa',
+  'abh' => 'ara',
+  'zpr' => 'zap',
+  'aln' => 'sqi',
+  'gno' => 'gon',
+  'zpp' => 'zap',
+  'lsm' => 'luy',
+  'ayl' => 'ara',
+  'cqu' => 'que',
+  'lks' => 'luy',
+  'meo' => 'msa',
+  'shu' => 'ara'
+};
+$NameToTwo = {
+  'korean' => 'ko',
+  'ido' => 'io',
+  'yiddish' => 'yi',
+  'thai' => 'th',
+  'sindhi' => 'sd',
+  'serbian' => 'sr',
+  'estonian' => 'et',
+  'sinhala' => 'si',
+  'manx' => 'gv',
+  'xhosa' => 'xh',
+  'guarani' => 'gn',
+  'norwegian nynorsk' => 'nn',
+  'bashkir' => 'ba',
+  'amharic' => 'am',
+  'dutch' => 'nl',
+  'nauru' => 'na',
+  'lingala' => 'ln',
+  'montenegrin' => 'me',
+  'dhivehi' => 'dv',
+  'moldavian' => 'mo',
+  'javanese' => 'jv',
+  'catalan' => 'ca',
+  'armenian' => 'hy',
+  'turkish' => 'tr',
+  'interlingue' => 'ie',
+  'tigrinya' => 'ti',
+  'spanish' => 'es',
+  'welsh' => 'cy',
+  'Bihari languages' => 'bh',
+  'tswana' => 'tn',
+  'bambara' => 'bm',
+  'croatian' => 'hr',
+  'khmer' => 'km',
+  'serbo-croatian' => 'sh',
+  'japanese' => 'jp',
+  'ndonga' => 'ng',
+  'russian' => 'ru',
+  'lithuanian' => 'lt',
+  'zhuang' => 'za',
+  'malayalam' => 'ml',
+  'azerbaijani' => 'az',
+  'bulgarian' => 'bg',
+  'greek' => 'gr',
+  'hungarian' => 'hu',
+  'hausa' => 'ha',
+  'portuguese' => 'pt',
+  'kalaallisut' => 'kl',
+  'kashmiri' => 'ks',
+  'kikuyu' => 'ki',
+  'dzongkha' => 'dz',
+  'navajo' => 'nv',
+  'tahitian' => 'ty',
+  'gujarati' => 'gu',
+  'avestan' => 'ae',
+  'modern greek (1453-)' => 'el',
+  'chinese (simplified)' => 'zh_CN',
+  'haitian' => 'ht',
+  'marshallese' => 'mh',
+  'tibetan' => 'bo',
+  'irish' => 'ga',
+  'sundanese' => 'su',
+  'church slavic' => 'cu',
+  'corsican' => 'co',
+  'bengali' => 'bn',
+  'swahili (macrolanguage)' => 'sw',
+  'kongo' => 'kg',
+  'akan' => 'ak',
+  'german' => 'de',
+  'central kurdish' => 'ku_Arab',
+  'panjabi' => 'pa',
+  'tonga (tonga islands)' => 'to',
+  'kurdish' => 'ku',
+  'bosnian' => 'bs',
+  'icelandic' => 'is',
+  'tajik' => 'tg',
+  'ganda' => 'lg',
+  'interlingua (international auxiliary language association)' => 'ia',
+  'oriya (macrolanguage)' => 'or',
+  'lao' => 'lo',
+  'uighur' => 'ug',
+  'marathi' => 'mr',
+  'somali' => 'so',
+  'belarusian' => 'be',
+  'malagasy' => 'mg',
+  'finnish' => 'fi',
+  'bislama' => 'bi',
+  'hindi' => 'hi',
+  'vietnamese' => 'vi',
+  'kirghiz' => 'ky',
+  'inuktitut' => 'iu',
+  'afrikaans' => 'af',
+  'sanskrit' => 'sa',
+  'tsonga' => 'ts',
+  'kuanyama' => 'kj',
+  'persian' => 'fa',
+  'aragonese' => 'an',
+  'ossetian' => 'os',
+  'georgian' => 'ka',
+  'assamese' => 'as',
+  'oromo' => 'om',
+  'danish' => 'da',
+  'shona' => 'sn',
+  'chamorro' => 'ch',
+  "norwegian bokm\x{e5}l" => 'nb',
+  'faroese' => 'fo',
+  'inupiaq' => 'ik',
+  'swedish' => 'sv',
+  'avaric' => 'av',
+  'nepali (macrolanguage)' => 'ne',
+  'northern sami' => 'se',
+  'quechua' => 'qu',
+  'albanian' => 'sq',
+  'tamil' => 'ta',
+  'macedonian' => 'mk',
+  'chinese' => 'ze_zh',
+  'western frisian' => 'fy',
+  'ojibwa' => 'oj',
+  'abkhazian' => 'ab',
+  'pushto' => 'ps',
+  'walloon' => 'wa',
+  'herero' => 'hz',
+  'rundi' => 'rn',
+  'hebrew' => 'he',
+  'kanuri' => 'kr',
+  'french' => 'fr',
+  'twi' => 'tw',
+  'chechen' => 'ce',
+  'sardinian' => 'sc',
+  'polish' => 'pl',
+  'luxembourgish' => 'lb',
+  'basque' => 'eu',
+  'aymara' => 'ay',
+  'fijian' => 'fj',
+  'southern sotho' => 'st',
+  'nyanja' => 'ny',
+  'igbo' => 'ig',
+  'urdu' => 'ur',
+  'romanian' => 'ro',
+  'south ndebele' => 'nr',
+  'sango' => 'sg',
+  'sichuan yi' => 'ii',
+  'slovenian' => 'sl',
+  'norwegian' => 'no',
+  'galician' => 'gl',
+  'latin' => 'la',
+  'maori' => 'mi',
+  'pali' => 'pi',
+  'venda' => 've',
+  'turkmen' => 'tk',
+  'indonesian' => 'id',
+  'romansh' => 'rm',
+  'czech' => 'cz',
+  'english' => 'ze_en',
+  'hiri motu' => 'ho',
+  'cree' => 'cr',
+  'kinyarwanda' => 'rw',
+  'latvian' => 'lv',
+  'mongolian' => 'mn',
+  'uzbek' => 'uz',
+  'italian' => 'it',
+  'kazakh' => 'kk',
+  'komi' => 'kv',
+  'maltese' => 'mt',
+  'north ndebele' => 'nd',
+  'tatar' => 'tt',
+  'wolof' => 'wo',
+  'chinese (traditional)' => 'zh_TW',
+  'breton' => 'br',
+  'ewe' => 'ee',
+  'kannada' => 'kn',
+  'simplified english' => 'simple',
+  "volap\x{fc}k" => 'vo',
+  'cornish' => 'kw',
+  'arabic' => 'ar',
+  'slovak' => 'sk',
+  'ukrainian' => 'uk',
+  'zulu' => 'zu',
+  'fulah' => 'ff',
+  'luba-katanga' => 'lu',
+  'tagalog' => 'tl',
+  'northern kurdish' => 'ku_Latn',
+  'samoan' => 'sm',
+  'occitan (post 1500)' => 'oc',
+  'esperanto' => 'eo',
+  'swati' => 'ss',
+  'telugu' => 'te',
+  'chuvash' => 'cv',
+  'yoruba' => 'yo',
+  'burmese' => 'my',
+  'scottish gaelic' => 'gd',
+  'afar' => 'aa',
+  'malay (macrolanguage)' => 'ms',
+  'limburgan' => 'li'
+};
+$NameToThree = {
+  'bintauna' => 'bne',
+  'pushto' => 'pus',
+  'pudtol atta' => 'atp',
+  'ati' => 'atk',
+  'leco' => 'lec',
+  'tonsawang' => 'tnw',
+  'siona' => 'snn',
+  'basque (family)' => 'euq',
+  'yonaguni' => 'yoi',
+  'loke' => 'loy',
+  'garrwa' => 'wrk',
+  'nimanbur' => 'nmp',
+  'sardinian' => 'srd',
+  'omi' => 'omi',
+  'ukrainian sign language' => 'ukl',
+  'befang' => 'bby',
+  'middle newar' => 'nwx',
+  'nyiyaparli' => 'xny',
+  'bardi' => 'bcj',
+  'uya' => 'usu',
+  'ndoola' => 'ndr',
+  'old burmese' => 'obr',
+  'karo (ethiopia)' => 'kxh',
+  'ticuna' => 'tca',
+  'upper kuskokwim' => 'kuu',
+  'nisa' => 'njs',
+  'ashe' => 'ahs',
+  'mango' => 'mge',
+  'diri' => 'dwa',
+  'konda-dora' => 'kfc',
+  'mongolian languages' => 'xgn',
+  'dii' => 'dur',
+  'mariyedi' => 'zmy',
+  'rajbanshi' => 'rjs',
+  'yutanduchi mixtec' => 'mab',
+  'sangkong' => 'sgk',
+  'prakrit languages' => 'pra',
+  'heiban' => 'hbn',
+  'yao' => 'yao',
+  'alyawarr' => 'aly',
+  'rengao' => 'ren',
+  'gapapaiwa' => 'pwg',
+  'arifama-miniafia' => 'aai',
+  "w\x{e3}pha" => 'juw',
+  'western apache' => 'apw',
+  'bunama' => 'bdd',
+  'cuba sign language' => 'csf',
+  'rade' => 'rad',
+  'jola-fonyi' => 'dyo',
+  'mumuye' => 'mzm',
+  'north muyu' => 'kti',
+  'naami' => 'bzv',
+  'walser' => 'wae',
+  'czech sign language' => 'cse',
+  'tuma-irumu' => 'iou',
+  'polabian' => 'pox',
+  'nyarafolo senoufo' => 'sev',
+  'nepali (macrolanguage)' => 'nep',
+  'northern sami' => 'sme',
+  'omaha-ponca' => 'oma',
+  'guana (paraguay)' => 'gva',
+  'tonkawa' => 'tqw',
+  'livvi' => 'olo',
+  'north asmat' => 'nks',
+  'gweda' => 'grw',
+  'uradhi' => 'urf',
+  'cahuilla' => 'chl',
+  "suruah\x{e1}" => 'swx',
+  'male (papua new guinea)' => 'mdc',
+  'wakde' => 'wkd',
+  'munggui' => 'mth',
+  'achterhoeks' => 'act',
+  'lamboya' => 'lmy',
+  'bulo stieng' => 'sti',
+  'fala' => 'fax',
+  'ndunga' => 'ndt',
+  'kobiana' => 'kcj',
+  'agwagwune' => 'yay',
+  'remun' => 'lkj',
+  'anserma' => 'ans',
+  "creoles and pidgins, english\x{2011}based" => 'cpe',
+  'mandarin chinese' => 'cmn',
+  'iha' => 'ihp',
+  'taruma' => 'tdm',
+  'songhai languages' => 'son',
+  'arapaso' => 'arj',
+  'wuzlam' => 'udl',
+  'fulah' => 'ful',
+  'beaver' => 'bea',
+  'tagalog' => 'tgl',
+  'nimbari' => 'nmr',
+  'zumaya' => 'zuy',
+  'maia' => 'sks',
+  'pwaamei' => 'pme',
+  'mpur' => 'akc',
+  'jukun takum' => 'jbu',
+  'russia buriat' => 'bxr',
+  'ngwaba' => 'ngw',
+  'na-dene languages' => 'xnd',
+  'walak' => 'wlw',
+  'ama (papua new guinea)' => 'amm',
+  'neapolitan' => 'nap',
+  'logo' => 'log',
+  'meroitic' => 'xmr',
+  'chuvash' => 'chv',
+  'guanano' => 'gvc',
+  'wayanad chetti' => 'ctt',
+  'burmese' => 'mya',
+  'bidjara' => 'bym',
+  'ngarinyin' => 'ung',
+  'ibibio' => 'ibb',
+  'bata' => 'bta',
+  'njerep' => 'njr',
+  'o\'chi\'chi\'' => 'xoc',
+  'mugom' => 'muk',
+  'mobilian' => 'mod',
+  'c\'lela' => 'dri',
+  'mannan' => 'mjv',
+  'ruuli' => 'ruc',
+  'boga' => 'bvw',
+  'west kewa' => 'kew',
+  'jutish' => 'jut',
+  'northeastern pomo' => 'pef',
+  'valle nacional chinantec' => 'cvn',
+  'teke-tyee' => 'tyx',
+  'sikiana' => 'sik',
+  'dongotono' => 'ddd',
+  'bamu' => 'bcf',
+  'iranun (philippines)' => 'ilp',
+  'uruava' => 'urv',
+  'shua' => 'shg',
+  "godi\x{e9}" => 'god',
+  'east nyala' => 'nle',
+  'kara (central african republic)' => 'kah',
+  'tobati' => 'tti',
+  'bilur' => 'bxf',
+  'sagalla' => 'tga',
+  'migum' => 'klm',
+  'chuwabu' => 'chw',
+  'garlali' => 'gll',
+  'hmong' => 'hmn',
+  'aklanon' => 'akl',
+  'seki' => 'syi',
+  'tjurruru' => 'tju',
+  'sino-tibetan languages' => 'sit',
+  'old lithuanian' => 'olt',
+  "parec\x{ed}s" => 'pab',
+  'chimalapa zoque' => 'zoh',
+  'butbut kalinga' => 'kyb',
+  'mashco piro' => 'cuj',
+  'bitare' => 'brt',
+  'talodi' => 'tlo',
+  'ipalapa amuzgo' => 'azm',
+  'ditidaht' => 'dtd',
+  'bun' => 'buv',
+  'ese ejja' => 'ese',
+  'tabo' => 'knv',
+  'slavic languages' => 'sla',
+  'isthmus-cosoleacaque nahuatl' => 'nhk',
+  'she' => 'shx',
+  'mangayat' => 'myj',
+  'ladji ladji' => 'llj',
+  'montol' => 'mtl',
+  'yiddish' => 'yid',
+  'queyu' => 'qvy',
+  'kono (sierra leone)' => 'kno',
+  'svan' => 'sva',
+  'manem' => 'jet',
+  'central mnong' => 'cmo',
+  'sayula popoluca' => 'pos',
+  "\x{1c2}ungkue" => 'gku',
+  'bouyei' => 'pcc',
+  'notsi' => 'ncf',
+  'dumun' => 'dui',
+  'unggaranggu' => 'xun',
+  'gitua' => 'ggt',
+  "bakair\x{ed}" => 'bkq',
+  'dimli (individual language)' => 'diq',
+  'akaselem' => 'aks',
+  'ankave' => 'aak',
+  'philippine sign language' => 'psp',
+  'hazaragi' => 'haz',
+  'male (ethiopia)' => 'mdy',
+  "mlahs\x{f6}" => 'lhs',
+  'sorbian languages' => 'wen',
+  'morom' => 'bdo',
+  'mawak' => 'mjj',
+  'selayar' => 'sly',
+  'toro tegu dogon' => 'dtt',
+  'kowiai' => 'kwh',
+  'muskum' => 'mje',
+  'lungalunga' => 'vmg',
+  'andoque' => 'ano',
+  'a-pucikwar' => 'apq',
+  'balinese malay' => 'mhp',
+  'botlikh' => 'bph',
+  'kaningi' => 'kzo',
+  'elamite' => 'elx',
+  'wunai bunu' => 'bwn',
+  'mauritian sign language' => 'lsy',
+  'diuwe' => 'diy',
+  'chol' => 'ctu',
+  'stellingwerfs' => 'stl',
+  "wich\x{ed} lhamt\x{e9}s g\x{fc}isnay" => 'mzh',
+  'ge' => 'hmj',
+  'turkana' => 'tuv',
+  'ancient hebrew' => 'hbo',
+  'dungmali' => 'raa',
+  'panamint' => 'par',
+  'jowulu' => 'jow',
+  'rawa' => 'rwo',
+  'mungkip' => 'mpv',
+  'ushojo' => 'ush',
+  'chakali' => 'cli',
+  'worimi' => 'kda',
+  'yug' => 'yug',
+  'vitu' => 'wiv',
+  'yakaikeke' => 'ykk',
+  'ngandi' => 'nid',
+  'faiwol' => 'fai',
+  'onin' => 'oni',
+  'trinidad and tobago sign language' => 'lst',
+  'tahitian' => 'tah',
+  'ndaka' => 'ndk',
+  'buli (indonesia)' => 'bzq',
+  'central siberian yupik' => 'ess',
+  'huastec' => 'hus',
+  'banda-bambari' => 'liy',
+  'mahali' => 'mjx',
+  'napu' => 'npy',
+  'kol (papua new guinea)' => 'kol',
+  'afro-asiatic languages' => 'afa',
+  'esimbi' => 'ags',
+  'lunanakha' => 'luk',
+  'tonga (tonga islands)' => 'ton',
+  'gaddi' => 'gbk',
+  'veps' => 'vep',
+  'puri' => 'prr',
+  'walloon' => 'wln',
+  'iko' => 'iki',
+  'ngombale' => 'nla',
+  "huallaga hu\x{e1}nuco quechua" => 'qub',
+  'dhodia' => 'dho',
+  'manide' => 'abd',
+  'holikachuk' => 'hoi',
+  'masana' => 'mcn',
+  'e' => 'eee',
+  'dombe' => 'dov',
+  'qabiao' => 'laq',
+  'kajakse' => 'ckq',
+  'zimakani' => 'zik',
+  'nyindrou' => 'lid',
+  'jahanka' => 'jad',
+  'old aramaic (up to 700 bce)' => 'oar',
+  'ncane' => 'ncr',
+  'vanuma' => 'vau',
+  'makhuwa-shirima' => 'vmk',
+  'ayizo gbe' => 'ayb',
+  'mabaale' => 'mmz',
+  'ruching palaung' => 'pce',
+  'chuvantsy' => 'xcv',
+  'guevea de humboldt zapotec' => 'zpg',
+  'kasanga' => 'ccj',
+  'marwari' => 'mwr',
+  'awa (china)' => 'vwa',
+  'anii' => 'blo',
+  'bira' => 'brf',
+  'puyuma' => 'pyu',
+  'tol' => 'jic',
+  'sinicahua mixtec' => 'xti',
+  'turumsa' => 'tqm',
+  'coatzospan mixtec' => 'miz',
+  'western malayo-polynesian languages' => 'pqw',
+  'northern pastaza quichua' => 'qvz',
+  'garig-ilgar' => 'ilg',
+  'eastern qiandong miao' => 'hmq',
+  'warwar feni' => 'hrw',
+  'chimila' => 'cbg',
+  'kyan-karyaw naga' => 'nqq',
+  'nde-gbite' => 'ned',
+  'bavarian' => 'bar',
+  'mmen' => 'bfm',
+  'gavak' => 'dmc',
+  'uma\' lung' => 'ulu',
+  'negeri sembilan malay' => 'zmi',
+  'tigre' => 'tig',
+  'northern tlaxiaco mixtec' => 'xtn',
+  'labo phowa' => 'ypb',
+  'phuan' => 'phu',
+  'islander creole english' => 'icr',
+  'kaskean' => 'zsk',
+  'sikkimese' => 'sip',
+  'bimoba' => 'bim',
+  'ir' => 'irr',
+  'maltese' => 'mlt',
+  'bodo (india)' => 'brx',
+  'uri' => 'uvh',
+  'andarum' => 'aod',
+  'nigerian pidgin' => 'pcm',
+  'maca' => 'mca',
+  'bebil' => 'bxp',
+  'yopno' => 'yut',
+  'panchpargania' => 'tdb',
+  "nat\x{fc}gu" => 'ntu',
+  'ona' => 'ona',
+  'mono (usa)' => 'mnr',
+  'auyokawa' => 'auo',
+  'wahau kayan' => 'whu',
+  'mofu-gudur' => 'mif',
+  'dhao' => 'nfa',
+  'caramanta' => 'crf',
+  'tereweng' => 'twg',
+  'mpade' => 'mpi',
+  'segai' => 'sge',
+  'kunimaipa' => 'kup',
+  'yau (sandaun province)' => 'yyu',
+  'san miguel el grande mixtec' => 'mig',
+  'cappadocian greek' => 'cpg',
+  'gane' => 'gzn',
+  'kugbo' => 'kes',
+  'mokpwe' => 'bri',
+  'sulod' => 'srg',
+  'capanahua' => 'kaq',
+  'northern yukaghir' => 'ykg',
+  'chinese sign language' => 'csl',
+  'trans-new guinea languages' => 'ngf',
+  'mozarabic' => 'mxi',
+  "tri\x{f3}" => 'tri',
+  "arh\x{e2}" => 'aqr',
+  'ukit' => 'umi',
+  'kiput' => 'kyi',
+  'salchuq' => 'slq',
+  'ma (papua new guinea)' => 'mjn',
+  "chiqui\x{e1}n ancash quechua" => 'qxa',
+  'naba' => 'mne',
+  'ketum' => 'ktt',
+  'dengese' => 'dez',
+  'bongili' => 'bui',
+  'maden' => 'xmx',
+  'pontic' => 'pnt',
+  'musi' => 'mui',
+  'cakfem-mushere' => 'cky',
+  'mayo' => 'mfy',
+  'romany' => 'rom',
+  'potawatomi' => 'pot',
+  'balti' => 'bft',
+  'south central dinka' => 'dib',
+  'pauri bareli' => 'bfb',
+  'lomwe' => 'ngl',
+  'anindilyakwa' => 'aoi',
+  'duhwa' => 'kbz',
+  'lahta karen' => 'kvt',
+  'huilliche' => 'huh',
+  'american sign language' => 'ase',
+  'sadri' => 'sck',
+  "aru\x{e1} (rodonia state)" => 'arx',
+  'woods cree' => 'cwd',
+  "xakriab\x{e1}" => 'xkr',
+  'gros ventre' => 'ats',
+  'ajawa' => 'ajw',
+  'kwer' => 'kwr',
+  'xibe' => 'sjo',
+  'wom (papua new guinea)' => 'wmo',
+  'papitalai' => 'pat',
+  'southern rengma naga' => 'nre',
+  'mentawai' => 'mwv',
+  'samvedi' => 'smv',
+  'southern nisu' => 'nsd',
+  'umanakaina' => 'gdn',
+  'mapudungun' => 'arn',
+  "mon\x{2013}khmer languages" => 'mkh',
+  'bobongko' => 'bgb',
+  'akha' => 'ahk',
+  "paraguayan guaran\x{ed}" => 'gug',
+  'malaynon' => 'mlz',
+  'awngi' => 'awn',
+  'pijao' => 'pij',
+  'koromira' => 'kqj',
+  'tinigua' => 'tit',
+  'sara' => 'sre',
+  'bakumpai' => 'bkr',
+  'yafi' => 'wfg',
+  'ndunda' => 'nuh',
+  'mru' => 'mro',
+  'mawan' => 'mcz',
+  'temi' => 'soz',
+  'isoko' => 'iso',
+  'nindi' => 'nxi',
+  'ma (democratic republic of congo)' => 'msj',
+  'sebat bet gurage' => 'sgw',
+  'boon' => 'bnl',
+  'qawasqar' => 'alc',
+  'tunisian arabic' => 'aeb',
+  'enwan (edu state)' => 'env',
+  'otank' => 'uta',
+  'ndumu' => 'nmd',
+  'wersing' => 'kvw',
+  'yabula yabula' => 'yxy',
+  'mro-khimi chin' => 'cmr',
+  'dawro' => 'dwr',
+  'east kewa' => 'kjs',
+  'chibchan languages' => 'cba',
+  'daungwurrung' => 'dgw',
+  'buli (ghana)' => 'bwu',
+  'baramu' => 'bmz',
+  'sipacapense' => 'qum',
+  'kija' => 'gia',
+  'old uighur' => 'oui',
+  'xiri' => 'xii',
+  'kunja' => 'pep',
+  'sabaean' => 'xsa',
+  'southern dagaare' => 'dga',
+  'bangandu' => 'bgf',
+  'ura (vanuatu)' => 'uur',
+  'andaman creole hindi' => 'hca',
+  'pagu' => 'pgu',
+  'duri' => 'mvp',
+  'persian sign language' => 'psc',
+  'firan' => 'fir',
+  'san miguel piedras mixtec' => 'xtp',
+  "apinay\x{e9}" => 'apn',
+  'teutila cuicatec' => 'cut',
+  'burduna' => 'bxn',
+  'epena' => 'sja',
+  "uamu\x{e9}" => 'uam',
+  'abureni' => 'mgj',
+  'uisai' => 'uis',
+  'oki-no-erabu' => 'okn',
+  'ainu (china)' => 'aib',
+  'marino' => 'mrb',
+  'taroko' => 'trv',
+  'mashi (zambia)' => 'mho',
+  'lamenu' => 'lmu',
+  "inese\x{f1}o" => 'inz',
+  'southeast ijo' => 'ijs',
+  'western armenian' => 'hyw',
+  'mefele' => 'mfj',
+  'abom' => 'aob',
+  'bilua' => 'blb',
+  'logol' => 'lof',
+  "latund\x{ea}" => 'ltn',
+  'indonesian bajau' => 'bdl',
+  'mamulique' => 'emm',
+  'bugun' => 'bgg',
+  'tareng' => 'tgr',
+  'karang' => 'kzr',
+  'mal paharia' => 'mkb',
+  'yoba' => 'yob',
+  'solomon islands sign language' => 'szs',
+  'playero' => 'gob',
+  'canela' => 'ram',
+  'greek languages' => 'grk',
+  'latu' => 'ltu',
+  'wapishana' => 'wap',
+  'takuu' => 'nho',
+  'mal' => 'mlf',
+  "lachix\x{ed}o zapotec" => 'zpl',
+  'andra-hus' => 'anx',
+  '\'auhelawa' => 'kud',
+  'sundanese' => 'sun',
+  'japanese (family)' => 'jpx',
+  "cal\x{f3}" => 'rmq',
+  'kosena' => 'kze',
+  'tsishingini' => 'tsw',
+  'culina' => 'cul',
+  'tagal murut' => 'mvv',
+  'standard estonian' => 'ekk',
+  'nyabwa' => 'nwb',
+  'southern yukaghir' => 'yux',
+  'guibian zhuang' => 'zgn',
+  'pauserna' => 'psm',
+  'pitjantjatjara' => 'pjt',
+  'angami naga' => 'njm',
+  'hmar' => 'hmr',
+  'hmong don' => 'hmf',
+  'timne' => 'tem',
+  'adnyamathanha' => 'adt',
+  'sabu' => 'hvn',
+  'pamplona atta' => 'att',
+  'biloxi' => 'bll',
+  'ngawun' => 'nxn',
+  'adasen' => 'tiu',
+  'gwa' => 'gwb',
+  'tetela' => 'tll',
+  'sori-harengan' => 'sbh',
+  'mombo dogon' => 'dmb',
+  'swiss-german sign language' => 'sgg',
+  'maragus' => 'mrs',
+  'kuku-mangk' => 'xmq',
+  'dogri (macrolanguage)' => 'doi',
+  'sabaot' => 'spy',
+  'tachawit' => 'shy',
+  'hassaniyya' => 'mey',
+  'dungu' => 'dbv',
+  'malo' => 'mla',
+  'noipx' => 'npx',
+  'anam' => 'pda',
+  'ngul' => 'nlo',
+  'casiguran dumagat agta' => 'dgc',
+  'efe' => 'efe',
+  'chambri' => 'can',
+  'to\'abaita' => 'mlu',
+  'kutto' => 'kpa',
+  'old spanish' => 'osp',
+  'lemio' => 'lei',
+  'ngam' => 'nmc',
+  'djiwarli' => 'dze',
+  'kuwema' => 'woa',
+  'jakun' => 'jak',
+  'khamyang' => 'ksu',
+  'brem' => 'buq',
+  'lahanan' => 'lhn',
+  'votic' => 'vot',
+  'niuafo\'ou' => 'num',
+  'yimchungru naga' => 'yim',
+  'ganang' => 'gne',
+  'rohingya' => 'rhg',
+  'ocotepec mixtec' => 'mie',
+  'western xwla gbe' => 'xwl',
+  'musasa' => 'smm',
+  'elkei' => 'elk',
+  'lango (uganda)' => 'laj',
+  'lower silesian' => 'sli',
+  'loma (liberia)' => 'lom',
+  'san francisco del mar huave' => 'hue',
+  'tlingit' => 'tli',
+  "purisime\x{f1}o" => 'puy',
+  'kambaira' => 'kyy',
+  'fanagalo' => 'fng',
+  'dar fur daju' => 'daj',
+  'sylheti' => 'syl',
+  'toposa' => 'toq',
+  "tecpatl\x{e1}n totonac" => 'tcw',
+  'andajin' => 'ajn',
+  'columbia-wenatchi' => 'col',
+  'narango' => 'nrg',
+  'el nayar cora' => 'crn',
+  'lyngngam' => 'lyg',
+  'baha buyang' => 'yha',
+  "karip\x{fa}na creole french" => 'kmv',
+  'tengger' => 'tes',
+  'wik-epa' => 'wie',
+  'so\'a' => 'ssq',
+  'busami' => 'bsm',
+  'siwu' => 'akp',
+  'tangkhul naga (myanmar)' => 'ntx',
+  'kosraean' => 'kos',
+  'busuu' => 'bju',
+  'mandan' => 'mhq',
+  'zemgalian' => 'xzm',
+  'harari' => 'har',
+  'austronesian languages' => 'map',
+  "chort\x{ed}" => 'caa',
+  'scottish gaelic' => 'gla',
+  'bhele' => 'bhy',
+  'chara' => 'cra',
+  "san mart\x{ed}n quechua" => 'qvs',
+  'hupla' => 'hap',
+  'bissa' => 'bib',
+  'andio' => 'bzb',
+  'huitepec mixtec' => 'mxs',
+  'mouk-aria' => 'mwh',
+  'talieng' => 'tdf',
+  'pacific gulf yupik' => 'ems',
+  'bandjalang' => 'bdy',
+  'kyanga' => 'tye',
+  'aringa' => 'luc',
+  'kriang' => 'ngt',
+  'wasu' => 'wsu',
+  'dakpakha' => 'dka',
+  'maquiritari' => 'mch',
+  'mon' => 'mnw',
+  'didinga' => 'did',
+  'venda' => 'ven',
+  'trieng' => 'stg',
+  'lowland tarahumara' => 'tac',
+  'kagulu' => 'kki',
+  'bubia' => 'bbx',
+  'petapa zapotec' => 'zpe',
+  'westphalien' => 'wep',
+  'mayogo' => 'mdm',
+  'min bei chinese' => 'mnp',
+  'gulay' => 'gvl',
+  'niellim' => 'nie',
+  'eastern xiangxi miao' => 'muq',
+  'tejalapan zapotec' => 'ztt',
+  'lachi' => 'lbt',
+  'manyawa' => 'mny',
+  'bishuo' => 'bwh',
+  'dewoin' => 'dee',
+  'rama' => 'rma',
+  'cuyonon' => 'cyo',
+  'tigon mbembe' => 'nza',
+  "cab\x{e9}car" => 'cjp',
+  'ntomba' => 'nto',
+  'moi (indonesia)' => 'mxn',
+  'berakou' => 'bxv',
+  'mwimbi-muthambi' => 'mws',
+  'neme' => 'nex',
+  'lenyima' => 'ldg',
+  'tabasco zoque' => 'zoq',
+  'mongolian' => 'mon',
+  'tangchangya' => 'tnv',
+  'kungkari' => 'lku',
+  'cafundo creole' => 'ccd',
+  'atemble' => 'ate',
+  'buksa' => 'tkb',
+  'geji' => 'gji',
+  'severn ojibwa' => 'ojs',
+  'sartang' => 'onp',
+  'salas' => 'sgu',
+  'halbi' => 'hlb',
+  'sekpele' => 'lip',
+  'kendayan' => 'knx',
+  'bemba (zambia)' => 'bem',
+  'mala malasar' => 'ima',
+  'hadrami arabic' => 'ayh',
+  "k\x{e9}l\x{e9}" => 'keb',
+  'kirikiri' => 'kiy',
+  'welaun' => 'wlh',
+  'hutterite german' => 'geh',
+  'muak sa-aak' => 'ukk',
+  'aranadan' => 'aaf',
+  'isekiri' => 'its',
+  'japanese' => 'jpn',
+  'dungra bhil' => 'duh',
+  'yamna' => 'ymn',
+  "ca\x{f1}ar highland quichua" => 'qxr',
+  'alladian' => 'ald',
+  'timugon murut' => 'tih',
+  "salum\x{e1}" => 'slj',
+  'tunen' => 'tvu',
+  'kita maninkakan' => 'mwk',
+  'lower tanana' => 'taa',
+  "idat\x{e9}" => 'idt',
+  'xokleng' => 'xok',
+  'morerebi' => 'xmo',
+  "hak\x{f6}" => 'hao',
+  'nugunu (australia)' => 'nnv',
+  'gao' => 'gga',
+  'rakhine' => 'rki',
+  "mond\x{e9}" => 'mnd',
+  'ukwa' => 'ukq',
+  'ogbah' => 'ogc',
+  'ngarluma' => 'nrl',
+  'ile ape' => 'ila',
+  'phong-kniang' => 'pnx',
+  'lufu' => 'ldq',
+  'butmas-tur' => 'bnr',
+  'lugbara' => 'lgg',
+  'elepi' => 'ele',
+  'saudi arabian sign language' => 'sdl',
+  'utu' => 'utu',
+  'abu\' arapesh' => 'aah',
+  'mocho' => 'mhc',
+  'gor' => 'gqr',
+  'mayi-yapi' => 'xyj',
+  'kachi koli' => 'gjk',
+  'kpelle' => 'kpe',
+  'marwari (pakistan)' => 'mve',
+  'moken' => 'mwt',
+  'kupsabiny' => 'kpz',
+  'kotafon gbe' => 'kqk',
+  'tasawaq' => 'twq',
+  'imbongu' => 'imo',
+  'rajong' => 'rjg',
+  'central pashto' => 'pst',
+  'moresada' => 'msx',
+  'northern nisu' => 'yiv',
+  'tomo kan dogon' => 'dtm',
+  'brithenig' => 'bzt',
+  'mburku' => 'bbt',
+  'ilwana' => 'mlk',
+  'northern rengma naga' => 'nnl',
+  'lhomi' => 'lhm',
+  'kaco\'' => 'xkk',
+  'akoose' => 'bss',
+  'susu' => 'sus',
+  'yawuru' => 'ywr',
+  'kobol' => 'kgu',
+  'kalaallisut' => 'kal',
+  'kashubian' => 'csb',
+  'patani' => 'ptn',
+  'langue des signes de belgique francophone' => 'sfb',
+  'lokaa' => 'yaz',
+  'bagupi' => 'bpi',
+  'polari' => 'pld',
+  'dongshanba lalo' => 'yik',
+  'mikasuki' => 'mik',
+  'joba' => 'job',
+  'aka' => 'soh',
+  'lijili' => 'mgi',
+  'bolongan' => 'blj',
+  'siraya' => 'fos',
+  'sensi' => 'sni',
+  'wadjigu' => 'wdu',
+  "k\x{f6}lsch" => 'ksh',
+  "san agust\x{ed}n mixtepec zapotec" => 'ztm',
+  'church slavic' => 'chu',
+  'kofa' => 'kso',
+  "ir\x{e1}ntxe" => 'irn',
+  'vehes' => 'val',
+  'manumanaw karen' => 'kxf',
+  'kaeku' => 'kkq',
+  'lewotobi' => 'lwt',
+  'berbice creole dutch' => 'brc',
+  'fembe' => 'agl',
+  'idesa' => 'ids',
+  'modole' => 'mqo',
+  'karajarri' => 'gbd',
+  'saweru' => 'swr',
+  'umiida' => 'xud',
+  'kou' => 'snz',
+  'tututepec mixtec' => 'mtu',
+  'mbandja' => 'zmz',
+  "s\x{f4}" => 'sss',
+  'nanai' => 'gld',
+  'mandar' => 'mdr',
+  'ayizi' => 'yyz',
+  "chirip\x{e1}" => 'nhd',
+  'lepontic' => 'xlp',
+  "apiak\x{e1}" => 'api',
+  'southeast babar' => 'vbb',
+  'middle english (1100-1500)' => 'enm',
+  'ambonese malay' => 'abs',
+  'lule' => 'ule',
+  'malango' => 'mln',
+  'yauyos quechua' => 'qux',
+  'igwe' => 'igw',
+  'songe' => 'sop',
+  'doka' => 'dbi',
+  'keyagana' => 'kyg',
+  'lipo' => 'lpo',
+  'kara-kalpak' => 'kaa',
+  'yugul' => 'ygu',
+  'pipil' => 'ppl',
+  'punan merah' => 'puf',
+  'bati (cameroon)' => 'btc',
+  'punan bah-biau' => 'pna',
+  'bagusa' => 'bqb',
+  'aranama-tamique' => 'xrt',
+  'malaryan' => 'mjq',
+  'dendi (central african republic)' => 'deq',
+  'turka' => 'tuz',
+  'bosngun' => 'bqs',
+  'noone' => 'nhu',
+  'bangime' => 'dba',
+  'lahul lohar' => 'lhl',
+  'southeastern pomo' => 'pom',
+  'arpitan' => 'frp',
+  'bagirmi' => 'bmi',
+  "asunci\x{f3}n mixtepec zapotec" => 'zoo',
+  'yakut' => 'sah',
+  'indic languages' => 'inc',
+  'shuwa-zamani' => 'ksa',
+  'amganad ifugao' => 'ifa',
+  'huizhou chinese' => 'czh',
+  'mari (russia)' => 'chm',
+  'creoles and pidgins, english-based' => 'cpe',
+  'phrae pwo karen' => 'kjt',
+  'sumbwa' => 'suw',
+  'sikaiana' => 'sky',
+  'holoholo' => 'hoo',
+  'sumtu chin' => 'csv',
+  'naro' => 'nhr',
+  'shekhawati' => 'swv',
+  'helong' => 'heg',
+  'achi' => 'acr',
+  'valley maidu' => 'vmv',
+  'kordofanian languages' => 'kdo',
+  'pero' => 'pip',
+  'langbashe' => 'lna',
+  'waddar' => 'wbq',
+  'occitan (post 1500)' => 'oci',
+  'awiyaana' => 'auy',
+  'idu-mishmi' => 'clk',
+  'luna' => 'luj',
+  'arikem' => 'ait',
+  'ancient zapotec' => 'xzp',
+  'yoidik' => 'ydk',
+  'central sierra miwok' => 'csm',
+  'sakao' => 'sku',
+  'mirandese' => 'mwl',
+  'yareni zapotec' => 'zae',
+  'adithinngithigh' => 'dth',
+  'suku' => 'sub',
+  "kh\x{e1}ng" => 'kjm',
+  'southern sami' => 'sma',
+  'hyam' => 'jab',
+  'katcha-kadugli-miri' => 'xtc',
+  'virgin islands creole english' => 'vic',
+  'bonan' => 'peh',
+  'mozambican sign language' => 'mzy',
+  'south muyu' => 'kts',
+  'ethiopian sign language' => 'eth',
+  'fataluku' => 'ddg',
+  'lezghian' => 'lez',
+  'southern aymara' => 'ayc',
+  'holiya' => 'hoy',
+  'latvian' => 'lav',
+  'kamaru' => 'kgx',
+  'arabana' => 'ard',
+  "\x{f6}mie" => 'aom',
+  'sarli' => 'sdf',
+  'classical nahuatl' => 'nci',
+  'kolbila' => 'klc',
+  'shehri' => 'shv',
+  'eblan' => 'xeb',
+  'kajali' => 'xkj',
+  'tigrinya' => 'tir',
+  'talaud' => 'tld',
+  'gangulu' => 'gnl',
+  'limos kalinga' => 'kmk',
+  'tanahmerah' => 'tcm',
+  'keningau murut' => 'kxi',
+  'mbule' => 'mlb',
+  'laghu' => 'lgb',
+  'ija-zuba' => 'vki',
+  'romano-greek' => 'rge',
+  'kanikkaran' => 'kev',
+  'mape' => 'mlh',
+  'tajio' => 'tdj',
+  'udi' => 'udi',
+  'malol' => 'mbk',
+  'suoy' => 'syo',
+  'mayawali' => 'yxa',
+  'yala' => 'yba',
+  'solano' => 'xso',
+  'minjungbal' => 'xjb',
+  'phu thai' => 'pht',
+  'vaghat-ya-bijim-legeri' => 'bij',
+  'swiss-italian sign language' => 'slf',
+  'kabatei' => 'xkp',
+  'chemakum' => 'xch',
+  'eastern xwla gbe' => 'gbx',
+  'mulao' => 'giu',
+  'parkari koli' => 'kvx',
+  'zumbun' => 'jmb',
+  'baga kaloum' => 'bqf',
+  "m\x{fc}nd\x{fc}" => 'muh',
+  'sheshi kham' => 'kip',
+  'muyuw' => 'myw',
+  'hunsrik' => 'hrx',
+  'ikwere' => 'ikw',
+  'nedebang' => 'nec',
+  "sierra de ju\x{e1}rez zapotec" => 'zaa',
+  'tai laing' => 'tjl',
+  'yamphu' => 'ybi',
+  'konyak naga' => 'nbe',
+  'lungga' => 'lga',
+  'mandandanyi' => 'zmk',
+  'kono (guinea)' => 'knu',
+  'wayana' => 'way',
+  'puyo-paekche' => 'xpp',
+  'kisankasa' => 'kqh',
+  'tamanaku' => 'tmz',
+  'teke-ebo' => 'ebo',
+  'raji' => 'rji',
+  'dutch' => 'nld',
+  'western xiangxi miao' => 'mmr',
+  'safaliba' => 'saf',
+  'sekani' => 'sek',
+  'vale' => 'vae',
+  'aka-bea' => 'abj',
+  'karnai' => 'bbv',
+  'benabena' => 'bef',
+  'korupun-sela' => 'kpq',
+  'kua' => 'tyu',
+  "gabrielino-fernande\x{f1}o" => 'xgf',
+  'mbula-bwazza' => 'mbu',
+  'bussa' => 'dox',
+  'tita' => 'tdq',
+  'ghulfan' => 'ghl',
+  'songo' => 'soo',
+  'ixil' => 'ixl',
+  'nubaca' => 'baf',
+  'veluws' => 'vel',
+  'yerakai' => 'yra',
+  'nguluwan' => 'nuw',
+  "\x{1c1}ani" => 'hnh',
+  'friulian' => 'fur',
+  'ravula' => 'yea',
+  'pacoh' => 'pac',
+  'chimariko' => 'cid',
+  'hmwaveke' => 'mrk',
+  'salampasu' => 'slx',
+  'rogo' => 'rod',
+  'tama (chad)' => 'tma',
+  'tumzabt' => 'mzb',
+  'mogofin' => 'mfg',
+  'yalarnnga' => 'ylr',
+  'sorsogon ayta' => 'ays',
+  'kalam' => 'kmh',
+  'tsucuba' => 'cbq',
+  'ndo' => 'ndp',
+  'sa\'ban' => 'snv',
+  'marti ke' => 'zmg',
+  'maklew' => 'mgf',
+  'naluo yi' => 'ylo',
+  'isanzu' => 'isn',
+  'mori bawah' => 'xmz',
+  'arammba' => 'stk',
+  'sekapan' => 'skp',
+  'oroha' => 'ora',
+  'margu' => 'mhg',
+  'etkywan' => 'ich',
+  "north jun\x{ed}n quechua" => 'qvn',
+  'atsahuaca' => 'atc',
+  'clallam' => 'clm',
+  'mesopotamian arabic' => 'acm',
+  'yaqay' => 'jaq',
+  'parsi' => 'prp',
+  'bolivian sign language' => 'bvl',
+  'jandai' => 'jan',
+  'ladino' => 'lad',
+  'oro win' => 'orw',
+  'kisi' => 'kiz',
+  'horned miao' => 'hrm',
+  'abidji' => 'abi',
+  'tajiki arabic' => 'abh',
+  'rufiji' => 'rui',
+  'jaya' => 'jyy',
+  'ngalakgan' => 'nig',
+  'central kurdish' => 'ckb',
+  'amanab' => 'amn',
+  'waropen' => 'wrp',
+  'dicamay agta' => 'duy',
+  'bhattiyali' => 'bht',
+  'bamileke languages' => 'bai',
+  'hebrew' => 'heb',
+  'yango' => 'yng',
+  'germanic languages' => 'gem',
+  'southwestern huishui hmong' => 'hmh',
+  'tocantins asurini' => 'asu',
+  'bete-bendi' => 'btt',
+  'pear' => 'pcb',
+  'vumbu' => 'vum',
+  'nzanyi' => 'nja',
+  'jinyu chinese' => 'cjy',
+  'lubuagan kalinga' => 'knb',
+  'transalpine gaulish' => 'xtg',
+  'phuie' => 'pug',
+  'kajaman' => 'kag',
+  'north american indian languages' => 'nai',
+  'hlepho phowa' => 'yhl',
+  'nchumbulu' => 'nlu',
+  'bayot' => 'bda',
+  'yangman' => 'jng',
+  'mongolia buriat' => 'bxm',
+  'kok borok' => 'trp',
+  'biatah bidayuh' => 'bth',
+  'nzadi' => 'nzd',
+  'bumthangkha' => 'kjz',
+  'mongolian sign language' => 'msr',
+  'tiv' => 'tiv',
+  'maram naga' => 'nma',
+  'simbo' => 'sbb',
+  'kuuk-yak' => 'uky',
+  'central yupik' => 'esu',
+  'upper guinea crioulo' => 'pov',
+  'goaria' => 'gig',
+  'demta' => 'dmy',
+  'chincha quechua' => 'qxc',
+  'bimin' => 'bhl',
+  'lehali' => 'tql',
+  'meta\'' => 'mgo',
+  'banaro' => 'byz',
+  'uneme' => 'une',
+  'narom' => 'nrm',
+  'western tawbuid' => 'twb',
+  'san mateo del mar huave' => 'huv',
+  'tariana' => 'tae',
+  'cubeo' => 'cub',
+  'kaduo' => 'ktp',
+  'east makian' => 'mky',
+  'western meohang' => 'raf',
+  'sinagen' => 'siu',
+  'ngurmbur' => 'nrx',
+  'nayi' => 'noz',
+  'fortsenal' => 'frt',
+  'goemai' => 'ank',
+  'angaataha' => 'agm',
+  'jennu kurumba' => 'xuj',
+  'pomo' => 'pmm',
+  'soyaltepec mixtec' => 'vmq',
+  'kairiru' => 'kxa',
+  'ket' => 'ket',
+  'kohistani shina' => 'plk',
+  'sos kundi' => 'sdk',
+  'breton' => 'bre',
+  "nal\x{f6}go" => 'nlz',
+  'batu' => 'btu',
+  'adamawa fulfulde' => 'fub',
+  'sekar' => 'skz',
+  'cornish' => 'cor',
+  'maiadomu' => 'mzz',
+  'arabic' => 'ara',
+  'pijin' => 'pis',
+  "m\x{e9}nik" => 'tnr',
+  'far western muria' => 'fmu',
+  "ember\x{e1}-tad\x{f3}" => 'tdc',
+  'mosimo' => 'mqv',
+  "pankarar\x{e9}" => 'pax',
+  'medebur' => 'mjm',
+  'gumatj' => 'gnn',
+  'iteri' => 'itr',
+  'leinong naga' => 'lzn',
+  'bozaba' => 'bzo',
+  'tunisian sign language' => 'tse',
+  'western fijian' => 'wyy',
+  'bahnar' => 'bdq',
+  'susuami' => 'ssu',
+  'gusii' => 'guz',
+  'mbalanhu' => 'lnb',
+  'vestinian' => 'xvs',
+  'ancient north arabian' => 'xna',
+  'eastern tamang' => 'taj',
+  'lake miwok' => 'lmw',
+  'jewish palestinian aramaic' => 'jpa',
+  'saterfriesisch' => 'stq',
+  "karip\x{fa}na" => 'kgm',
+  'northern betsimisaraka malagasy' => 'bmm',
+  'kuvi' => 'kxv',
+  'chichicapan zapotec' => 'zpv',
+  'odut' => 'oda',
+  'tagabawa' => 'bgs',
+  'koy sanjaq surat' => 'kqd',
+  'aari' => 'aiw',
+  'indonesian' => 'ind',
+  'kuke' => 'ght',
+  'tetete' => 'teb',
+  'kulisusu' => 'vkl',
+  'con' => 'cno',
+  'bambassi' => 'myf',
+  'mpalitjanh' => 'xpj',
+  'pacahuara' => 'pcp',
+  'haiphong sign language' => 'haf',
+  'mundabli' => 'boe',
+  'pangwali' => 'pgg',
+  'rawngtu chin' => 'weu',
+  'kagayanen' => 'cgc',
+  'venetian' => 'vec',
+  'tabasco chontal' => 'chf',
+  'pattani' => 'lae',
+  'kungardutyi' => 'gdt',
+  "himarim\x{e3}" => 'hir',
+  'sebop' => 'sib',
+  'galo' => 'adl',
+  'tonsea' => 'txs',
+  'eastern canadian inuktitut' => 'ike',
+  'mbara (australia)' => 'mvl',
+  'musgu' => 'mug',
+  'emae' => 'mmw',
+  'gvoko' => 'ngs',
+  'north moluccan malay' => 'max',
+  'saafi-saafi' => 'sav',
+  'tanaina' => 'tfn',
+  'orang kanaq' => 'orn',
+  'sidetic' => 'xsd',
+  'bambalang' => 'bmo',
+  'andaqui' => 'ana',
+  'mbesa' => 'zms',
+  'yevanic' => 'yej',
+  'oblo' => 'obl',
+  'southeastern tarahumara' => 'tcu',
+  'bidhawal' => 'ihw',
+  'khamti' => 'kht',
+  'gula (chad)' => 'glu',
+  "umot\x{ed}na" => 'umo',
+  'kutong' => 'skm',
+  "pirah\x{e3}" => 'myp',
+  'tharaka' => 'thk',
+  'matipuhy' => 'mzo',
+  'siang' => 'sya',
+  'cross river mbembe' => 'mfn',
+  'konai' => 'kxw',
+  'kaan' => 'ldl',
+  "poyan\x{e1}wa" => 'pyn',
+  'mbosi' => 'mdw',
+  'wiru' => 'wiu',
+  'port sorell tasmanian' => 'xpl',
+  'lomaiviti' => 'lmv',
+  'ehueun' => 'ehu',
+  'western magar' => 'mrd',
+  'western durango nahuatl' => 'azn',
+  'el molo' => 'elo',
+  'walio' => 'wla',
+  'kuanua' => 'ksd',
+  'tewe' => 'twx',
+  'montenegrin' => 'cnr',
+  'kaikadi' => 'kep',
+  'south picene' => 'spx',
+  'taloki' => 'tlk',
+  'hmong-mien languages' => 'hmx',
+  "alaba-k\x{2019}abeena" => 'alw',
+  'dendi (benin)' => 'ddn',
+  'zhang-zhung' => 'xzh',
+  'muluridyi' => 'vmu',
+  'menya' => 'mcr',
+  'mbugwe' => 'mgz',
+  'mt. iraya agta' => 'atl',
+  'isconahua' => 'isc',
+  'bragat' => 'aof',
+  'wiarumus' => 'tua',
+  'lengo' => 'lgr',
+  'ewondo' => 'ewo',
+  'yuki' => 'yuk',
+  'acheron' => 'acz',
+  "katuk\x{ed}na" => 'kav',
+  'ngombe (democratic republic of congo)' => 'ngc',
+  'ache' => 'yif',
+  'nawdm' => 'nmz',
+  'okolod' => 'kqv',
+  'gimme' => 'kmp',
+  'salar' => 'slr',
+  'gudanji' => 'nji',
+  'tlachichilco tepehua' => 'tpt',
+  'zemba' => 'dhm',
+  'northern pame' => 'pmq',
+  'yabong' => 'ybo',
+  'minz zhuang' => 'zgm',
+  'khowar' => 'khw',
+  'sanskrit' => 'san',
+  'homa' => 'hom',
+  'kofyar' => 'kwl',
+  'maco' => 'wpc',
+  'catalan sign language' => 'csc',
+  'lahnda' => 'lah',
+  'maleng' => 'pkt',
+  'mamboru' => 'mvd',
+  'karankawa' => 'zkk',
+  'araona' => 'aro',
+  'lele (papua new guinea)' => 'lle',
+  'mursi' => 'muz',
+  "vur\x{eb}s" => 'msn',
+  'tundra enets' => 'enh',
+  'sebuyau' => 'snb',
+  'penang sign language' => 'psg',
+  'ambele' => 'ael',
+  'mapoyo' => 'mcg',
+  'zizilivakan' => 'ziz',
+  'chitimacha' => 'ctm',
+  'tataltepec chatino' => 'cta',
+  'central bikol' => 'bcl',
+  "hoby\x{f3}t" => 'hoh',
+  'bikya' => 'byb',
+  'northern grebo' => 'gbo',
+  'umeda' => 'upi',
+  'manchu' => 'mnc',
+  'saam' => 'raq',
+  'binumarien' => 'bjr',
+  'bactrian' => 'xbc',
+  'sou nama' => 'tlt',
+  'njyem' => 'njy',
+  'athapascan languages' => 'ath',
+  'kara (papua new guinea)' => 'leu',
+  'tiranige diga dogon' => 'tde',
+  'mittu' => 'mwu',
+  "h\x{e9}rtevin" => 'hrt',
+  'matumbi' => 'mgw',
+  'bedoanas' => 'bed',
+  'baeggu' => 'bvd',
+  'bobot' => 'bty',
+  'qatabanian' => 'xqt',
+  'sherpa' => 'xsr',
+  'wangkangurru' => 'wgg',
+  "orej\x{f3}n" => 'ore',
+  'central bontok' => 'lbk',
+  "mazatl\x{e1}n mixe" => 'mzl',
+  'jadgali' => 'jdg',
+  "herd\x{e9}" => 'hed',
+  'warji' => 'wji',
+  'rempi' => 'rmp',
+  'canichana' => 'caz',
+  'wolaytta' => 'wal',
+  'kanufi' => 'kni',
+  'alutor' => 'alr',
+  'shuswap' => 'shs',
+  "gourmanch\x{e9}ma" => 'gux',
+  'bakoko' => 'bkh',
+  'yakan' => 'yka',
+  'cebuano' => 'ceb',
+  'bargam' => 'mlp',
+  'linear a' => 'lab',
+  "loma (c\x{f4}te d'ivoire)" => 'loi',
+  'lule sami' => 'smj',
+  'nicaragua creole english' => 'bzk',
+  'namonuito' => 'nmt',
+  'molima' => 'mox',
+  'amdang' => 'amj',
+  'rongmei naga' => 'nbu',
+  "santa in\x{e9}s yatzechi zapotec" => 'zpn',
+  'tu' => 'mjg',
+  "ember\x{e1}-cat\x{ed}o" => 'cto',
+  'syenara senoufo' => 'shz',
+  'bulu (papua new guinea)' => 'bjl',
+  'fuliiru' => 'flr',
+  'gungabula' => 'gyf',
+  "dogos\x{e9}" => 'dos',
+  'classical mandaic' => 'myz',
+  'chinook jargon' => 'chn',
+  'daga' => 'dgz',
+  'ibu' => 'ibu',
+  'parawen' => 'prw',
+  'ghayavi' => 'bmk',
+  'ratahan' => 'rth',
+  'nisenan' => 'nsz',
+  'kunda' => 'kdn',
+  'kalo finnish romani' => 'rmf',
+  'seko tengah' => 'sko',
+  'serili' => 'sve',
+  'tsum' => 'ttz',
+  'jejueo' => 'jje',
+  'iowa-oto' => 'iow',
+  'warao' => 'wba',
+  'bundeli' => 'bns',
+  'marenje' => 'vmr',
+  'gawwada' => 'gwd',
+  'anasi' => 'bpo',
+  'bali (democratic republic of congo)' => 'bcp',
+  'dengka' => 'dnk',
+  'pyapun' => 'pcw',
+  'kwasio' => 'nmg',
+  'kanite' => 'kmu',
+  'kari' => 'kbj',
+  'seneca' => 'see',
+  'domu' => 'dof',
+  'mungaka' => 'mhk',
+  'papapana' => 'ppn',
+  'santa teresa cora' => 'cok',
+  'zaghawa' => 'zag',
+  'kom (cameroon)' => 'bkm',
+  'nancere' => 'nnc',
+  'wambule' => 'wme',
+  'ong' => 'oog',
+  'shark bay' => 'ssv',
+  'rawo' => 'rwa',
+  'silacayoapan mixtec' => 'mks',
+  'cayubaba' => 'cyb',
+  'niwer mil' => 'hrc',
+  'isirawa' => 'srl',
+  'simplified english' => 'eng-simple',
+  'abipon' => 'axb',
+  'yucateco' => 'yua',
+  'ogbogolo' => 'ogg',
+  'teanu' => 'tkw',
+  'buru (indonesia)' => 'mhs',
+  'mbato' => 'gwa',
+  'idakho-isukha-tiriki' => 'ida',
+  'ndobo' => 'ndw',
+  'mono (democratic republic of congo)' => 'mnh',
+  'yabem' => 'jae',
+  'kirmanjki (individual language)' => 'kiu',
+  'koresh-e rostam' => 'okh',
+  'talondo\'' => 'tln',
+  'central huasteca nahuatl' => 'nch',
+  'danaru' => 'dnr',
+  'khlula' => 'ykl',
+  'banggarla' => 'bjb',
+  'lere' => 'gnh',
+  'minoan' => 'omn',
+  'tiwa' => 'lax',
+  'perai' => 'wet',
+  'hijazi arabic' => 'acw',
+  'ugong' => 'ugo',
+  'northern sorsoganon' => 'bks',
+  'yameo' => 'yme',
+  'abun' => 'kgr',
+  "mal\x{e9}ku ja\x{ed}ka" => 'gut',
+  'umon' => 'umm',
+  'sri lankan creole malay' => 'sci',
+  'cocama-cocamilla' => 'cod',
+  'cisalpine gaulish' => 'xcg',
+  'nahari' => 'nhh',
+  'ndasa' => 'nda',
+  'eastern durango nahuatl' => 'azd',
+  'tiagbamrin aizi' => 'ahi',
+  'swiss german' => 'gsw',
+  'eastern magar' => 'mgp',
+  'slavomolisano' => 'svm',
+  'ulwa' => 'ulw',
+  'romansh' => 'roh',
+  'umbindhamu' => 'umd',
+  'kuanhua' => 'xnh',
+  'aeka' => 'aez',
+  'cameroon pidgin' => 'wes',
+  'biak' => 'bhw',
+  'kurti' => 'ktm',
+  'northern guiyang hmong' => 'huj',
+  'are' => 'mwc',
+  'chuukese' => 'chk',
+  'nottoway' => 'ntw',
+  'epi-olmec' => 'xep',
+  'nyole' => 'nuj',
+  'waci gbe' => 'wci',
+  'taiwan sign language' => 'tss',
+  'dulbu' => 'dbo',
+  'suma' => 'sqm',
+  "atti\x{e9}" => 'ati',
+  'dominican sign language' => 'doq',
+  'iyojwa\'ja chorote' => 'crt',
+  'weliki' => 'klh',
+  'kinaray-a' => 'krj',
+  'whitesands' => 'tnp',
+  'lanas lobu' => 'ruu',
+  'tagalaka' => 'tgz',
+  'awad bing' => 'bcu',
+  'alur' => 'alz',
+  'paniya' => 'pcg',
+  'gudu' => 'gdu',
+  'amto' => 'amt',
+  'north mofu' => 'mfk',
+  'east limba' => 'lma',
+  'kerek' => 'krk',
+  'carijona' => 'cbd',
+  'mangareva' => 'mrv',
+  'kanashi' => 'xns',
+  'zoogocho zapotec' => 'zpq',
+  'lower chehalis' => 'cea',
+  'southwestern tepehuan' => 'tla',
+  'mangala' => 'mem',
+  'old high german (ca. 750-1050)' => 'goh',
+  'lukpa' => 'dop',
+  'binandere' => 'bhg',
+  'nusu' => 'nuf',
+  'as' => 'asz',
+  'kabwari' => 'kcw',
+  'kwoma' => 'kmo',
+  'kwini' => 'gww',
+  'kiowa' => 'kio',
+  'pileni' => 'piv',
+  'kenga' => 'kyq',
+  'tese' => 'keg',
+  'west goodenough' => 'ddi',
+  'nyamusa-molo' => 'nwm',
+  'morigi' => 'mdb',
+  'fon' => 'fon',
+  'ngarla' => 'nrk',
+  'deno' => 'dbb',
+  'xhosa' => 'xho',
+  'auwe' => 'smf',
+  'kituba (democratic republic of congo)' => 'ktu',
+  'musar' => 'mmi',
+  'lak' => 'lbe',
+  'southeastern kolami' => 'nit',
+  'bisorio' => 'bir',
+  'china buriat' => 'bxu',
+  'toku-no-shima' => 'tkn',
+  'old russian' => 'orv',
+  'eastern khumi chin' => 'cek',
+  'hawaiian' => 'haw',
+  'wagi' => 'fad',
+  'bangwinji' => 'bsj',
+  'nungali' => 'nug',
+  'ningil' => 'niz',
+  'sukuma' => 'suk',
+  "yol\x{14b}u sign language" => 'ygs',
+  'koitabu' => 'kqi',
+  'maeng itneg' => 'itt',
+  'western tamang' => 'tdg',
+  'kru languages' => 'kro',
+  'gan chinese' => 'gan',
+  'tebul sign language' => 'tsy',
+  'yimas' => 'yee',
+  'agi' => 'aif',
+  'loja highland quichua' => 'qvj',
+  'muratayak' => 'asx',
+  'malapandaram' => 'mjp',
+  "den\x{ed}" => 'dny',
+  'pholo' => 'yip',
+  "kaiw\x{e1}" => 'kgk',
+  'chamacoco' => 'ceg',
+  'mituku' => 'zmq',
+  'sabah malay' => 'msi',
+  'naskapi' => 'nsk',
+  'yidiny' => 'yii',
+  'lamkang' => 'lmk',
+  'simeku' => 'smz',
+  'niuean' => 'niu',
+  'northern pumi' => 'pmi',
+  'kunduvadi' => 'wku',
+  "filomena mata-coahuitl\x{e1}n totonac" => 'tlp',
+  'kumbewaha' => 'xks',
+  'andh' => 'anr',
+  'formosan languages' => 'fox',
+  'krenak' => 'kqq',
+  "\x{e0}h\x{e0}n" => 'ahn',
+  'karko' => 'kko',
+  'afrikaans' => 'afr',
+  'mangole' => 'mqc',
+  'tanglang' => 'ytl',
+  'pankhu' => 'pkh',
+  'romanian sign language' => 'rms',
+  'lamu' => 'llh',
+  'huaxcaleca nahuatl' => 'nhq',
+  'tlacoatzintepec chinantec' => 'ctl',
+  'bugawac' => 'buk',
+  'ossetian' => 'oss',
+  'esuma' => 'esm',
+  'ndemli' => 'nml',
+  'gambian wolof' => 'wof',
+  'moksela' => 'vms',
+  "ararandew\x{e1}ra" => 'xaj',
+  'siwai' => 'siw',
+  'murkim' => 'rmh',
+  'kakabai' => 'kqf',
+  'kabalai' => 'kvf',
+  'soi' => 'soj',
+  'taushiro' => 'trr',
+  'west makian' => 'mqs',
+  'keoru-ahia' => 'xeu',
+  'gundungurra' => 'xrd',
+  'beeke' => 'bkf',
+  'bonggo' => 'bpg',
+  'sumbawa' => 'smw',
+  'eastern meohang' => 'emg',
+  'grangali' => 'nli',
+  'upper kinabatangan' => 'dmg',
+  'moba' => 'mfq',
+  'koro (india)' => 'jkr',
+  'akum' => 'aku',
+  'arabela' => 'arl',
+  'tindi' => 'tin',
+  'urningangg' => 'urc',
+  'eastern tawbuid' => 'bnj',
+  'nemi' => 'nem',
+  'isinai' => 'inn',
+  'lenakel' => 'tnl',
+  'hula' => 'hul',
+  'southern haida' => 'hax',
+  'hernican' => 'xhr',
+  'gyele' => 'gyi',
+  'bugan' => 'bbh',
+  'nimo' => 'niw',
+  'sapo' => 'krn',
+  "ju\x{1c0}\x{2bc}hoan" => 'ktz',
+  'southern sorsoganon' => 'srv',
+  'belhariya' => 'byw',
+  'lote' => 'uvl',
+  'volscian' => 'xvo',
+  'west slavic languages' => 'zlw',
+  'bade' => 'bde',
+  'obo manobo' => 'obo',
+  'taveta' => 'tvs',
+  'rungtu chin' => 'rtc',
+  'pulabu' => 'pup',
+  'palya bareli' => 'bpx',
+  'samay' => 'syx',
+  'jewish babylonian aramaic (ca. 200-1200 ce)' => 'tmr',
+  'tartessian' => 'txr',
+  'anufo' => 'cko',
+  'nde-nsele-nta' => 'ndd',
+  'apali' => 'ena',
+  'yogad' => 'yog',
+  'breri' => 'brq',
+  'munda' => 'unx',
+  'minderico' => 'drc',
+  "mainfr\x{e4}nkisch" => 'vmf',
+  'wemale' => 'weo',
+  'kuwaa' => 'blh',
+  'matukar' => 'mjk',
+  'menka' => 'mea',
+  "b\x{e4}di kanum" => 'khd',
+  'mvanip' => 'mcj',
+  'noy' => 'noy',
+  'teme' => 'tdo',
+  'maung' => 'mph',
+  'ute-southern paiute' => 'ute',
+  "tor\x{e1}" => 'trz',
+  'gothic' => 'got',
+  'karkin' => 'krb',
+  'garus' => 'gyb',
+  'kumzari' => 'zum',
+  'ben tey dogon' => 'dbt',
+  'ere' => 'twp',
+  'thulung' => 'tdh',
+  'asturian' => 'ast',
+  'tanzanian sign language' => 'tza',
+  'laura' => 'lur',
+  'awabakal' => 'awk',
+  'yeretuar' => 'gop',
+  'ulumanda\'' => 'ulm',
+  'daro-matu melanau' => 'dro',
+  'yangum gel' => 'ygl',
+  'saba' => 'saa',
+  'southern guiyang hmong' => 'hmy',
+  'chamicuro' => 'ccc',
+  'garre' => 'gex',
+  'konongo' => 'kcz',
+  'scots' => 'sco',
+  'tsamai' => 'tsb',
+  'old tibetan' => 'otb',
+  'dangaura tharu' => 'thl',
+  'patwin' => 'pwi',
+  "\x{f6}nge" => 'oon',
+  'yongnan zhuang' => 'zyn',
+  'dampelas' => 'dms',
+  'yerukula' => 'yeu',
+  'mulaha' => 'mfw',
+  'wasa' => 'wss',
+  'nete' => 'net',
+  'arigidi' => 'aqg',
+  'secoya' => 'sey',
+  'wanga' => 'lwg',
+  'ingrian' => 'izh',
+  "mocov\x{ed}" => 'moc',
+  'southern bai' => 'bfs',
+  'khoibu naga' => 'nkb',
+  'kipsigis' => 'sgc',
+  'kiorr' => 'xko',
+  'mobumrin aizi' => 'ahm',
+  'attapady kurumba' => 'pkr',
+  'batak alas-kluet' => 'btz',
+  'ukrainian' => 'ukr',
+  'kafoa' => 'kpu',
+  'sakizaya' => 'szy',
+  'pochutec' => 'xpo',
+  'bandi' => 'bza',
+  'pimbwe' => 'piw',
+  'limilngan' => 'lmc',
+  'darkinyung' => 'xda',
+  'dhuwal' => 'dwu',
+  'yora' => 'mts',
+  'batjala' => 'xby',
+  'kilmeri' => 'kih',
+  'olu\'bo' => 'lul',
+  'kerinci' => 'kvr',
+  'bena (nigeria)' => 'yun',
+  'baruya' => 'byr',
+  'cotoname' => 'xcn',
+  'malay (macrolanguage)' => 'msa',
+  'bulu (cameroon)' => 'bum',
+  'tumshuqese' => 'xtq',
+  'horpa' => 'ero',
+  'tunni' => 'tqq',
+  'vano' => 'vnk',
+  'hungu' => 'hng',
+  'gua' => 'gwx',
+  'raetic' => 'xrr',
+  "lakond\x{ea}" => 'lkd',
+  'turkmen' => 'tuk',
+  'enu' => 'enu',
+  'campalagian' => 'cml',
+  'pasi' => 'psq',
+  'nuk' => 'noc',
+  'moru' => 'mgd',
+  'budibud' => 'btp',
+  'sibu melanau' => 'sdx',
+  'puyo' => 'xpy',
+  'manda (tanzania)' => 'mgs',
+  'bura-pabir' => 'bwr',
+  'wedau' => 'wed',
+  "dz\x{f9}\x{f9}ngoo" => 'dnn',
+  'huehuetla tepehua' => 'tee',
+  'sobei' => 'sob',
+  'kanauji' => 'bjj',
+  'inor' => 'ior',
+  'araki' => 'akr',
+  'nuu-chah-nulth' => 'nuk',
+  "krah\x{f4}" => 'xra',
+  'bo-rukul' => 'mae',
+  'zande languages' => 'znd',
+  'middle irish (900-1200)' => 'mga',
+  'zaachila zapotec' => 'ztx',
+  'skagit' => 'ska',
+  'seti' => 'sbi',
+  'tututni' => 'tuu',
+  'dar sila daju' => 'dau',
+  'wampar' => 'lbq',
+  'samaritan' => 'smp',
+  'zayein karen' => 'kxk',
+  'ngando (democratic republic of congo)' => 'nxd',
+  'sharanahua' => 'mcd',
+  'lubu' => 'lcf',
+  'chepya' => 'ycp',
+  'southern pumi' => 'pmj',
+  'malayo-polynesian languages' => 'poz',
+  'wawonii' => 'wow',
+  'watam' => 'wax',
+  'yagomi' => 'ygm',
+  'hanoi sign language' => 'hab',
+  'guayabero' => 'guo',
+  'indo-iranian languages' => 'iir',
+  'ngie' => 'ngj',
+  'karingani' => 'kgn',
+  'lithuanian' => 'lit',
+  'puerto rican sign language' => 'psl',
+  'eastern lawa' => 'lwl',
+  'weme gbe' => 'wem',
+  'oku' => 'oku',
+  'celtiberian' => 'xce',
+  'longto' => 'wok',
+  'campidanese sardinian' => 'sro',
+  'mbala' => 'mdp',
+  'naxi' => 'nxq',
+  'nusa laut' => 'nul',
+  'krevinian' => 'zkv',
+  'eastern penan' => 'pez',
+  'algerian saharan arabic' => 'aao',
+  'northern haida' => 'hdn',
+  'sighu' => 'sxe',
+  'mpiemo' => 'mcx',
+  'undetermined' => 'und',
+  'lohorung' => 'lbr',
+  'red gelao' => 'gir',
+  'kaytetye' => 'gbb',
+  'mbangwe' => 'zmn',
+  'ngas' => 'anc',
+  'min dong chinese' => 'cdo',
+  'abai sungai' => 'abf',
+  'barakai' => 'baj',
+  'mamusi' => 'kdf',
+  'chaldean neo-aramaic' => 'cld',
+  'maring naga' => 'nng',
+  'iranian languages' => 'ira',
+  'kunyi' => 'njx',
+  'hunzib' => 'huz',
+  'yurats' => 'rts',
+  'burmeso' => 'bzu',
+  'wa' => 'wbm',
+  'khakas' => 'kjh',
+  'sholaga' => 'sle',
+  'kabore one' => 'onk',
+  'loniu' => 'los',
+  'wumboko' => 'bqm',
+  'keerray-woorroong' => 'wkr',
+  'bunoge dogon' => 'dgb',
+  'shanenawa' => 'swo',
+  'land dayak languages' => 'day',
+  'aleut' => 'ale',
+  'sawknah' => 'swn',
+  'warlpiri' => 'wbp',
+  "kuru\x{e1}ya" => 'kyr',
+  'southern conchucos ancash quechua' => 'qxo',
+  'sorothaptic' => 'sxo',
+  'lanoh' => 'lnh',
+  'eastern keres' => 'kee',
+  "xav\x{e1}nte" => 'xav',
+  'rongpo' => 'rnp',
+  'nomlaki' => 'nol',
+  "\x{1c2}hua" => 'huc',
+  'marind' => 'mrz',
+  'khinalugh' => 'kjj',
+  'plains cree' => 'crk',
+  'lemolang' => 'ley',
+  'omani arabic' => 'acx',
+  'koba' => 'kpd',
+  'momina' => 'mmb',
+  'beli (papua new guinea)' => 'bey',
+  'ozolotepec zapotec' => 'zao',
+  'badimaya' => 'bia',
+  'malalamai' => 'mmt',
+  'uma' => 'ppk',
+  'hurrian' => 'xhu',
+  'uab meto' => 'aoz',
+  'middle korean (10th-16th cent.)' => 'okm',
+  'nara' => 'nrb',
+  'ocaina' => 'oca',
+  'nyali' => 'nlj',
+  'malawian sign language' => 'lws',
+  'ambakich' => 'aew',
+  'dori\'o' => 'dor',
+  "guat\x{f3}" => 'gta',
+  'saamia' => 'lsm',
+  'bo-ung' => 'mux',
+  'kumaoni' => 'kfy',
+  'quechan' => 'yum',
+  'bada (nigeria)' => 'bau',
+  "fw\x{e2}i" => 'fwa',
+  'pini' => 'pii',
+  'gade lohar' => 'gda',
+  'piamatsina' => 'ptr',
+  'poumei naga' => 'pmx',
+  'lo-toga' => 'lht',
+  'levuka' => 'lvu',
+  'asu (nigeria)' => 'aum',
+  'weri' => 'wer',
+  'sika' => 'ski',
+  'zarma' => 'dje',
+  'kagoro' => 'xkg',
+  'darmiya' => 'drd',
+  'puragi' => 'pru',
+  'quetzaltepec mixe' => 'pxm',
+  'burunge' => 'bds',
+  'gorontalo' => 'gor',
+  'cua' => 'cua',
+  'ndonde hamba' => 'njd',
+  'muniche' => 'myr',
+  'konkani (macrolanguage)' => 'kok',
+  'emai-iuleha-ora' => 'ema',
+  'monom' => 'moo',
+  'rembarrnga' => 'rmb',
+  'itundujia mixtec' => 'mce',
+  'langam' => 'lnm',
+  'nsongo' => 'nsx',
+  'cibak' => 'ckl',
+  "du\x{303}ya" => 'ldb',
+  'selian' => 'sxl',
+  'oyster bay tasmanian' => 'xpd',
+  'burate' => 'bti',
+  'buna' => 'bvn',
+  'yamap' => 'ymp',
+  'pisidian' => 'xps',
+  'kami (tanzania)' => 'kcu',
+  'bibbulman' => 'xbp',
+  'tarifit' => 'rif',
+  'doso' => 'dol',
+  'gawri' => 'gwc',
+  'luguru' => 'ruf',
+  'betaf' => 'bfe',
+  'kundal shahi' => 'shd',
+  'samba leko' => 'ndi',
+  'maaka' => 'mew',
+  "par\x{e1} gavi\x{e3}o" => 'gvp',
+  'mongol' => 'mgt',
+  'fayu' => 'fau',
+  'gwahatike' => 'dah',
+  'burui' => 'bry',
+  'kao' => 'kax',
+  'atong (cameroon)' => 'ato',
+  'lamnso\'' => 'lns',
+  'aneityum' => 'aty',
+  'baissa fali' => 'fah',
+  'kalenjin' => 'kln',
+  'likuba' => 'kxx',
+  'basque' => 'eus',
+  'bonkeng' => 'bvg',
+  'simbari' => 'smb',
+  'grebo' => 'grb',
+  'mag-indi ayta' => 'blx',
+  'lorediakarkar' => 'lnn',
+  'southern yamphu' => 'lrr',
+  'anong' => 'nun',
+  'na-kara' => 'nck',
+  'western keres' => 'kjq',
+  'bile' => 'bil',
+  'khaling' => 'klr',
+  'belanda viri' => 'bvi',
+  'waxianghua' => 'wxa',
+  'french sign language' => 'fsl',
+  "ember\x{e1}-baud\x{f3}" => 'bdc',
+  'peripheral mongolian' => 'mvf',
+  'mayi-thakurti' => 'xyt',
+  'segeju' => 'seg',
+  'north wahgi' => 'whg',
+  "ghadam\x{e8}s" => 'gha',
+  'kedang' => 'ksx',
+  "ocotl\x{e1}n zapotec" => 'zac',
+  'dravidian languages' => 'dra',
+  'ikoma-nata-isenye' => 'ntk',
+  'wathawurrung' => 'wth',
+  'yuqui' => 'yuq',
+  'monastic sign language' => 'mzg',
+  'khorasani turkish' => 'kmz',
+  'huaulu' => 'hud',
+  'dhangu-djangu' => 'dhg',
+  'muda' => 'ymd',
+  'iwaidja' => 'ibd',
+  "pum\x{e9}" => 'yae',
+  'dogri (individual language)' => 'dgo',
+  'cumanagoto' => 'cuo',
+  'nakanai' => 'nak',
+  'kisar' => 'kje',
+  'bariai' => 'bch',
+  'kelon' => 'kyo',
+  'tillamook' => 'til',
+  'amundava' => 'adw',
+  'nathembo' => 'nte',
+  'chungmboko' => 'cug',
+  'kung' => 'kfl',
+  'omurano' => 'omu',
+  'algonquin' => 'alq',
+  "zacatl\x{e1}n-ahuacatl\x{e1}n-tepetzintla nahuatl" => 'nhi',
+  'arop-lokep' => 'apr',
+  'yahadian' => 'ner',
+  'western lawa' => 'lcp',
+  'balantak' => 'blz',
+  'beginci' => 'ebc',
+  'yaka (central african republic)' => 'axk',
+  'bezhta' => 'kap',
+  'gobu' => 'gox',
+  'cerma' => 'cme',
+  'siyin chin' => 'csy',
+  'cajun french' => 'frc',
+  'varli' => 'vav',
+  'nande' => 'nnb',
+  'tunjung' => 'tjg',
+  "alo\x{e1}pam zapotec" => 'zaq',
+  'gofa' => 'gof',
+  'tampulma' => 'tpm',
+  'nauo' => 'nwo',
+  'ukpe-bayobiri' => 'ukp',
+  'yalakalore' => 'xyl',
+  'nali' => 'nss',
+  'ede idaca' => 'idd',
+  'tairaha' => 'bxa',
+  'nahuatl languages' => 'nah',
+  'lega-shabunda' => 'lea',
+  'landoma' => 'ldm',
+  'naga pidgin' => 'nag',
+  'yabarana' => 'yar',
+  'afar' => 'aar',
+  'singa' => 'sgm',
+  'kauwera' => 'xau',
+  'beli (south sudan)' => 'blm',
+  'pinyin' => 'pny',
+  'samatao' => 'ysd',
+  'anglo-norman' => 'xno',
+  'wawa' => 'www',
+  'lambichhong' => 'lmh',
+  'mukha-dora' => 'mmk',
+  'tedim chin' => 'ctd',
+  'sassarese sardinian' => 'sdc',
+  "panao hu\x{e1}nuco quechua" => 'qxh',
+  "nivacl\x{e9}" => 'cag',
+  'ilue' => 'ilv',
+  'bondum dom dogon' => 'dbu',
+  'lawu' => 'lwu',
+  'jalkunan' => 'bxl',
+  'yamba' => 'yam',
+  'gal' => 'gap',
+  'kugama' => 'kow',
+  'dom' => 'doa',
+  'dogrib' => 'dgr',
+  'yurok' => 'yur',
+  'bago-kusuntu' => 'bqg',
+  'pentlatch' => 'ptw',
+  'western penan' => 'pne',
+  'oluta popoluca' => 'plo',
+  'bagheli' => 'bfy',
+  'esselen' => 'esq',
+  'tabaa zapotec' => 'zat',
+  'western neo-aramaic' => 'amw',
+  'dirim' => 'dir',
+  'lydian' => 'xld',
+  'coeur d\'alene' => 'crd',
+  'kemberano' => 'bzp',
+  'wirangu' => 'wgu',
+  'marsian' => 'ims',
+  'roon' => 'rnn',
+  'southern pame' => 'pmz',
+  'tofanma' => 'tlg',
+  'huautla mazatec' => 'mau',
+  'udmurt' => 'udm',
+  'tiang' => 'tbj',
+  'klao' => 'klu',
+  'kunggari' => 'kgl',
+  'bijori' => 'bix',
+  'guahibo' => 'guh',
+  'yawijibaya' => 'jbw',
+  'andegerebinha' => 'adg',
+  'kaure' => 'bpp',
+  'alngith' => 'aid',
+  'mapos buang' => 'bzh',
+  "yurut\x{ed}" => 'yui',
+  'laurentian' => 'lre',
+  'mudburra' => 'dmw',
+  'ixtenco otomi' => 'otz',
+  'zan gula' => 'zna',
+  'uhami' => 'uha',
+  'gurr-goni' => 'gge',
+  'gorakor' => 'goc',
+  'nukunul' => 'xnu',
+  'galice' => 'gce',
+  'sota kanum' => 'krz',
+  'kistane' => 'gru',
+  'eskayan' => 'esy',
+  'hibito' => 'hib',
+  'kildin sami' => 'sjd',
+  'karas' => 'kgv',
+  'sambal' => 'xsb',
+  'sindhi' => 'snd',
+  "kimr\x{e9}" => 'kqp',
+  'cyc language' => 'cycl',
+  'southern grebo' => 'grj',
+  'dera (indonesia)' => 'kbv',
+  'mahou' => 'mxx',
+  'isebe' => 'igo',
+  'dawera-daweloor' => 'ddw',
+  'ho' => 'hoc',
+  'kwa' => 'kwb',
+  'nzakara' => 'nzk',
+  'yuracare' => 'yuz',
+  'chesu' => 'ych',
+  'achang' => 'acn',
+  'kaniet' => 'ktk',
+  'carolinian' => 'cal',
+  'gail' => 'gic',
+  'zuojiang zhuang' => 'zzj',
+  'ngomba' => 'jgo',
+  'goreng' => 'xgg',
+  'efutop' => 'ofu',
+  'ngambay' => 'sba',
+  'bashkardi' => 'bsg',
+  'guanche' => 'gnc',
+  'stodsde' => 'jih',
+  'rinconada bikol' => 'bto',
+  'aribwaung' => 'ylu',
+  'nocte naga' => 'njb',
+  'dagbani' => 'dag',
+  'banao itneg' => 'bjx',
+  "kadiw\x{e9}u" => 'kbc',
+  'ulch' => 'ulc',
+  'haveke' => 'hvk',
+  "wayor\x{f3}" => 'wyr',
+  'yandjibara' => 'xyb',
+  'o\'du' => 'tyh',
+  'tilquiapan zapotec' => 'zts',
+  'wikngenchera' => 'wua',
+  'wailaki' => 'wlk',
+  'pom' => 'pmo',
+  'naaba' => 'nao',
+  'chukwa' => 'cuw',
+  'moro' => 'mor',
+  'kaninuwa' => 'wat',
+  'akar-bale' => 'acl',
+  'haruai' => 'tmd',
+  'eastern gorkha tamang' => 'tge',
+  'amele' => 'aey',
+  'batui' => 'zbt',
+  'aka-kede' => 'akx',
+  'omotik' => 'omt',
+  'omotic languages' => 'omv',
+  'wahau kenyah' => 'whk',
+  'dacian' => 'xdc',
+  'pindiini' => 'pti',
+  'lambya' => 'lai',
+  'imonda' => 'imn',
+  'east slavic languages' => 'zle',
+  'xadani zapotec' => 'zax',
+  'mazaltepec zapotec' => 'zpy',
+  'amis' => 'ami',
+  'tauade' => 'ttd',
+  'spanish sign language' => 'ssp',
+  'north picene' => 'nrp',
+  'ngombe (central african republic)' => 'nmj',
+  'judeo-iraqi arabic' => 'yhd',
+  'rabha' => 'rah',
+  'soo' => 'teu',
+  'daur' => 'dta',
+  'gayo' => 'gay',
+  'timbe' => 'tim',
+  'vinza' => 'vin',
+  'barbaram' => 'vmb',
+  'yout wam' => 'ytw',
+  'tektiteko' => 'ttc',
+  'tima' => 'tms',
+  'ipili' => 'ipi',
+  'vishavan' => 'vis',
+  'badjiri' => 'jbi',
+  'momare' => 'msz',
+  'blissymbols' => 'zbl',
+  'gizrra' => 'tof',
+  'chadong' => 'cdy',
+  'dzao min' => 'bpn',
+  'waka' => 'wav',
+  'sar' => 'mwm',
+  'tsaangi' => 'tsa',
+  'airoran' => 'air',
+  'wyandot' => 'wya',
+  'iranian persian' => 'pes',
+  'lower burdekin' => 'xbb',
+  'larevat' => 'lrv',
+  'putukwam' => 'afe',
+  'tchitchege' => 'tck',
+  'mawchi' => 'mke',
+  'sidamo' => 'sid',
+  'wadjabangayi' => 'wdy',
+  'magahi' => 'mag',
+  'wichita' => 'wic',
+  'northern ping chinese' => 'cnp',
+  'rundi' => 'run',
+  'central pomo' => 'poo',
+  'kuvale' => 'olu',
+  'hmong njua' => 'hnj',
+  'gowli' => 'gok',
+  'ouma' => 'oum',
+  'piti' => 'pcn',
+  'ga\'anda' => 'gqa',
+  'qiubei zhuang' => 'zqe',
+  "ash\x{e9}ninka pajonal" => 'cjo',
+  'mwani' => 'wmw',
+  'tavringer romani' => 'rmu',
+  'numbami' => 'sij',
+  'maek' => 'hmk',
+  'southern mnong' => 'mnn',
+  'githabul' => 'gih',
+  'bwisi' => 'bwz',
+  'kuman (papua new guinea)' => 'kue',
+  'kinuku' => 'kkd',
+  'maskelynes' => 'klv',
+  'nanticoke' => 'nnt',
+  'ega' => 'ega',
+  'antankarana malagasy' => 'xmv',
+  'tjupany' => 'tjp',
+  'georgian' => 'kat',
+  "ojitl\x{e1}n chinantec" => 'chj',
+  'beothuk' => 'bue',
+  'nkami' => 'nkq',
+  'maiwa (indonesia)' => 'wmm',
+  'kumba' => 'ksm',
+  'pima bajo' => 'pia',
+  'kepo\'' => 'kuk',
+  'gurung' => 'gvr',
+  'sinyar' => 'sys',
+  'karok' => 'kyh',
+  'siksika' => 'bla',
+  'frankish' => 'frk',
+  'kodi' => 'kod',
+  'farefare' => 'gur',
+  'hiligaynon' => 'hil',
+  'nisga\'a' => 'ncg',
+  'kemtuik' => 'kmt',
+  'havasupai-walapai-yavapai' => 'yuf',
+  'sengo' => 'spk',
+  'mangerr' => 'zme',
+  'dhudhuroa' => 'ddr',
+  'pirriya' => 'xpa',
+  'murrinh-patha' => 'mwf',
+  'lombard' => 'lmo',
+  'vunjo' => 'vun',
+  'logooli' => 'rag',
+  'ayi (papua new guinea)' => 'ayq',
+  'norwegian sign language' => 'nsl',
+  'kla-dan' => 'lda',
+  'southern pastaza quechua' => 'qup',
+  "barbare\x{f1}o" => 'boi',
+  'mandingo' => 'man',
+  'nasal' => 'nsy',
+  'sira' => 'swj',
+  'djimini senoufo' => 'dyi',
+  'tolowa' => 'tol',
+  'ralte' => 'ral',
+  'higaonon' => 'mba',
+  'ma\'anyan' => 'mhy',
+  'brokpake' => 'sgt',
+  'cuneiform luwian' => 'xlu',
+  'nandi' => 'niq',
+  'dizin' => 'mdx',
+  'uruangnirin' => 'urn',
+  'selkup' => 'sel',
+  'chabu' => 'sbf',
+  'gula iro' => 'glj',
+  'hakha chin' => 'cnh',
+  'panim' => 'pnr',
+  'gagu' => 'ggu',
+  'zeme naga' => 'nzm',
+  'ligenza' => 'lgz',
+  'folopa' => 'ppo',
+  'wali (ghana)' => 'wlx',
+  'lealao chinantec' => 'cle',
+  'dyaberdyaber' => 'dyb',
+  'lipan apache' => 'apl',
+  'mende (papua new guinea)' => 'sim',
+  'bete' => 'byf',
+  'honduras sign language' => 'hds',
+  'kadu' => 'zkd',
+  'panyi bai' => 'bfc',
+  'mbudum' => 'xmd',
+  'tboli' => 'tbl',
+  'taje' => 'pee',
+  "magdalena pe\x{f1}asco mixtec" => 'xtm',
+  'chavacano' => 'cbk',
+  'tangale' => 'tan',
+  'ngendelengo' => 'nql',
+  'mlomp' => 'mlo',
+  'creek' => 'mus',
+  'mednyj aleut' => 'mud',
+  'ikobi' => 'meb',
+  "xiri\x{e2}na" => 'xir',
+  'bolia' => 'bli',
+  'lillooet' => 'lil',
+  'duriankere' => 'dbn',
+  'pamona' => 'pmf',
+  'birked' => 'brk',
+  'mansaka' => 'msk',
+  "south ucayali ash\x{e9}ninka" => 'cpy',
+  'embu' => 'ebu',
+  'tombelala' => 'ttp',
+  'lao naga' => 'nlq',
+  'kerewo' => 'kxz',
+  'tenango otomi' => 'otn',
+  'wuliwuli' => 'wlu',
+  'yatzachi zapotec' => 'zav',
+  'carabayo' => 'cby',
+  'maa' => 'cma',
+  'pnar' => 'pbv',
+  'khazar' => 'zkz',
+  'hadza' => 'hts',
+  'lowland oaxaca chontal' => 'clo',
+  'indian sign language' => 'ins',
+  'vitou' => 'vto',
+  'taman (myanmar)' => 'tcl',
+  "michoac\x{e1}n mazahua" => 'mmc',
+  'wab' => 'wab',
+  'simeulue' => 'smr',
+  'samo' => 'smq',
+  'mulam' => 'mlm',
+  'borei' => 'gai',
+  'ainbai' => 'aic',
+  'puimei naga' => 'npu',
+  'judeo-persian' => 'jpr',
+  'tinputz' => 'tpz',
+  "turiw\x{e1}ra" => 'twt',
+  'mandobo atas' => 'aax',
+  'chamic languages' => 'cmc',
+  'cushitic languages' => 'cus',
+  'malayalam' => 'mal',
+  'mabire' => 'muj',
+  'pyen' => 'pyy',
+  'duke' => 'nke',
+  'xaasongaxango' => 'kao',
+  'yinwum' => 'yxm',
+  'northeastern tasmanian' => 'xpb',
+  'tungag' => 'lcm',
+  'igo' => 'ahl',
+  'nkhumbi' => 'khu',
+  'north caucasian languages' => 'ccn',
+  'besoa' => 'bep',
+  'bedjond' => 'bjv',
+  'kwerba' => 'kwe',
+  'ndolo' => 'ndl',
+  'gugu warra' => 'wrw',
+  'pathiya' => 'pty',
+  'jawe' => 'jaz',
+  'nyankpa' => 'yes',
+  'tingui-boto' => 'tgv',
+  'ivbie north-okpela-arhe' => 'atg',
+  'gwere' => 'gwr',
+  'wajuk' => 'xwj',
+  'lola' => 'lcd',
+  'man met' => 'mml',
+  'south nuaulu' => 'nxl',
+  'finnish sign language' => 'fse',
+  'gepo' => 'ygp',
+  'murupi' => 'mqw',
+  'togbo-vara banda' => 'tor',
+  'baba malay' => 'mbf',
+  'gafat' => 'gft',
+  'kota (india)' => 'kfe',
+  'nyaturu' => 'rim',
+  'morouas' => 'mrp',
+  'ubi' => 'ubi',
+  'busam' => 'bxs',
+  'seimat' => 'ssg',
+  'ladakhi' => 'lbj',
+  'silesian' => 'szl',
+  'sunam' => 'ssk',
+  'siouan languages' => 'sio',
+  "enawen\x{e9}-naw\x{e9}" => 'unk',
+  "yaroam\x{eb}" => 'yro',
+  'san salvador kongo' => 'kwy',
+  'warumungu' => 'wrm',
+  'logorik' => 'liu',
+  'belarusian' => 'bel',
+  'bangubangu' => 'bnx',
+  'kalao' => 'kly',
+  'guatemalan sign language' => 'gsm',
+  'malaysian sign language' => 'xml',
+  "macagu\x{e1}n" => 'mbn',
+  'nanga dama dogon' => 'nzz',
+  'bellari' => 'brw',
+  'nyungar' => 'nys',
+  'lumba-yakkha' => 'luu',
+  'ulau-suain' => 'svb',
+  'ujir' => 'udj',
+  'guana (brazil)' => 'gqn',
+  'kangean' => 'kkv',
+  'wolane' => 'wle',
+  'greek' => 'gre',
+  'morawa' => 'mze',
+  'dakota' => 'dak',
+  'ban khor sign language' => 'bfk',
+  'hamap' => 'hmu',
+  'halia' => 'hla',
+  'kudmali' => 'kyw',
+  'yapese' => 'yap',
+  'maricopa' => 'mrc',
+  'mabaan' => 'mfz',
+  'cicipu' => 'awc',
+  'urum' => 'uum',
+  'ecuadorian sign language' => 'ecs',
+  'taznatit' => 'grr',
+  'kalaktang monpa' => 'kkf',
+  'saxwe gbe' => 'sxw',
+  'kalou' => 'ywa',
+  'umbundu' => 'umb',
+  'judeo-yemeni arabic' => 'jye',
+  'indri' => 'idr',
+  'katso' => 'kaf',
+  'kaburi' => 'uka',
+  'chambeali' => 'cdh',
+  'lakalei' => 'lka',
+  'grenadian creole english' => 'gcl',
+  'mailu' => 'mgu',
+  'laro' => 'lro',
+  'jah hut' => 'jah',
+  'tsoa' => 'hio',
+  'ganda' => 'lug',
+  'riang (india)' => 'ria',
+  'wambon' => 'wms',
+  'ambo-pasco quechua' => 'qva',
+  'iwur' => 'iwo',
+  'aghwan' => 'xag',
+  'lotud' => 'dtr',
+  'central ojibwa' => 'ojc',
+  'singpho' => 'sgp',
+  'sicel' => 'scx',
+  'kanuri' => 'kau',
+  'zacatepec chatino' => 'ctz',
+  'qimant' => 'ahg',
+  'coos' => 'csz',
+  'karon' => 'krx',
+  'tawoyan' => 'twy',
+  'old chinese' => 'och',
+  'newari' => 'new',
+  'foma' => 'fom',
+  'terei' => 'buo',
+  'merlav' => 'mrm',
+  'south watut' => 'mcy',
+  'kachama-ganjule' => 'kcx',
+  'gumuz' => 'guk',
+  'lesing-gelimi' => 'let',
+  "angait\x{e9}" => 'aqt',
+  'nasarian' => 'nvh',
+  'pana (burkina faso)' => 'pnq',
+  'reshe' => 'res',
+  'rathawi' => 'rtw',
+  'tacahua mixtec' => 'xtt',
+  'lamma' => 'lev',
+  'mwali comorian' => 'wlc',
+  'punthamara' => 'xpt',
+  'kwadi' => 'kwz',
+  'ngurimi' => 'ngq',
+  'northwest pashai' => 'glh',
+  "c\x{f4}\x{f4}ng" => 'cnc',
+  'pe' => 'pai',
+  "kapinaw\x{e1}" => 'xpn',
+  'padoe' => 'pdo',
+  'old french (842-ca. 1400)' => 'fro',
+  'aiton' => 'aio',
+  'kwama' => 'kmq',
+  'wogamusin' => 'wog',
+  'chamorro' => 'cha',
+  'southeastern dinka' => 'dks',
+  'milyan' => 'imy',
+  'temascaltepec nahuatl' => 'nhv',
+  'anor' => 'anj',
+  'hong kong sign language' => 'hks',
+  'tesaka malagasy' => 'tkg',
+  'arta' => 'atz',
+  'hieroglyphic luwian' => 'hlu',
+  'ngiti' => 'niy',
+  'faroese' => 'fao',
+  'romano-serbian' => 'rsb',
+  'murik (malaysia)' => 'mxr',
+  'ancient greek (to 1453)' => 'grc',
+  'saliba' => 'sbe',
+  'port sandwich' => 'psw',
+  "quer\x{e9}taro otomi" => 'otq',
+  'waorani' => 'auc',
+  'soga' => 'xog',
+  'awadhi' => 'awa',
+  'lingarak' => 'lgk',
+  'lawangan' => 'lbx',
+  "lish\x{e1}n did\x{e1}n" => 'trg',
+  'owenia' => 'wsr',
+  'djambarrpuyngu' => 'djr',
+  'vandalic' => 'xvn',
+  'minriq' => 'mnq',
+  'na' => 'nbt',
+  'miriwoong sign language' => 'rsm',
+  'una' => 'mtg',
+  'gengle' => 'geg',
+  'shanga' => 'sho',
+  "old proven\x{e7}al (to 1500)" => 'pro',
+  'pallanganmiddang' => 'pmd',
+  'west central banda' => 'bbp',
+  'biage' => 'bdf',
+  'laru' => 'lan',
+  'bukiyip' => 'ape',
+  'dusun malang' => 'duq',
+  'pisabo' => 'pig',
+  'sherbro' => 'bun',
+  'chukot' => 'ckt',
+  'kuni-boazi' => 'kvg',
+  'ma\'di' => 'mhi',
+  'pinotepa nacional mixtec' => 'mio',
+  'likum' => 'lib',
+  'ngamambo' => 'nbv',
+  'jilbe' => 'jie',
+  'esperanto' => 'epo',
+  'tena lowland quichua' => 'quw',
+  'yangulam' => 'ynl',
+  'faita' => 'faj',
+  'kaonde' => 'kqn',
+  'hpon' => 'hpo',
+  'angal enen' => 'aoe',
+  'southern nago' => 'nqg',
+  'masikoro malagasy' => 'msh',
+  'yangum mon' => 'ymo',
+  'eyak' => 'eya',
+  'wara' => 'wbf',
+  'southwest gbaya' => 'gso',
+  'mushungulu' => 'xma',
+  'bilba' => 'bpz',
+  "trememb\x{e9}" => 'tme',
+  'tifal' => 'tif',
+  'bakpinka' => 'bbs',
+  'hamba' => 'hba',
+  'samberigi' => 'ssx',
+  'fungwa' => 'ula',
+  "sater\x{e9}-maw\x{e9}" => 'mav',
+  'digo' => 'dig',
+  'kaqchikel' => 'cak',
+  'besme' => 'bes',
+  'valpei' => 'vlp',
+  'abanyom' => 'abm',
+  'shempire senoufo' => 'seb',
+  'old breton' => 'obt',
+  'southern one' => 'osu',
+  'wasembo' => 'gsp',
+  'wan' => 'wan',
+  'north marquesan' => 'mrq',
+  'paama' => 'pma',
+  'larteh' => 'lar',
+  'northern dong' => 'doc',
+  'timucua' => 'tjm',
+  'sign languages' => 'sgn',
+  'doe' => 'doe',
+  'etruscan' => 'ett',
+  'lower ta\'oih' => 'tto',
+  'takia' => 'tbc',
+  'judeo-georgian' => 'jge',
+  'armenian sign language' => 'aen',
+  'lamalama' => 'lby',
+  'lycian' => 'xlc',
+  'laua' => 'luf',
+  'kalabakan' => 'kve',
+  'younuo bunu' => 'buh',
+  'pai tavytera' => 'pta',
+  'chuanqiandian cluster miao' => 'cqd',
+  'mwatebu' => 'mwa',
+  'kirike' => 'okr',
+  'alcozauca mixtec' => 'xta',
+  'maslam' => 'msv',
+  'tirahi' => 'tra',
+  'runga' => 'rou',
+  'wangkumara' => 'xwk',
+  'eastern hongshuihe zhuang' => 'zeh',
+  'alege' => 'alf',
+  'tebul ure dogon' => 'dtu',
+  'mapun' => 'sjm',
+  'pite sami' => 'sje',
+  'watubela' => 'wah',
+  'katla' => 'kcr',
+  'eastern acipa' => 'acp',
+  'kela (democratic republic of congo)' => 'kel',
+  'naka\'ela' => 'nae',
+  'kenswei nsei' => 'ndb',
+  'bualkhaw chin' => 'cbl',
+  "waur\x{e1}" => 'wau',
+  'hawai\'i sign language (hsl)' => 'hps',
+  'olkol' => 'olk',
+  'nari nari' => 'rnr',
+  'bolango' => 'bld',
+  'low german' => 'nds',
+  "cabiyar\x{ed}" => 'cbb',
+  'south bolivian quechua' => 'quh',
+  "chan\x{e9}" => 'caj',
+  'paekche' => 'pkc',
+  'ai-cham' => 'aih',
+  'magoma' => 'gmx',
+  'san pedro amuzgos amuzgo' => 'azg',
+  'cayuse' => 'xcy',
+  'estonian' => 'est',
+  'wilawila' => 'wil',
+  'awngthim' => 'gwm',
+  'tokharian b' => 'txb',
+  'southern puget sound salish' => 'slh',
+  'tanimbili' => 'tbe',
+  'sami languages' => 'smi',
+  'boro (ethiopia)' => 'bwo',
+  'adonara' => 'adr',
+  'gbayi' => 'gyg',
+  'sere' => 'swf',
+  'tswapong' => 'two',
+  'majera' => 'xmj',
+  'no linguistic content' => 'zxx',
+  'pangwa' => 'pbr',
+  'bateri' => 'btv',
+  'bumbita arapesh' => 'aon',
+  'burumakok' => 'aip',
+  'mamasa' => 'mqj',
+  'gbagyi' => 'gbr',
+  'pitcairn-norfolk' => 'pih',
+  "sakirabi\x{e1}" => 'skf',
+  'temein' => 'teq',
+  'telefol' => 'tlf',
+  'argentine sign language' => 'aed',
+  "ucayali-yur\x{fa}a ash\x{e9}ninka" => 'cpb',
+  'javanese' => 'jav',
+  'karey' => 'kyd',
+  'dandami maria' => 'daq',
+  'kalmyk' => 'xal',
+  'yekhee' => 'ets',
+  'foia foia' => 'ffi',
+  'jogi' => 'jog',
+  'porohanon' => 'prh',
+  'demisa' => 'dei',
+  "mat\x{ed}s" => 'mpq',
+  "atatl\x{e1}huca mixtec" => 'mib',
+  'candoshi-shapra' => 'cbu',
+  'obolo' => 'ann',
+  'basa-gurmana' => 'buj',
+  'kuy' => 'kdt',
+  'kara (korea)' => 'zra',
+  'shwai' => 'shw',
+  'nyang\'i' => 'nyp',
+  'mubi' => 'mub',
+  'mingang doso' => 'mko',
+  'marathi' => 'mar',
+  'dhalandji' => 'dhl',
+  'dameli' => 'dml',
+  'dari' => 'prs',
+  'wagiman' => 'waq',
+  'lonwolwol' => 'crc',
+  'vangunu' => 'mpr',
+  'venetic' => 'xve',
+  'kariyarra' => 'vka',
+  'chochotec' => 'coz',
+  'austral' => 'aut',
+  'sajau basap' => 'sjb',
+  'minanibai' => 'mcv',
+  'iraqw' => 'irk',
+  "creoles and pidgins, french\x{2011}based" => 'cpf',
+  'hehe' => 'heh',
+  'turkish sign language' => 'tsm',
+  'hanunoo' => 'hnn',
+  'cuyamecalco mixtec' => 'xtu',
+  'warembori' => 'wsa',
+  'rotokas' => 'roo',
+  'totela' => 'ttl',
+  'pekal' => 'pel',
+  "ach\x{e9}" => 'guq',
+  'musak' => 'mmq',
+  'limbum' => 'lmp',
+  'crow' => 'cro',
+  'tunia' => 'tug',
+  'citak' => 'txt',
+  'nubian languages' => 'nub',
+  'baldemu' => 'bdn',
+  'central masela' => 'mxz',
+  'nyamwezi' => 'nym',
+  'toraja-sa\'dan' => 'sda',
+  'toba-maskoy' => 'tmf',
+  'wanukaka' => 'wnk',
+  'loarki' => 'lrk',
+  'seeku' => 'sos',
+  'ersu' => 'ers',
+  'phuong' => 'phg',
+  'axi yi' => 'yix',
+  'mid-southern banda' => 'bjo',
+  "banda-nd\x{e9}l\x{e9}" => 'bfl',
+  'irish' => 'gle',
+  'tai dam' => 'blt',
+  'mambai' => 'mcs',
+  'dabe' => 'dbe',
+  'susquehannock' => 'sqn',
+  'dai' => 'dij',
+  'malak malak' => 'mpb',
+  'luang' => 'lex',
+  'morisyen' => 'mfe',
+  'barro negro tunebo' => 'tbn',
+  "tezoatl\x{e1}n mixtec" => 'mxb',
+  "anamb\x{e9}" => 'aan',
+  'noric' => 'nrc',
+  "wakon\x{e1}" => 'waf',
+  'middle watut' => 'mpl',
+  'yine' => 'pib',
+  'ngawn chin' => 'cnw',
+  "estado de m\x{e9}xico otomi" => 'ots',
+  'ruma' => 'ruz',
+  'ata manobo' => 'atd',
+  'northern nago' => 'xkb',
+  'guya' => 'gka',
+  'shor' => 'cjs',
+  'doyayo' => 'dow',
+  'tutelo' => 'tta',
+  'taliabu' => 'tlv',
+  'zenzontepec chatino' => 'czn',
+  'da\'a kaili' => 'kzf',
+  'minangkabau' => 'min',
+  'lika' => 'lik',
+  'phupha' => 'yph',
+  'trinidadian creole english' => 'trf',
+  'shilluk' => 'shk',
+  'shekkacho' => 'moy',
+  'itu mbon uzo' => 'itm',
+  'atzingo matlatzinca' => 'ocu',
+  'belanda bor' => 'bxb',
+  'kushi' => 'kuh',
+  'apache languages' => 'apa',
+  'ut-ma\'in' => 'gel',
+  'braj' => 'bra',
+  'hyolmo' => 'scp',
+  'assamese' => 'asm',
+  'ndrulo' => 'dno',
+  'central melanau' => 'mel',
+  'bisu' => 'bzi',
+  'rendille' => 'rel',
+  'bindal' => 'xbd',
+  'beja' => 'bej',
+  'malvi' => 'mup',
+  'tilung' => 'tij',
+  'kandas' => 'kqw',
+  'southern dong' => 'kmc',
+  'lauje' => 'law',
+  'south marquesan' => 'mqm',
+  'keninjal' => 'knl',
+  'semnam' => 'ssm',
+  'futuna-aniwa' => 'fut',
+  'northern one' => 'onr',
+  'termanu' => 'twu',
+  'kamakan' => 'vkm',
+  'white gelao' => 'giw',
+  'dutton world speedwords' => 'dws',
+  'palauan' => 'pau',
+  'buso' => 'bso',
+  'northwest gbaya' => 'gya',
+  'central nicobarese' => 'ncb',
+  'mysian' => 'yms',
+  'awa-cuaiquer' => 'kwi',
+  'delaware' => 'del',
+  'lese' => 'les',
+  'leelau' => 'ldk',
+  'motlav' => 'mlv',
+  'picard' => 'pcd',
+  'north watut' => 'una',
+  'yalunka' => 'yal',
+  'tukpa' => 'tpq',
+  'manado malay' => 'xmm',
+  'tuotomb' => 'ttf',
+  'bum' => 'bmv',
+  'hani' => 'hni',
+  'gondi' => 'gon',
+  'ledo kaili' => 'lew',
+  'kenyang' => 'ken',
+  'mayeka' => 'myc',
+  'big nambas' => 'nmb',
+  'east berawan' => 'zbe',
+  'kura ede nago' => 'nqk',
+  'gikyode' => 'acd',
+  'manipuri' => 'mni',
+  "tai d\x{f3}n" => 'twh',
+  'twana' => 'twa',
+  'vilela' => 'vil',
+  'pech' => 'pay',
+  'doromu-koki' => 'kqc',
+  "fulni\x{f4}" => 'fun',
+  'laiyolo' => 'lji',
+  'alugu' => 'aub',
+  'buglere' => 'sab',
+  'tuamotuan' => 'pmt',
+  'pumpokol' => 'xpm',
+  'kisan' => 'xis',
+  "maxakal\x{ed}" => 'mbl',
+  'marfa' => 'mvu',
+  'chut' => 'scb',
+  'pintupi-luritja' => 'piu',
+  'ullatan' => 'ull',
+  'vaiphei' => 'vap',
+  'dotyali' => 'dty',
+  'western parbate kham' => 'kjl',
+  'antigua and barbuda creole english' => 'aig',
+  'papiamento' => 'pap',
+  "tux\x{e1}" => 'tud',
+  'ding' => 'diz',
+  'laven' => 'lbo',
+  'west masela' => 'mss',
+  'lotha naga' => 'njh',
+  'uzbeki arabic' => 'auz',
+  'yanda' => 'yda',
+  'umpila' => 'ump',
+  'warungu' => 'wrg',
+  'tobanga' => 'tng',
+  'abu' => 'ado',
+  'arguni' => 'agf',
+  'bukharic' => 'bhh',
+  'kokola' => 'kzn',
+  'northeastern dinka' => 'dip',
+  'southern birifor' => 'biv',
+  'innu' => 'moe',
+  "chigmecatitl\x{e1}n mixtec" => 'mii',
+  'ila' => 'ilb',
+  'southwest pashai' => 'psh',
+  'baygo' => 'byg',
+  'ulukwumi' => 'ulb',
+  'wano' => 'wno',
+  'gbiri-niragu' => 'grh',
+  'wangkayutyuru' => 'wky',
+  'kwaya' => 'kya',
+  'kera' => 'ker',
+  "m\x{e1}ghd\x{ec}" => 'gmd',
+  'arbore' => 'arv',
+  'mok' => 'mqt',
+  'sabah bisaya' => 'bsy',
+  'central tunebo' => 'tuf',
+  'nobiin' => 'fia',
+  'tswana' => 'tsn',
+  'zenag' => 'zeg',
+  'kamasa' => 'klp',
+  'kimaragang' => 'kqr',
+  'southern catanduanes bikol' => 'bln',
+  'manobo languages' => 'mno',
+  'moingi' => 'mwz',
+  'kusaghe' => 'ksg',
+  'guriaso' => 'grx',
+  'dijim-bwilim' => 'cfa',
+  'godwari' => 'gdx',
+  'enlhet' => 'enl',
+  'aruek' => 'aur',
+  'dongxiang' => 'sce',
+  'yugambal' => 'yub',
+  'ambo' => 'amb',
+  'bongo' => 'bot',
+  'kagoma' => 'kdm',
+  "\x{1c1}xegwi" => 'xeg',
+  'central nahuatl' => 'nhn',
+  'malay (individual language)' => 'zlm',
+  'sechelt' => 'sec',
+  'kemedzung' => 'dmo',
+  'wikalkan' => 'wik',
+  'gbii' => 'ggb',
+  'ambul' => 'apo',
+  'gawar-bati' => 'gwt',
+  'nzima' => 'nzi',
+  'khams tibetan' => 'khg',
+  "toura (c\x{f4}te d'ivoire)" => 'neb',
+  'nugunu (cameroon)' => 'yas',
+  'chinese (family)' => 'zhx',
+  'tulehu' => 'tlu',
+  'harzani' => 'hrz',
+  'dawik kui' => 'dwk',
+  'mbati' => 'mdn',
+  'lawunuia' => 'tgi',
+  'ottawa' => 'otw',
+  'minkin' => 'xxm',
+  'komodo' => 'kvh',
+  'nambo' => 'ncm',
+  'bau' => 'bbd',
+  'kwerisa' => 'kkb',
+  'horom' => 'hoe',
+  'biseni' => 'ije',
+  'otoro' => 'otr',
+  'north bolivian quechua' => 'qul',
+  'bankan tey dogon' => 'dbw',
+  'kasem' => 'xsm',
+  "mazatl\x{e1}n mazatec" => 'vmz',
+  'baraamu' => 'brd',
+  'biao mon' => 'bmt',
+  'dixon reef' => 'dix',
+  'eastern muria' => 'emu',
+  'nateni' => 'ntm',
+  'lehalurup' => 'urr',
+  'kalasha' => 'kls',
+  'ma\'ya' => 'slz',
+  'ontong java' => 'ojv',
+  'moikodi' => 'mkp',
+  'asumboa' => 'aua',
+  'kanan' => 'zkn',
+  'yelogu' => 'ylg',
+  'rangkas' => 'rgk',
+  'mangga buang' => 'mmo',
+  'mina (cameroon)' => 'hna',
+  'zangwal' => 'zah',
+  'baga manduri' => 'bmd',
+  'laba' => 'lau',
+  'bogaya' => 'boq',
+  'yombe' => 'yom',
+  'uma\' lasan' => 'xky',
+  'ende' => 'end',
+  'mansi' => 'mns',
+  'us-saare' => 'uss',
+  'samaritan aramaic' => 'sam',
+  'abar' => 'mij',
+  'mota' => 'mtt',
+  'al-sayyid bedouin sign language' => 'syy',
+  'chiga' => 'cgg',
+  'zhaba' => 'zhb',
+  'kolibugan subanon' => 'skn',
+  'fiwaga' => 'fiw',
+  'dema' => 'dmx',
+  'vaghua' => 'tva',
+  'nyemba' => 'nba',
+  'khisa' => 'kqm',
+  'kubi' => 'kof',
+  'tegali' => 'ras',
+  'alamblak' => 'amp',
+  'pyu (myanmar)' => 'pyx',
+  'rer bare' => 'rer',
+  'koasati' => 'cku',
+  'komo (democratic republic of congo)' => 'kmw',
+  'sogdian' => 'sog',
+  'hunnic' => 'xhc',
+  'mbowe' => 'mxo',
+  'loxicha zapotec' => 'ztp',
+  'western lalu' => 'ywl',
+  'bierebo' => 'bnk',
+  'angor' => 'agg',
+  'vanimo' => 'vam',
+  "n\x{ea}l\x{ea}mwa-nixumwak" => 'nee',
+  'waimaha' => 'bao',
+  'bo (laos)' => 'bgl',
+  'dime' => 'dim',
+  'bihari languages' => 'bih',
+  'mesqan' => 'mvz',
+  'northeast maidu' => 'nmu',
+  "kango (bas-u\x{e9}l\x{e9} district)" => 'kty',
+  'batak angkola' => 'akb',
+  "cruze\x{f1}o" => 'crz',
+  'kawi' => 'kaw',
+  'manombai' => 'woo',
+  'ngaanyatjarra' => 'ntj',
+  'wongo' => 'won',
+  'ngando (central african republic)' => 'ngd',
+  'kuni' => 'kse',
+  'usan' => 'wnu',
+  'western subanon' => 'suc',
+  'nukumanu' => 'nuq',
+  'isthmus mixe' => 'mir',
+  'wahgi' => 'wgi',
+  'altaic languages' => 'tut',
+  'byep' => 'mkk',
+  'binji' => 'bpj',
+  'zhire' => 'zhi',
+  'oko-eni-osayen' => 'oks',
+  'egyptian arabic' => 'arz',
+  'kaur' => 'vkk',
+  'kereho' => 'xke',
+  'samogitian' => 'sgs',
+  'mingrelian' => 'xmf',
+  'timor pidgin' => 'tvy',
+  'loo' => 'ldo',
+  'western muria' => 'mut',
+  'valencian sign language' => 'vsv',
+  'gula (central african republic)' => 'kcm',
+  "p\x{e9}mono" => 'pev',
+  "kaxui\x{e2}na" => 'kbb',
+  'eastern lalu' => 'yit',
+  'lolopo' => 'ycl',
+  'lopi' => 'lov',
+  'dolpo' => 'dre',
+  'bentong' => 'bnu',
+  "san lu\x{ed}s temalacayuca popoloca" => 'pps',
+  'sangil' => 'snl',
+  'northern gondi' => 'gno',
+  'soqotri' => 'sqt',
+  'dieri' => 'dif',
+  'humene' => 'huf',
+  'parauk' => 'prk',
+  'mullu kurumba' => 'kpb',
+  'auslan' => 'asf',
+  'kambaata' => 'ktb',
+  'waray (philippines)' => 'war',
+  'pye krumen' => 'pye',
+  'riantana' => 'ran',
+  'mountain koiali' => 'kpx',
+  'konyanka maninka' => 'mku',
+  'hinduri' => 'hii',
+  'eastern huishui hmong' => 'hme',
+  'brokkat' => 'bro',
+  'uduk' => 'udu',
+  "pe\x{f1}oles mixtec" => 'mil',
+  'seke (nepal)' => 'skj',
+  'kamas' => 'xas',
+  'zenaga' => 'zen',
+  'oro' => 'orx',
+  'kela (papua new guinea)' => 'kcl',
+  'cacaloxtepec mixtec' => 'miu',
+  'sepik iwam' => 'iws',
+  'kominimung' => 'xoi',
+  'cao lan' => 'mlc',
+  'old tamil' => 'oty',
+  'north tanna' => 'tnn',
+  'guinea kpelle' => 'gkp',
+  'anaang' => 'anw',
+  'aushi' => 'auh',
+  'nggem' => 'nbq',
+  'kpeego' => 'cpo',
+  'pele-ata' => 'ata',
+  'zayse-zergulla' => 'zay',
+  'tehit' => 'kps',
+  'surubu' => 'sde',
+  'lama bai' => 'lay',
+  'gungu' => 'rub',
+  'central palawano' => 'plc',
+  'ambelau' => 'amv',
+  'kituba (congo)' => 'mkw',
+  "jabut\x{ed}" => 'jbt',
+  'ajumbu' => 'muc',
+  'western dani' => 'dnw',
+  'barai' => 'bbb',
+  'kyak' => 'bka',
+  'yoruba' => 'yor',
+  'kalkoti' => 'xka',
+  'southern ping chinese' => 'csp',
+  'rasawa' => 'rac',
+  'siuslaw' => 'sis',
+  'choni' => 'cda',
+  'neo' => 'neu',
+  'sam' => 'snx',
+  'moabite' => 'obm',
+  'southern carrier' => 'caf',
+  'myene' => 'mye',
+  'anyin morofo' => 'mtb',
+  'teke-nzikou' => 'nzu',
+  'afghan sign language' => 'afg',
+  'tseku' => 'tsk',
+  'swahili (individual language)' => 'swh',
+  'baluan-pam' => 'blq',
+  'eleme' => 'elm',
+  'kasua' => 'khs',
+  'central awyu' => 'awu',
+  'tira' => 'tic',
+  'ghomara' => 'gho',
+  'njebi' => 'nzb',
+  'bassossi' => 'bsi',
+  'qaqet' => 'byx',
+  'makonde' => 'kde',
+  'boselewa' => 'bwf',
+  'kire' => 'geb',
+  'gusilay' => 'gsl',
+  'goundo' => 'goy',
+  'old persian (ca. 600-400 b.c.)' => 'peo',
+  'denya' => 'anv',
+  'rahambuu' => 'raz',
+  'torona' => 'tqr',
+  'hiri motu' => 'hmo',
+  'wunambal' => 'wub',
+  'urali' => 'url',
+  'kanasi' => 'soq',
+  'siawi' => 'mmp',
+  'nyika (tanzania)' => 'nkt',
+  'mindiri' => 'mpn',
+  'manambu' => 'mle',
+  'northern paiute' => 'pao',
+  'feroge' => 'fer',
+  'urumi' => 'uru',
+  'northern tarahumara' => 'thh',
+  'bhilali' => 'bhi',
+  'wabo' => 'wbb',
+  'aguacateco' => 'agu',
+  'papi' => 'ppe',
+  'brokskat' => 'bkk',
+  'multiple languages' => 'mul',
+  'lengilu' => 'lgi',
+  'deori' => 'der',
+  "ab\x{e9}" => 'aba',
+  'martu wangka' => 'mpj',
+  'mansoanka' => 'msw',
+  'mbonga' => 'xmb',
+  'mwan' => 'moa',
+  'wardandi' => 'wxw',
+  'coatecas altas zapotec' => 'zca',
+  'bangka' => 'mfb',
+  'kaluli' => 'bco',
+  'west berawan' => 'zbw',
+  'adioukrou' => 'adj',
+  'makyan naga' => 'umn',
+  'okpamheri' => 'opa',
+  'kunigami' => 'xug',
+  'papora' => 'ppu',
+  'kandawo' => 'gam',
+  'sorkhei' => 'sqo',
+  'paipai' => 'ppi',
+  'halkomelem' => 'hur',
+  'bekati\'' => 'bei',
+  'bench' => 'bcq',
+  "metlat\x{f3}noc mixtec" => 'mxv',
+  'paraguayan sign language' => 'pys',
+  'tukang besi north' => 'khc',
+  'northern puebla nahuatl' => 'ncj',
+  'haigwai' => 'hgw',
+  'mahasu pahari' => 'bfz',
+  'baniva' => 'bvv',
+  'yue chinese' => 'yue',
+  'midob' => 'mei',
+  'ali' => 'aiy',
+  'rutul' => 'rut',
+  'leti (indonesia)' => 'lti',
+  'alabat island agta' => 'dul',
+  'tetun dili' => 'tdt',
+  'aribwatsa' => 'laz',
+  'pogolo' => 'poy',
+  'ugaritic' => 'uga',
+  'lonzo' => 'lnz',
+  'tugun' => 'tzn',
+  'rukai' => 'dru',
+  'tanggu' => 'tgu',
+  'shahmirzadi' => 'srz',
+  'yele' => 'yle',
+  'bikol' => 'bik',
+  'nyamwanga' => 'mwn',
+  'botolan sambal' => 'sbl',
+  'bashkir' => 'bak',
+  'ngala' => 'nud',
+  "kambiw\x{e1}" => 'xbw',
+  'east masela' => 'vme',
+  'adai' => 'xad',
+  'bassa' => 'bsq',
+  'ngan\'gityemerri' => 'nam',
+  'faire atta' => 'azt',
+  'algerian arabic' => 'arq',
+  'jiongnai bunu' => 'pnu',
+  'mambwe-lungu' => 'mgr',
+  'eastern parbate kham' => 'kif',
+  'lomavren' => 'rmi',
+  'gadsup' => 'gaj',
+  'phrygian' => 'xpg',
+  'chokwe' => 'cjk',
+  'kovai' => 'kqb',
+  'paranan' => 'prf',
+  'lepcha' => 'lep',
+  'sauria paharia' => 'mjt',
+  'tuwuli' => 'bov',
+  'yardliyawarra' => 'yxl',
+  'mundang' => 'mua',
+  'el alto zapotec' => 'zpp',
+  'waris' => 'wrs',
+  'ana tinga dogon' => 'dti',
+  'san dionisio del mar huave' => 'hve',
+  'mag-antsi ayta' => 'sgb',
+  'gurdjar' => 'gdj',
+  'palaka senoufo' => 'plr',
+  'nopala chatino' => 'cya',
+  'masbatenyo' => 'msb',
+  'mzieme naga' => 'nme',
+  'kuku-uwanh' => 'uwa',
+  'kurnai' => 'unn',
+  'watakataui' => 'wtk',
+  'degema' => 'deg',
+  'gurani' => 'hac',
+  'nyakyusa-ngonde' => 'nyy',
+  'sa\'och' => 'scq',
+  'north germanic languages' => 'gmq',
+  'kurudu' => 'kjr',
+  'miyako' => 'mvi',
+  'jingulu' => 'jig',
+  'tabriak' => 'tzx',
+  "ti\x{e9}fo" => 'tiq',
+  'puno quechua' => 'qxp',
+  'tumari kanuri' => 'krt',
+  'mo\'da' => 'gbn',
+  'eruwa' => 'erh',
+  "suy\x{e1}" => 'suy',
+  'juquila mixe' => 'mxq',
+  'orya' => 'ury',
+  'wiradjuri' => 'wrh',
+  "munduruk\x{fa}" => 'myu',
+  'meoswar' => 'mvx',
+  'bo (papua new guinea)' => 'bpw',
+  'gorowa' => 'gow',
+  'blang' => 'blr',
+  'ndali' => 'ndh',
+  'nakai' => 'nkj',
+  'dharumbal' => 'xgm',
+  'artificial languages' => 'art',
+  'koyra chiini songhay' => 'khq',
+  'saleman' => 'sau',
+  'babango' => 'bbm',
+  'maindo' => 'cwb',
+  'north nuaulu' => 'nni',
+  'tibetan' => 'bod',
+  'kho\'ini' => 'xkc',
+  'aka-kol' => 'aky',
+  'yessan-mayo' => 'yss',
+  'plapo krumen' => 'ktj',
+  'en' => 'enc',
+  'banda-banda' => 'bpd',
+  'ngulu' => 'ngp',
+  'kaingang' => 'kgp',
+  'hoava' => 'hoa',
+  'pecheneg' => 'xpc',
+  'german' => 'deu',
+  'dao' => 'daz',
+  "maritsau\x{e1}" => 'msp',
+  'blablanga' => 'blp',
+  'yaka (congo)' => 'iyx',
+  'bunuba' => 'bck',
+  'west albay bikol' => 'fbl',
+  'santiago del estero quichua' => 'qus',
+  'baiso' => 'bsw',
+  'kerewe' => 'ked',
+  'liv' => 'liv',
+  'kwaza' => 'xwa',
+  'buamu' => 'box',
+  'tiene' => 'tii',
+  'legenyem' => 'lcc',
+  'shama-sambuga' => 'sqa',
+  'caribbean javanese' => 'jvn',
+  'sihan' => 'snr',
+  'kare (central african republic)' => 'kbn',
+  'efik' => 'efi',
+  'lavukaleve' => 'lvk',
+  'loncong' => 'lce',
+  'old hungarian' => 'ohu',
+  'central mashan hmong' => 'hmm',
+  'rapanui' => 'rap',
+  'terebu' => 'trb',
+  'malankuravan' => 'mjo',
+  'ayu' => 'ayu',
+  'sepa (papua new guinea)' => 'spe',
+  'fijian' => 'fij',
+  'tai thanh' => 'tmm',
+  'ayiwo' => 'nfl',
+  'ponam' => 'ncc',
+  'sheni' => 'scv',
+  "parakan\x{e3}" => 'pak',
+  'urdu' => 'urd',
+  'sharwa' => 'swq',
+  'mbangi' => 'mgn',
+  'kukatja' => 'kux',
+  'masaaba' => 'myx',
+  'vengo' => 'bav',
+  'abua' => 'abn',
+  'minokok' => 'mqq',
+  'punic' => 'xpu',
+  'garingbal' => 'xgi',
+  'upper saxon' => 'sxu',
+  'shona' => 'sna',
+  'laari' => 'ldi',
+  'yil' => 'yll',
+  'kw\'adza' => 'wka',
+  'nyiha (tanzania)' => 'nih',
+  'san miguel creole french' => 'scf',
+  'yaur' => 'jau',
+  'birwa' => 'brl',
+  'sawai' => 'szw',
+  'gallurese sardinian' => 'sdn',
+  'imroing' => 'imr',
+  'aghu' => 'ahh',
+  'kwaami' => 'ksq',
+  'usaghade' => 'usk',
+  'quechua' => 'que',
+  'adele' => 'ade',
+  'garhwali' => 'gbm',
+  'pingelapese' => 'pif',
+  'taungyo' => 'tco',
+  'bwanabwana' => 'tte',
+  'laomian' => 'lwm',
+  'bajan' => 'bjs',
+  'umbugarla' => 'umr',
+  "southern nambiku\x{e1}ra" => 'nab',
+  'coptic' => 'cop',
+  'warkay-bipim' => 'bgv',
+  'traveller danish' => 'rmd',
+  "san vicente coatl\x{e1}n zapotec" => 'zpt',
+  'koireng' => 'nkd',
+  'wares' => 'wai',
+  'talise' => 'tlr',
+  'paleni' => 'pnl',
+  'bolgarian' => 'xbo',
+  'chang naga' => 'nbc',
+  "xicotepec de ju\x{e1}rez totonac" => 'too',
+  'duano' => 'dup',
+  "quioquitani-quier\x{ed} zapotec" => 'ztq',
+  'yuwana' => 'yau',
+  'paite chin' => 'pck',
+  'wali (sudan)' => 'wll',
+  'cuvok' => 'cuv',
+  'shoshoni' => 'shh',
+  'eastern egyptian bedawi arabic' => 'avl',
+  'sranan tongo' => 'srn',
+  'bebeli' => 'bek',
+  'aiklep' => 'mwg',
+  'baatonum' => 'bba',
+  'tairuma' => 'uar',
+  'old mon' => 'omx',
+  'warnman' => 'wbt',
+  'southern luri' => 'luz',
+  'litzlitz' => 'lzl',
+  'wiyot' => 'wiy',
+  'korwa' => 'kfp',
+  'bungku' => 'bkz',
+  'zinza' => 'zin',
+  'panobo' => 'pno',
+  'piya-kwonci' => 'piy',
+  'suarmin' => 'seo',
+  'ngelima' => 'agh',
+  'wurrugu' => 'wur',
+  'kalanadi' => 'wkl',
+  'tilapa otomi' => 'otl',
+  "arh\x{f6}" => 'aok',
+  'latin' => 'lat',
+  'tupi languages' => 'tup',
+  'makwe' => 'ymk',
+  'paloor' => 'fap',
+  'tabasco nahuatl' => 'nhc',
+  'mon-khmer languages' => 'mkh',
+  'nambya' => 'nmq',
+  'ambulas' => 'abt',
+  'klingon' => 'tlh',
+  "gavi\x{e3}o do jiparan\x{e1}" => 'gvo',
+  'tambora' => 'xxt',
+  'wamin' => 'wmi',
+  'topoiyo' => 'toy',
+  'cocos islands malay' => 'coa',
+  'central asmat' => 'cns',
+  'yaka (democratic republic of congo)' => 'yaf',
+  'even' => 'eve',
+  'eastern krahn' => 'kqo',
+  'old georgian' => 'oge',
+  'ibuoro' => 'ibr',
+  'sangtam naga' => 'nsa',
+  'mang' => 'zng',
+  'cajonos zapotec' => 'zad',
+  'tuvalu' => 'tvl',
+  'arawum' => 'awm',
+  'notre' => 'bly',
+  'puroik' => 'suv',
+  'letemboi' => 'nms',
+  'lingua franca nova' => 'lfn',
+  'dem' => 'dem',
+  'muruwari' => 'zmu',
+  'edopi' => 'dbf',
+  'kawacha' => 'kcb',
+  'cameroon mambila' => 'mcu',
+  'dehwari' => 'deh',
+  'tenino' => 'tqn',
+  'alacatlatzala mixtec' => 'mim',
+  'turks and caicos creole english' => 'tch',
+  'kawe' => 'kgb',
+  'tjungundji' => 'tjj',
+  'tshangla' => 'tsj',
+  'ambai' => 'amk',
+  'wauyai' => 'wuy',
+  'nepalese sign language' => 'nsp',
+  'yautepec zapotec' => 'zpb',
+  'mandobo bawah' => 'bwp',
+  'alekano' => 'gah',
+  'muya' => 'mvm',
+  'taiap' => 'gpn',
+  'mangarrayi' => 'mpc',
+  'bisis' => 'bnw',
+  'karekare' => 'kai',
+  'kaiep' => 'kbw',
+  'pinjarup' => 'pnj',
+  'highland popoluca' => 'poi',
+  'itelmen' => 'itl',
+  'mbay' => 'myb',
+  "s\x{e3}otomense" => 'cri',
+  'ngen' => 'gnj',
+  'olulumo-ikom' => 'iko',
+  'chipaya' => 'cap',
+  'ayerrerenge' => 'axe',
+  'yom' => 'pil',
+  'mattole' => 'mvb',
+  'yuyu' => 'yxu',
+  'sumau' => 'six',
+  'gangte' => 'gnb',
+  "d\x{e2}w" => 'kwa',
+  "kariti\x{e2}na" => 'ktn',
+  'sie' => 'erg',
+  'dharuk' => 'xdk',
+  "sauraseni pr\x{101}krit" => 'psu',
+  'mapidian' => 'mpw',
+  'gerai' => 'gef',
+  'yareba' => 'yrb',
+  'tawala' => 'tbo',
+  'aguaruna' => 'agr',
+  'klamath-modoc' => 'kla',
+  'dhivehi' => 'div',
+  'talysh' => 'tly',
+  "tawand\x{ea}" => 'xtw',
+  'mankiyali' => 'nlm',
+  "nad\x{eb}b" => 'mbj',
+  'wulna' => 'wux',
+  'manda (india)' => 'mha',
+  'old turkish' => 'otk',
+  'kamayo' => 'kyk',
+  'dido' => 'ddo',
+  'dagoman' => 'dgn',
+  'south central banda' => 'lnl',
+  'uripiv-wala-rano-atchin' => 'upv',
+  'classical newari' => 'nwc',
+  'northern conchucos ancash quechua' => 'qxn',
+  'bilbil' => 'brz',
+  'azhe' => 'yiz',
+  'misima-panaeati' => 'mpx',
+  'kula' => 'tpg',
+  'buhutu' => 'bxh',
+  'kayaw' => 'kvl',
+  'thado chin' => 'tcz',
+  'luimbi' => 'lum',
+  'lumbu' => 'lup',
+  'basay' => 'byq',
+  'mandara' => 'tbf',
+  'middle welsh' => 'wlm',
+  'kamara' => 'jmr',
+  'yintale karen' => 'kvy',
+  'kpan' => 'kpk',
+  'towei' => 'ttn',
+  'northern frisian' => 'frr',
+  'kuan' => 'uan',
+  'nyahkur' => 'cbn',
+  'tamnim citak' => 'tml',
+  'syriac' => 'syr',
+  'mamuju' => 'mqx',
+  'akhvakh' => 'akv',
+  'phoenician' => 'phn',
+  "i\x{f1}apari" => 'inp',
+  'katua' => 'kta',
+  'tsou' => 'tsu',
+  'dondo' => 'dok',
+  'kinamiging manobo' => 'mkx',
+  'masmaje' => 'mes',
+  'rapa' => 'ray',
+  'nyungwe' => 'nyu',
+  "if\x{e8}" => 'ife',
+  'aruamu' => 'msy',
+  'jamaican sign language' => 'jls',
+  'temuan' => 'tmw',
+  'lalana chinantec' => 'cnl',
+  'ngwo' => 'ngn',
+  'uneapa' => 'bbn',
+  'adilabad gondi' => 'wsg',
+  'cacaopera' => 'ccr',
+  'tahaggart tamahaq' => 'thv',
+  "baga soban\x{e9}" => 'bsv',
+  "aur\x{e1}" => 'aux',
+  'humla' => 'hut',
+  'coquille' => 'coq',
+  'pamosu' => 'hih',
+  'digaro-mishmi' => 'mhu',
+  'akukem' => 'spm',
+  'bakhtiari' => 'bqi',
+  'burji' => 'bji',
+  "ts'\x{fc}n-lao" => 'tsl',
+  'bilaspuri' => 'kfs',
+  'jemez' => 'tow',
+  'niuatoputapu' => 'nkp',
+  'komo (sudan)' => 'xom',
+  'kapori' => 'khp',
+  'iha based pidgin' => 'ihb',
+  'bookan' => 'bnb',
+  'unserdeutsch' => 'uln',
+  'bola' => 'bnp',
+  'nigeria mambila' => 'mzk',
+  'atampaya' => 'amz',
+  'beng' => 'nhb',
+  'satawalese' => 'stw',
+  'sama' => 'smd',
+  'kwere' => 'cwe',
+  'mezquital otomi' => 'ote',
+  'tagakaulo' => 'klg',
+  'nong zhuang' => 'zhn',
+  'sengele' => 'szg',
+  'wunumara' => 'wnn',
+  'polish' => 'pol',
+  'hre' => 'hre',
+  'carpathian romani' => 'rmc',
+  'sambe' => 'xab',
+  'njen' => 'njj',
+  'northern sierra miwok' => 'nsq',
+  'southern subanen' => 'laa',
+  'settla' => 'sta',
+  'santali' => 'sat',
+  'lelepa' => 'lpa',
+  'mogholi' => 'mhj',
+  'corongo ancash quechua' => 'qwa',
+  'maiwa (papua new guinea)' => 'mti',
+  "tapiet\x{e9}" => 'tpj',
+  'nyankole' => 'nyn',
+  'gbaya-mbodomo' => 'gmm',
+  'kodava' => 'kfa',
+  'uda' => 'uda',
+  'northern ngbandi' => 'ngb',
+  'tumulung sisaala' => 'sil',
+  'shiki' => 'gua',
+  'hoyahoya' => 'hhy',
+  'dumi' => 'dus',
+  'moklen' => 'mkm',
+  'ghotuo' => 'aaa',
+  'kutenai' => 'kut',
+  'gimnime' => 'gmn',
+  'akuku' => 'ayk',
+  'bauwaki' => 'bwk',
+  'tela-masbuar' => 'tvm',
+  'woi' => 'wbw',
+  'sirenik yupik' => 'ysr',
+  'ndau' => 'ndc',
+  'tibeto-burman languages' => 'tbq',
+  'hangaza' => 'han',
+  'ngunawal' => 'xul',
+  "tup\x{ed}" => 'tpw',
+  'agob' => 'kit',
+  'swedish' => 'swe',
+  'lolo' => 'llb',
+  "kayab\x{ed}" => 'kyz',
+  'macedonian' => 'mkd',
+  'malgana' => 'vml',
+  'serrano' => 'ser',
+  'miya' => 'mkf',
+  'abishira' => 'ash',
+  "bar\x{ed}" => 'mot',
+  "mats\x{e9}s" => 'mcf',
+  'bantik' => 'bnq',
+  'ilongot' => 'ilk',
+  'belait' => 'beg',
+  'vagla' => 'vag',
+  'kpasam' => 'pbn',
+  'kamang' => 'woi',
+  'sankaran maninka' => 'msc',
+  'bagirmi fulfulde' => 'fui',
+  'mochi' => 'old',
+  'badaga' => 'bfq',
+  'parsi-dari' => 'prd',
+  'umbrian' => 'xum',
+  'ndombe' => 'ndq',
+  'kuri' => 'nbn',
+  'shahrudi' => 'shm',
+  'tereno' => 'ter',
+  'day' => 'dai',
+  'atikamekw' => 'atj',
+  'remontado dumagat' => 'agv',
+  'nunggubuyu' => 'nuy',
+  'wadi wadi' => 'xwd',
+  'koreguaje' => 'coe',
+  'nipsan' => 'nps',
+  'yemsa' => 'jnj',
+  'swati' => 'ssw',
+  'copala triqui' => 'trc',
+  'coast miwok' => 'csi',
+  "santa mar\x{ed}a la alta nahuatl" => 'nhz',
+  'waube' => 'kop',
+  'ito' => 'itw',
+  'toki pona' => 'toki',
+  'ponyo-gongwang naga' => 'npg',
+  'northern tepehuan' => 'ntp',
+  'dhatki' => 'mki',
+  'eskimo-aleut languages' => 'esx',
+  'koluwawa' => 'klx',
+  'weh' => 'weh',
+  'kamar' => 'keq',
+  'saluan' => 'loe',
+  'western arrarnta' => 'are',
+  'mayaguduna' => 'xmy',
+  'unggumi' => 'xgu',
+  'limbu' => 'lif',
+  'kamwe' => 'hig',
+  'bantayanon' => 'bfx',
+  'kungarakany' => 'ggk',
+  'kenaboi' => 'xbn',
+  'kube' => 'kgf',
+  'papel' => 'pbo',
+  'birao' => 'brr',
+  'paelignian' => 'pgn',
+  'north mesopotamian arabic' => 'ayp',
+  'minang' => 'xrg',
+  'lakha' => 'lkh',
+  'temacine tamazight' => 'tjo',
+  'northern pomo' => 'pej',
+  'zotung chin' => 'czt',
+  'duau' => 'dva',
+  "hai\x{1c1}om" => 'hgm',
+  'waru' => 'wru',
+  'suwawa' => 'swu',
+  'wardaman' => 'wrr',
+  'plains indian sign language' => 'psd',
+  'bonerate' => 'bna',
+  'yangum dey' => 'yde',
+  'gavar' => 'gou',
+  'iamalele' => 'yml',
+  'menominee' => 'mez',
+  'bima' => 'bhp',
+  'batak mandailing' => 'btm',
+  'hewa' => 'ham',
+  'yang zhuang' => 'zyg',
+  'novial' => 'nov',
+  'yitha yitha' => 'xth',
+  'gedeo' => 'drs',
+  'odia' => 'ory',
+  'bagri' => 'bgq',
+  'dalmatian' => 'dlm',
+  'buriat' => 'bua',
+  'humburi senni songhay' => 'hmb',
+  'bamunka' => 'bvm',
+  'mekmek' => 'mvk',
+  'kaang chin' => 'ckn',
+  'kati' => 'bsh',
+  'indo-portuguese' => 'idb',
+  "pilag\x{e1}" => 'plg',
+  'naasioi' => 'nas',
+  'anuta' => 'aud',
+  'tandia' => 'tni',
+  'akolet' => 'akt',
+  'kyenele' => 'kql',
+  'laghuu' => 'lgh',
+  'north ambrym' => 'mmg',
+  'meru' => 'mer',
+  'yinhawangka' => 'ywg',
+  'western krahn' => 'krw',
+  'lushootseed' => 'lut',
+  'cishingini' => 'asg',
+  'eastern subanen' => 'sfe',
+  'dagik' => 'dec',
+  'evant' => 'bzz',
+  'south azerbaijani' => 'azb',
+  'monsang naga' => 'nmh',
+  'arauan languages' => 'auf',
+  'malua bay' => 'mll',
+  'wandala' => 'mfi',
+  'southern nicobarese' => 'nik',
+  'istriot' => 'ist',
+  'varisi' => 'vrs',
+  'matengo' => 'mgv',
+  'sursurunga' => 'sgz',
+  'athpariya' => 'aph',
+  'matagalpa' => 'mtn',
+  'texistepec popoluca' => 'poq',
+  'nage' => 'nxe',
+  'dogul dom dogon' => 'dbg',
+  'coyutla totonac' => 'toc',
+  'khao' => 'xao',
+  'aghul' => 'agx',
+  'highland oaxaca chontal' => 'chd',
+  'engenni' => 'enn',
+  'ika' => 'ikk',
+  'gbari' => 'gby',
+  'aer' => 'aeq',
+  'ringgou' => 'rgu',
+  'minica huitoto' => 'hto',
+  'akrukay' => 'afi',
+  'yindjibarndi' => 'yij',
+  'sou upaa' => 'wha',
+  'chug' => 'cvg',
+  'written oirat' => 'xwo',
+  'bharia' => 'bha',
+  "nukak mak\x{fa}" => 'mbr',
+  'lorang' => 'lrn',
+  'doutai' => 'tds',
+  'sentani' => 'set',
+  'makaa' => 'mcp',
+  'nkongho' => 'nkc',
+  'geruma' => 'gea',
+  'mpotovoro' => 'mvt',
+  'malagasy' => 'mlg',
+  'ese' => 'mcq',
+  "tiemac\x{e8}w\x{e8} bozo" => 'boo',
+  'petjo' => 'pey',
+  'wik-keyangan' => 'wif',
+  'phukha' => 'phh',
+  'ukaan' => 'kcf',
+  'konni' => 'kma',
+  'horo' => 'hor',
+  'miani' => 'pla',
+  'tsuvadi' => 'tvd',
+  "japrer\x{ed}a" => 'jru',
+  'ganzi' => 'gnz',
+  'tauya' => 'tya',
+  'nogai' => 'nog',
+  'tacana' => 'tna',
+  'gbaya-bossangoa' => 'gbp',
+  'santiago xanica zapotec' => 'zpr',
+  'kitan' => 'zkt',
+  'musey' => 'mse',
+  'lundayeh' => 'lnd',
+  'keliko' => 'kbo',
+  'armazic' => 'xrm',
+  'navajo' => 'nav',
+  'koch' => 'kdq',
+  'koma' => 'kmy',
+  'modern greek (1453-)' => 'ell',
+  'chinese (simplified)' => 'zhs',
+  'enggano' => 'eno',
+  'vili' => 'vif',
+  'beezen' => 'bnz',
+  'tsimihety malagasy' => 'xmw',
+  'gozarkhani' => 'goz',
+  'polci' => 'plj',
+  'aguna' => 'aug',
+  'northern ghale' => 'ghh',
+  'ono' => 'ons',
+  'baimak' => 'bmx',
+  'baibai' => 'bbf',
+  'mehri' => 'gdq',
+  'akan' => 'aka',
+  'borong' => 'ksr',
+  'surgujia' => 'sgj',
+  'chayuco mixtec' => 'mih',
+  'yarluyandi' => 'yry',
+  'tepo krumen' => 'ted',
+  'marriammu' => 'xru',
+  'intha' => 'int',
+  'karanga' => 'kth',
+  'rusyn' => 'rue',
+  'marrucinian' => 'umc',
+  'east yugur' => 'yuy',
+  'congo swahili' => 'swc',
+  'ndzwani comorian' => 'wni',
+  'western sisaala' => 'ssl',
+  'romanova' => 'rmv',
+  'chinook' => 'chh',
+  'nisi (china)' => 'yso',
+  'andi' => 'ani',
+  'byangsi' => 'bee',
+  'thaiphum chin' => 'cth',
+  'hung' => 'hnu',
+  'central malay' => 'pse',
+  'mudhili gadaba' => 'gau',
+  'awutu' => 'afu',
+  'gaa' => 'ttb',
+  'bilma kanuri' => 'bms',
+  'rana tharu' => 'thr',
+  'neyo' => 'ney',
+  'thai song' => 'soa',
+  'yaweyuha' => 'yby',
+  'barama' => 'bbg',
+  'kulung (nepal)' => 'kle',
+  'odiai' => 'bhf',
+  'labir' => 'jku',
+  'tavoyan' => 'tvn',
+  'manangba' => 'nmm',
+  'dobu' => 'dob',
+  'sinaugoro' => 'snc',
+  'bukit malay' => 'bvu',
+  'green gelao' => 'giq',
+  'ninam' => 'shb',
+  'bariji' => 'bjc',
+  'ndyuka-trio pidgin' => 'njt',
+  'kele (democratic republic of congo)' => 'khy',
+  'danish' => 'dan',
+  'bafia' => 'ksf',
+  'rumu' => 'klq',
+  'shina' => 'scl',
+  'southern pomo' => 'peq',
+  'cutchi-swahili' => 'ccl',
+  'kouya' => 'kyf',
+  'makasar' => 'mak',
+  'manichaean middle persian' => 'xmn',
+  'lushai' => 'lus',
+  'iyayu' => 'iya',
+  'seri' => 'sei',
+  'suganga' => 'sug',
+  'bafanji' => 'bfj',
+  'jad' => 'jda',
+  'ijo languages' => 'ijo',
+  'efai' => 'efa',
+  'paiwan' => 'pwn',
+  'laka (chad)' => 'lap',
+  'mboi' => 'moi',
+  'gronings' => 'gos',
+  'phangduwali' => 'phw',
+  'serui-laut' => 'seu',
+  'kwese' => 'kws',
+  'epigraphic mayan' => 'emy',
+  'tibea' => 'ngy',
+  'kamviri' => 'xvi',
+  'katbol' => 'tmb',
+  'tepetotutla chinantec' => 'cnt',
+  'katkari' => 'kfu',
+  'mangbutu' => 'mdk',
+  'algerian sign language' => 'asp',
+  'tajuasohn' => 'tja',
+  'chinese (traditional)' => 'zht',
+  'gupa-abawa' => 'gpa',
+  'ngamo' => 'nbh',
+  'caribbean hindustani' => 'hns',
+  'siroi' => 'ssd',
+  'northern subanen' => 'stb',
+  "purubor\x{e1}" => 'pur',
+  'southern sierra miwok' => 'skd',
+  'mpi' => 'mpz',
+  'kimaama' => 'kig',
+  'mundat' => 'mmf',
+  'mian' => 'mpt',
+  'old welsh' => 'owl',
+  'dibole' => 'bvx',
+  'carapana' => 'cbc',
+  'veddah' => 'ved',
+  'ndut' => 'ndv',
+  'guarequena' => 'gae',
+  'selungai murut' => 'slg',
+  'turkic languages' => 'trk',
+  'suba' => 'sxb',
+  'assangori' => 'sjg',
+  'kwesten' => 'kwt',
+  'kwegu' => 'xwg',
+  'norwegian' => 'nor',
+  'galician' => 'glg',
+  'wampanoag' => 'wam',
+  'alawa' => 'alh',
+  'zulgo-gemzek' => 'gnd',
+  'tachelhit' => 'shi',
+  'wasco-wishram' => 'wac',
+  'phalura' => 'phl',
+  'guruntum-mbaaru' => 'grd',
+  'caddo' => 'cad',
+  'straits salish' => 'str',
+  'chippewa' => 'ciw',
+  'dedua' => 'ded',
+  'scythian' => 'xsc',
+  'faliscan' => 'xfa',
+  'italian' => 'ita',
+  'southern ngbandi' => 'nbw',
+  'south slavic languages' => 'zls',
+  'sa' => 'sax',
+  'bilakura' => 'bql',
+  'karagas' => 'kim',
+  'portuguese sign language' => 'psr',
+  "ozumac\x{ed}n chinantec" => 'chz',
+  'fongoro' => 'fgr',
+  'tok pisin' => 'tpi',
+  'peranakan indonesian' => 'pea',
+  'jamiltepec mixtec' => 'mxt',
+  'upper necaxa totonac' => 'tku',
+  'nokuku' => 'nkk',
+  'chewong' => 'cwg',
+  'archi' => 'aqc',
+  'bana' => 'bcw',
+  'brazilian sign language' => 'bzs',
+  'gabri' => 'gab',
+  'yami' => 'tao',
+  'molof' => 'msl',
+  'jakati' => 'jat',
+  'tso' => 'ldp',
+  'dia' => 'dia',
+  'lobi' => 'lob',
+  'keiyo' => 'eyo',
+  'long phuri naga' => 'lpn',
+  'tahltan' => 'tht',
+  'usui' => 'usi',
+  'hovongan' => 'hov',
+  'saaroa' => 'sxr',
+  'ngom' => 'nra',
+  'assyrian neo-aramaic' => 'aii',
+  'nagarchal' => 'nbg',
+  'haeke' => 'aek',
+  'ko' => 'fuj',
+  'muinane' => 'bmr',
+  "cof\x{e1}n" => 'con',
+  'mbe' => 'mfo',
+  'extremaduran' => 'ext',
+  'yiningayi' => 'ygi',
+  'kalabra' => 'kzz',
+  'pal' => 'abw',
+  "ixcatl\x{e1}n mazatec" => 'mzi',
+  'lingua franca' => 'pml',
+  'hausa sign language' => 'hsl',
+  'zeem' => 'zua',
+  'kodaku' => 'ksz',
+  'bukitan' => 'bkn',
+  'worrorra' => 'wro',
+  'fyam' => 'pym',
+  'ngizim' => 'ngi',
+  'desano' => 'des',
+  'gende' => 'gaf',
+  'galatian' => 'xga',
+  'dilling' => 'dil',
+  'manx' => 'glv',
+  'southern ma\'di' => 'snm',
+  'southern ghale' => 'ghe',
+  "potigu\x{e1}ra" => 'pog',
+  'ata' => 'atm',
+  "coatl\x{e1}n mixe" => 'mco',
+  'dek' => 'dek',
+  'iwal' => 'kbm',
+  'barikewa' => 'jbk',
+  'wymysorys' => 'wym',
+  'haruku' => 'hrk',
+  'luwo' => 'lwo',
+  'silopi' => 'xsp',
+  'ixtayutla mixtec' => 'vmj',
+  'baangi' => 'bqx',
+  'ayacucho quechua' => 'quy',
+  "cupe\x{f1}o" => 'cup',
+  'oriya (macrolanguage)' => 'ori',
+  'jirel' => 'jul',
+  'motu' => 'meu',
+  'eastern balochi' => 'bgp',
+  'saramaccan' => 'srm',
+  'kaivi' => 'kce',
+  'malgbe' => 'mxf',
+  "eastern bolivian guaran\x{ed}" => 'gui',
+  'legbo' => 'agb',
+  'southern puebla mixtec' => 'mit',
+  'gunwinggu' => 'gup',
+  "xing\x{fa} asurin\x{ed}" => 'asn',
+  'uighur' => 'uig',
+  'yansi' => 'yns',
+  'upper sorbian' => 'hsb',
+  'saraiki' => 'skr',
+  'el hugeirat' => 'elh',
+  'mboko' => 'mdu',
+  'vwanji' => 'wbi',
+  'spiti bhoti' => 'spt',
+  'moma' => 'myl',
+  'naukan yupik' => 'ynk',
+  'angoram' => 'aog',
+  'inuktitut' => 'iku',
+  'monzombo' => 'moj',
+  'kuanyama' => 'kua',
+  'tomoip' => 'tqp',
+  'old ossetic' => 'oos',
+  'gooniyandi' => 'gni',
+  'semaq beri' => 'szc',
+  'seroa' => 'kqu',
+  'muthuvan' => 'muv',
+  'central puebla nahuatl' => 'ncx',
+  'seget' => 'sbg',
+  'haya' => 'hay',
+  'batak toba' => 'bbc',
+  'ibanag' => 'ibg',
+  'yanesha\'' => 'ame',
+  'kakabe' => 'kke',
+  'nias' => 'nia',
+  'gujarati' => 'guj',
+  'keak' => 'keh',
+  'lower grand valley dani' => 'dni',
+  'north azerbaijani' => 'azj',
+  'pare' => 'ppt',
+  'spokane' => 'spo',
+  'russian sign language' => 'rsl',
+  'banyjima' => 'pnw',
+  "guiberoua b\x{e9}te" => 'bet',
+  'yarsun' => 'yrs',
+  'sakalava malagasy' => 'skg',
+  'kalaamaya' => 'lkm',
+  'ashkun' => 'ask',
+  'baybayanon' => 'bvy',
+  'bara malagasy' => 'bhr',
+  'andoa' => 'anb',
+  'labu' => 'lbu',
+  'sampang' => 'rav',
+  'akei' => 'tsr',
+  'tidikelt tamazight' => 'tia',
+  'pa\'a' => 'pqa',
+  'tawang monpa' => 'twm',
+  'buwal' => 'bhs',
+  'central aymara' => 'ayr',
+  'vlaamse gebarentaal' => 'vgt',
+  'northern luri' => 'lrc',
+  'natioro' => 'nti',
+  'bofi' => 'bff',
+  'napo lowland quechua' => 'qvo',
+  'uvbie' => 'evh',
+  'tigak' => 'tgc',
+  'malyangapa' => 'yga',
+  'gen' => 'gej',
+  'eki' => 'eki',
+  'matbat' => 'xmt',
+  'kujarge' => 'vkj',
+  'apalachee' => 'xap',
+  'dela-oenale' => 'row',
+  'toro so dogon' => 'dts',
+  'moji' => 'ymi',
+  "western bolivian guaran\x{ed}" => 'gnw',
+  'lau' => 'llu',
+  'kuranko' => 'knk',
+  'tepeuxila cuicatec' => 'cux',
+  'classical quechua' => 'qwc',
+  'cinda-regi-tiyal' => 'cdr',
+  'cinta larga' => 'cin',
+  'mombum' => 'mso',
+  'rigwe' => 'iri',
+  'xwela gbe' => 'xwe',
+  'munda languages' => 'mun',
+  'western balochi' => 'bgn',
+  'bongu' => 'bpu',
+  'nawathinehena' => 'nwa',
+  'gera' => 'gew',
+  'bhalay' => 'bhx',
+  'namia' => 'nnm',
+  'amarasi' => 'aaz',
+  'judeo-berber' => 'jbe',
+  'karata' => 'kpt',
+  'murui huitoto' => 'huu',
+  'western highland purepecha' => 'pua',
+  'nez perce' => 'nez',
+  'supyire senoufo' => 'spp',
+  'tampias lobu' => 'low',
+  'hema' => 'nix',
+  'central mazahua' => 'maz',
+  'southern kalinga' => 'ksc',
+  'mohawk' => 'moh',
+  'yukuben' => 'ybl',
+  "k\x{25b}l\x{25b}ngaxo bozo" => 'bzx',
+  'safwa' => 'sbk',
+  'ofo' => 'ofo',
+  'ejamat' => 'eja',
+  'arosi' => 'aia',
+  'nyambo' => 'now',
+  'yeyi' => 'yey',
+  'british sign language' => 'bfi',
+  'labo' => 'mwi',
+  'semimi' => 'etz',
+  'cocopa' => 'coc',
+  'gitonga' => 'toh',
+  'oorlams' => 'oor',
+  'tregami' => 'trm',
+  'central sama' => 'sml',
+  'sudanese creole arabic' => 'pga',
+  'mandinka' => 'mnk',
+  'old marathi' => 'omr',
+  'rajah kabunsuwan manobo' => 'mqk',
+  'lianshan zhuang' => 'zln',
+  'baelelea' => 'bvc',
+  'berti' => 'byt',
+  'bamali' => 'bbq',
+  'seselwa creole french' => 'crs',
+  'mgbolizhia' => 'gmz',
+  'lautu chin' => 'clt',
+  'kang' => 'kyp',
+  "makur\x{e1}p" => 'mpu',
+  'wadjiginy' => 'wdj',
+  'chumburung' => 'ncu',
+  'bu' => 'jid',
+  'purari' => 'iar',
+  'pawnee' => 'paw',
+  'chhattisgarhi' => 'hne',
+  'galindan' => 'xgl',
+  'koyaga' => 'kga',
+  'parkwa' => 'pbi',
+  'dargwa' => 'dar',
+  'sonaga' => 'ysg',
+  'yaqui' => 'yaq',
+  'romkun' => 'rmk',
+  'patamona' => 'pbc',
+  'mandaya' => 'mry',
+  'shughni' => 'sgh',
+  'siamou' => 'sif',
+  'mawa (nigeria)' => 'wma',
+  'serua' => 'srw',
+  'tutuba' => 'tmi',
+  'arvanitika albanian' => 'aat',
+  'miriwoong' => 'mep',
+  'lasgerdi' => 'lsa',
+  'gaikundi' => 'gbf',
+  'kimki' => 'sbt',
+  'batek' => 'btq',
+  'arhuaco' => 'arh',
+  'southwestern guiyang hmong' => 'hmg',
+  'shubi' => 'suj',
+  'baba' => 'bbw',
+  'tamasheq' => 'taq',
+  'manga kanuri' => 'kby',
+  'jangkang' => 'djo',
+  'kazakh' => 'kaz',
+  'nottoway-meherrin' => 'nwy',
+  'kuo' => 'xuo',
+  'salt-yui' => 'sll',
+  'cen' => 'cen',
+  'wa\'ema' => 'wag',
+  'ampanang' => 'apg',
+  'ngangam' => 'gng',
+  'maridjabin' => 'zmj',
+  'kembayan' => 'xem',
+  'pedi' => 'nso',
+  'ninggerum' => 'nxr',
+  'kariya' => 'kil',
+  'kendem' => 'kvm',
+  'sur' => 'tdl',
+  'lisu' => 'lis',
+  'totomachapan zapotec' => 'zph',
+  'arritinngithigh' => 'rrt',
+  'onjob' => 'onj',
+  'penchal' => 'pek',
+  'nkari' => 'nkz',
+  'serbo-croatian' => 'hbs',
+  'san pedro quiatoni zapotec' => 'zpf',
+  'kagate' => 'syw',
+  "m\x{e1}ku" => 'xak',
+  'gamo-ningi' => 'bte',
+  'pwo western karen' => 'pwo',
+  'bokyi' => 'bky',
+  'kathu' => 'ykt',
+  'bungain' => 'but',
+  "tupinamb\x{e1}" => 'tpn',
+  'korean' => 'kor',
+  'molale' => 'mbe',
+  'thai' => 'tha',
+  'nhanda' => 'nha',
+  'barapasi' => 'brp',
+  'mararit' => 'mgb',
+  'izii' => 'izz',
+  'hawai\'i creole english' => 'hwc',
+  "yanomam\x{f6}" => 'guu',
+  'ogbia' => 'ogb',
+  'western tlacolula valley zapotec' => 'zab',
+  'busa' => 'bqp',
+  'okpe (southwestern edo)' => 'oke',
+  'niksek' => 'gbe',
+  'diuxi-tilantongo mixtec' => 'xtd',
+  'dimasa' => 'dis',
+  'puquina' => 'puq',
+  'papuan languages' => 'paa',
+  'wu chinese' => 'wuu',
+  'lamatuka' => 'lmq',
+  'oyda' => 'oyd',
+  'adang' => 'adn',
+  'wannu' => 'jub',
+  'teke-laali' => 'lli',
+  'toda' => 'tcx',
+  'kabutra' => 'kbu',
+  'lasalimu' => 'llm',
+  'bai (south sudan)' => 'bdj',
+  'fanti' => 'fat',
+  'aka-cari' => 'aci',
+  'kaki ae' => 'tbd',
+  'noon' => 'snf',
+  'papar' => 'dpp',
+  'lampung api' => 'ljp',
+  'yulu' => 'yul',
+  'arawak' => 'arw',
+  "\x{1c0}gwi" => 'gwj',
+  'machiguenga' => 'mcb',
+  'amblong' => 'alm',
+  'awara' => 'awx',
+  'large flowery miao' => 'hmd',
+  "w\x{e8} southern" => 'gxx',
+  'lepki' => 'lpe',
+  'lang\'e' => 'yne',
+  'ngazidja comorian' => 'zdj',
+  'davawenyo' => 'daw',
+  'mixtepec mixtec' => 'mix',
+  'mer' => 'mnu',
+  'tsuvan' => 'tsh',
+  'santo domingo albarradas zapotec' => 'zas',
+  'namo' => 'mxw',
+  'zimbabwe sign language' => 'zib',
+  'dass' => 'dot',
+  'west yugur' => 'ybe',
+  'yoloxochitl mixtec' => 'xty',
+  'bit' => 'bgk',
+  'luyana' => 'lyn',
+  'ormuri' => 'oru',
+  'kalkutung' => 'ktg',
+  'djinba' => 'djb',
+  'aka-bo' => 'akm',
+  'nsenga' => 'nse',
+  'sunwar' => 'suz',
+  'kadai' => 'kzd',
+  'sene' => 'sej',
+  'paku karen' => 'jkp',
+  'ogea' => 'eri',
+  'avestan' => 'ave',
+  'modang' => 'mxd',
+  'basketo' => 'bst',
+  'khetrani' => 'xhe',
+  'sembakung murut' => 'sbr',
+  'nyangbo' => 'nyb',
+  "ng\x{e4}bere" => 'gym',
+  'achagua' => 'aca',
+  'mator' => 'mtm',
+  'lamogai' => 'lmg',
+  'unubahe' => 'unu',
+  'mamaa' => 'mhf',
+  'tolomako' => 'tlm',
+  'kukna' => 'kex',
+  'madhi madhi' => 'dmd',
+  'albanian sign language' => 'sqk',
+  'namuyi' => 'nmy',
+  'kok-nar' => 'gko',
+  'tagish' => 'tgx',
+  'marba' => 'mpg',
+  'bondei' => 'bou',
+  'vlax romani' => 'rmy',
+  'kumukio' => 'kuo',
+  'korandje' => 'kcy',
+  'malecite-passamaquoddy' => 'pqm',
+  'andaandi' => 'dgl',
+  'french' => 'fra',
+  'old avar' => 'oav',
+  'sedoa' => 'tvw',
+  'eton (vanuatu)' => 'etn',
+  'kala lagaw ya' => 'mwp',
+  'andalusian arabic' => 'xaa',
+  'southern kurdish' => 'sdh',
+  'narua' => 'nru',
+  'puoc' => 'puo',
+  'sumi naga' => 'nsm',
+  'karon dori' => 'kgw',
+  'kugu-muminh' => 'xmh',
+  'birrpayi' => 'xbj',
+  'mali' => 'gcc',
+  'teso' => 'teo',
+  'makayam' => 'aup',
+  'kaansa' => 'gna',
+  'aymara' => 'aym',
+  'mayangna' => 'yan',
+  'vao' => 'vao',
+  'enrekang' => 'ptt',
+  'southern sotho' => 'sot',
+  'southern hindko' => 'hnd',
+  'nupe-nupe-tako' => 'nup',
+  'madurese' => 'mad',
+  'southeastern tepehuan' => 'stp',
+  'sango' => 'sag',
+  'maltese sign language' => 'mdl',
+  'sissala' => 'sld',
+  'kairak' => 'ckr',
+  'central berawan' => 'zbc',
+  'luba-lulua' => 'lua',
+  'khalaj' => 'klj',
+  'old irish (to 900)' => 'sga',
+  'tae\'' => 'rob',
+  'tungus languages' => 'tuw',
+  'malila' => 'mgq',
+  'kopar' => 'xop',
+  'yangben' => 'yav',
+  'mala (papua new guinea)' => 'ped',
+  'mesme' => 'zim',
+  'phom naga' => 'nph',
+  'aore' => 'aor',
+  'romblomanon' => 'rol',
+  'avaric' => 'ava',
+  'tampuan' => 'tpu',
+  'sea island creole english' => 'gul',
+  'gamit' => 'gbl',
+  'fiji hindi' => 'hif',
+  'sukur' => 'syk',
+  'najdi arabic' => 'ars',
+  'rajput garasia' => 'gra',
+  'san felipe otlaltepec popoloca' => 'pow',
+  'creoles and pidgins, portuguese-based' => 'cpp',
+  'chinese' => 'zho',
+  'tai hongjin' => 'tiz',
+  'northwest oaxaca mixtec' => 'mxa',
+  "northern bobo madar\x{e9}" => 'bbo',
+  'sou' => 'sqq',
+  'kharam naga' => 'kfw',
+  'youjiang zhuang' => 'zyj',
+  'sani' => 'ysn',
+  "l\x{e1}\x{e1} l\x{e1}\x{e1} bwamu" => 'bwj',
+  'korra koraga' => 'kfd',
+  'koroni' => 'xkq',
+  'mandaic' => 'mid',
+  'nyaheun' => 'nev',
+  'temoq' => 'tmo',
+  'ywom' => 'gek',
+  "santa luc\x{ed}a monteverde mixtec" => 'mdv',
+  'yola' => 'yol',
+  'kiliwa' => 'klb',
+  'asuri' => 'asr',
+  'kalanguya' => 'kak',
+  'markweeta' => 'enb',
+  'bukar-sadung bidayuh' => 'sdo',
+  'kuku' => 'ukv',
+  'wotapuri-katarqalai' => 'wsv',
+  'lenje' => 'leh',
+  'cuiba' => 'cui',
+  'middle french (ca. 1400-1600)' => 'frm',
+  'madak' => 'mmx',
+  'mossi' => 'mos',
+  'mi\'kmaq' => 'mic',
+  'estonian sign language' => 'eso',
+  'dong' => 'doh',
+  'temoaya otomi' => 'ott',
+  "calder\x{f3}n highland quichua" => 'qud',
+  'oroch' => 'oac',
+  'tem' => 'kdh',
+  'eastern cham' => 'cjm',
+  'aduge' => 'adu',
+  'ngbundu' => 'nuu',
+  'bunganditj' => 'xbg',
+  'baka (south sudan)' => 'bdh',
+  'duna' => 'duc',
+  'kanggape' => 'igm',
+  'nyangatom' => 'nnj',
+  'kenzi' => 'xnz',
+  "urub\x{fa}-kaapor sign language" => 'uks',
+  'tagin' => 'tgj',
+  'ter sami' => 'sjt',
+  'northern bontok' => 'rbk',
+  'hlersu' => 'hle',
+  'southern tidung' => 'itd',
+  'kinyarwanda' => 'kin',
+  'mobwa karen' => 'jkm',
+  'waima' => 'rro',
+  'bauzi' => 'bvz',
+  'chicomuceltec' => 'cob',
+  'bushi' => 'buc',
+  'southern nuni' => 'nnw',
+  'jimi (cameroon)' => 'jim',
+  'ilianen manobo' => 'mbi',
+  'borgu fulfulde' => 'fue',
+  'phunoi' => 'pho',
+  'wusa nasu' => 'yig',
+  'maleu-kilenge' => 'mgl',
+  "nanerig\x{e9} s\x{e9}noufo" => 'sen',
+  'warduji' => 'wrd',
+  'talu' => 'yta',
+  'acatepec me\'phaa' => 'tpx',
+  'jamaican creole english' => 'jam',
+  'taulil' => 'tuh',
+  'jumli' => 'jml',
+  'texmelucan zapotec' => 'zpz',
+  "w\x{e8} western" => 'wec',
+  'bubi' => 'buw',
+  'upper grand valley dani' => 'dna',
+  'gbaya-bozoum' => 'gbq',
+  'achuar-shiwiar' => 'acu',
+  'nayini' => 'nyq',
+  'maraghei' => 'vmh',
+  'te\'un' => 'tve',
+  'prussian' => 'prg',
+  'zaramo' => 'zaj',
+  'yankunytjatjara' => 'kdd',
+  'sarudu' => 'sdu',
+  'kosadle' => 'kiq',
+  'huaylla wanca quechua' => 'qvw',
+  'plautdietsch' => 'pdt',
+  'yuanga' => 'nua',
+  'palantla chinantec' => 'cpa',
+  'sarangani blaan' => 'bps',
+  'gunditjmara' => 'gjm',
+  'djabugay' => 'dyy',
+  'tugutil' => 'tuj',
+  'kwinti' => 'kww',
+  'bure' => 'bvh',
+  'chokri naga' => 'nri',
+  'paraujano' => 'pbg',
+  'machinere' => 'mpd',
+  'manda (australia)' => 'zma',
+  'lower sorbian' => 'dsb',
+  "arikap\x{fa}" => 'ark',
+  'retta' => 'ret',
+  'langnian buyang' => 'yln',
+  'duguri' => 'dbm',
+  'middle breton' => 'xbm',
+  'riverain sango' => 'snj',
+  'manam' => 'mva',
+  'anguthimri' => 'awg',
+  'yawanawa' => 'ywn',
+  'kabola' => 'klz',
+  'tringgus-sembaan bidayuh' => 'trx',
+  'ama (sudan)' => 'nyi',
+  'cusco quechua' => 'quz',
+  'riung' => 'riu',
+  'lingala' => 'lin',
+  "santa mar\x{ed}a del mar huave" => 'hvv',
+  "rinc\x{f3}n zapotec" => 'zar',
+  'soninke' => 'snk',
+  'aheu' => 'thm',
+  'bidyogo' => 'bjg',
+  'karakhanid' => 'xqa',
+  'central pame' => 'pbs',
+  'armenian' => 'hye',
+  "k\x{e2}te" => 'kmg',
+  'karelian' => 'krl',
+  'chakma' => 'ccp',
+  'guadeloupean creole french' => 'gcf',
+  'ginuman' => 'gnm',
+  "tsiman\x{e9}" => 'cas',
+  'cacgia roglai' => 'roc',
+  'indo-european languages' => 'ine',
+  'mai brat' => 'ayz',
+  'kanu' => 'khx',
+  'singapore sign language' => 'sls',
+  'ontenu' => 'ont',
+  'wamas' => 'wmc',
+  'ligbi' => 'lig',
+  'kokoda' => 'xod',
+  'lachiguiri zapotec' => 'zpa',
+  'bini' => 'bin',
+  'ruund' => 'rnd',
+  'southern amami-oshima' => 'ams',
+  'ghanongga' => 'ghn',
+  'bullom so' => 'buy',
+  'tanguat' => 'tbs',
+  'lampung nyo' => 'abl',
+  'zande (individual language)' => 'zne',
+  'suki' => 'sui',
+  'old norse' => 'non',
+  'tumbuka' => 'tum',
+  'wotjobaluk' => 'xwt',
+  'somba-siawari' => 'bmu',
+  "venture\x{f1}o" => 'veo',
+  'trimuris' => 'tip',
+  'persian' => 'fas',
+  'small flowery miao' => 'sfm',
+  'choctaw' => 'cho',
+  'pela' => 'bxd',
+  'touo' => 'tqu',
+  'jumjum' => 'jum',
+  'kumyk' => 'kum',
+  'kibet' => 'kie',
+  'central tarahumara' => 'tar',
+  'aka-kora' => 'ack',
+  'yaul' => 'yla',
+  'western juxtlahuaca mixtec' => 'jmx',
+  'salishan languages' => 'sal',
+  'iberian' => 'xib',
+  'balangingi' => 'sse',
+  'sissano' => 'sso',
+  'southwestern tlaxiaco mixtec' => 'meh',
+  'yidgha' => 'ydg',
+  'pa\'o karen' => 'blk',
+  'bina (papua new guinea)' => 'bmn',
+  'boano (sulawesi)' => 'bzl',
+  'kemiehua' => 'kfj',
+  "zo'\x{e9}" => 'pto',
+  'northeastern thai' => 'tts',
+  'hote' => 'hot',
+  'jiiddu' => 'jii',
+  'wanap' => 'wnp',
+  'pyu (papua new guinea)' => 'pby',
+  'kongo' => 'kon',
+  'suena' => 'sue',
+  'khezha naga' => 'nkh',
+  'dibiyaso' => 'dby',
+  'mafea' => 'mkv',
+  'angosturas tunebo' => 'tnd',
+  'tajik' => 'tgk',
+  'nhuwala' => 'nhf',
+  'chinese pidgin english' => 'cpi',
+  'guerrero amuzgo' => 'amu',
+  'wejewa' => 'wew',
+  'adangbe' => 'adq',
+  'san blas kuna' => 'cuk',
+  'highland konjo' => 'kjk',
+  'mor (mor islands)' => 'mhz',
+  'waima\'a' => 'wmh',
+  'kamoro' => 'kgq',
+  'pelende' => 'ppp',
+  'murik (papua new guinea)' => 'mtf',
+  'saparua' => 'spr',
+  'central atlas tamazight' => 'tzm',
+  'kwomtari' => 'kwo',
+  'penrhyn' => 'pnh',
+  'australian languages' => 'aus',
+  'casuarina coast asmat' => 'asc',
+  'tichurong' => 'tcn',
+  'makuri naga' => 'jmn',
+  'ju' => 'juu',
+  'tiruray' => 'tiy',
+  'northern dagara' => 'dgi',
+  'thu lao' => 'tyl',
+  'waffa' => 'waj',
+  'seta' => 'stf',
+  'kumbainggar' => 'kgs',
+  'mendalam kayan' => 'xkd',
+  'kavalan' => 'ckv',
+  'gitxsan' => 'git',
+  'southwestern tarahumara' => 'twr',
+  'diriku' => 'diu',
+  'bontok' => 'bnc',
+  'sumariup' => 'siv',
+  'kairui-midiki' => 'krd',
+  'jwira-pepesa' => 'jwi',
+  'kakwa' => 'keo',
+  'kumam' => 'kdi',
+  'phupa' => 'ypp',
+  'ainu (japan)' => 'ain',
+  'wakawaka' => 'wkw',
+  'mewati' => 'wtm',
+  "ebri\x{e9}" => 'ebr',
+  'ishkashimi' => 'isk',
+  'kafa' => 'kbr',
+  'tanjijili' => 'uji',
+  'north fali' => 'fll',
+  'gimi (eastern highlands)' => 'gim',
+  "yal\x{e1}lag zapotec" => 'zpu',
+  'bukusu' => 'bxk',
+  'jauja wanca quechua' => 'qxw',
+  'galela' => 'gbi',
+  'yatee zapotec' => 'zty',
+  'li\'o' => 'ljl',
+  'bau bidayuh' => 'sne',
+  'yelmek' => 'jel',
+  'guinean sign language' => 'gus',
+  'laimbue' => 'lmx',
+  'international sign' => 'ils',
+  'kadaru' => 'kdu',
+  'yongbei zhuang' => 'zyb',
+  'alumu-tesu' => 'aab',
+  'ahtena' => 'aht',
+  'jiamao' => 'jio',
+  'kayong' => 'kxy',
+  'phana\'' => 'phq',
+  'kuturmi' => 'khj',
+  'hemba' => 'hem',
+  'comecrudo' => 'xcm',
+  'juwal' => 'mwb',
+  'samba daka' => 'ccg',
+  'guibei zhuang' => 'zgb',
+  'tuyuca' => 'tue',
+  'guwa' => 'xgw',
+  'kamantan' => 'kci',
+  'gana' => 'gnq',
+  'siar-lak' => 'sjr',
+  'saraveca' => 'sar',
+  'mampruli' => 'maw',
+  'agutaynen' => 'agn',
+  "arb\x{eb}resh\x{eb} albanian" => 'aae',
+  'ixcatec' => 'ixc',
+  'kanowit-tanjong melanau' => 'kxn',
+  'rombo' => 'rof',
+  'chaudangsi' => 'cdn',
+  'iban' => 'iba',
+  'urimo' => 'urx',
+  'yamongeri' => 'ymg',
+  'samburu' => 'saq',
+  "aikan\x{e3}" => 'tba',
+  'kayan river kayan' => 'xkn',
+  'burarra' => 'bvr',
+  'yotti' => 'yot',
+  'kunza' => 'kuz',
+  'choapan zapotec' => 'zpc',
+  'foodo' => 'fod',
+  'sonia' => 'siq',
+  'maisin' => 'mbq',
+  'bende' => 'bdp',
+  'pei' => 'ppq',
+  'enya' => 'gey',
+  'laha (viet nam)' => 'lha',
+  'sivandi' => 'siy',
+  'kachari' => 'xac',
+  'djabwurrung' => 'tjw',
+  'birgit' => 'btf',
+  'mohave' => 'mov',
+  'mbo (cameroon)' => 'mbo',
+  'kofei' => 'kpi',
+  'chilcotin' => 'clc',
+  'bukwen' => 'buz',
+  'tennet' => 'tex',
+  'karamojong' => 'kdj',
+  'nai' => 'bio',
+  'lardil' => 'lbz',
+  'makhuwa-marrevone' => 'xmc',
+  'tetum' => 'tet',
+  'shawnee' => 'sjw',
+  'donno so dogon' => 'dds',
+  'welsh' => 'cym',
+  'sheko' => 'she',
+  'sa\'a' => 'apb',
+  'takestani' => 'tks',
+  'northern katang' => 'ncq',
+  'kendeje' => 'klf',
+  'kim' => 'kia',
+  'melpa' => 'med',
+  'cacua' => 'cbv',
+  'kohumono' => 'bcs',
+  'mahongwe' => 'mhb',
+  'tocho' => 'taz',
+  'koyo' => 'koh',
+  "aas\x{e1}x" => 'aas',
+  'eteocretan' => 'ecr',
+  'nuer' => 'nus',
+  'bacanese malay' => 'btj',
+  "saban\x{ea}" => 'sae',
+  'avatime' => 'avn',
+  'sasak' => 'sas',
+  'lendu' => 'led',
+  'dhungaloo' => 'dhx',
+  'yirandali' => 'ljw',
+  'taupota' => 'tpa',
+  '\'are\'are' => 'alu',
+  "mby\x{e1} guaran\x{ed}" => 'gun',
+  "tida\x{e1} mixtec" => 'mtx',
+  'karkar-yuri' => 'yuj',
+  'nyulnyul' => 'nyv',
+  'kachin' => 'kac',
+  'thangal naga' => 'nki',
+  'sengseng' => 'ssz',
+  'namosi-naitasiri-serua' => 'bwb',
+  'southern rincon zapotec' => 'zsr',
+  'kurichiya' => 'kfh',
+  'old japanese' => 'ojp',
+  'torres strait creole' => 'tcs',
+  'tosk albanian' => 'als',
+  'lambadi' => 'lmn',
+  'elotepec zapotec' => 'zte',
+  'kawaiisu' => 'xaw',
+  'wandarang' => 'wnd',
+  'mbariman-gudhinma' => 'zmv',
+  'roma' => 'rmm',
+  'kim mun' => 'mji',
+  'dompo' => 'doy',
+  'uto-aztecan languages' => 'azc',
+  'badui' => 'bac',
+  'dusner' => 'dsn',
+  'agavotaguerra' => 'avo',
+  'atohwaim' => 'aqm',
+  'lhokpu' => 'lhp',
+  'kumarbhag paharia' => 'kmj',
+  'austrian sign language' => 'asq',
+  'tayart tamajeq' => 'thz',
+  'northern khmer' => 'kxm',
+  'western mashan hmong' => 'hmw',
+  'bulgarian sign language' => 'bqn',
+  'western cham' => 'cja',
+  'aguano' => 'aga',
+  'phende' => 'pem',
+  'hakka chinese' => 'hak',
+  'papua new guinean sign language' => 'pgz',
+  'ratagnon' => 'btn',
+  "ofay\x{e9}" => 'opy',
+  'gude' => 'gde',
+  'alsea' => 'aes',
+  'tojolabal' => 'toj',
+  'achumawi' => 'acv',
+  'southern uzbek' => 'uzs',
+  'molo' => 'zmo',
+  'tumi' => 'kku',
+  'central subanen' => 'syb',
+  'kwa\'' => 'bko',
+  'ranglong' => 'rnl',
+  'macedo-romanian' => 'rup',
+  'halang doan' => 'hld',
+  'danau' => 'dnu',
+  'brunei' => 'kxd',
+  'mazanderani' => 'mzn',
+  'inonhan' => 'loc',
+  'tunica' => 'tun',
+  'middle mongolian' => 'xng',
+  'igala' => 'igl',
+  'natchez' => 'ncz',
+  "hupd\x{eb}" => 'jup',
+  'rungwa' => 'rnw',
+  'rennell-bellona' => 'mnv',
+  'wayuu' => 'guc',
+  'western panjabi' => 'pnb',
+  'hokan languages' => 'hok',
+  'boko (benin)' => 'bqc',
+  'matya samo' => 'stj',
+  'capiznon' => 'cps',
+  'axamb' => 'ahb',
+  "francisco le\x{f3}n zoque" => 'zos',
+  'mbongno' => 'bgu',
+  'kusu' => 'ksv',
+  'nyikina' => 'nyh',
+  'hupa' => 'hup',
+  'siwi' => 'siz',
+  'gundi' => 'gdi',
+  'eggon' => 'ego',
+  'buyu' => 'byi',
+  'kangjia' => 'kxs',
+  'lemerig' => 'lrz',
+  'wushi' => 'bse',
+  'wailapa' => 'wlr',
+  'lame' => 'bma',
+  'north midlands tasmanian' => 'xph',
+  'baima' => 'bqh',
+  'komyandaret' => 'kzv',
+  'parachi' => 'prc',
+  'karuwali' => 'rxw',
+  'finland-swedish sign language' => 'fss',
+  'moere' => 'mvq',
+  'pemon' => 'aoc',
+  "p\x{e9}v\x{e9}" => 'lme',
+  'tlamacazapa nahuatl' => 'nuz',
+  'budukh' => 'bdk',
+  'san juan atzingo popoloca' => 'poe',
+  'anfillo' => 'myo',
+  'gyalsumdo' => 'gyo',
+  'waboda' => 'kmx',
+  'biyo' => 'byo',
+  "\x{1c3}x\x{f3}\x{f5}" => 'nmn',
+  'baki' => 'bki',
+  'orma' => 'orc',
+  'kochila tharu' => 'thq',
+  'bwatoo' => 'bwa',
+  'bintulu' => 'bny',
+  'buol' => 'blf',
+  'kis' => 'kis',
+  'pagi' => 'pgi',
+  'kalispel-pend d\'oreille' => 'fla',
+  'nyaneka' => 'nyk',
+  "m\x{101}h\x{101}r\x{101}\x{1e63}\x{1e6d}ri pr\x{101}krit" => 'pmh',
+  'wariyangga' => 'wri',
+  'panawa' => 'pwb',
+  'tai languages' => 'tai',
+  'michif' => 'crg',
+  'aja (benin)' => 'ajg',
+  'sudovian' => 'xsv',
+  'paluan' => 'plz',
+  'vai' => 'vai',
+  'gyem' => 'gye',
+  'emerillon' => 'eme',
+  'kuk' => 'kfn',
+  'mafa' => 'maf',
+  'inebu one' => 'oin',
+  'chadian arabic' => 'shu',
+  'agariya' => 'agi',
+  'keiga' => 'kec',
+  'latvian sign language' => 'lsl',
+  "y\x{e1}mana" => 'yag',
+  'juang' => 'jun',
+  'sanglechi' => 'sgy',
+  'dza' => 'jen',
+  'terik' => 'tec',
+  'berom' => 'bom',
+  'urapmin' => 'urm',
+  'mur pano' => 'tkv',
+  'kuku-yalanji' => 'gvn',
+  'chenchu' => 'cde',
+  'quapaw' => 'qua',
+  'oko-juwoi' => 'okj',
+  'foi' => 'foi',
+  'itik' => 'itx',
+  'kapingamarangi' => 'kpg',
+  "wan\x{e9}" => 'hwa',
+  'chong' => 'cog',
+  'central maewo' => 'mwo',
+  "jor\x{e1}" => 'jor',
+  'ronga' => 'rng',
+  'bukat' => 'bvk',
+  'langobardic' => 'lng',
+  'keley-i kallahan' => 'ify',
+  'yassic' => 'ysc',
+  "z\x{e1}paro" => 'zro',
+  'nume' => 'tgs',
+  'awera' => 'awr',
+  'nefamese' => 'nef',
+  'pagibete' => 'pae',
+  'wanggom' => 'wng',
+  'dair' => 'drb',
+  'mari (madang province)' => 'hob',
+  'nimadi' => 'noe',
+  'kete' => 'kcv',
+  'nukuria' => 'nur',
+  'kein' => 'bmh',
+  'western frisian' => 'fry',
+  'kashaya' => 'kju',
+  'tanema' => 'tnx',
+  'shumcho' => 'scu',
+  'maguindanaon' => 'mdh',
+  'classical syriac' => 'syc',
+  "acro\x{e1}" => 'acs',
+  'khorezmian' => 'zkh',
+  'iyive' => 'uiv',
+  'ugandan sign language' => 'ugn',
+  'isthmus-pajapan nahuatl' => 'nhp',
+  "apurin\x{e3}" => 'apu',
+  'yavitero' => 'yvt',
+  'alagwa' => 'wbj',
+  'lele (guinea)' => 'llc',
+  'nengone' => 'nen',
+  'mano' => 'mev',
+  'barok' => 'bjk',
+  'sora' => 'srb',
+  'tumleo' => 'tmq',
+  'alor' => 'aol',
+  'mandahuaca' => 'mht',
+  'semnani' => 'smy',
+  'kokata' => 'ktd',
+  'kono (nigeria)' => 'klk',
+  'mawa (chad)' => 'mcw',
+  'kwang' => 'kvi',
+  'tayo' => 'cks',
+  'bruny island tasmanian' => 'xpz',
+  'lingao' => 'onb',
+  'parenga' => 'pcj',
+  'kunbarlang' => 'wlg',
+  'gaam' => 'tbi',
+  'shan' => 'shn',
+  'masalit' => 'mls',
+  'guramalum' => 'grz',
+  'nema' => 'gsn',
+  'oruma' => 'orr',
+  'gibanawa' => 'gib',
+  'fanbak' => 'fnb',
+  'hermit' => 'llf',
+  'goan konkani' => 'gom',
+  'tepecano' => 'tep',
+  'hunde' => 'hke',
+  'malavedan' => 'mjr',
+  'central hongshuihe zhuang' => 'zch',
+  'bantu languages' => 'bnt',
+  'banda (indonesia)' => 'bnd',
+  'ipiko' => 'ipo',
+  'huli' => 'hui',
+  'chantyal' => 'chx',
+  'aheri gondi' => 'esg',
+  'south fali' => 'fal',
+  'ndra\'ngith' => 'dgt',
+  'kulina pano' => 'xpk',
+  'teke-kukuya' => 'kkw',
+  "yaour\x{e9}" => 'yre',
+  'la\'bi' => 'lbi',
+  'ndogo' => 'ndz',
+  'gunya' => 'gyy',
+  'mamara senoufo' => 'myk',
+  'elip' => 'ekm',
+  'quebec sign language' => 'fcs',
+  'luri' => 'ldd',
+  'northern kissi' => 'kqs',
+  'awun' => 'aww',
+  'zyphe chin' => 'zyp',
+  'yau (morobe province)' => 'yuw',
+  'tangoa' => 'tgp',
+  'geez' => 'gez',
+  'sangir' => 'sxn',
+  'lamang' => 'hia',
+  'mokole' => 'mkl',
+  'bwaidoka' => 'bwd',
+  'cumbric' => 'xcb',
+  'bon gula' => 'glc',
+  'ebughu' => 'ebg',
+  'tainae' => 'ago',
+  'lamalera' => 'lmr',
+  'malas' => 'mkr',
+  'mawayana' => 'mzx',
+  'ludian' => 'lud',
+  'samoyedic languages' => 'syd',
+  'shihhi arabic' => 'ssh',
+  'garo' => 'grt',
+  'tring' => 'tgq',
+  'stod bhoti' => 'sbu',
+  'kibiri' => 'prm',
+  'mixtepec zapotec' => 'zpm',
+  "winy\x{e9}" => 'kst',
+  'northern uzbek' => 'uzn',
+  'west lembata' => 'lmj',
+  "amatl\x{e1}n zapotec" => 'zpo',
+  "sara kaba n\x{e1}\x{e0}" => 'kwv',
+  'roviana' => 'rug',
+  'suga' => 'sgi',
+  "yawalapit\x{ed}" => 'yaw',
+  'kimbu' => 'kiv',
+  'lele (democratic republic of congo)' => 'lel',
+  'aimol' => 'aim',
+  "\x{1c1}gana" => 'gnk',
+  'daasanach' => 'dsh',
+  'ngbaka ma\'bo' => 'nbm',
+  'quileute' => 'qui',
+  'isarog agta' => 'agk',
+  'kohin' => 'kkx',
+  'lamaholot' => 'slp',
+  'jaru' => 'ddj',
+  'sileibi' => 'sbq',
+  "kaimb\x{e9}" => 'xai',
+  'coastal konjo' => 'kjc',
+  'merey' => 'meq',
+  'kwamtim one' => 'okk',
+  'berau malay' => 'bve',
+  'eipomek' => 'eip',
+  'piro' => 'pie',
+  'juxtlahuaca mixtec' => 'vmc',
+  'liujiang zhuang' => 'zlj',
+  'hulung' => 'huk',
+  'saponi' => 'spi',
+  'tijaltepec mixtec' => 'xtl',
+  "ardham\x{101}gadh\x{12b} pr\x{101}krit" => 'pka',
+  'pictish' => 'xpi',
+  'suau' => 'swp',
+  'sakata' => 'skt',
+  'nshi' => 'nsc',
+  'abon' => 'abo',
+  'solong' => 'aaw',
+  'algic languages' => 'aql',
+  'jeh' => 'jeh',
+  'yirrk-mel' => 'yrm',
+  'yeniche' => 'yec',
+  'morokodo' => 'mgc',
+  'chakavian' => 'ckm',
+  'songoora' => 'sod',
+  'baka (cameroon)' => 'bkc',
+  'paunaka' => 'pnk',
+  'neo-hittite' => 'nei',
+  'saposa' => 'sps',
+  'panamanian sign language' => 'lsp',
+  "hixkary\x{e1}na" => 'hix',
+  'hungarian sign language' => 'hsh',
+  'phuza' => 'ypz',
+  'eastern ngad\'a' => 'nea',
+  'pamlico' => 'pmk',
+  'dama' => 'dmm',
+  'laragia' => 'lrg',
+  'gola' => 'gol',
+  'erre' => 'err',
+  'nafi' => 'srf',
+  'siane' => 'snp',
+  'phimbi' => 'phm',
+  'highland puebla nahuatl' => 'azz',
+  'oune' => 'oue',
+  'tal' => 'tal',
+  'taikat' => 'aos',
+  'ibani' => 'iby',
+  'ngadjunmaya' => 'nju',
+  'tiwi' => 'tiw',
+  'chimborazo highland quichua' => 'qug',
+  'nukuoro' => 'nkr',
+  'meriam mir' => 'ulk',
+  "sanum\x{e1}" => 'xsu',
+  'manna-dora' => 'mju',
+  'wik ngathan' => 'wig',
+  'tlacolulita zapotec' => 'zpk',
+  'southern katang' => 'sct',
+  'dhofari arabic' => 'adf',
+  'mokilese' => 'mkj',
+  'gudang' => 'xgd',
+  'daho-doo' => 'das',
+  'vamale' => 'mkt',
+  'lombo' => 'loo',
+  'north babar' => 'bcd',
+  'jandavra' => 'jnd',
+  'war-jaintia' => 'aml',
+  'zaniza zapotec' => 'zpw',
+  'zaiwa' => 'atb',
+  'selaru' => 'slu',
+  "x\x{e2}r\x{e2}c\x{f9}\x{f9}" => 'ane',
+  'polonombauk' => 'plb',
+  'luopohe hmong' => 'hml',
+  'kwanja' => 'knp',
+  'kanju' => 'kbe',
+  'tho' => 'tou',
+  'southern betsimisaraka malagasy' => 'bzc',
+  'usila chinantec' => 'cuc',
+  'classical tibetan' => 'xct',
+  'pawaia' => 'pwa',
+  'waruna' => 'wrv',
+  "m\x{ed}skito" => 'miq',
+  "santa mar\x{ed}a quiegolani zapotec" => 'zpi',
+  'gurindji' => 'gue',
+  'bikaru' => 'bic',
+  'daantanai\'' => 'lni',
+  'bolinao' => 'smk',
+  'abinomn' => 'bsa',
+  'asue awyu' => 'psa',
+  'duvle' => 'duv',
+  'tolaki' => 'lbw',
+  'central okinawan' => 'ryu',
+  'kwerba mamberamo' => 'xwr',
+  'west uvean' => 'uve',
+  'yuchi' => 'yuc',
+  'quenya' => 'qya',
+  'batuley' => 'bay',
+  'ubir' => 'ubr',
+  'basa (cameroon)' => 'bas',
+  'jenaama bozo' => 'bze',
+  'tama (colombia)' => 'ten',
+  'iu mien' => 'ium',
+  'vasavi' => 'vas',
+  'kantosi' => 'xkt',
+  'iatmul' => 'ian',
+  'pahi' => 'lgt',
+  'gulf arabic' => 'afb',
+  "s\x{ec}c\x{ec}t\x{e9} s\x{e9}noufo" => 'sep',
+  'rang' => 'rax',
+  'kapriman' => 'dju',
+  'glavda' => 'glw',
+  "l\x{e1}adan" => 'ldn',
+  'kakanda' => 'kka',
+  'chepang' => 'cdm',
+  "kaxarar\x{ed}" => 'ktx',
+  'jurchen' => 'juc',
+  'geba karen' => 'kvq',
+  'libinza' => 'liz',
+  'central tagbanwa' => 'tgt',
+  'mum' => 'kqa',
+  'south lembata' => 'lmf',
+  'ndam' => 'ndm',
+  'langi' => 'lag',
+  'edomite' => 'xdm',
+  'adamorobe sign language' => 'ads',
+  'nafaanra' => 'nfr',
+  'hukumina' => 'huw',
+  "m\x{f3}cheno" => 'mhn',
+  'biwat' => 'bwm',
+  'elseng' => 'mrf',
+  'southern kiwai' => 'kjd',
+  'lahu shi' => 'lhi',
+  'interglossa' => 'igs',
+  'wintu' => 'wnw',
+  'northern nuni' => 'nuv',
+  'shuar' => 'jiv',
+  'ginyanga' => 'ayg',
+  'kande' => 'kbs',
+  'northern tidung' => 'ntd',
+  'gbanu' => 'gbv',
+  'southern bontok' => 'obk',
+  'selee' => 'snw',
+  'biete' => 'biu',
+  'mufian' => 'aoj',
+  'tapei' => 'afp',
+  'lahu' => 'lhu',
+  'chodri' => 'cdi',
+  'laka (nigeria)' => 'lak',
+  'yawarawarga' => 'yww',
+  "j\x{e8}rriais" => 'nrf',
+  'tobo' => 'tbv',
+  'karipuna' => 'kuq',
+  'koro (papua new guinea)' => 'kxr',
+  'izon' => 'ijc',
+  'northern hindko' => 'hno',
+  'port vato' => 'ptv',
+  'mescalero-chiricahua apache' => 'apm',
+  'pana (central african republic)' => 'pnz',
+  'khua' => 'xhv',
+  'kinnauri' => 'kfk',
+  'kota marudu talantang' => 'grm',
+  'gahri' => 'bfu',
+  'komi-permyak' => 'koi',
+  'damal' => 'uhn',
+  'saisiyat' => 'xsy',
+  "hulaul\x{e1}" => 'huy',
+  'maithili' => 'mai',
+  'abau' => 'aau',
+  'viti' => 'vit',
+  "ngu\x{f4}n" => 'nuo',
+  'lishana deni' => 'lsd',
+  'broome pearling lugger pidgin' => 'bpl',
+  'northern kurdish' => 'kmr',
+  'heyo' => 'auk',
+  'oya\'oya' => 'oyy',
+  'hamtai' => 'hmt',
+  'sanggau' => 'scg',
+  "pichis ash\x{e9}ninka" => 'cpu',
+  "karir\x{ed}-xoc\x{f3}" => 'kzw',
+  'gidar' => 'gid',
+  'loup a' => 'xlo',
+  'chalikha' => 'tgf',
+  'bauria' => 'bge',
+  'bafut' => 'bfd',
+  'koalib' => 'kib',
+  'yangkam' => 'bsx',
+  "southern bobo madar\x{e9}" => 'bwq',
+  'wadikali' => 'wdk',
+  'northwestern kolami' => 'kfb',
+  'libyan sign language' => 'lbs',
+  'morelos nahuatl' => 'nhm',
+  'inga' => 'inb',
+  'san francisco matlatzinca' => 'mat',
+  'olekha' => 'ole',
+  'pitta pitta' => 'pit',
+  'samba' => 'smx',
+  'sowanda' => 'sow',
+  'tooro' => 'ttj',
+  'ketengban' => 'xte',
+  'kui (india)' => 'uki',
+  'dazaga' => 'dzg',
+  'laal' => 'gdm',
+  'kuwaataay' => 'cwt',
+  'balanta-kentohe' => 'ble',
+  'mba' => 'mfc',
+  'degexit\'an' => 'ing',
+  'ga\'dang' => 'gdg',
+  'adara' => 'kad',
+  'border kuna' => 'kvn',
+  'bathari' => 'bhm',
+  'hwana' => 'hwo',
+  'dubli' => 'dub',
+  'yorta yorta' => 'xyy',
+  'sierra leone sign language' => 'sgx',
+  'huarijio' => 'var',
+  'gwamhi-wuri' => 'bga',
+  'bomboli' => 'bml',
+  'subiya' => 'sbs',
+  'kinabalian' => 'cbw',
+  "cakchiquel-quich\x{e9} mixed language" => 'ckz',
+  'womo' => 'wmx',
+  'komba' => 'kpf',
+  'waritai' => 'wbe',
+  'dalabon' => 'ngk',
+  'paulohi' => 'plh',
+  'yale' => 'nce',
+  'ibino' => 'ibn',
+  'dugwor' => 'dme',
+  'ikizu' => 'ikz',
+  'caddoan languages' => 'cdd',
+  'khanty' => 'kca',
+  'tay khang' => 'tnu',
+  'eravallan' => 'era',
+  'ubang' => 'uba',
+  'nkem-nkum' => 'isi',
+  'poke' => 'pof',
+  'malimpung' => 'mli',
+  'lumun' => 'lmd',
+  'northern amami-oshima' => 'ryn',
+  'itawit' => 'itv',
+  'waja' => 'wja',
+  'iduna' => 'viv',
+  'azerbaijani' => 'aze',
+  "cavine\x{f1}a" => 'cav',
+  "p\x{e4}ri" => 'lkr',
+  'arapaho' => 'arp',
+  'ngayawung' => 'nwg',
+  'mankanya' => 'knf',
+  'palu\'e' => 'ple',
+  'moni' => 'mnz',
+  'abron' => 'abr',
+  'od' => 'odk',
+  'bian marind' => 'bpv',
+  'icelandic sign language' => 'icl',
+  'khe' => 'kqg',
+  'khana' => 'ogo',
+  'sara kaba' => 'sbz',
+  'asilulu' => 'asl',
+  'bomu' => 'bmq',
+  'budza' => 'bja',
+  'guarani' => 'grn',
+  'norwegian nynorsk' => 'nno',
+  'dhuwaya' => 'dwy',
+  'geme' => 'geq',
+  'inuinnaqtun' => 'ikt',
+  'western kanjobal' => 'knj',
+  'bankal' => 'jjr',
+  'jebero' => 'jeb',
+  'wojenaka' => 'jod',
+  'mubami' => 'tsx',
+  'tukang besi south' => 'bhq',
+  'rawang' => 'raw',
+  'akyaung ari naga' => 'nqy',
+  'baltic romani' => 'rml',
+  'nyengo' => 'nye',
+  'baniwa' => 'bwi',
+  'tefaro' => 'tfo',
+  'korku' => 'kfq',
+  'hijuk' => 'hij',
+  'ghari' => 'gri',
+  'caquinte' => 'cot',
+  'mising' => 'mrg',
+  'kon keu' => 'kkn',
+  'namakura' => 'nmk',
+  'mongo' => 'lol',
+  'tembo (kitembo)' => 'tbt',
+  'yana' => 'ynn',
+  'sasaru' => 'sxs',
+  'mandari' => 'mqu',
+  'shi' => 'shr',
+  'tandaganon' => 'tgn',
+  'nyokon' => 'nvo',
+  'soli' => 'sby',
+  'bepour' => 'bie',
+  'arop-sissano' => 'aps',
+  "t\x{e0}y sa pa" => 'tys',
+  'sonde' => 'shc',
+  'cori' => 'cry',
+  'gagauz' => 'gag',
+  'pwo eastern karen' => 'kjp',
+  "koro (c\x{f4}te d'ivoire)" => 'kfo',
+  'sokoro' => 'sok',
+  'lavi' => 'lvi',
+  'binongan itneg' => 'itb',
+  'pular' => 'fuf',
+  'emilian' => 'egl',
+  'armenian (family)' => 'hyx',
+  'mayan languages' => 'myn',
+  'loun' => 'lox',
+  'butuanon' => 'btw',
+  'putoh' => 'put',
+  'hausa' => 'hau',
+  'kwanga' => 'kwj',
+  'dumpas' => 'dmv',
+  'liuqian zhuang' => 'zlq',
+  'seluwasan' => 'sws',
+  'eastern frisian' => 'frs',
+  'mitla zapotec' => 'zaw',
+  'munji' => 'mnj',
+  'mwaghavul' => 'sur',
+  'kacipo-balesi' => 'koe',
+  'nenets' => 'yrk',
+  'amahai' => 'amq',
+  "m\x{fc}n chin" => 'mwq',
+  'harijan kinnauri' => 'kjo',
+  'haida' => 'hai',
+  'nend' => 'anh',
+  'tay boi' => 'tas',
+  'kunjen' => 'kjn',
+  'bankagooma' => 'bxw',
+  'jordanian sign language' => 'jos',
+  'phai' => 'prt',
+  'kusaal' => 'kus',
+  'tuki' => 'bag',
+  'ut-hun' => 'uth',
+  'voro' => 'vor',
+  'phake' => 'phk',
+  'musom' => 'msu',
+  'macushi' => 'mbc',
+  'munit' => 'mtc',
+  'ten\'edn' => 'tnz',
+  'guambiano' => 'gum',
+  'kyerung' => 'kgy',
+  'fa d\'ambu' => 'fab',
+  'kankanaey' => 'kne',
+  'nimi' => 'nis',
+  'koya' => 'kff',
+  'ani phowa' => 'ypn',
+  'zazao' => 'jaj',
+  'papasena' => 'pas',
+  'memoni' => 'mby',
+  'murle' => 'mur',
+  'ngalum' => 'szb',
+  'baram kayan' => 'kys',
+  'pam' => 'pmn',
+  'tornedalen finnish' => 'fit',
+  'sedang' => 'sed',
+  'narragansett' => 'xnt',
+  'tamazola mixtec' => 'vmx',
+  'ak' => 'akq',
+  'south ndebele' => 'nbl',
+  'bishnupriya' => 'bpy',
+  'col' => 'liw',
+  'senggi' => 'snu',
+  'camling' => 'rab',
+  "senara s\x{e9}noufo" => 'seq',
+  'tai long' => 'thi',
+  'buyuan jinuo' => 'jiy',
+  'tai do' => 'tyj',
+  "pwapw\x{e2}" => 'pop',
+  'eastern sudanic languages' => 'sdv',
+  "norwegian bokm\x{e5}l" => 'nob',
+  'benyadu\'' => 'byd',
+  'aekyom' => 'awi',
+  'nding' => 'eli',
+  'chenoua' => 'cnu',
+  'babuza' => 'bzg',
+  'nakwi' => 'nax',
+  'waimiri-atroari' => 'atr',
+  'khirwar' => 'kwx',
+  'ot danum' => 'otd',
+  'korubo' => 'xor',
+  'chilean sign language' => 'csg',
+  'jaitmatang' => 'xjt',
+  'berber languages' => 'ber',
+  'tsimshian' => 'tsi',
+  'yinggarda' => 'yia',
+  'mashi (nigeria)' => 'jms',
+  'laeko-libuat' => 'lkl',
+  'unua' => 'onu',
+  'texcatepec otomi' => 'otx',
+  'duwet' => 'gve',
+  'ngardi' => 'rxd',
+  'urarina' => 'ura',
+  'medumba' => 'byv',
+  'todrah' => 'tdr',
+  'south slavey' => 'xsl',
+  'desiya' => 'dso',
+  'gbin' => 'xgb',
+  'okanagan' => 'oka',
+  'iaai' => 'iai',
+  'zulu' => 'zul',
+  'songlai chin' => 'csj',
+  'pass valley yali' => 'yac',
+  'mele-fila' => 'mxe',
+  'wagawaga' => 'wgb',
+  'makhuwa' => 'vmw',
+  'lave' => 'brb',
+  'mbole' => 'mdq',
+  'huba' => 'hbb',
+  'tlacoapa me\'phaa' => 'tpl',
+  'kaska' => 'kkz',
+  'hatam' => 'had',
+  'central kanuri' => 'knc',
+  'ngasa' => 'nsg',
+  'ososo' => 'oso',
+  'laki' => 'lki',
+  'judeo-italian' => 'itk',
+  'yahuna' => 'ynu',
+  "bakw\x{e9}" => 'bjw',
+  'catawba' => 'chc',
+  'south awyu' => 'aws',
+  'weyto' => 'woy',
+  'tontemboan' => 'tnt',
+  'dyula' => 'dyu',
+  'hiberno-scottish gaelic' => 'ghc',
+  'wewaw' => 'wea',
+  'limburgan' => 'lim',
+  'ahirani' => 'ahr',
+  'kinga' => 'zga',
+  'paku' => 'pku',
+  'kisa' => 'lks',
+  'konzo' => 'koo',
+  'turaka' => 'trh',
+  'amaimon' => 'ali',
+  'ngatik men\'s creole' => 'ngm',
+  'barambu' => 'brm',
+  'tobilung' => 'tgb',
+  'west damar' => 'drn',
+  'buru (nigeria)' => 'bqw',
+  'au' => 'avt',
+  'korlai creole portuguese' => 'vkp',
+  'gayil' => 'gyl',
+  'gupapuyngu' => 'guf',
+  'eastern pomo' => 'peb',
+  'kanjari' => 'kft',
+  'aralle-tabulahan' => 'atq',
+  'simte' => 'smt',
+  'mbum' => 'mdd',
+  'ha' => 'haq',
+  'girawa' => 'bbr',
+  'yekora' => 'ykr',
+  'mbwela' => 'mfu',
+  'koguryo' => 'zkg',
+  'mantsi' => 'nty',
+  'ogbronuagum' => 'ogu',
+  'tewa (usa)' => 'tew',
+  'nagumi' => 'ngv',
+  'gurmana' => 'gvm',
+  'neku' => 'nek',
+  'bandial' => 'bqj',
+  'caucasian languages' => 'cau',
+  'gone dau' => 'goo',
+  'lala-roba' => 'lla',
+  'mlabri' => 'mra',
+  'uare' => 'ksj',
+  'biafada' => 'bif',
+  "obispe\x{f1}o" => 'obi',
+  'majhi' => 'mjz',
+  'bipi' => 'biq',
+  'hanga' => 'hag',
+  'mao naga' => 'nbi',
+  'bungu' => 'wun',
+  'tabassaran' => 'tab',
+  'krio' => 'kri',
+  'alago' => 'ala',
+  'kosarek yale' => 'kkl',
+  'shumashti' => 'sts',
+  'mezontla popoloca' => 'pbe',
+  'tutong' => 'ttg',
+  'kaurna' => 'zku',
+  'selangor sign language' => 'kgi',
+  'ughele' => 'uge',
+  'iyo' => 'nca',
+  "azoy\x{fa} me'phaa" => 'tpc',
+  'yagnobi' => 'yai',
+  'maria (papua new guinea)' => 'mds',
+  'nekgini' => 'nkg',
+  'inapang' => 'mzu',
+  'uru' => 'ure',
+  'doko-uyanga' => 'uya',
+  'yanda dom dogon' => 'dym',
+  'bangolan' => 'bgj',
+  'nauete' => 'nxa',
+  'mokerang' => 'mft',
+  'onondaga' => 'ono',
+  "ch\x{e1}cobo" => 'cao',
+  'oto-manguean languages' => 'omq',
+  'jimi (nigeria)' => 'jmi',
+  'tala' => 'tak',
+  'yaosakor asmat' => 'asy',
+  'tagdal' => 'tda',
+  'tause' => 'tad',
+  'atauran' => 'adb',
+  'irish sign language' => 'isg',
+  'west germanic languages' => 'gmw',
+  'gugadj' => 'ggd',
+  'southeast ambrym' => 'tvk',
+  'jaunsari' => 'jns',
+  "michoac\x{e1}n nahuatl" => 'ncl',
+  'lenca' => 'len',
+  'meyah' => 'mej',
+  'interlingue' => 'ile',
+  'western ojibwa' => 'ojw',
+  'kwalhioqua-tlatskanai' => 'qwt',
+  'boghom' => 'bux',
+  'middle high german (ca. 1050-1500)' => 'gmh',
+  'gamkonora' => 'gak',
+  'kimbundu' => 'kmb',
+  'nyenkha' => 'neh',
+  'lango (south sudan)' => 'lno',
+  'solos' => 'sol',
+  'judeo-tat' => 'jdt',
+  'western bukidnon manobo' => 'mbb',
+  'akawaio' => 'ake',
+  'fum' => 'fum',
+  'cashibo-cacataibo' => 'cbr',
+  'kalapuya' => 'kyl',
+  'middle armenian' => 'axm',
+  'duruma' => 'dug',
+  'sened' => 'sds',
+  'malinaltepec me\'phaa' => 'tcf',
+  'bengkala sign language' => 'bqy',
+  'kehu' => 'khh',
+  'tommo so dogon' => 'dto',
+  'jju' => 'kaj',
+  'hungarian' => 'hun',
+  'manikion' => 'mnx',
+  'nalu' => 'naj',
+  'busang kayan' => 'bfg',
+  'nzakambay' => 'nzy',
+  "suru\x{ed} do par\x{e1}" => 'mdz',
+  'twendi' => 'twn',
+  "huamal\x{ed}es-dos de mayo hu\x{e1}nuco quechua" => 'qvh',
+  'pahlavani' => 'phv',
+  'kikuyu' => 'kik',
+  "banda-mbr\x{e8}s" => 'bqk',
+  'bahamas creole english' => 'bah',
+  'west bengal sign language' => 'wbs',
+  'saya' => 'say',
+  'mengen' => 'mee',
+  'elfdalian' => 'ovd',
+  'dezfuli' => 'def',
+  'samarokena' => 'tmj',
+  'punu' => 'puu',
+  'southern sama' => 'ssb',
+  'teor' => 'tev',
+  'lenkau' => 'ler',
+  'punan merap' => 'puc',
+  'kaidipang' => 'kzp',
+  'haisla' => 'has',
+  'kupang malay' => 'mkn',
+  'falam chin' => 'cfm',
+  'cypriot arabic' => 'acy',
+  'nimoa' => 'nmw',
+  "jamamad\x{ed}" => 'jaa',
+  'fyer' => 'fie',
+  'toro' => 'tdv',
+  "h\x{f5}ne" => 'juh',
+  'lithuanian sign language' => 'lls',
+  'kaike' => 'kzq',
+  'puluwatese' => 'puw',
+  'principense' => 'pre',
+  'old korean (3rd-9th cent.)' => 'oko',
+  'pahlavi' => 'pal',
+  'maiani' => 'tnh',
+  'adi' => 'adi',
+  'tswa' => 'tsc',
+  'jorto' => 'jrt',
+  'nawuri' => 'naw',
+  'dupaninan agta' => 'duo',
+  'lubila' => 'kcc',
+  'luyia' => 'luy',
+  'jhankot sign language' => 'jhs',
+  'pakanha' => 'pkn',
+  'kriol' => 'rop',
+  'ihievbe' => 'ihi',
+  'mycenaean greek' => 'gmy',
+  'sanaani arabic' => 'ayn',
+  'mbukushu' => 'mhw',
+  'dungan' => 'dng',
+  "mamaind\x{e9}" => 'wmd',
+  "wich\x{ed} lhamt\x{e9}s nocten" => 'mtp',
+  "apala\x{ed}" => 'apy',
+  'austro-asiatic languages' => 'aav',
+  'sewa bay' => 'sew',
+  'angika' => 'anp',
+  'cia-cia' => 'cia',
+  'new caledonian javanese' => 'jas',
+  'vlaams' => 'vls',
+  'tai' => 'taw',
+  'piemontese' => 'pms',
+  'kare (papua new guinea)' => 'kmf',
+  'kaba' => 'ksp',
+  'welsh romani' => 'rmw',
+  'wipi' => 'gdr',
+  'dyirbal' => 'dbl',
+  "kayap\x{f3}" => 'txu',
+  'thawa' => 'xtv',
+  'jarai' => 'jra',
+  'dadibi' => 'mps',
+  'nkoroo' => 'nkx',
+  'tupuri' => 'tui',
+  'reel' => 'atu',
+  'opata' => 'opt',
+  'yis' => 'yis',
+  'sicanian' => 'sxc',
+  "t\x{e9}\x{e9}n" => 'lor',
+  'suundi' => 'sdj',
+  'petats' => 'pex',
+  'kitsai' => 'kii',
+  'batak dairi' => 'btd',
+  'wandji' => 'wdd',
+  'zimba' => 'zmb',
+  'piscataway' => 'psy',
+  'khasi' => 'kha',
+  'changthang' => 'cna',
+  'atong (india)' => 'aot',
+  'kuot' => 'kto',
+  'sri lankan sign language' => 'sqs',
+  'wanyi' => 'wny',
+  'salinan' => 'sln',
+  'nung (viet nam)' => 'nut',
+  "sm\x{e4}rky kanum" => 'kxq',
+  'udihe' => 'ude',
+  'nyangga' => 'nny',
+  'u' => 'uuu',
+  'serudung murut' => 'srk',
+  'swiss-french sign language' => 'ssr',
+  'pak-tong' => 'pkg',
+  'kayan mahakam' => 'xay',
+  'riang lai' => 'yin',
+  'egyptian (ancient)' => 'egy',
+  'tondano' => 'tdn',
+  'kiowa apache' => 'apk',
+  'mono (cameroon)' => 'mru',
+  'sihuas ancash quechua' => 'qws',
+  'amdo tibetan' => 'adx',
+  'piu' => 'pix',
+  'kurukh' => 'kru',
+  'yace' => 'ekr',
+  'tokharian a' => 'xto',
+  'senaya' => 'syn',
+  'yoy' => 'yoy',
+  'kalagan' => 'kqe',
+  'barombi' => 'bbi',
+  'baikeno' => 'bkx',
+  'taman (indonesia)' => 'tmn',
+  'ometepec nahuatl' => 'nht',
+  'kulon-pazeh' => 'uun',
+  'nyangumarta' => 'nna',
+  'nda\'nda\'' => 'nnz',
+  'isabi' => 'isa',
+  'sirmauri' => 'srx',
+  'gbanziri' => 'gbg',
+  'namiae' => 'nvm',
+  'achinese' => 'ace',
+  'ekit' => 'eke',
+  'gowlan' => 'goj',
+  'mae' => 'mme',
+  'nakame' => 'nib',
+  'eastern ojibwa' => 'ojg',
+  'min nan chinese' => 'nan',
+  'khunsari' => 'kfm',
+  'mengaka' => 'xmg',
+  'pacaraos quechua' => 'qvp',
+  'seit-kaitetu' => 'hik',
+  'tanudan kalinga' => 'kml',
+  'aimaq' => 'aiq',
+  'chickasaw' => 'cic',
+  'miluk' => 'iml',
+  'bwe karen' => 'bwe',
+  'mutu' => 'tuc',
+  'izora' => 'cbo',
+  'wapan' => 'juk',
+  'ngete' => 'nnn',
+  'east germanic languages' => 'gme',
+  'mintil' => 'mzt',
+  'giyug' => 'giy',
+  'huichol' => 'hch',
+  'malayo' => 'mbp',
+  'rathwi bareli' => 'bgd',
+  'fe\'fe\'' => 'fmp',
+  'tewa (indonesia)' => 'twe',
+  'vute' => 'vut',
+  'babatana' => 'baa',
+  'south efate' => 'erk',
+  'thaypan' => 'typ',
+  'maring' => 'mbw',
+  'boor' => 'bvf',
+  'north levantine arabic' => 'apc',
+  'gimi (west new britain)' => 'gip',
+  'kuku-mu\'inh' => 'xmp',
+  'fania' => 'fni',
+  'momuna' => 'mqf',
+  'umatilla' => 'uma',
+  'ayoreo' => 'ayo',
+  'binahari' => 'bxz',
+  'carolina algonquian' => 'crr',
+  'vemgo-mabas' => 'vem',
+  'lafofa' => 'laf',
+  'cashinahua' => 'cbs',
+  'tetelcingo nahuatl' => 'nhg',
+  'loko' => 'lok',
+  'walangama' => 'nlw',
+  'teop' => 'tio',
+  'songomeno' => 'soe',
+  'ombo' => 'oml',
+  'koroshi' => 'ktl',
+  'karen languages' => 'kar',
+  'limassa' => 'bme',
+  'dadi dadi' => 'dda',
+  'woiwurrung' => 'wyi',
+  'tagwana senoufo' => 'tgw',
+  "santa in\x{e9}s ahuatempan popoloca" => 'pca',
+  'hoia hoia' => 'hhi',
+  'fuyug' => 'fuy',
+  'tsakwambo' => 'kvz',
+  'dewas rai' => 'dwz',
+  'aproumu aizi' => 'ahp',
+  'majukayang kalinga' => 'kmd',
+  'classical armenian' => 'xcl',
+  'balkan gagauz turkish' => 'bgx',
+  'yakha' => 'ybh',
+  'kholok' => 'ktc',
+  'mazagway' => 'dkx',
+  "wiraf\x{e9}d" => 'wir',
+  'kuku-ugbanh' => 'ugb',
+  'tatana' => 'txx',
+  'kom (india)' => 'kmm',
+  'mmaala' => 'mmu',
+  'kerak' => 'hhr',
+  'fore' => 'for',
+  'parya' => 'paq',
+  'yaygir' => 'xya',
+  'orang seletar' => 'ors',
+  'urat' => 'urt',
+  'greek sign language' => 'gss',
+  'belize kriol english' => 'bzj',
+  'saint lucian creole french' => 'acf',
+  'ndoe' => 'nbb',
+  'megam' => 'mef',
+  "par\x{e1} ar\x{e1}ra" => 'aap',
+  'nawaru' => 'nwr',
+  'dibo' => 'dio',
+  'southeast tasmanian' => 'xpf',
+  'matngala' => 'zml',
+  'totontepec mixe' => 'mto',
+  'old saxon' => 'osx',
+  'nepali (individual language)' => 'npi',
+  'bamako sign language' => 'bog',
+  'marwari (india)' => 'rwr',
+  'guugu yimidhirr' => 'kky',
+  'askopan' => 'eiv',
+  'dubu' => 'dmu',
+  'sumerian' => 'sux',
+  'guanyinqiao' => 'jiq',
+  'pukapuka' => 'pkp',
+  'karaim' => 'kdr',
+  'woun meu' => 'noa',
+  'maru' => 'mhx',
+  'tehuelche' => 'teh',
+  'finno-ugrian languages' => 'fiu',
+  'mauwake' => 'mhl',
+  'zialo' => 'zil',
+  'vono' => 'kch',
+  'catalan' => 'cat',
+  'standard latvian' => 'lvs',
+  'east damar' => 'dmr',
+  'old kentish sign language' => 'okl',
+  'cherepon' => 'cpn',
+  'akwa' => 'akw',
+  'konso' => 'kxc',
+  'ebira' => 'igb',
+  'guarayu' => 'gyr',
+  'middle hittite' => 'htx',
+  'semelai' => 'sza',
+  'koiwat' => 'kxt',
+  'neko' => 'nej',
+  'bankon' => 'abb',
+  'toaripi' => 'tqo',
+  'a\'ou' => 'aou',
+  'waigali' => 'wbk',
+  'yecuatla totonac' => 'tlc',
+  'ikpeng' => 'txi',
+  'dyan' => 'dya',
+  'somali' => 'som',
+  'bwela' => 'bwl',
+  'iresim' => 'ire',
+  'wangaaybuwan-ngiyambaa' => 'wyb',
+  'purum' => 'pub',
+  'baham' => 'bdw',
+  'vietnamese' => 'vie',
+  'galolen' => 'gal',
+  'iwam' => 'iwm',
+  'guerrero nahuatl' => 'ngu',
+  'southern samo' => 'sbd',
+  'rungus' => 'drg',
+  'thakali' => 'ths',
+  'maonan' => 'mmd',
+  'wandamen' => 'wad',
+  'kott' => 'zko',
+  'chamalal' => 'cji',
+  'boruca' => 'brn',
+  'moose cree' => 'crm',
+  'kwamera' => 'tnk',
+  'djamindjung' => 'djd',
+  'eastern malayo-polynesian languages' => 'pqe',
+  'bokoto' => 'bdt',
+  'lasi' => 'lss',
+  'sabine' => 'sbv',
+  'mussau-emira' => 'emi',
+  'corsican' => 'cos',
+  'youle jinuo' => 'jiu',
+  "bar\x{e9}" => 'bae',
+  'doondo' => 'dde',
+  'yarawata' => 'yrw',
+  'baluchi' => 'bal',
+  'central malayo-polynesian languages' => 'plf',
+  'nganakarti' => 'xnk',
+  'delo' => 'ntr',
+  'juray' => 'juy',
+  'gokana' => 'gkn',
+  'kulere' => 'kul',
+  'lewo eleng' => 'lwe',
+  'northern kalapuya' => 'nrt',
+  'bosnian' => 'bos',
+  'icelandic' => 'isl',
+  'sari' => 'asj',
+  'toram' => 'trj',
+  'coyotepec popoloca' => 'pbf',
+  'indonesian sign language' => 'inl',
+  'alapmunte' => 'apv',
+  'wotu' => 'wtw',
+  'madagascar sign language' => 'mzc',
+  'larantuka malay' => 'lrt',
+  'chak' => 'ckh',
+  'bassari' => 'bsc',
+  'sulka' => 'sua',
+  'gurgula' => 'ggg',
+  'tetserret' => 'tez',
+  'bohtan neo-aramaic' => 'bhn',
+  'waioli' => 'wli',
+  'sinasina' => 'sst',
+  'barababaraba' => 'rbp',
+  "chol\x{f3}n" => 'cht',
+  'adivasi oriya' => 'ort',
+  'long wat' => 'ttw',
+  'ivatan' => 'ivv',
+  "awet\x{ed}" => 'awe',
+  'erromintxela' => 'emx',
+  'beami' => 'beo',
+  'nyanga' => 'nyj',
+  'burmbar' => 'vrt',
+  'qashqa\'i' => 'qxq',
+  "korop\x{f3}" => 'xxr',
+  'ormu' => 'orz',
+  'bati (indonesia)' => 'bvt',
+  "g\x{fc}il\x{e1} zapotec" => 'ztu',
+  'maria (india)' => 'mrr',
+  'lojban' => 'jbo',
+  'central grebo' => 'grv',
+  'pu-xian chinese' => 'cpx',
+  'south levantine arabic' => 'ajp',
+  'narim' => 'loh',
+  'simaa' => 'sie',
+  'shuadit' => 'sdt',
+  'sop' => 'urw',
+  'wuding-luquan yi' => 'ywq',
+  'kua-nsi' => 'ykn',
+  'north efate' => 'llp',
+  'adiwasi garasia' => 'gas',
+  'koryak' => 'kpy',
+  'yatay' => 'yty',
+  'dura' => 'drq',
+  'krikati-timbira' => 'xri',
+  'kpala' => 'kpl',
+  'white lachi' => 'lwh',
+  'djangun' => 'djf',
+  'ari' => 'aac',
+  'asu (tanzania)' => 'asa',
+  'maridan' => 'zmd',
+  'ampari dogon' => 'aqd',
+  'kurtokha' => 'xkz',
+  'aneme wake' => 'aby',
+  'finongan' => 'fag',
+  'agoi' => 'ibm',
+  "tanimuca-retuar\x{e3}" => 'tnc',
+  'ho chi minh city sign language' => 'hos',
+  'borana-arsi-guji oromo' => 'gax',
+  'mainstream kenyah' => 'xkl',
+  'nek' => 'nif',
+  'rikbaktsa' => 'rkb',
+  'leyigha' => 'ayi',
+  'albanian' => 'sqi',
+  'dimbong' => 'dii',
+  'zabana' => 'kji',
+  'semitic languages' => 'sem',
+  'wolof' => 'wol',
+  'waigeo' => 'wgo',
+  'dhimal' => 'dhi',
+  'kikai' => 'kzg',
+  'snohomish' => 'sno',
+  'orok' => 'oaa',
+  'domung' => 'dev',
+  'savosavo' => 'svs',
+  'wik-mungkan' => 'wim',
+  'garifuna' => 'cab',
+  'orokaiva' => 'okv',
+  'central-eastern niger fulfulde' => 'fuq',
+  'samoan' => 'smo',
+  'nkoya' => 'nka',
+  'northern huishui hmong' => 'hmi',
+  'baga pokur' => 'bcg',
+  'kutu' => 'kdc',
+  'bahing' => 'bhj',
+  'chru' => 'cje',
+  'krobu' => 'kxb',
+  'libido' => 'liq',
+  'maiwala' => 'mum',
+  'sichuan yi' => 'iii',
+  'eastern maninkakan' => 'emk',
+  'slovenian' => 'slv',
+  'i-wak' => 'iwk',
+  'buhid' => 'bku',
+  'ngandyera' => 'nne',
+  'washo' => 'was',
+  'pwo northern karen' => 'pww',
+  'molengue' => 'bxc',
+  "tuxin\x{e1}wa" => 'tux',
+  'etchemin' => 'etc',
+  'kpagua' => 'kuw',
+  'manggarai' => 'mqy',
+  'taino' => 'tnq',
+  'jair awyu' => 'awv',
+  'carrier' => 'crx',
+  'cheyenne' => 'chy',
+  'harami' => 'xha',
+  'punan aput' => 'pud',
+  'suabo' => 'szp',
+  "jur\x{fa}na" => 'jur',
+  'miwa' => 'vmi',
+  'jur modo' => 'bex',
+  'batak languages' => 'btk',
+  "arequipa-la uni\x{f3}n quechua" => 'qxu',
+  'tene kan dogon' => 'dtk',
+  'kalabari' => 'ijn',
+  'kaulong' => 'pss',
+  'bigambal' => 'xbe',
+  'alabama' => 'akz',
+  'namat' => 'nkm',
+  'sentinel' => 'std',
+  'chazumba mixtec' => 'xtb',
+  'spanish' => 'spa',
+  'k\'iche\'' => 'quc',
+  'mfinu' => 'zmf',
+  'mixed great andamanese' => 'gac',
+  "yucua\x{f1}e mixtec" => 'mvg',
+  'eloyi' => 'afo',
+  'sarasira' => 'zsa',
+  'logudorese sardinian' => 'src',
+  'tabla' => 'tnm',
+  'eastern mari' => 'mhr',
+  'yucuna' => 'ycn',
+  'western totonac' => 'tqt',
+  'dera (nigeria)' => 'kna',
+  'jara' => 'jaf',
+  'kangri' => 'xnr',
+  'bekwarra' => 'bkv',
+  "tai n\x{fc}a" => 'tdd',
+  'che' => 'ruk',
+  'olo' => 'ong',
+  'biri' => 'bzr',
+  'poqomam' => 'poc',
+  'bonggi' => 'bdg',
+  'shambala' => 'ksb',
+  'oksapmin' => 'opm',
+  'vaagri booli' => 'vaa',
+  'bawm chin' => 'bgr',
+  'tikar' => 'tik',
+  'creoles and pidgins, french-based' => 'cpf',
+  'dusun deyah' => 'dun',
+  'malasar' => 'ymr',
+  'biyom' => 'bpm',
+  'ignaciano' => 'ign',
+  'walmajarri' => 'wmt',
+  'lisabata-nuniali' => 'lcs',
+  'havu' => 'hav',
+  'bolon' => 'bof',
+  'southern kalapuya' => 'sxk',
+  'lwalu' => 'lwa',
+  "guaj\x{e1}" => 'gvj',
+  'tamki' => 'tax',
+  'bayali' => 'bjy',
+  'jaqaru' => 'jqr',
+  'camtho' => 'cmt',
+  'tofin gbe' => 'tfi',
+  'trumai' => 'tpy',
+  'tafi' => 'tcd',
+  'wanda' => 'wbh',
+  'old dutch' => 'odt',
+  'holma' => 'hod',
+  'semai' => 'sea',
+  'magori' => 'zgr',
+  "kamayur\x{e1}" => 'kay',
+  'colorado' => 'cof',
+  "xanagu\x{ed}a zapotec" => 'ztg',
+  'mese' => 'mci',
+  'amal' => 'aad',
+  'idon' => 'idc',
+  'nauru' => 'nau',
+  'western yiddish' => 'yih',
+  'iceve-maci' => 'bec',
+  "kanamar\x{ed}" => 'knm',
+  'bangi' => 'bni',
+  "truk\x{e1}" => 'tka',
+  'sambalpuri' => 'spv',
+  'standard moroccan tamazight' => 'zgh',
+  'pangseng' => 'pgs',
+  'haji' => 'hji',
+  'eastern arrernte' => 'aer',
+  'ndengereko' => 'ndg',
+  'laha (indonesia)' => 'lhh',
+  'apatani' => 'apt',
+  'bajelani' => 'bjm',
+  'romam' => 'rmx',
+  'lefa' => 'lfa',
+  'pardhan' => 'pch',
+  'gula\'alaa' => 'gmb',
+  'kap' => 'ykm',
+  'takelma' => 'tkm',
+  'bay miwok' => 'mkq',
+  'lishanid noshan' => 'aij',
+  'bislama' => 'bis',
+  'ndendeule' => 'dne',
+  'pere' => 'pfe',
+  'koi' => 'kkt',
+  'toba' => 'tob',
+  'dabarre' => 'dbr',
+  'massalat' => 'mdg',
+  'unami' => 'unm',
+  'nyindu' => 'nyg',
+  'ngarrindjeri' => 'nay',
+  'dhanwar (nepal)' => 'dhw',
+  'swabian' => 'swg',
+  'liabuku' => 'lix',
+  'natanzi' => 'ntz',
+  'ngemba' => 'nge',
+  'aushiri' => 'avs',
+  'lemoro' => 'ldj',
+  'kenyi' => 'lke',
+  'ingush' => 'inh',
+  'marshallese' => 'mah',
+  "n\x{fc}pode huitoto" => 'hux',
+  'urak lawoi\'' => 'urk',
+  'masimasi' => 'ism',
+  'gazi' => 'gzi',
+  'totoro' => 'ttk',
+  'kanakanabu' => 'xnb',
+  'mapia' => 'mpy',
+  'sugut dusun' => 'kzs',
+  'nyishi' => 'njz',
+  'siriano' => 'sri',
+  "p\x{f6}koot" => 'pko',
+  'nabi' => 'mty',
+  'doga' => 'dgg',
+  'kulfa' => 'kxj',
+  "patax\x{f3} h\x{e3}-ha-h\x{e3}e" => 'pth',
+  'ghodoberi' => 'gdo',
+  'north awyu' => 'yir',
+  'kazukuru' => 'kzk',
+  'balau' => 'blg',
+  'bila' => 'bip',
+  'kuthant' => 'xut',
+  'iquito' => 'iqu',
+  'bamwe' => 'bmg',
+  'yaeyama' => 'rys',
+  'awa (papua new guinea)' => 'awb',
+  'lower nossob' => 'nsb',
+  'nnam' => 'nbp',
+  'lagwan' => 'kot',
+  'wakashan languages' => 'wak',
+  'bube' => 'bvb',
+  'ombamba' => 'mbm',
+  'keder' => 'kdy',
+  'nimboran' => 'nir',
+  'apma' => 'app',
+  'lopit' => 'lpx',
+  'upper ta\'oih' => 'tth',
+  'north slavey' => 'scs',
+  'yinbaw karen' => 'kvu',
+  'malimba' => 'mzd',
+  'nyanja' => 'nya',
+  'teressa' => 'tef',
+  'nubri' => 'kte',
+  'reyesano' => 'rey',
+  'bomitaba' => 'zmx',
+  'yugoslavian sign language' => 'ysl',
+  'marimanindji' => 'zmm',
+  'mochica' => 'omc',
+  'pendau' => 'ums',
+  "mag\x{268}yi" => 'gmg',
+  'isthmus-mecayapan nahuatl' => 'nhx',
+  'nhengatu' => 'yrl',
+  'moloko' => 'mlw',
+  'thompson' => 'thp',
+  'basa (nigeria)' => 'bzw',
+  'skalvian' => 'svx',
+  'mser' => 'kqx',
+  'idoma' => 'idu',
+  'ramoaaina' => 'rai',
+  'western tunebo' => 'tnb',
+  'inupiaq' => 'ipk',
+  'shipibo-conibo' => 'shp',
+  'tumtum' => 'tbr',
+  'tambas' => 'tdk',
+  'glaro-twabo' => 'glr',
+  'osing' => 'osi',
+  'sempan' => 'xse',
+  'ronji' => 'roe',
+  'north ndebele' => 'nde',
+  'nggwahyi' => 'ngx',
+  'pardhi' => 'pcl',
+  'tambotalo' => 'tls',
+  'zoroastrian dari' => 'gbz',
+  'marama' => 'lrm',
+  'pengo' => 'peg',
+  'mesmes' => 'mys',
+  'reli' => 'rei',
+  'tobagonian creole english' => 'tgh',
+  'wanambre' => 'wnb',
+  'eritai' => 'ert',
+  "t\x{e0}y tac" => 'tyt',
+  'lauan' => 'llx',
+  'makah' => 'myh',
+  'rejang kayan' => 'ree',
+  'sarua' => 'swy',
+  'bine' => 'bon',
+  'malfaxal' => 'mlx',
+  'jehai' => 'jhi',
+  'dugun' => 'ndu',
+  "paumar\x{ed}" => 'pad',
+  'totoli' => 'txe',
+  'macanese' => 'mzs',
+  'silimo' => 'wul',
+  'western mari' => 'mrj',
+  'wetamut' => 'wwo',
+  'erokwanas' => 'erw',
+  'comox' => 'coo',
+  'kabyle' => 'kab',
+  'chonyi-dzihana-kauma' => 'coh',
+  'djeebbana' => 'djj',
+  'central huishui hmong' => 'hmc',
+  'beba' => 'bfp',
+  'boko (democratic republic of congo)' => 'bkp',
+  'mwera (nyasa)' => 'mjh',
+  'maay' => 'ymm',
+  'zauzou' => 'zal',
+  'kota (gabon)' => 'koq',
+  'krung' => 'krr',
+  'atayal' => 'tay',
+  'traveller norwegian' => 'rmg',
+  'wemba wemba' => 'xww',
+  'eastern yiddish' => 'ydd',
+  'kola' => 'kvv',
+  'matu chin' => 'hlt',
+  'badeshi' => 'bdz',
+  'bannoni' => 'bcm',
+  'dusun witu' => 'duw',
+  "xukur\x{fa}" => 'xoo',
+  'wolio' => 'wlo',
+  'sonsorol' => 'sov',
+  'uralic languages' => 'urj',
+  'ewage-notu' => 'nou',
+  'barein' => 'bva',
+  'nalca' => 'nlc',
+  'nobonob' => 'gaw',
+  'english' => 'eng',
+  "temb\x{e9}" => 'tqb',
+  'cree' => 'cre',
+  'valman' => 'van',
+  'rembong' => 'reb',
+  'hoti' => 'hti',
+  'kreye' => 'xre',
+  'bouna kulango' => 'nku',
+  'mala (nigeria)' => 'ruy',
+  'kwakum' => 'kwu',
+  'sala' => 'shq',
+  'miju-mishmi' => 'mxj',
+  'kemi sami' => 'sjk',
+  'cara' => 'cfd',
+  "kirya-konz\x{259}l" => 'fkk',
+  'mono (solomon islands)' => 'mte',
+  'me\'en' => 'mym',
+  'boma' => 'boh',
+  'cajatambo north lima quechua' => 'qvl',
+  'mandjak' => 'mfv',
+  'ndonga' => 'ndo',
+  "cent\x{fa}\x{fa}m" => 'cet',
+  'yokuts' => 'yok',
+  'usku' => 'ulf',
+  'argobba' => 'agj',
+  'sause' => 'sao',
+  'waluwarra' => 'wrb',
+  'chittagonian' => 'ctg',
+  'west central oromo' => 'gaz',
+  'bina (nigeria)' => 'byj',
+  "n\x{e1}-meo" => 'neo',
+  'iku-gora-ankwa' => 'ikv',
+  'xiang chinese' => 'hsn',
+  'longgu' => 'lgu',
+  'zuni' => 'zun',
+  'dhundari' => 'dhd',
+  'arutani' => 'atx',
+  'gamilaraay' => 'kld',
+  'batak simalungun' => 'bts',
+  "southeastern ixtl\x{e1}n zapotec" => 'zpd',
+  'kharia' => 'khr',
+  'kavet' => 'krv',
+  'baruga' => 'bjz',
+  'ume sami' => 'sju',
+  'loloda' => 'loa',
+  'lolak' => 'llq',
+  'kedah malay' => 'meo',
+  'nahali' => 'nlx',
+  'south african sign language' => 'sfs',
+  'bhatri' => 'bgw',
+  'mak (nigeria)' => 'pbl',
+  'western maninkakan' => 'mlq',
+  'ao naga' => 'njo',
+  'hajong' => 'haj',
+  'nicaraguan sign language' => 'ncs',
+  'thai sign language' => 'tsq',
+  'inoke-yate' => 'ino',
+  'chiru' => 'cdf',
+  'pannei' => 'pnc',
+  'maii' => 'mmm',
+  'munsee' => 'umu',
+  'bodo gadaba' => 'gbj',
+  "gwich\x{2bc}in" => 'gwi',
+  'bantoanon' => 'bno',
+  'mulgi' => 'mvh',
+  'bughotu' => 'bgt',
+  'guhu-samane' => 'ghs',
+  'bazigar' => 'bfr',
+  'bada (indonesia)' => 'bhz',
+  'zire' => 'sih',
+  "p\x{e1}ez" => 'pbb',
+  'calamian tagbanwa' => 'tbk',
+  'adzera' => 'adz',
+  'luvale' => 'lue',
+  'fernando po creole english' => 'fpe',
+  'kokota' => 'kkk',
+  'tarjumo' => 'txj',
+  'malawi lomwe' => 'lon',
+  'fali' => 'fli',
+  "mag\x{268} (madang province)" => 'gkd',
+  'budeh stieng' => 'stt',
+  'xinca' => 'xin',
+  'ikpeshi' => 'ikp',
+  'min zhong chinese' => 'czo',
+  'curonian' => 'xcu',
+  'iloko' => 'ilo',
+  'oneida' => 'one',
+  'colonia tovar german' => 'gct',
+  'okobo' => 'okb',
+  'iguta' => 'nar',
+  'bulgarian' => 'bul',
+  'minaveha' => 'mvn',
+  'navut' => 'nsw',
+  'lish' => 'lsh',
+  'quinqui' => 'quq',
+  'mitlatongo mixtec' => 'vmm',
+  'chiangmai sign language' => 'csd',
+  'kashmiri' => 'kas',
+  'phuma' => 'ypm',
+  'dzongkha' => 'dzo',
+  "mar\x{fa}bo" => 'mzr',
+  'zambian sign language' => 'zsl',
+  'phala' => 'ypa',
+  'moo' => 'gwg',
+  'haryanvi' => 'bgc',
+  'cheke holo' => 'mrn',
+  'maringarr' => 'zmt',
+  'jita' => 'jit',
+  "mato grosso ar\x{e1}ra" => 'axg',
+  "s\x{e3}o paulo kaing\x{e1}ng" => 'zkp',
+  'ngad\'a' => 'nxg',
+  'besisi' => 'mhe',
+  'jamaican country sign language' => 'jcs',
+  'maba (indonesia)' => 'mqa',
+  'skolt sami' => 'sms',
+  'ambala ayta' => 'abc',
+  'wayu' => 'vay',
+  'tombulu' => 'tom',
+  'bena (tanzania)' => 'bez',
+  "xet\x{e1}" => 'xet',
+  'oloma' => 'olm',
+  'hidatsa' => 'hid',
+  'karawa' => 'xrw',
+  'shasta' => 'sht',
+  'leipon' => 'lek',
+  'enwan (akwa ibom state)' => 'enw',
+  'ejagham' => 'etu',
+  'habu' => 'hbu',
+  'chorasmian' => 'xco',
+  'yagwoia' => 'ygw',
+  'tokano' => 'zuh',
+  'sawila' => 'swt',
+  'bakole' => 'kme',
+  'meskwaki' => 'sac',
+  'aghu-tharnggala' => 'gtu',
+  'mesaka' => 'iyo',
+  'kalanga' => 'kck',
+  'saek' => 'skb',
+  'obanliku' => 'bzy',
+  "ajy\x{ed}ninka apurucayali" => 'cpc',
+  'ikulu' => 'ikl',
+  'north giziga' => 'gis',
+  'majhwar' => 'mmj',
+  'ukwuani-aboh-ndoni' => 'ukw',
+  'wancho naga' => 'nnp',
+  'warlmanpa' => 'wrl',
+  'muzi' => 'ymz',
+  'yalahatan' => 'jal',
+  'nyamal' => 'nly',
+  'kuijau' => 'dkr',
+  'wakhi' => 'wbl',
+  "x\x{e2}r\x{e2}gur\x{e8}" => 'axx',
+  'kullu pahari' => 'kfx',
+  'tohono o\'odham' => 'ood',
+  'tlazoyaltepec mixtec' => 'mqh',
+  'dhanki' => 'dhn',
+  'lemnian' => 'xle',
+  'yagua' => 'yad',
+  'australian aborigines sign language' => 'asw',
+  'akurio' => 'ako',
+  'dinka' => 'din',
+  'sakachep' => 'sch',
+  'dehu' => 'dhv',
+  'swo' => 'sox',
+  'majang' => 'mpe',
+  "ember\x{e1}-cham\x{ed}" => 'cmi',
+  'guwamu' => 'gwu',
+  'sawi' => 'saw',
+  'nyika (malawi and zambia)' => 'nkv',
+  'cowlitz' => 'cow',
+  'piaroa' => 'pid',
+  'basap' => 'bdb',
+  'zhoa' => 'zhw',
+  'yaaku' => 'muu',
+  'tamil' => 'tam',
+  'tsotso' => 'lto',
+  'wolani' => 'wod',
+  'karo (brazil)' => 'arr',
+  "koromf\x{e9}" => 'kfz',
+  'kabwa' => 'cwa',
+  'tarok' => 'yer',
+  'degenan' => 'dge',
+  'northern roglai' => 'rog',
+  'kove' => 'kvc',
+  'alo phola' => 'ypo',
+  'kagan kalagan' => 'kll',
+  'torwali' => 'trw',
+  'hano' => 'lml',
+  "\x{1c0}xam" => 'xam',
+  'ewe' => 'ewe',
+  'marau' => 'mvr',
+  'bonkiman' => 'bop',
+  'muduga' => 'udg',
+  'ternate' => 'tft',
+  'nalik' => 'nal',
+  'margany' => 'zmc',
+  'bhoti kinnauri' => 'nes',
+  'quiripi' => 'qyp',
+  'iranun (malaysia)' => 'ilm',
+  'malawi sena' => 'swk',
+  "res\x{ed}garo" => 'rgr',
+  'kwami' => 'ktf',
+  'fur' => 'fvr',
+  'tabaru' => 'tby',
+  'prasuni' => 'prn',
+  "mop\x{e1}n maya" => 'mop',
+  'nyawaygi' => 'nyt',
+  'kanembu' => 'kbl',
+  'qau' => 'gqu',
+  'laos sign language' => 'lso',
+  'malaccan creole portuguese' => 'mcm',
+  'sierra negra nahuatl' => 'nsu',
+  'messapic' => 'cms',
+  'uru-eu-wau-wau' => 'urz',
+  'alak' => 'alk',
+  'roria' => 'rga',
+  'kam' => 'kdx',
+  'liana-seti' => 'ste',
+  'zaza' => 'zza',
+  'lakon' => 'lkn',
+  'nake' => 'nbk',
+  'igede' => 'ige',
+  'ntcham' => 'bud',
+  'kaningdon-nindem' => 'kdp',
+  'avikam' => 'avi',
+  'northwest alaska inupiatun' => 'esk',
+  'urhobo' => 'urh',
+  'berik' => 'bkl',
+  'kembra' => 'xkw',
+  'loreto-ucayali spanish' => 'spq',
+  'pfaelzisch' => 'pfl',
+  'yakoma' => 'yky',
+  'onin based pidgin' => 'onx',
+  'quiotepec chinantec' => 'chq',
+  'ngbinda' => 'nbd',
+  'gedaged' => 'gdd',
+  'marka' => 'rkm',
+  'awtuw' => 'kmn',
+  'jonkor bourmataguil' => 'jeu',
+  'gants' => 'gao',
+  'southern pashto' => 'pbt',
+  'literary chinese' => 'lzh',
+  'tsat' => 'huq',
+  't\'en' => 'tct',
+  'viemo' => 'vig',
+  'kabuverdianu' => 'kea',
+  'siberian tatar' => 'sty',
+  'southwest palawano' => 'plv',
+  'tanosy malagasy' => 'txy',
+  'sausi' => 'ssj',
+  'kaningra' => 'knr',
+  'wik-me\'anha' => 'wih',
+  'bambara' => 'bam',
+  'amba (uganda)' => 'rwm',
+  's\'gaw karen' => 'ksw',
+  'gebe' => 'gei',
+  'changriwa' => 'cga',
+  'elymian' => 'xly',
+  'khmer' => 'khm',
+  'kansa' => 'ksk',
+  'hadothi' => 'hoj',
+  'ukue' => 'uku',
+  'cogui' => 'kog',
+  'pokomo' => 'pkb',
+  'disa' => 'dsi',
+  'chulym' => 'clw',
+  'wagaya' => 'wga',
+  'amara' => 'aie',
+  "tukumanf\x{e9}d" => 'tkf',
+  'kodeoha' => 'vko',
+  'warapu' => 'wra',
+  'duruwa' => 'pci',
+  'south american indian languages' => 'sai',
+  'judeo-arabic' => 'jrb',
+  'tonjon' => 'tjn',
+  'nii' => 'nii',
+  'koronadal blaan' => 'bpr',
+  'pa di' => 'pdi',
+  "aru\x{e1} (amazonas state)" => 'aru',
+  'oirata' => 'oia',
+  'torau' => 'ttu',
+  'korean sign language' => 'kvk',
+  'shom peng' => 'sii',
+  'baetora' => 'btr',
+  'matal' => 'mfh',
+  'jicarilla apache' => 'apj',
+  'bamenyam' => 'bce',
+  'som' => 'smc',
+  'zigula' => 'ziw',
+  'lole' => 'llg',
+  'punan batu 1' => 'pnm',
+  'mairasi' => 'zrs',
+  'turkish' => 'tur',
+  'trinitario' => 'trn',
+  'kalumpang' => 'kli',
+  'puare' => 'pux',
+  'kahe' => 'hka',
+  'mualang' => 'mtd',
+  'yongkom' => 'yon',
+  'lao' => 'lao',
+  'busoa' => 'bup',
+  'bakaka' => 'bqz',
+  "chiquihuitl\x{e1}n mazatec" => 'maq',
+  'glio-oubi' => 'oub',
+  'somyev' => 'kgt',
+  "kepkiriw\x{e1}t" => 'kpn',
+  'tai daeng' => 'tyr',
+  'madi' => 'grg',
+  'kasiguranin' => 'ksn',
+  'malaccan creole malay' => 'ccm',
+  'isu (menchum division)' => 'isu',
+  'middle cornish' => 'cnx',
+  'kupa' => 'kug',
+  'baloi' => 'biz',
+  'domari' => 'rmt',
+  'koongo' => 'kng',
+  'yan-nhangu' => 'jay',
+  'northeast kiwai' => 'kiw',
+  'ancient macedonian' => 'xmk',
+  'warrgamay' => 'wgy',
+  'grass koiari' => 'kbk',
+  'yagaria' => 'ygr',
+  "beti (c\x{f4}te d'ivoire)" => 'eot',
+  'northwestern ojibwa' => 'ojb',
+  'krache' => 'kye',
+  'jiba' => 'juo',
+  'western huasteca nahuatl' => 'nhw',
+  'damakawa' => 'dam',
+  'hadiyya' => 'hdy',
+  'ga' => 'gaa',
+  'sangisari' => 'sgr',
+  'bwile' => 'bwc',
+  'northern toussian' => 'tsp',
+  'gnau' => 'gnu',
+  'balangao' => 'blw',
+  'yoke' => 'yki',
+  'waata' => 'ssn',
+  'mexican sign language' => 'mfs',
+  'teke-tege' => 'teg',
+  'northern thai' => 'nod',
+  'agatu' => 'agc',
+  'punan tubu' => 'puj',
+  'kubo' => 'jko',
+  'tulu' => 'tcy',
+  'ngantangarra' => 'ntg',
+  'mbe\'' => 'mtk',
+  'kurdish' => 'kur',
+  'forest enets' => 'enf',
+  'boguru' => 'bqu',
+  'bhaya' => 'bhe',
+  'bainouk-samik' => 'bcb',
+  'arem' => 'aem',
+  'kemak' => 'kem',
+  'defi gbe' => 'gbh',
+  'mbuko' => 'mqb',
+  'herero' => 'her',
+  'afro-seminole creole' => 'afs',
+  "daats\x{2bc}i\x{301}in" => 'dtn',
+  'tidore' => 'tvo',
+  'kapin' => 'tbx',
+  'pongu' => 'png',
+  'wantoat' => 'wnc',
+  'orokolo' => 'oro',
+  'masiwang' => 'bnf',
+  'twi' => 'twi',
+  'kelo' => 'xel',
+  'epie' => 'epi',
+  "wich\x{ed} lhamt\x{e9}s vejoz" => 'wlv',
+  'chhulung' => 'cur',
+  'kombai' => 'tyn',
+  'mambae' => 'mgm',
+  'dghwede' => 'dgh',
+  "v\x{f5}ro" => 'vro',
+  'khehek' => 'tlx',
+  'nila' => 'nil',
+  'cherokee' => 'chr',
+  'manta' => 'myg',
+  'khumi chin' => 'cnk',
+  'rangpuri' => 'rkt',
+  'cajamarca quechua' => 'qvc',
+  'koenoem' => 'kcs',
+  'mande languages' => 'dmn',
+  'marik' => 'dad',
+  'jina' => 'jia',
+  'dakka' => 'dkk',
+  'amba (solomon islands)' => 'utp',
+  'vera\'a' => 'vra',
+  'caka' => 'ckx',
+  'giangan' => 'bgi',
+  'hattic' => 'xht',
+  'khandesi' => 'khn',
+  'uzekwe' => 'eze',
+  'kudiya' => 'kfg',
+  'southern binukidnon' => 'mtw',
+  'bote-majhi' => 'bmj',
+  'abellen ayta' => 'abp',
+  'ligurian (ancient)' => 'xlg',
+  'parthian' => 'xpr',
+  'kayagar' => 'kyt',
+  'gela' => 'nlg',
+  'danish sign language' => 'dsl',
+  'merwari' => 'wry',
+  'vame' => 'mlr',
+  'rerep' => 'pgk',
+  'seberuang' => 'sbx',
+  'ufim' => 'ufi',
+  'venezuelan sign language' => 'vsl',
+  'arin' => 'xrn',
+  'aoheng' => 'pni',
+  'lobala' => 'loq',
+  'klias river kadazan' => 'kqt',
+  'southern alta' => 'agy',
+  'gambera' => 'gma',
+  'sikule' => 'skh',
+  'eastern huasteca nahuatl' => 'nhe',
+  'kayort' => 'kyv',
+  'anal' => 'anm',
+  'kpessi' => 'kef',
+  'tatar' => 'tat',
+  'nyoro' => 'nyo',
+  'owiniga' => 'owi',
+  'bodo (central african republic)' => 'boy',
+  'angkamuthi' => 'avm',
+  'kubu' => 'kvb',
+  'irula' => 'iru',
+  'dhurga' => 'dhu',
+  'tumak' => 'tmc',
+  'sivia sign language' => 'lsv',
+  'curripaco' => 'kpc',
+  'nauna' => 'ncn',
+  'gamale kham' => 'kgj',
+  'seke (vanuatu)' => 'ske',
+  'moyadan itneg' => 'ity',
+  'papuan malay' => 'pmy',
+  'eastern highland otomi' => 'otm',
+  'algonquian languages' => 'alg',
+  'gagadu' => 'gbu',
+  'kopkaka' => 'opk',
+  'baga koga' => 'bgo',
+  'bambili-bambui' => 'baw',
+  'geser-gorom' => 'ges',
+  'ili turki' => 'ili',
+  'kami (nigeria)' => 'kmi',
+  'keapara' => 'khz',
+  'northern altai' => 'atv',
+  'ngwe' => 'nwe',
+  'fanamaket' => 'bjp',
+  'tonga (nyasa)' => 'tog',
+  'kelabit' => 'kzi',
+  'cao miao' => 'cov',
+  'eastern bontok' => 'ebk',
+  'chicahuaxtla triqui' => 'trs',
+  'etebi' => 'etb',
+  'central sudanic languages' => 'csu',
+  'shabak' => 'sdb',
+  "ga\x{253}ogbo" => 'gie',
+  "ny\x{e2}layu" => 'yly',
+  'ninia yali' => 'nlk',
+  'isu (fako division)' => 'szv',
+  'ubykh' => 'uby',
+  'lidzonka' => 'add',
+  'knaanic' => 'czk',
+  'allar' => 'all',
+  'miriti' => 'mmv',
+  'sangu (gabon)' => 'snq',
+  'lower southern aranda' => 'axl',
+  'marma' => 'rmz',
+  'rajasthani' => 'raj',
+  'gule' => 'gly',
+  'liberia kpelle' => 'xpe',
+  'iroquoian languages' => 'iro',
+  'krongo' => 'kgo',
+  'uzbek' => 'uzb',
+  'fataleka' => 'far',
+  "yan-nha\x{14b}u sign language" => 'yhs',
+  'sapuan' => 'spu',
+  'ansus' => 'and',
+  'italic languages' => 'itc',
+  'yauma' => 'yax',
+  'highland totonac' => 'tos',
+  'vidunda' => 'vid',
+  "ly\x{e9}l\x{e9}" => 'lee',
+  'southern qiang' => 'qxs',
+  'fagani' => 'faf',
+  'tinani' => 'lbf',
+  'walla walla' => 'waa',
+  'patpatar' => 'gfk',
+  'mbangala' => 'mxg',
+  'gilima' => 'gix',
+  'croatian' => 'hrv',
+  'isnag' => 'isd',
+  'maranunggu' => 'zmr',
+  'cotabato manobo' => 'mta',
+  'minaean' => 'inm',
+  'khvarshi' => 'khv',
+  'dyugun' => 'dyd',
+  'honi' => 'how',
+  'kako' => 'kkj',
+  'northern mashan hmong' => 'hmp',
+  'santa catarina albarradas zapotec' => 'ztn',
+  'biem' => 'bmc',
+  'kaimbulawa' => 'zka',
+  'quechuan (family)' => 'qwe',
+  'sajalong' => 'sjl',
+  'zari' => 'zaz',
+  'ci gbe' => 'cib',
+  'ido' => 'ido',
+  'lamja-dengsa-tola' => 'ldh',
+  'barclayville grebo' => 'gry',
+  'kyaka' => 'kyc',
+  'wusi' => 'wsi',
+  'nyore' => 'nyd',
+  'bua' => 'bub',
+  'mabaka valley kalinga' => 'kkg',
+  'yucatec maya sign language' => 'msd',
+  'embaloh' => 'emb',
+  'sochiapam chinantec' => 'cso',
+  'jarawa (india)' => 'anq',
+  'xishanba lalo' => 'ywt',
+  "eastern apur\x{ed}mac quechua" => 'qve',
+  'akuntsu' => 'aqz',
+  'massep' => 'mvs',
+  'tondi songway kiini' => 'tst',
+  'mangseng' => 'mbh',
+  'inari sami' => 'smn',
+  'makhuwa-saka' => 'xsq',
+  'tangko' => 'tkx',
+  'bali (nigeria)' => 'bcn',
+  'soyaltepec mazatec' => 'vmp',
+  'tami' => 'tmy',
+  'jilim' => 'jil',
+  'chuj' => 'cac',
+  'muong' => 'mtq',
+  'sininkere' => 'skq',
+  'guyanese creole english' => 'gyn',
+  'ngbaka manza' => 'ngg',
+  'nkukoli' => 'nbo',
+  'patep' => 'ptp',
+  'ramopa' => 'kjx',
+  'budong-budong' => 'bdx',
+  'asoa' => 'asv',
+  'sera' => 'sry',
+  'kumiai' => 'dih',
+  'interlingua (international auxiliary language association)' => 'ina',
+  'mili' => 'ymh',
+  'santa ana de tusi pasco quechua' => 'qxt',
+  'konkani (individual language)' => 'knn',
+  'dyangadi' => 'dyn',
+  'betawi' => 'bew',
+  'moskona' => 'mtj',
+  'chadic languages' => 'cdc',
+  'namla' => 'naa',
+  'plains miwok' => 'pmw',
+  'tuvinian' => 'tyv',
+  'dhargari' => 'dhr',
+  'angloromani' => 'rme',
+  'narak' => 'nac',
+  'gade' => 'ged',
+  'igana' => 'igg',
+  'subi' => 'xsj',
+  'moroccan sign language' => 'xms',
+  'kota bangun kutai malay' => 'mqg',
+  'mbere' => 'mdt',
+  'finnish' => 'fin',
+  'lama (togo)' => 'las',
+  'yuru' => 'ljx',
+  'kumalu' => 'ksl',
+  'maritime sign language' => 'nsr',
+  'ukhwejo' => 'ukh',
+  'thopho' => 'ytp',
+  'duungooma' => 'dux',
+  'kwambi' => 'kwm',
+  'odual' => 'odu',
+  "t\x{fc}batulabal" => 'tub',
+  'pinai-hagahai' => 'pnn',
+  'bekwel' => 'bkw',
+  'pattapu' => 'ptq',
+  'tenggarong kutai malay' => 'vkt',
+  'barasana-eduria' => 'bsn',
+  'owa' => 'stn',
+  'bunak' => 'bfn',
+  'hanga hundi' => 'wos',
+  "tupar\x{ed}" => 'tpr',
+  'kung-ekoka' => 'knw',
+  'daba' => 'dbq',
+  'pennsylvania german' => 'pdc',
+  'ukuriguma' => 'ukg',
+  'tiale' => 'mnl',
+  "itz\x{e1}" => 'itz',
+  'egypt sign language' => 'esl',
+  'kayan' => 'pdu',
+  'batad ifugao' => 'ifb',
+  'molbog' => 'pwm',
+  'ibali teke' => 'tek',
+  'ekari' => 'ekg',
+  'djinang' => 'dji',
+  'tado' => 'klw',
+  'maranao' => 'mrw',
+  'aka-jeru' => 'akj',
+  'nhirrpi' => 'hrp',
+  'jerung' => 'jee',
+  'ngoshie' => 'nsh',
+  'akpa' => 'akf',
+  'irarutu' => 'irh',
+  'kamano' => 'kbq',
+  'morrobalama' => 'umg',
+  'uru-pa-in' => 'urp',
+  'mangas' => 'zns',
+  'evenki' => 'evn',
+  'dirasha' => 'gdl',
+  'uspanteco' => 'usp',
+  'furu' => 'fuu',
+  'ayautla mazatec' => 'vmy',
+  'kpati' => 'koc',
+  'yei' => 'jei',
+  "northern ember\x{e1}" => 'emp',
+  'polish sign language' => 'pso',
+  'amol' => 'alx',
+  'awbono' => 'awh',
+  'celtic languages' => 'cel',
+  'shelta' => 'sth',
+  'puma' => 'pum',
+  'squamish' => 'squ',
+  'andai' => 'afd',
+  'martuyhunira' => 'vma',
+  'lihir' => 'lih',
+  'hiw' => 'hiw',
+  'aequian' => 'xae',
+  'kamu' => 'xmu',
+  'atorada' => 'aox',
+  'ninzo' => 'nin',
+  'kickapoo' => 'kic',
+  'manza' => 'mzv',
+  'koibal' => 'zkb',
+  'tzeltal' => 'tzh',
+  'chinbon chin' => 'cnb',
+  'ladin' => 'lld',
+  'jawoyn' => 'djn',
+  'aja (south sudan)' => 'aja',
+  'judeo-tunisian arabic' => 'ajt',
+  'brunei bisaya' => 'bsb',
+  "kabiy\x{e8}" => 'kbp',
+  'sinte romani' => 'rmo',
+  'oroko' => 'bdu',
+  "tapirap\x{e9}" => 'taf',
+  'okiek' => 'oki',
+  'western highland chatino' => 'ctp',
+  'eshtehardi' => 'esh',
+  'kamula' => 'xla',
+  'lembena' => 'leq',
+  'movima' => 'mzp',
+  'mangbetu' => 'mdj',
+  'tulishi' => 'tey',
+  "kh\x{fc}n" => 'kkh',
+  'nadruvian' => 'ndf',
+  'louisiana creole' => 'lou',
+  'huaylas ancash quechua' => 'qwh',
+  'ndamba' => 'ndj',
+  'ekai chin' => 'cey',
+  "\x{e1}nc\x{e1}" => 'acb',
+  'gogo' => 'gog',
+  'marghi south' => 'mfm',
+  'hasha' => 'ybj',
+  'miu' => 'mpo',
+  'taivoan' => 'tvx',
+  'bu-nao bunu' => 'bwx',
+  'melo' => 'mfx',
+  'samtao' => 'stu',
+  'surjapuri' => 'sjp',
+  'merei' => 'lmb',
+  'qila muji' => 'ymq',
+  'adangme' => 'ada',
+  'southern altai' => 'alt',
+  'kwaio' => 'kwd',
+  'mortlockese' => 'mrl',
+  "kalams\x{e9}" => 'knz',
+  'bainouk-gunyaamolo' => 'bcz',
+  'eastern maroon creole' => 'djk',
+  'jola-kasa' => 'csk',
+  'hmong daw' => 'mww',
+  'miyobe' => 'soy',
+  'mayoyao ifugao' => 'ifu',
+  'raute' => 'rau',
+  'buginese' => 'bug',
+  'hahon' => 'hah',
+  'toura (papua new guinea)' => 'don',
+  'izere' => 'izr',
+  'kunama' => 'kun',
+  'gugubera' => 'kkp',
+  'budu' => 'buu',
+  'talossan' => 'tzl',
+  'mudu koraga' => 'vmd',
+  'mori atas' => 'mzq',
+  'odoodee' => 'kkc',
+  'norra' => 'nrr',
+  'rema' => 'bow',
+  'old manipuri' => 'omp',
+  'toromono' => 'tno',
+  'pakistan sign language' => 'pks',
+  'assiniboine' => 'asb',
+  'yaminahua' => 'yaa',
+  'cahuarano' => 'cah',
+  'sepa (indonesia)' => 'spb',
+  'kenati' => 'gat',
+  'tunzu' => 'dza',
+  'northern alta' => 'aqn',
+  'lanima' => 'lnw',
+  'biga' => 'bhc',
+  'barrow point' => 'bpt',
+  'dai zhuang' => 'zhd',
+  'kol (bangladesh)' => 'ekl',
+  'holu' => 'hol',
+  'mogum' => 'mou',
+  'southern balochi' => 'bcc',
+  'tsakonian' => 'tsd',
+  'bondo' => 'bfw',
+  'sudest' => 'tgo',
+  'san juan colorado mixtec' => 'mjc',
+  'northern binukidnon' => 'kyn',
+  'maore comorian' => 'swb',
+  'vunapu' => 'vnp',
+  "sirion\x{f3}" => 'srq',
+  'niger-kordofanian languages' => 'nic',
+  'mbre' => 'mka',
+  'machame' => 'jmc',
+  'mpoto' => 'mpa',
+  'tsetsaut' => 'txc',
+  'amahuaca' => 'amc',
+  'kgalagadi' => 'xkv',
+  "pankarar\x{fa}" => 'paz',
+  'komi' => 'kom',
+  'atlantic-congo languages' => 'alv',
+  'ezaa' => 'eza',
+  "ray\x{f3}n zoque" => 'zor',
+  'beembe' => 'beq',
+  'medefaidrin' => 'dmf',
+  'makasae' => 'mkz',
+  'tibetan sign language' => 'lsn',
+  "sab\x{fc}m" => 'sbo',
+  'western karaboro' => 'kza',
+  'zangskari' => 'zau',
+  'karachay-balkar' => 'krc',
+  'tlahuitoltepec mixe' => 'mxp',
+  'tandroy-mahafaly malagasy' => 'tdx',
+  'forak' => 'frq',
+  'nungu' => 'rin',
+  'tera' => 'ttr',
+  'laitu chin' => 'clj',
+  'migaama' => 'mmy',
+  'central cagayan agta' => 'agt',
+  'wambaya' => 'wmb',
+  'pinigura' => 'pnv',
+  'gata\'' => 'gaq',
+  'ribun' => 'rir',
+  "suru\x{ed}" => 'sru',
+  'obulom' => 'obu',
+  "hmong d\x{f4}" => 'hmv',
+  'eton (cameroon)' => 'eto',
+  'matigsalug manobo' => 'mbt',
+  'yasa' => 'yko',
+  'piapoco' => 'pio',
+  'flaaitaal' => 'fly',
+  'yaleba' => 'ylb',
+  'burun' => 'bdi',
+  'chiquitano' => 'cax',
+  'shendu' => 'shl',
+  'galibi carib' => 'car',
+  'panasuan' => 'psn',
+  'bidiyo' => 'bid',
+  'gadang' => 'gdk',
+  'koro (vanuatu)' => 'krf',
+  'chachi' => 'cbi',
+  'mayi-kulan' => 'xyk',
+  'duma' => 'dma',
+  'unde kaili' => 'unz',
+  'simba' => 'sbw',
+  'varhadi-nagpuri' => 'vah',
+  'tulu-bohuai' => 'rak',
+  'abaza' => 'abq',
+  'antakarinya' => 'ant',
+  'koro wachi' => 'bqv',
+  'chachapoyas quechua' => 'quk',
+  'sonha' => 'soi',
+  'malba birifor' => 'bfo',
+  'mel-khaonh' => 'hkn',
+  'koki naga' => 'nxk',
+  'quinault' => 'qun',
+  'mawes' => 'mgk',
+  'nehan' => 'nsn',
+  'maxi gbe' => 'mxl',
+  "ternate\x{f1}o" => 'tmg',
+  'takua' => 'tkz',
+  'dawawa' => 'dww',
+  'late middle chinese' => 'ltc',
+  'kaptiau' => 'kbi',
+  'koorete' => 'kqy',
+  'shwe palaung' => 'pll',
+  'bolgo' => 'bvo',
+  'kayupulau' => 'kzu',
+  'southern mashan hmong' => 'hma',
+  'kodia' => 'kwp',
+  'eastern oromo' => 'hae',
+  'pangasinan' => 'pag',
+  'konomala' => 'koa',
+  'kowaki' => 'xow',
+  'garza' => 'xgr',
+  'kwara\'ae' => 'kwf',
+  'brahui' => 'brh',
+  'powari' => 'pwr',
+  'purepecha' => 'tsz',
+  'tanacross' => 'tcb',
+  'kaiy' => 'tcq',
+  'basa-gumna' => 'bsl',
+  'sagala' => 'sbm',
+  'sansi' => 'ssi',
+  'kirghiz' => 'kir',
+  'duala' => 'dua',
+  'boano (maluku)' => 'bzn',
+  'cebaara senoufo' => 'sef',
+  'tsonga' => 'tso',
+  'amurdak' => 'amg',
+  'nigerian fulfulde' => 'fuv',
+  'northern qiang' => 'cng',
+  'batak karo' => 'btx',
+  'ibatan' => 'ivb',
+  'inuit sign language' => 'iks',
+  "l\x{fc}" => 'khb',
+  'birale' => 'bxe',
+  'khengkha' => 'xkf',
+  'lunda' => 'lun',
+  'anjam' => 'boj',
+  'old cornish' => 'oco',
+  'gresi' => 'grs',
+  'mundani' => 'mnf',
+  'guro' => 'goa',
+  'kui (indonesia)' => 'kvd',
+  'mamvu' => 'mdi',
+  'iraya' => 'iry',
+  'macuna' => 'myy',
+  'bella coola' => 'blc',
+  'tadaksahak' => 'dsq',
+  'mohegan-pequot' => 'xpq',
+  'lari' => 'lrl',
+  'kuamasi' => 'yku',
+  'noiri' => 'noi',
+  'dar daju daju' => 'djc',
+  'ashtiani' => 'atn',
+  'gureng gureng' => 'gnr',
+  'subtiaba' => 'sut',
+  'tikopia' => 'tkp',
+  'betta kurumba' => 'xub',
+  "e'\x{f1}apa woromaipu" => 'pbh',
+  'kintaq' => 'knq',
+  'wagdi' => 'wbr',
+  'panjabi' => 'pan',
+  'lakkia' => 'lbc',
+  'ubaghara' => 'byc',
+  'serer' => 'srr',
+  'abkhazian' => 'abk',
+  'eastern nisu' => 'nos',
+  'brooke\'s point palawano' => 'plw',
+  'malayic dayak' => 'xdy',
+  'utarmbung' => 'omo',
+  'bokha' => 'ybk',
+  'korop' => 'krp',
+  'daakaka' => 'bpa',
+  'jangshung' => 'jna',
+  'negidal' => 'neg',
+  'somrai' => 'sor',
+  "sanapan\x{e1}" => 'spn',
+  'sialum' => 'slw',
+  'shatt' => 'shj',
+  'mongondow' => 'mog',
+  'bora' => 'boa',
+  'arikara' => 'ari',
+  'north central mixe' => 'neq',
+  'nyong' => 'muo',
+  'omagua' => 'omg',
+  'rmeet' => 'lbn',
+  'dima' => 'jma',
+  "arawet\x{e9}" => 'awt',
+  'dumbea' => 'duf',
+  'miraya bikol' => 'rbl',
+  'khamba' => 'kbg',
+  'west-central limba' => 'lia',
+  'kombio' => 'xbi',
+  'tuscarora' => 'tus',
+  'southern roglai' => 'rgs',
+  "panoan katuk\x{ed}na" => 'knt',
+  'oromo' => 'orm',
+  'northern pashto' => 'pbu',
+  'puebla mazatec' => 'pbm',
+  'inlaod itneg' => 'iti',
+  'kiong' => 'kkm',
+  'gowro' => 'gwf',
+  "paranaw\x{e1}t" => 'paf',
+  'kele (papua new guinea)' => 'sbc',
+  'emplawas' => 'emw',
+  'bhojpuri' => 'bho',
+  'ayutla mixtec' => 'miy',
+  'ligurian' => 'lij',
+  'mbara (chad)' => 'mpk',
+  'phudagi' => 'phd',
+  'chenapian' => 'cjn',
+  'vafsi' => 'vaf',
+  'gorap' => 'goq',
+  'nduga' => 'ndx',
+  'otuke' => 'otu',
+  'wae rana' => 'wrx',
+  'ojibwa' => 'oji',
+  'media lengua' => 'mue',
+  'pa-hng' => 'pha',
+  'filipino' => 'fil',
+  'ngumbi' => 'nui',
+  'coatepec nahuatl' => 'naz',
+  'tanapag' => 'tpv',
+  'label' => 'lbb',
+  'martha\'s vineyard sign language' => 'mre',
+  'kiunum' => 'wei',
+  'nukuini' => 'nuc',
+  'southern kisi' => 'kss',
+  'aulua' => 'aul',
+  'south giziga' => 'giz',
+  'akkala sami' => 'sia',
+  'balo' => 'bqo',
+  'yerong' => 'yrn',
+  "ash\x{e9}ninka peren\x{e9}" => 'prq',
+  'dagba' => 'dgk',
+  'rao' => 'rao',
+  "pokang\x{e1}" => 'pok',
+  'dzalakha' => 'dzl',
+  'mpumpong' => 'mgg',
+  'ik' => 'ikx',
+  'luhu' => 'lcq',
+  'vaghri' => 'vgr',
+  'makhuwa-meetto' => 'mgh',
+  'japanese sign language' => 'jsl',
+  'tawr chin' => 'tcp',
+  'phola' => 'ypg',
+  'assan' => 'xss',
+  'creoles and pidgins' => 'crp',
+  'eastern karaboro' => 'xrb',
+  "w\x{e8} northern" => 'wob',
+  'kotava' => 'avk',
+  'defaka' => 'afn',
+  'oraon sadri' => 'sdr',
+  'kuman (russia)' => 'qwm',
+  'gboloo grebo' => 'gec',
+  "kekch\x{ed}" => 'kek',
+  'mekeo' => 'mek',
+  'maremgi' => 'mrx',
+  'deg' => 'mzw',
+  'mam' => 'mam',
+  'san baltazar loxicha zapotec' => 'zpx',
+  'nomaande' => 'lem',
+  'bahau' => 'bhv',
+  'harsusi' => 'hss',
+  'wadaginam' => 'wdg',
+  'crimean tatar' => 'crh',
+  'zapotec' => 'zap',
+  'nafri' => 'nxx',
+  'istro romanian' => 'ruo',
+  'golin' => 'gvf',
+  'makassar malay' => 'mfp',
+  'northern catanduanes bikol' => 'cts',
+  'bauchi' => 'bsf',
+  'ngile' => 'jle',
+  'luo (kenya and tanzania)' => 'luo',
+  'lala' => 'nrz',
+  'lilau' => 'lll',
+  'hrangkhol' => 'hra',
+  'anu-hkongso chin' => 'anl',
+  'ho-chunk' => 'win',
+  'jiru' => 'jrr',
+  'vincentian creole english' => 'svc',
+  'indus valley language' => 'xiv',
+  'tippera' => 'tpe',
+  'nukna' => 'klt',
+  'lisela' => 'lcl',
+  'romagnol' => 'rgn',
+  'ngundi' => 'ndn',
+  'edera awyu' => 'awy',
+  "kuik\x{fa}ro-kalap\x{e1}lo" => 'kui',
+  'oscan' => 'osc',
+  'rudbari' => 'rdb',
+  'awak' => 'awo',
+  'saurashtra' => 'saz',
+  'sacapulteco' => 'quv',
+  'duwai' => 'dbp',
+  'urartian' => 'xur',
+  "copainal\x{e1} zoque" => 'zoc',
+  'abui' => 'abz',
+  'rongga' => 'ror',
+  'talinga-bwisi' => 'tlj',
+  'peruvian sign language' => 'prl',
+  'hinukh' => 'gin',
+  'barwe' => 'bwg',
+  'mada (cameroon)' => 'mxu',
+  'tokelau' => 'tkl',
+  'tamagario' => 'tcg',
+  'anyin' => 'any',
+  'alviri-vidari' => 'avd',
+  'onobasulu' => 'onn',
+  'lega-mwenga' => 'lgm',
+  'razajerdi' => 'rat',
+  'ahwai' => 'nfd',
+  'dobel' => 'kvo',
+  'ngiemboon' => 'nnh',
+  'drung' => 'duu',
+  'sinhala' => 'sin',
+  'chrau' => 'crw',
+  'middle dutch (ca. 1050-1350)' => 'dum',
+  'longuda' => 'lnu',
+  'alu kurumba' => 'xua',
+  'idi' => 'idi',
+  'waling' => 'wly',
+  'kamo' => 'kcq',
+  'logba' => 'lgq',
+  'hunjara-kaina ke' => 'hkk',
+  'masadiit itneg' => 'tis',
+  'southern thai' => 'sou',
+  'puelche' => 'pue',
+  'kwakiutl' => 'kwk',
+  'mbo (democratic republic of congo)' => 'zmw',
+  'kraol' => 'rka',
+  'mundari' => 'unr',
+  'hozo' => 'hoz',
+  'yawa' => 'yva',
+  'southern toussian' => 'wib',
+  'han' => 'haa',
+  'sauri' => 'srt',
+  'gbaya (sudan)' => 'krs',
+  'galeya' => 'gar',
+  'fordata' => 'frd',
+  'moldavian' => 'mol',
+  'sukurum' => 'zsu',
+  'yong' => 'yno',
+  'moksha' => 'mdf',
+  'yela' => 'yel',
+  'miltu' => 'mlj',
+  'makolkol' => 'zmh',
+  'biritai' => 'bqq',
+  'southern lolopo' => 'ysp',
+  'chipewyan' => 'chp',
+  'aputai' => 'apx',
+  'kaibobo' => 'kzb',
+  'atakapa' => 'aqp',
+  'nilo-saharan languages' => 'ssa',
+  'alangan' => 'alj',
+  'chilisso' => 'clh',
+  'chhintange' => 'ctn',
+  'chaura' => 'crv',
+  'ekpeye' => 'ekp',
+  'seko padang' => 'skx',
+  "p\x{e1}\x{e1}fang" => 'pfa',
+  'uncoded languages' => 'mis',
+  'old nubian' => 'onw',
+  'isthmus zapotec' => 'zai',
+  'mpinda' => 'pnd',
+  'maba (chad)' => 'mde',
+  'wudu' => 'wud',
+  'anuki' => 'aui',
+  'lakota' => 'lkt',
+  'manangkari' => 'znk',
+  'itonama' => 'ito',
+  'yandruwandha' => 'ynd',
+  'comanche' => 'com',
+  'atsugewi' => 'atw',
+  'upper umpqua' => 'xup',
+  'sanga (nigeria)' => 'xsn',
+  'kapya' => 'klo',
+  'wappo' => 'wao',
+  'sindihui mixtec' => 'xts',
+  'mara chin' => 'mrh',
+  'nyaw' => 'nyw',
+  "yaba\x{e2}na" => 'ybn',
+  'rwa' => 'rwk',
+  'dagaari dioula' => 'dgd',
+  "ca\x{331}hungwa\x{331}rya\x{331}" => 'nat',
+  'upper chehalis' => 'cjh',
+  'makalero' => 'mjb',
+  'taabwa' => 'tap',
+  'biao' => 'byk',
+  'bengali' => 'ben',
+  'sara kaba deme' => 'kwg',
+  'tawallammat tamajaq' => 'ttq',
+  'nankina' => 'nnk',
+  'khoisan languages' => 'khi',
+  'eastern highland chatino' => 'cly',
+  'ngungwel' => 'ngz',
+  'indus kohistani' => 'mvy',
+  'guduf-gava' => 'gdf',
+  'pidgin delaware' => 'dep',
+  'mahican' => 'mjy',
+  'buhi\'non bikol' => 'ubl',
+  'hu' => 'huo',
+  'mapena' => 'mnm',
+  'tarao naga' => 'tro',
+  'mbugu' => 'mhd',
+  'bangba' => 'bbe',
+  'bieria' => 'brj',
+  'paakantyi' => 'drl',
+  'kurama' => 'krh',
+  'tangkhul naga (india)' => 'nmf',
+  'takwane' => 'tke',
+  'dongo' => 'doo',
+  'kara (tanzania)' => 'reg',
+  'bondoukou kulango' => 'kzc',
+  'wumbvu' => 'wum',
+  'pouye' => 'bye',
+  'chiapanec' => 'cip',
+  'illyrian' => 'xil',
+  'huachipaeri' => 'hug',
+  'hittite' => 'hit',
+  'heiltsuk' => 'hei',
+  'alanic' => 'xln',
+  'official aramaic (700-300 bce)' => 'arc',
+  'duupa' => 'dae',
+  'yaben' => 'ybm',
+  'lucumi' => 'luq',
+  'piratapuyo' => 'pir',
+  'salvadoran sign language' => 'esn',
+  'bodo parja' => 'bdv',
+  'para naga' => 'pzn',
+  'kamba (kenya)' => 'kam',
+  'tasmate' => 'tmt',
+  'moronene' => 'mqn',
+  'sindhi bhil' => 'sbn',
+  'romanian' => 'ron',
+  'kalarko' => 'kba',
+  'yagara' => 'yxg',
+  'chitkuli kinnauri' => 'cik',
+  'meramera' => 'mxm',
+  'likwala' => 'kwc',
+  'colombian sign language' => 'csn',
+  'cwi bwamu' => 'bwy',
+  'waamwang' => 'wmn',
+  'bomboma' => 'bws',
+  'moroccan arabic' => 'ary',
+  'bhadrawahi' => 'bhd',
+  'samre' => 'sxm',
+  'samosa' => 'swm',
+  'akebu' => 'keu',
+  'fang (equatorial guinea)' => 'fan',
+  'n\'ko' => 'nqo',
+  'repanbitip' => 'rpn',
+  'chinali' => 'cih',
+  'sikaritai' => 'tty',
+  'angolar' => 'aoa',
+  'east tarangan' => 'tre',
+  'jiarong' => 'jya',
+  'tenharim' => 'pah',
+  'emumu' => 'enr',
+  'danu' => 'dnv',
+  "gagnoa b\x{e9}t\x{e9}" => 'btg',
+  'lelak' => 'llk',
+  'blagar' => 'beu',
+  'chothe naga' => 'nct',
+  "amanay\x{e9}" => 'ama',
+  'tarpia' => 'tpf',
+  'sherdukpen' => 'sdp',
+  'tsikimba' => 'kdl',
+  'northern qiandong miao' => 'hea',
+  'mbulungish' => 'mbv',
+  'ambrak' => 'aag',
+  'anuak' => 'anu',
+  'ghanaian sign language' => 'gse',
+  'yuhup' => 'yab',
+  'chaima' => 'ciy',
+  'luba-katanga' => 'lub',
+  'birhor' => 'biy',
+  'swedish sign language' => 'swl',
+  'teke-fuumu' => 'ifm',
+  'toto' => 'txo',
+  'mbunga' => 'mgy',
+  'comaltepec chinantec' => 'cco',
+  'telugu' => 'tel',
+  'kudu-camo' => 'kov',
+  'tai ya' => 'cuu',
+  'matepi' => 'mqe',
+  'kumbaran' => 'wkb',
+  'lacandon' => 'lac',
+  'doghoro' => 'dgx',
+  'dahalo' => 'dal',
+  'koneraw' => 'kdw',
+  'bembe' => 'bmb',
+  'lehar' => 'cae',
+  'providencia sign language' => 'prz',
+  'gorovu' => 'grq',
+  'maori' => 'mri',
+  'ngbee' => 'jgb',
+  'wumeng nasu' => 'ywu',
+  'kuuku-ya\'u' => 'kuy',
+  'koyukon' => 'koy',
+  'tomadino' => 'tdi',
+  'gabi-gabi' => 'gbw',
+  'nar phu' => 'npa',
+  'mandeali' => 'mjl',
+  'podena' => 'pdn',
+  'gumalu' => 'gmu',
+  'animere' => 'anf',
+  'gujari' => 'gju',
+  'norn' => 'nrn',
+  'saidi arabic' => 'aec',
+  'sowa' => 'sww',
+  'layakha' => 'lya',
+  'balaibalan' => 'zba',
+  'yeni' => 'yei',
+  'tupinikin' => 'tpk',
+  'tepinapa chinantec' => 'cte',
+  'slave (athapascan)' => 'den',
+  'balkan romani' => 'rmn',
+  'biali' => 'beh',
+  'tagbu' => 'tbm',
+  'biangai' => 'big',
+  'drents' => 'drt',
+  'janji' => 'jni',
+  'classical mongolian' => 'cmg',
+  'khiamniungan naga' => 'kix',
+  'otuho' => 'lot',
+  'ganza' => 'gza',
+  'suba-simbiti' => 'ssc',
+  'yahang' => 'rhp',
+  'tyap' => 'kcg',
+  'safeyoka' => 'apz',
+  'adhola' => 'adh',
+  'usarufa' => 'usa',
+  'nanubae' => 'afk',
+  'manya' => 'mzj',
+  'waray (australia)' => 'wrz',
+  'kambera' => 'xbr',
+  'kryts' => 'kry',
+  'zhuang' => 'zha',
+  'tsakhur' => 'tkr',
+  'marghi central' => 'mrt',
+  "kano\x{e9}" => 'kxo',
+  'hdi' => 'xed',
+  "num\x{e8}\x{e8}" => 'kdk',
+  'gweno' => 'gwe',
+  'lambayeque quechua' => 'quf',
+  'sarsi' => 'srs',
+  'buduma' => 'bdm',
+  'pangutaran sama' => 'slm',
+  't\'apo' => 'lgn',
+  'middle low german' => 'gml',
+  'giiwo' => 'kks',
+  'judeo-moroccan arabic' => 'aju',
+  'mato' => 'met',
+  'banda malay' => 'bpq',
+  'fam' => 'fam',
+  'northern tutchone' => 'ttm',
+  'tausug' => 'tsg',
+  'southwestern dinka' => 'dik',
+  'pampanga' => 'pam',
+  'jumla sign language' => 'jus',
+  'cineni' => 'cie',
+  'kenyan sign language' => 'xki',
+  'kango (tshopo district)' => 'kzy',
+  'ta\'izzi-adeni arabic' => 'acq',
+  'babine' => 'bcr',
+  'northeast pashai' => 'aee',
+  'kur' => 'kuv',
+  'hlai' => 'lic',
+  'kurmukar' => 'kfv',
+  'dayi' => 'dax',
+  'yapunda' => 'yev',
+  'lopa' => 'lop',
+  'bebele' => 'beb',
+  'ditammari' => 'tbz',
+  "yanom\x{e1}mi" => 'wca',
+  'chayahuita' => 'cbt',
+  'rara bakati\'' => 'lra',
+  'bamukumbit' => 'bqt',
+  'papantla totonac' => 'top',
+  'chiltepec chinantec' => 'csa',
+  'israeli sign language' => 'isr',
+  'orizaba nahuatl' => 'nlv',
+  'upper tanana' => 'tau',
+  'tatuyo' => 'tav',
+  'tii' => 'txq',
+  'angguruk yali' => 'yli',
+  'psikye' => 'kvj',
+  'ririo' => 'rri',
+  'jibu' => 'jib',
+  'eastern mnong' => 'mng',
+  'bangala' => 'bxg',
+  'gbaya (central african republic)' => 'gba',
+  "ash\x{e1}ninka" => 'cni',
+  'pottangi ollar gadaba' => 'gdb',
+  'lou' => 'loj',
+  'sanie' => 'ysy',
+  'daai chin' => 'dao',
+  'bushoong' => 'buf',
+  'watiwa' => 'wtf',
+  'balanta-ganja' => 'bjt',
+  'batanga' => 'bnm',
+  'oring' => 'org',
+  'mehek' => 'nux',
+  'pambia' => 'pmb',
+  'liberian english' => 'lir',
+  'tutsa naga' => 'tvt',
+  'ngaing' => 'nnf',
+  'hindi' => 'hin',
+  'northwestern nisu' => 'nsf',
+  'north tairora' => 'tbg',
+  'sindarin' => 'sjn',
+  'azha' => 'aza',
+  'ottoman turkish (1500-1928)' => 'ota',
+  'kachhi' => 'kfr',
+  'ningera' => 'nby',
+  'arakwal' => 'rkw',
+  "jalapa de d\x{ed}az mazatec" => 'maj',
+  'kharia thar' => 'ksy',
+  'zarphatic' => 'zrp',
+  'tembo (motembo)' => 'tmv',
+  'mvuba' => 'mxh',
+  'tula' => 'tul',
+  'walungge' => 'ola',
+  'kayeli' => 'kzl',
+  "miahuatl\x{e1}n zapotec" => 'zam',
+  'mwera (chimwera)' => 'mwe',
+  'akpes' => 'ibe',
+  'portuguese' => 'por',
+  'kucong' => 'lkc',
+  'golpa' => 'lja',
+  'kwaja' => 'kdz',
+  'bunun' => 'bnn',
+  "palik\x{fa}r" => 'plu',
+  'rawat' => 'jnl',
+  'german sign language' => 'gsg',
+  'mukulu' => 'moz',
+  'pancana' => 'pnp',
+  'southern tujia' => 'tjs',
+  'bafaw-balong' => 'bwt',
+  'michigamea' => 'cmm',
+  'makhuwa-moniga' => 'mhm',
+  'zeeuws' => 'zea',
+  'south caucasian languages' => 'ccs',
+  'sekele' => 'vaj',
+  'gobasi' => 'goi',
+  "cams\x{e1}" => 'kbh',
+  'urigina' => 'urg',
+  'tunggare' => 'trt',
+  'amri karbi' => 'ajz',
+  'plateau malagasy' => 'plt',
+  'powhatan' => 'pim',
+  'tiri' => 'cir',
+  'kumhali' => 'kra',
+  'kibala' => 'blv',
+  'sicilian' => 'scn',
+  "san jer\x{f3}nimo tec\x{f3}atl mazatec" => 'maa',
+  'guiqiong' => 'gqi',
+  'mari (east sepik province)' => 'mbx',
+  'mouwase' => 'jmw',
+  'mende (sierra leone)' => 'men',
+  'akoye' => 'miw',
+  'awyi' => 'auw',
+  'bih' => 'ibh',
+  'chechen' => 'che',
+  'anmatyerre' => 'amx',
+  'mama' => 'mma',
+  'northwestern tasmanian' => 'xpw',
+  'luiseno' => 'lui',
+  'luxembourgish' => 'ltz',
+  'boloki' => 'bkt',
+  'e\'ma buyang' => 'yzg',
+  'numidian' => 'nxm',
+  'eviya' => 'gev',
+  'elu' => 'elu',
+  'bole' => 'bol',
+  'ron' => 'cla',
+  'stoney' => 'sto',
+  'southwestern bontok' => 'vbk',
+  'rakahanga-manihiki' => 'rkh',
+  'kwinsu' => 'kuc',
+  'bonerif' => 'bnv',
+  'masai' => 'mas',
+  'west coast bajau' => 'bdr',
+  'sudanese arabic' => 'apd',
+  'zay' => 'zwa',
+  'teshenawa' => 'twc',
+  'amo' => 'amo',
+  'pisaflores tepehua' => 'tpp',
+  'kanyok' => 'kny',
+  'lombi' => 'lmi',
+  'silt\'e' => 'stv',
+  'mirgan' => 'zrg',
+  'lutos' => 'ndy',
+  'latgalian' => 'ltg',
+  'kei' => 'kei',
+  'afrihili' => 'afh',
+  'deccan' => 'dcc',
+  'nganyaywana' => 'nyx',
+  'paynamar' => 'pmr',
+  'wadiyara koli' => 'kxp',
+  'afade' => 'aal',
+  'traveller scottish' => 'trl',
+  'kabras' => 'lkb',
+  'urim' => 'uri',
+  'osage' => 'osa',
+  'agarabi' => 'agd',
+  'southern tiwa' => 'tix',
+  'callawalla' => 'caw',
+  'ngindo' => 'nnq',
+  'yamdena' => 'jmd',
+  'rampi' => 'lje',
+  'tukudede' => 'tkd',
+  'nkangala' => 'nkn',
+  'sarikoli' => 'srh',
+  'liburnian' => 'xli',
+  'tuwali ifugao' => 'ifk',
+  'pinji' => 'pic',
+  'abure' => 'abu',
+  'pano' => 'mqz',
+  'tuwari' => 'tww',
+  'awar' => 'aya',
+  "ngk\x{e2}lmpw kanum" => 'kcd',
+  'narungga' => 'nnr',
+  'gilaki' => 'glk',
+  'skepi creole dutch' => 'skw',
+  'gaina' => 'gcn',
+  'akeu' => 'aeu',
+  'djawi' => 'djw',
+  "j\x{fa}ma" => 'jua',
+  'gongduk' => 'goe',
+  'slovak' => 'slk',
+  'ngamini' => 'nmv',
+  'kayardild' => 'gyd',
+  'haitian vodoun culture language' => 'hvc',
+  'nyanga-li' => 'nyc',
+  'aighon' => 'aix',
+  'ukpet-ehom' => 'akd',
+  'yanyuwa' => 'jao',
+  'burushaski' => 'bsk',
+  'wik-iiyanh' => 'wij',
+  'ulithian' => 'uli',
+  'kaian' => 'kct',
+  'poqomchi\'' => 'poh',
+  'worodougou' => 'jud',
+  'siculo arabic' => 'sqr',
+  'rapoisi' => 'kyx',
+  'chichimeca-jonaz' => 'pei',
+  'aimele' => 'ail',
+  'laopang' => 'lbg',
+  'bumaji' => 'byp',
+  'xamtanga' => 'xan',
+  'turi' => 'trd',
+  'bung' => 'bqd',
+  'churahi' => 'cdj',
+  'loup b' => 'xlb',
+  'thuri' => 'thu',
+  'wajarri' => 'wbv',
+  'mendankwe-nkwen' => 'mfd',
+  'old frisian' => 'ofs',
+  'djadjawurrung' => 'dja',
+  'wergaia' => 'weg',
+  'ngadjuri' => 'jui',
+  'laz' => 'lzz',
+  'khuen' => 'khf',
+  'bolyu' => 'ply',
+  'southern east cree' => 'crj',
+  'guntai' => 'gnt',
+  'umiray dumaget agta' => 'due',
+  'setaman' => 'stm',
+  'baltic languages' => 'bat',
+  'kobon' => 'kpw',
+  'fasu' => 'faa',
+  'czech' => 'ces',
+  'southwestern fars' => 'fay',
+  'krisa' => 'ksi',
+  'nigerian sign language' => 'nsi',
+  'areba' => 'aea',
+  "bainouk-gunyu\x{f1}o" => 'bab',
+  'duli-gey' => 'duz',
+  'macaguaje' => 'mcl',
+  'yukpa' => 'yup',
+  'ghanaian pidgin english' => 'gpe',
+  'sha' => 'scw',
+  'amarakaeri' => 'amr',
+  'togoyo' => 'tgy',
+  'dibabawon manobo' => 'mbd',
+  'ndambomo' => 'nxo',
+  "san mart\x{ed}n itunyoso triqui" => 'trq',
+  'mander' => 'mqr',
+  'liki' => 'lio',
+  'wogeo' => 'woc',
+  'luwati' => 'luv',
+  'q\'anjob\'al' => 'kjb',
+  'dano' => 'aso',
+  'asaro\'o' => 'mtv',
+  'kutep' => 'kub',
+  'yindjilandji' => 'yil',
+  "t\x{e0}y" => 'tyz',
+  'cayuga' => 'cay',
+  "xer\x{e9}nte" => 'xer',
+  "lapagu\x{ed}a-guivini zapotec" => 'ztl',
+  'ahanta' => 'aha',
+  'mbunda' => 'mck',
+  'fipa' => 'fip',
+  'koshin' => 'kid',
+  'datooga' => 'tcc',
+  'bom-kim' => 'bmf',
+  'kwandu' => 'xdo',
+  'central bai' => 'bca',
+  'haroi' => 'hro',
+  'wanggamala' => 'wnm',
+  'so (democratic republic of congo)' => 'soc',
+  'awu' => 'yiu',
+  'gurindji kriol' => 'gjr',
+  'seru' => 'szd',
+  'chagatai' => 'chg',
+  'turung' => 'try',
+  'babanki' => 'bbk',
+  "dangal\x{e9}at" => 'daa',
+  'standard malay' => 'zsm',
+  'lusi' => 'khl',
+  'southern muji' => 'ymc',
+  'jofotek-bromnya' => 'jbr',
+  'serbian' => 'srp',
+  'wampur' => 'waz',
+  'lashi' => 'lsi',
+  'turoyo' => 'tru',
+  "panar\x{e1}" => 'kre',
+  'putai' => 'mfl',
+  'thao' => 'ssf',
+  'dadiya' => 'dbd',
+  'karbi' => 'mjw',
+  'miship' => 'mjs',
+  'awing' => 'azo',
+  'southern ohlone' => 'css',
+  'inabaknon' => 'abx',
+  'kuuk thaayorre' => 'thd',
+  'nomu' => 'noh',
+  'ritharrngu' => 'rit',
+  'kanga' => 'kcp',
+  'numana' => 'nbr',
+  'galambu' => 'glo',
+  'aluo' => 'yna',
+  'sangu (tanzania)' => 'sbp',
+  'khotanese' => 'kho',
+  'salasaca highland quichua' => 'qxl',
+  'likila' => 'lie',
+  'caac' => 'msq',
+  "s\x{e1}liba" => 'slc',
+  'taita' => 'dav',
+  'angal' => 'age',
+  'ida\'an' => 'dbj',
+  'torricelli' => 'tei',
+  'kupia' => 'key',
+  'gaddang' => 'gad',
+  'angal heneng' => 'akh',
+  'baras' => 'brs',
+  'rotuman' => 'rtm',
+  'arandai' => 'jbj',
+  'njalgulgule' => 'njl',
+  'pochuri naga' => 'npo',
+  'kabardian' => 'kbd',
+  'taworta' => 'tbp',
+  'dambi' => 'dac',
+  'ekajuk' => 'eka',
+  'zanaki' => 'zak',
+  'mt. iriga agta' => 'agz',
+  'mamanwa' => 'mmn',
+  'romance languages' => 'roa',
+  'bwa' => 'bww',
+  'darai' => 'dry',
+  'anus' => 'auq',
+  'blafe' => 'bfh',
+  "w\x{e1}ra" => 'tci',
+  'tucano' => 'tuo',
+  'kir-balar' => 'kkr',
+  'car nicobarese' => 'caq',
+  'ipulo' => 'ass',
+  'luchazi' => 'lch',
+  'jamsay dogon' => 'djm',
+  'nomane' => 'nof',
+  'ayere' => 'aye',
+  'nganasan' => 'nio',
+  'nonuya' => 'noj',
+  'selepet' => 'spl',
+  'alune' => 'alp',
+  'hopi' => 'hop',
+  'island carib' => 'crb',
+  'senthang chin' => 'sez',
+  "baoul\x{e9}" => 'bci',
+  'sio' => 'xsi',
+  'eman' => 'emn',
+  'ap ma' => 'kbx',
+  'ruga' => 'ruh',
+  'nama (papua new guinea)' => 'nmx',
+  'akkadian' => 'akk',
+  'kilivila' => 'kij',
+  'tongwe' => 'tny',
+  'west tarangan' => 'txn',
+  'libyan arabic' => 'ayl',
+  'old hittite' => 'oht',
+  'pije' => 'piz',
+  'etulo' => 'utr',
+  'kais' => 'kzm',
+  'yir yoront' => 'yyr',
+  'san juan teita mixtec' => 'xtj',
+  'nyeu' => 'nyl',
+  'woleaian' => 'woe',
+  'baure' => 'brg',
+  'mlap' => 'kja',
+  'nooksack' => 'nok',
+  'khayo' => 'lko',
+  'khoekhoe' => 'naq',
+  'old english (ca. 450-1100)' => 'ang',
+  'yakama' => 'yak',
+  'shoo-minda-nye' => 'bcv',
+  'sarangani manobo' => 'mbs',
+  'mbula' => 'mna',
+  'swahili (macrolanguage)' => 'swa',
+  'titan' => 'ttv',
+  'sanga (democratic republic of congo)' => 'sng',
+  'engdewu' => 'ngr',
+  'northern tasmanian' => 'xpv',
+  'toma' => 'tod',
+  'yoron' => 'yox',
+  'yanahuanca pasco quechua' => 'qur',
+  'eastern bru' => 'bru',
+  'lavatbura-lamusong' => 'lbv',
+  'twents' => 'twd',
+  'gogodala' => 'ggw',
+  'muslim tat' => 'ttt',
+  'ura (papua new guinea)' => 'uro',
+  'boro (ghana)' => 'xxb',
+  'kathoriya tharu' => 'tkt',
+  'seba' => 'kdg',
+  'zerenkel' => 'zrn',
+  'kpatili' => 'kym',
+  'mondropolon' => 'npn',
+  'philippine languages' => 'phi',
+  'gamo' => 'gmv',
+  'teke-tsaayi' => 'tyi',
+  'magbukun ayta' => 'ayt',
+  'orowe' => 'bpk',
+  'luo (cameroon)' => 'luw',
+  'east ambae' => 'omb',
+  'kahua' => 'agw',
+  'temiar' => 'tea',
+  'karore' => 'xkx',
+  'morori' => 'mok',
+  'manipa' => 'mqp',
+  'koyraboro senni songhai' => 'ses',
+  'buraka' => 'bkg',
+  'eastern abnaki' => 'aaq',
+  "santa mar\x{ed}a zacatepec mixtec" => 'mza',
+  'papuma' => 'ppm',
+  'ede ije' => 'ijj',
+  'lalia' => 'lal',
+  'bassa-kontagora' => 'bsr',
+  'bhili' => 'bhb',
+  'nilamba' => 'nim',
+  'purik' => 'prx',
+  'maya samo' => 'sym',
+  'hamer-banna' => 'amf',
+  'tubar' => 'tbu',
+  'berta' => 'wti',
+  'nyam' => 'nmi',
+  "paka\x{e1}snovos" => 'pav',
+  'bribri' => 'bzd',
+  'agusan manobo' => 'msm',
+  'shamang' => 'xsh',
+  "mehin\x{e1}ku" => 'mmh',
+  'croatia sign language' => 'csq',
+  'abaga' => 'abg',
+  'northwestern fars' => 'faz',
+  "n\x{1c1}ng" => 'ngh',
+  "aji\x{eb}" => 'aji',
+  'popti\'' => 'jac',
+  'miqie' => 'yiq',
+  'kwangali' => 'kwn',
+  'dorze' => 'doz',
+  'banda languages' => 'bad',
+  'northern east cree' => 'crl',
+  'chitwania tharu' => 'the',
+  'baga sitemu' => 'bsp',
+  'standard arabic' => 'arb',
+  'karenggapa' => 'eaa',
+  'median' => 'xme',
+  'manyika' => 'mxc',
+  'ngaju' => 'nij',
+  'liangmai naga' => 'njn',
+  'aweer' => 'bob',
+  'sandawe' => 'sad',
+  'rarotongan' => 'rar',
+  'surbakhal' => 'sbj',
+  'villa viciosa agta' => 'dyg',
+  'moyon naga' => 'nmo',
+  'chetco' => 'ctc',
+  "yocobou\x{e9} dida" => 'gud',
+  'kannada' => 'kan',
+  'koti' => 'eko',
+  'thachanadan' => 'thn',
+  'okodia' => 'okd',
+  'korafe-yegha' => 'kpr',
+  'sui' => 'swi',
+  'southwestern tasmanian' => 'xpx',
+  'sian' => 'spg',
+  'bamun' => 'bax',
+  'mewari' => 'mtr',
+  'tenis' => 'tns',
+  "nocam\x{e1}n" => 'nom',
+  'uyajitaya' => 'duk',
+  'wakabunga' => 'wwb',
+  'tai loi' => 'tlq',
+  'ngbaka' => 'nga',
+  'sila' => 'slt',
+  'anamgura' => 'imi',
+  'tha' => 'thy',
+  'eastern kayah' => 'eky',
+  'warrwa' => 'wwr',
+  'tz\'utujil' => 'tzj',
+  'hadrami' => 'xhd',
+  'groma' => 'gro',
+  'quiavicuzas zapotec' => 'zpj',
+  'tee' => 'tkq',
+  'nihali' => 'nll',
+  'bahinemo' => 'bjh',
+  'northern oaxaca nahuatl' => 'nhy',
+  'thudam' => 'thw',
+  'boikin' => 'bzf',
+  'judeo-tripolitanian arabic' => 'yud',
+  'ngoni' => 'ngo',
+  'uruguayan sign language' => 'ugy',
+  'western niger fulfulde' => 'fuh',
+  "southeastern nochixtl\x{e1}n mixtec" => 'mxy',
+  'machinga' => 'mvw',
+  'san marcos tlacoyalco popoloca' => 'pls',
+  'tawara' => 'twl',
+  'northern tiwa' => 'twf',
+  'daonda' => 'dnd',
+  'mor (bomberai peninsula)' => 'moq',
+  'southwest tanna' => 'nwi',
+  'korak' => 'koz',
+  'ciwogai' => 'tgd',
+  'wutunhua' => 'wuh',
+  'slovakian sign language' => 'svk',
+  'dahalik' => 'dlk',
+  'dharawal' => 'tbh',
+  'yambes' => 'ymb',
+  'southeastern puebla nahuatl' => 'npl',
+  "ghom\x{e1}l\x{e1}'" => 'bbj',
+  'dan' => 'dnj',
+  'umbu-ungu' => 'ubu',
+  'suri' => 'suq',
+  'nabak' => 'naf',
+  'skou' => 'skv',
+  'konkomba' => 'xon',
+  'saho' => 'ssy',
+  'maasina fulfulde' => 'ffm',
+  'caluyanun' => 'clu',
+  'komi-zyrian' => 'kpv',
+  'albanian languages' => 'sqj',
+  'bendi' => 'bct',
+  'opao' => 'opo',
+  'yupik languages' => 'ypk',
+  "coatl\x{e1}n zapotec" => 'zps',
+  'apasco-apoala mixtec' => 'mip',
+  'gbesi gbe' => 'gbs',
+  'konda' => 'knd',
+  'lusengo' => 'lse',
+  'komering' => 'kge',
+  'cimbrian' => 'cim',
+  'yambeta' => 'yat',
+  'northwest maidu' => 'mjd',
+  'gugu badhun' => 'gdc',
+  'ayoquesco zapotec' => 'zaf',
+  'oroqen' => 'orh',
+  'samei' => 'smh',
+  'to' => 'toz',
+  'chala' => 'cll',
+  'nubi' => 'kcn',
+  'korowai' => 'khe',
+  'guianese creole french' => 'gcr',
+  'jambi malay' => 'jax',
+  'koho' => 'kpm',
+  'sallands' => 'sdz',
+  'oy' => 'oyb',
+  'wom (nigeria)' => 'wom',
+  'xipaya' => 'xiy',
+  'cuitlatec' => 'cuy',
+  'ndai' => 'gke',
+  'anakalangu' => 'akg',
+  'bayungu' => 'bxj',
+  'arawakan languages' => 'awd',
+  'upper taromi' => 'tov',
+  'darlong' => 'dln',
+  'rapting' => 'rpt',
+  'kulung (nigeria)' => 'bbu',
+  'marachi' => 'lri',
+  'vinmavis' => 'vnm',
+  'tagargrent' => 'oua',
+  'dwang' => 'nnu',
+  'mom jango' => 'ver',
+  'wayampi' => 'oym',
+  'bilin' => 'byn',
+  "sap\x{e9}" => 'spc',
+  'leti (cameroon)' => 'leo',
+  'bomwali' => 'bmw',
+  'jungle inga' => 'inj',
+  'ganglau' => 'ggl',
+  'guyani' => 'gvy',
+  'tamashek' => 'tmh',
+  'kxoe' => 'xuu',
+  'migabac' => 'mpp',
+  'lusitanian' => 'xls',
+  'bambam' => 'ptu',
+  'aquitanian' => 'xaq',
+  'bantawa' => 'bap',
+  'katawixi' => 'xat',
+  'tobelo' => 'tlb',
+  'jere' => 'jer',
+  'lelemi' => 'lef',
+  'iyo\'wujwa chorote' => 'crq',
+  'mak (china)' => 'mkg',
+  "yosond\x{fa}a mixtec" => 'mpm',
+  'simbali' => 'smg',
+  'miami' => 'mia',
+  'bhujel' => 'byh',
+  'fwe' => 'fwe',
+  'banggai' => 'bgz',
+  'east futuna' => 'fud',
+  'tachoni' => 'lts',
+  'ponosakan' => 'pns',
+  'mid grand valley dani' => 'dnt',
+  'leningitij' => 'lnj',
+  'halh mongolian' => 'khk',
+  'lele (chad)' => 'lln',
+  'banjar' => 'bjn',
+  'marra' => 'mec',
+  'tomini' => 'txm',
+  'hitu' => 'htu',
+  'bitur' => 'mcc',
+  'zia' => 'zia',
+  'karao' => 'kyj',
+  'numanggang' => 'nop',
+  'baan' => 'bvj',
+  "r\x{e9}union creole french" => 'rcf',
+  'palenquero' => 'pln',
+  'lakota dida' => 'dic',
+  'flinders island' => 'fln',
+  'lala-bisa' => 'leb',
+  'giryama' => 'nyf',
+  'waama' => 'wwa',
+  'yetfa' => 'yet',
+  'gumawana' => 'gvs',
+  'kven finnish' => 'fkv',
+  'bacama' => 'bcy',
+  'marovo' => 'mvo',
+  'pohnpeian' => 'pon',
+  'tangut' => 'txg',
+  'yawiyo' => 'ybx',
+  'piame' => 'pin',
+  'mekwei' => 'msf',
+  'western katu' => 'kuf',
+  'benggoi' => 'bgy',
+  'baharna arabic' => 'abv',
+  'carian' => 'xcr',
+  'ngumbarl' => 'xnm',
+  'nen' => 'nqn',
+  'wuvulu-aua' => 'wuv',
+  'wutung' => 'wut',
+  'nachering' => 'ncd',
+  'alacalufan languages' => 'aqa',
+  'wamey' => 'cou',
+  'kurrama' => 'vku',
+  'foau' => 'flh',
+  'nkonya' => 'nko',
+  'afitti' => 'aft',
+  'edolo' => 'etr',
+  'huambisa' => 'hub',
+  'kannada kurumba' => 'kfi',
+  'palaic' => 'plq',
+  'aragonese' => 'arg',
+  'pattani malay' => 'mfa',
+  'iau' => 'tmu',
+  'surigaonon' => 'sgd',
+  'kaamba' => 'xku',
+  'lewo' => 'lww',
+  'marrithiyel' => 'mfr',
+  'bonjo' => 'bok',
+  'saniyo-hiyewe' => 'sny',
+  'tonga (zambia)' => 'toi',
+  'auye' => 'auu',
+  'moldova sign language' => 'vsi',
+  'libon bikol' => 'lbl',
+  'nafusi' => 'jbn',
+  'northern ohlone' => 'cst',
+  'saruga' => 'sra',
+  'ngongo' => 'noq',
+  'kamarian' => 'kzx',
+  "g\x{101}ndh\x{101}r\x{12b}" => 'pgd',
+  'haitian' => 'hat',
+  'kompane' => 'kvp',
+  'thur' => 'lth',
+  'bhunjia' => 'bhu',
+  'kamasau' => 'kms',
+  'dolgan' => 'dlg',
+  'ede ica' => 'ica',
+  'dutch sign language' => 'dse',
+  'bulgebi' => 'bmp',
+  'chopi' => 'cce',
+  'korana' => 'kqz',
+  'bats' => 'bbl',
+  'halang' => 'hal',
+  'buruwai' => 'asi',
+  'bahonsuai' => 'bsu',
+  'puinave' => 'pui',
+  'kusunda' => 'kgg',
+  'waneci' => 'wne',
+  'northern muji' => 'ymx',
+  "guajaj\x{e1}ra" => 'gub',
+  'namibian sign language' => 'nbs',
+  'barzani jewish neo-aramaic' => 'bjf',
+  'ake' => 'aik',
+  'ke\'o' => 'xxk',
+  'ikwo' => 'iqw',
+  'eastern katu' => 'ktv',
+  'gheg albanian' => 'aln',
+  'otomian languages' => 'oto',
+  'warnang' => 'wrn',
+  'hruso' => 'hru',
+  'kinalakna' => 'kco',
+  'awjilah' => 'auj',
+  'ngundu' => 'nue',
+  'imbabura highland quichua' => 'qvi',
+  'ami' => 'amy',
+  'rerau' => 'rea',
+  'tadyawan' => 'tdy',
+  'erave' => 'kjy',
+  'javindo' => 'jvd',
+  'gwandara' => 'gwn',
+  'banda-yangere' => 'yaj',
+  'coahuilteco' => 'xcw',
+  'hungana' => 'hum',
+  'southern qiandong miao' => 'hms',
+  'nupbikha' => 'npb',
+  'cochimi' => 'coj',
+  'pulaar' => 'fuc',
+  'monumbo' => 'mxk',
+  "karaj\x{e1}" => 'kpj',
+  'tagbanwa' => 'tbw',
+  'italian sign language' => 'ise',
+  'igbo' => 'ibo',
+  'zokhuo' => 'yzk',
+  'oti' => 'oti',
+  'tedaga' => 'tuq',
+  'megleno romanian' => 'ruq',
+  'eten' => 'etx',
+  'hya' => 'hya',
+  'olrat' => 'olr',
+  'sake' => 'sak',
+  'fas' => 'fqs',
+  'waiwai' => 'waw',
+  'chuave' => 'cjv',
+  'moraid' => 'msg',
+  'camunic' => 'xcc',
+  'birri' => 'bvq',
+  'savi' => 'sdg',
+  'kadar' => 'kej',
+  'esan' => 'ish',
+  'biao-jiao mien' => 'bje',
+  'thiin' => 'iin',
+  'nkutu' => 'nkw',
+  'early tripuri' => 'xtr',
+  "r\x{101}zi\x{1e25}\x{12b}" => 'rzh',
+  'chibcha' => 'chb',
+  'ganggalida' => 'gcd',
+  'nyiha (malawi)' => 'nyr',
+  'larike-wakasihu' => 'alo',
+  'lokoya' => 'lky',
+  'domaaki' => 'dmk',
+  'tsogo' => 'tsv',
+  'como karim' => 'cfg',
+  'primitive irish' => 'pgl',
+  'negerhollands' => 'dcr',
+  'koonzime' => 'ozm',
+  'shau' => 'sqh',
+  'okpe (northwestern edo)' => 'okx',
+  'ngarigu' => 'xni',
+  "paic\x{ee}" => 'pri',
+  'ghera' => 'ghr',
+  'ngarinyman' => 'nbj',
+  'nanti' => 'cox',
+  'ghandruk sign language' => 'gds',
+  'ayabadhu' => 'ayd',
+  'lozi' => 'loz',
+  'pahari-potwari' => 'phr',
+  "urub\x{fa}-kaapor" => 'urb',
+  'balaesang' => 'bls',
+  'woccon' => 'xwc',
+  "volap\x{fc}k" => 'vol',
+  'wala' => 'lgl',
+  'amoltepec mixtec' => 'mbz',
+  'gilbertese' => 'gil',
+  'hmong shua' => 'hmz',
+  'shall-zwall' => 'sha',
+  'tase naga' => 'nst',
+  'gun' => 'guw',
+  'bumang' => 'bvp',
+  "av\x{e1}-canoeiro" => 'avv',
+  'central american indian languages' => 'cai',
+  'labuk-kinabatangan kadazan' => 'dtb',
+  'bari' => 'bfa',
+  'yemba' => 'ybb',
+  'tai pao' => 'tpo',
+  'balinese' => 'ban',
+  'jeri kuo' => 'jek',
+  'karami' => 'xar',
+  'somray' => 'smu',
+  'kaera' => 'jka',
+  'pande' => 'bkj',
+  'aghem' => 'agq',
+  'enga' => 'enq',
+  'egyptian languages' => 'egx',
+  'pali' => 'pli',
+  'mengisa' => 'mct',
+  'fang (cameroon)' => 'fak',
+  'new zealand sign language' => 'nzs',
+  'northwestern tamang' => 'tmk',
+  'barikanchi' => 'bxo',
+  'ede cabe' => 'cbj',
+  'aiome' => 'aki',
+  'ifo' => 'iff',
+  'pahanan agta' => 'apf',
+  'omok' => 'omk',
+  'inpui naga' => 'nkf',
+  'pirlatapa' => 'bxi',
+  'bagvalal' => 'kva',
+  'gwak' => 'jgk',
+  'waskia' => 'wsk',
+  'rejang' => 'rej',
+  'chocangacakha' => 'cgk',
+  'mirning' => 'gmr',
+  'paliyan' => 'pcf',
+  'batak' => 'bya',
+  'adyghe' => 'ady',
+  "bor\x{f4}ro" => 'bor',
+  'chuka' => 'cuh',
+  'sehwi' => 'sfw',
+  'western kayah' => 'kyu',
+  'acoli' => 'ach',
+  'southwestern nisu' => 'nsv',
+  'south tairora' => 'omw',
+  "cemuh\x{ee}" => 'cam',
+  'semandang' => 'sdq',
+  'burusu' => 'bqr',
+  'tobian' => 'tox',
+  'krymchak' => 'jct',
+  'yendang' => 'ynq',
+  'beele' => 'bxq',
+  'mbelime' => 'mql',
+  'geko karen' => 'ghk',
+  'koko babangk' => 'okg',
+  'kukele' => 'kez',
+  'lamba' => 'lam',
+  'avau' => 'avb',
+  'itene' => 'ite',
+  'gilyak' => 'niv',
+  'russian' => 'rus',
+  'kato' => 'ktw',
+  'maku\'a' => 'lva',
+  'zakhring' => 'zkr',
+  'tugen' => 'tuy',
+  'dogoso' => 'dgs',
+  'obokuitai' => 'afz',
+  'koda' => 'cdz',
+  'ibaloi' => 'ibl',
+  'burak' => 'bys',
+  'zou' => 'zom',
+  'muna' => 'mnb',
+  'abadi' => 'kbt',
+  'mfumte' => 'nfu',
+  'south west bay' => 'sns',
+  'wallisian' => 'wls',
+  'ndom' => 'nqm',
+  'thracian' => 'txh',
+  'swampy cree' => 'csw',
+  'northern tujia' => 'tji',
+  "ti\x{e9}yaxo bozo" => 'boz',
+  'shuhi' => 'sxg',
+  'chadian sign language' => 'cds',
+  'mpuono' => 'zmp',
+  'bolondo' => 'bzm',
+  'berinomo' => 'bit',
+  'kuria' => 'kuj',
+  'lodhi' => 'lbm',
+  'gonja' => 'gjn',
+  'margos-yarowilca-lauricocha quechua' => 'qvm',
+  'amharic' => 'amh',
+  'kol (cameroon)' => 'biw',
+  'limi' => 'ylm',
+  'mada (nigeria)' => 'mda',
+  'kplang' => 'kph',
+  'nomatsiguenga' => 'not',
+  'kaikavian literary language' => 'kjv',
+  'idere' => 'ide',
+  'dhaiso' => 'dhs',
+  'riang lang' => 'ril',
+  'mariri' => 'mqi',
+  'kioko' => 'ues',
+  'seze' => 'sze',
+  'remo' => 'rem',
+  'moi (congo)' => 'mow',
+  'koke' => 'kou',
+  'anem' => 'anz',
+  'sahu' => 'saj',
+  'gadjerawang' => 'gdh',
+  'tzotzil' => 'tzo',
+  'siliput' => 'mkc',
+  'tagoi' => 'tag',
+  'ikposo' => 'kpo',
+  'ili\'uun' => 'ilu',
+  'tchumbuli' => 'bqa',
+  'dzando' => 'dzn',
+  'western abnaki' => 'abe',
+  'mangue' => 'mom',
+  'yazgulyam' => 'yah',
+  'siri' => 'sir',
+  'kensiu' => 'kns',
+  'atsam' => 'cch',
+  'kamberau' => 'irx',
+  'west ambae' => 'nnd',
+  'ahom' => 'aho',
+  'saep' => 'spd',
+  'costa rican sign language' => 'csr',
+  'avokaya' => 'avu',
+  'tombonuo' => 'txa',
+  'cun' => 'cuq',
+  'western bru' => 'brv',
+  'lengola' => 'lej',
+  'ketangalan' => 'kae',
+  'paasaal' => 'sig',
+  'eteocypriot' => 'ecy',
+  'northern kankanay' => 'xnn',
+  'bokobaru' => 'bus',
+  'thangmi' => 'thf',
+  'teribe' => 'tfr',
+  'kadazan dusun' => 'dtp',
+  "daloa b\x{e9}t\x{e9}" => 'bev',
+  'eitiep' => 'eit',
+  'asho chin' => 'csh',
+  'enxet' => 'enx',
+  'bayono' => 'byl',
+  'katabaga' => 'ktq',
+  'aruop' => 'lsr',
+  'naki' => 'mff',
+  'badyara' => 'pbp',
+  'khmu' => 'kjg',
+  'binukid' => 'bkd',
+  'sibe' => 'nco',
+  'woria' => 'wor',
+  'muyang' => 'muy',
+  'north alaskan inupiatun' => 'esi',
+  'rumai palaung' => 'rbb',
+  'ikaranggal' => 'ikr',
+  'sula' => 'szn',
+  'osatu' => 'ost',
+  'molmo one' => 'aun',
+  'southeast pashai' => 'psi',
+  'ma manda' => 'skc',
+  'minidien' => 'wii',
+  'sena' => 'seh',
+  'erzya' => 'myv',
+  'senhaja de srair' => 'sjs',
+  'northwestern dinka' => 'diw',
+  'kesawai' => 'xes',
+  'southern tutchone' => 'tce',
+  'benga' => 'bng'
+};
+$TwoToName = {
+  'dv' => 'Dhivehi',
+  'vo' => "Volap\x{fc}k",
+  'el' => 'Modern Greek (1453-)',
+  'nn' => 'Norwegian Nynorsk',
+  'kl' => 'Kalaallisut',
+  'to' => 'Tonga (Tonga Islands)',
+  'la' => 'Latin',
+  'ay' => 'Aymara',
+  'zh_TW' => 'Chinese (traditional)',
+  'ti' => 'Tigrinya',
+  'ps' => 'Pushto',
+  'sh' => 'Serbo-Croatian',
+  'os' => 'Ossetian',
+  'vi' => 'Vietnamese',
+  'mh' => 'Marshallese',
+  'eo' => 'Esperanto',
+  'fj' => 'Fijian',
+  'de' => 'German',
+  'io' => 'Ido',
+  'gr' => 'Greek',
+  'ko' => 'Korean',
+  'as' => 'Assamese',
+  'tl' => 'Tagalog',
+  'ki' => 'Kikuyu',
+  'zu' => 'Zulu',
+  'ku_Latn' => 'Northern Kurdish',
+  'ch' => 'Chamorro',
+  'sq' => 'Albanian',
+  'gu' => 'Gujarati',
+  'zh_CN' => 'Chinese (simplified)',
+  'bn' => 'Bengali',
+  'nd' => 'North Ndebele',
+  'ii' => 'Sichuan Yi',
+  'bs' => 'Bosnian',
+  'mi' => 'Maori',
+  'ng' => 'Ndonga',
+  'ho' => 'Hiri Motu',
+  'th' => 'Thai',
+  'si' => 'Sinhala',
+  'hi' => 'Hindi',
+  'an' => 'Aragonese',
+  'so' => 'Somali',
+  'ze_zh' => 'Chinese',
+  'ny' => 'Nyanja',
+  'mo' => 'Moldavian',
+  'fa' => 'Persian',
+  'qu' => 'Quechua',
+  'yi' => 'Yiddish',
+  'rn' => 'Rundi',
+  'bg' => 'Bulgarian',
+  'da' => 'Danish',
+  'co' => 'Corsican',
+  'sl' => 'Slovenian',
+  'wa' => 'Walloon',
+  'yo' => 'Yoruba',
+  'lv' => 'Latvian',
+  'ml' => 'Malayalam',
+  'sn' => 'Shona',
+  'ty' => 'Tahitian',
+  'ks' => 'Kashmiri',
+  'ze_en' => 'English',
+  'es' => 'Spanish',
+  'is' => 'Icelandic',
+  'mn' => 'Mongolian',
+  'tg' => 'Tajik',
+  'ff' => 'Fulah',
+  'fr' => 'French',
+  'pl' => 'Polish',
+  'nb' => "Norwegian Bokm\x{e5}l",
+  'pi' => 'Pali',
+  'ky' => 'Kirghiz',
+  'lt' => 'Lithuanian',
+  'ro' => 'Romanian',
+  'ts' => 'Tsonga',
+  'gv' => 'Manx',
+  'bh' => 'Bihari languages',
+  'kg' => 'Kongo',
+  'sd' => 'Sindhi',
+  'ig' => 'Igbo',
+  'hy' => 'Armenian',
+  'ab' => 'Abkhazian',
+  'mg' => 'Malagasy',
+  'xh' => 'Xhosa',
+  'ug' => 'Uighur',
+  'id' => 'Indonesian',
+  'dz' => 'Dzongkha',
+  'sg' => 'Sango',
+  'za' => 'Zhuang',
+  'my' => 'Burmese',
+  'ga' => 'Irish',
+  'no' => 'Norwegian',
+  'tn' => 'Tswana',
+  'cs' => 'Czech',
+  'bo' => 'Tibetan',
+  'lu' => 'Luba-Katanga',
+  'simple' => 'Simplified English',
+  'en' => 'English',
+  'bi' => 'Bislama',
+  'ms' => 'Malay (macrolanguage)',
+  'ss' => 'Swati',
+  'cy' => 'Welsh',
+  'nl' => 'Dutch',
+  'kn' => 'Kannada',
+  'ku_Arab' => 'Central Kurdish',
+  'su' => 'Sundanese',
+  'hr' => 'Croatian',
+  'pa' => 'Panjabi',
+  'be' => 'Belarusian',
+  'tt' => 'Tatar',
+  'sr' => 'Serbian',
+  'km' => 'Khmer',
+  'hu' => 'Hungarian',
+  'nv' => 'Navajo',
+  'ur' => 'Urdu',
+  'mr' => 'Marathi',
+  'cu' => 'Church Slavic',
+  'zh' => 'Chinese',
+  'rw' => 'Kinyarwanda',
+  'ak' => 'Akan',
+  'lg' => 'Ganda',
+  'jp' => 'Japanese',
+  'cr' => 'Cree',
+  'aa' => 'Afar',
+  'ne' => 'Nepali (macrolanguage)',
+  'et' => 'Estonian',
+  'it' => 'Italian',
+  'hz' => 'Herero',
+  'av' => 'Avaric',
+  'gl' => 'Galician',
+  'mt' => 'Maltese',
+  'tr' => 'Turkish',
+  'st' => 'Southern Sotho',
+  'oj' => 'Ojibwa',
+  'ht' => 'Haitian',
+  'uz' => 'Uzbek',
+  'sc' => 'Sardinian',
+  'fy' => 'Western Frisian',
+  'ba' => 'Bashkir',
+  'ae' => 'Avestan',
+  'kr' => 'Kanuri',
+  'ln' => 'Lingala',
+  'sm' => 'Samoan',
+  'na' => 'Nauru',
+  'iu' => 'Inuktitut',
+  'eu' => 'Basque',
+  'cz' => 'Czech',
+  'ku' => 'Kurdish',
+  'ik' => 'Inupiaq',
+  'om' => 'Oromo',
+  'gd' => 'Scottish Gaelic',
+  'tw' => 'Twi',
+  'kk' => 'Kazakh',
+  'az' => 'Azerbaijani',
+  'sv' => 'Swedish',
+  'ia' => 'Interlingua (International Auxiliary Language Association)',
+  'ce' => 'Chechen',
+  'ka' => 'Georgian',
+  'rm' => 'Romansh',
+  'nr' => 'South Ndebele',
+  'pt' => 'Portuguese',
+  'jv' => 'Javanese',
+  'li' => 'Limburgan',
+  'br' => 'Breton',
+  'he' => 'Hebrew',
+  'tk' => 'Turkmen',
+  'kw' => 'Cornish',
+  'se' => 'Northern Sami',
+  'cv' => 'Chuvash',
+  'gn' => 'Guarani',
+  'oc' => 'Occitan (post 1500)',
+  'ta' => 'Tamil',
+  'am' => 'Amharic',
+  'me' => 'Montenegrin',
+  'lo' => 'Lao',
+  'ee' => 'Ewe',
+  'ca' => 'Catalan',
+  'ie' => 'Interlingue',
+  'ar' => 'Arabic',
+  'wo' => 'Wolof',
+  'af' => 'Afrikaans',
+  'fi' => 'Finnish',
+  'ja' => 'Japanese',
+  'fo' => 'Faroese',
+  'sw' => 'Swahili (macrolanguage)',
+  'bm' => 'Bambara',
+  'kj' => 'Kuanyama',
+  've' => 'Venda',
+  'sa' => 'Sanskrit',
+  'kv' => 'Komi',
+  'te' => 'Telugu',
+  'sk' => 'Slovak',
+  'ru' => 'Russian',
+  'uk' => 'Ukrainian',
+  'mk' => 'Macedonian',
+  'ha' => 'Hausa',
+  'lb' => 'Luxembourgish',
+  'or' => 'Oriya (macrolanguage)'
+};
+$ThreeToName = {
+  'gig' => 'Goaria',
+  'rie' => 'Rien',
+  'chx' => 'Chantyal',
+  'sma' => 'Southern Sami',
+  'pmr' => 'Paynamar',
+  'dbr' => 'Dabarre',
+  'rts' => 'Yurats',
+  'kpa' => 'Kutto',
+  'mhi' => 'Ma\'di',
+  'kua' => 'Kuanyama',
+  'kid' => 'Koshin',
+  'mrn' => 'Cheke Holo',
+  'sju' => 'Ume Sami',
+  'hsb' => 'Upper Sorbian',
+  'tks' => 'Takestani',
+  'euq' => 'Basque (family)',
+  'ajz' => 'Amri Karbi',
+  'dgh' => 'Dghwede',
+  'guj' => 'Gujarati',
+  'agx' => 'Aghul',
+  'ndo' => 'Ndonga',
+  'qyp' => 'Quiripi',
+  'cde' => 'Chenchu',
+  'try' => 'Turung',
+  'prv' => "Proven\x{e7}al",
+  'ukv' => 'Kuku',
+  'osc' => 'Oscan',
+  'uvl' => 'Lote',
+  'btv' => 'Bateri',
+  'ctz' => 'Zacatepec Chatino',
+  'var' => 'Huarijio',
+  'nnx' => 'Ngong',
+  'esm' => 'Esuma',
+  'ksk' => 'Kansa',
+  'hvv' => "Santa Mar\x{ed}a Del Mar Huave",
+  'vmg' => 'Lungalunga',
+  'byc' => 'Ubaghara',
+  'srz' => 'Shahmirzadi',
+  'neg' => 'Negidal',
+  'afr' => 'Afrikaans',
+  'nlm' => 'Mankiyali',
+  'huz' => 'Hunzib',
+  'xah' => 'Kahayan',
+  'dyn' => 'Dyangadi',
+  'bvh' => 'Bure',
+  'bxe' => 'Birale',
+  'qux' => 'Yauyos Quechua',
+  'cuh' => 'Chuka',
+  'for' => 'Fore',
+  'sau' => 'Saleman',
+  'sox' => 'Swo',
+  'pot' => 'Potawatomi',
+  'hix' => "Hixkary\x{e1}na",
+  'aaz' => 'Amarasi',
+  'kvr' => 'Kerinci',
+  'nxm' => 'Numidian',
+  'tch' => 'Turks And Caicos Creole English',
+  'bml' => 'Bomboli',
+  'bht' => 'Bhattiyali',
+  'pag' => 'Pangasinan',
+  'ble' => 'Balanta-Kentohe',
+  'bey' => 'Beli (Papua New Guinea)',
+  'fao' => 'Faroese',
+  'lec' => 'Leco',
+  'awh' => 'Awbono',
+  'knf' => 'Mankanya',
+  'aru' => "Aru\x{e1} (Amazonas State)",
+  'zmc' => 'Margany',
+  'kes' => 'Kugbo',
+  'nyd' => 'Nyore',
+  'aew' => 'Ambakich',
+  'tea' => 'Temiar',
+  'ojv' => 'Ontong Java',
+  'org' => 'Oring',
+  'duo' => 'Dupaninan Agta',
+  'bmz' => 'Baramu',
+  'nzz' => 'Nanga Dama Dogon',
+  'mfp' => 'Makassar Malay',
+  'tsd' => 'Tsakonian',
+  'aal' => 'Afade',
+  'mcv' => 'Minanibai',
+  'lmo' => 'Lombard',
+  'xnk' => 'Nganakarti',
+  'tyj' => 'Tai Do',
+  'snc' => 'Sinaugoro',
+  'def' => 'Dezfuli',
+  'xwl' => 'Western Xwla Gbe',
+  'ebk' => 'Eastern Bontok',
+  'mob' => 'Moinba',
+  'pse' => 'Central Malay',
+  'bqc' => 'Boko (Benin)',
+  'woa' => 'Kuwema',
+  'ckh' => 'Chak',
+  'wrd' => 'Warduji',
+  'srl' => 'Isirawa',
+  'udi' => 'Udi',
+  'zpf' => 'San Pedro Quiatoni Zapotec',
+  'kzp' => 'Kaidipang',
+  'gnn' => 'Gumatj',
+  'ulk' => 'Meriam Mir',
+  'crr' => 'Carolina Algonquian',
+  'hul' => 'Hula',
+  'pcn' => 'Piti',
+  'bod' => 'Tibetan',
+  'oav' => 'Old Avar',
+  'ccs' => 'South Caucasian languages',
+  'zhw' => 'Zhoa',
+  'log' => 'Logo',
+  'wam' => 'Wampanoag',
+  'str' => 'Straits Salish',
+  'bgm' => 'Baga Mboteni',
+  'bra' => 'Braj',
+  'upv' => 'Uripiv-Wala-Rano-Atchin',
+  'gwd' => 'Gawwada',
+  'tno' => 'Toromono',
+  'pta' => 'Pai Tavytera',
+  'ctl' => 'Tlacoatzintepec Chinantec',
+  'wmx' => 'Womo',
+  'wci' => 'Waci Gbe',
+  'mms' => 'Southern Mam',
+  'kwg' => 'Sara Kaba Deme',
+  'aho' => 'Ahom',
+  'txt' => 'Citak',
+  'phd' => 'Phudagi',
+  'lat' => 'Latin',
+  'bfg' => 'Busang Kayan',
+  'tik' => 'Tikar',
+  'kbm' => 'Iwal',
+  'zna' => 'Zan Gula',
+  'ibe' => 'Akpes',
+  'tdx' => 'Tandroy-Mahafaly Malagasy',
+  'kka' => 'Kakanda',
+  'gbv' => 'Gbanu',
+  'tus' => 'Tuscarora',
+  'ygi' => 'Yiningayi',
+  'ane' => "X\x{e2}r\x{e2}c\x{f9}\x{f9}",
+  'tlt' => 'Sou Nama',
+  'the' => 'Chitwania Tharu',
+  'xyb' => 'Yandjibara',
+  'xep' => 'Epi-Olmec',
+  'emw' => 'Emplawas',
+  'nge' => 'Ngemba',
+  'noc' => 'Nuk',
+  'jbt' => "Jabut\x{ed}",
+  'mlg' => 'Malagasy',
+  'jih' => 'sTodsde',
+  'mnr' => 'Mono (USA)',
+  'isr' => 'Israeli Sign Language',
+  'zbc' => 'Central Berawan',
+  'mdu' => 'Mboko',
+  'nsh' => 'Ngoshie',
+  'uro' => 'Ura (Papua New Guinea)',
+  'swt' => 'Sawila',
+  'pko' => "P\x{f6}koot",
+  'bbl' => 'Bats',
+  'akd' => 'Ukpet-Ehom',
+  'mem' => 'Mangala',
+  'dag' => 'Dagbani',
+  'miq' => "M\x{ed}skito",
+  'lva' => 'Maku\'a',
+  'qxc' => 'Chincha Quechua',
+  'kgl' => 'Kunggari',
+  'yxa' => 'Mayawali',
+  'ynu' => 'Yahuna',
+  'mvf' => 'Peripheral Mongolian',
+  'lsi' => 'Lashi',
+  'dot' => 'Dass',
+  'myv' => 'Erzya',
+  'rna' => 'Runa',
+  'xrt' => 'Aranama-Tamique',
+  'mxg' => 'Mbangala',
+  'kto' => 'Kuot',
+  'xaj' => "Ararandew\x{e1}ra",
+  'wuu' => 'Wu Chinese',
+  'bvj' => 'Baan',
+  'yla' => 'Yaul',
+  'pyn' => "Poyan\x{e1}wa",
+  'fwa' => "Fw\x{e2}i",
+  'gde' => 'Gude',
+  'cuj' => 'Mashco Piro',
+  'tab' => 'Tabassaran',
+  'tfi' => 'Tofin Gbe',
+  'skm' => 'Kutong',
+  'yet' => 'Yetfa',
+  'wyi' => 'Woiwurrung',
+  'biu' => 'Biete',
+  'guh' => 'Guahibo',
+  'ovd' => 'Elfdalian',
+  'eve' => 'Even',
+  'blp' => 'Blablanga',
+  'bdq' => 'Bahnar',
+  'adn' => 'Adang',
+  'lur' => 'Laura',
+  'xgg' => 'Goreng',
+  'ksw' => 'S\'gaw Karen',
+  'llb' => 'Lolo',
+  'mtc' => 'Munit',
+  'pbr' => 'Pangwa',
+  'dmr' => 'East Damar',
+  'ruf' => 'Luguru',
+  'vkt' => 'Tenggarong Kutai Malay',
+  'xcb' => 'Cumbric',
+  'ipi' => 'Ipili',
+  'elh' => 'El Hugeirat',
+  'bxp' => 'Bebil',
+  'sba' => 'Ngambay',
+  'ixl' => 'Ixil',
+  'psp' => 'Philippine Sign Language',
+  'lwu' => 'Lawu',
+  'yre' => "Yaour\x{e9}",
+  'vut' => 'Vute',
+  'iki' => 'Iko',
+  'gmv' => 'Gamo',
+  'vls' => 'Vlaams',
+  'kou' => 'Koke',
+  'ttf' => 'Tuotomb',
+  'tgn' => 'Tandaganon',
+  'lkr' => "P\x{e4}ri",
+  'nri' => 'Chokri Naga',
+  'ass' => 'Ipulo',
+  'nhn' => 'Central Nahuatl',
+  'ulw' => 'Ulwa',
+  'kze' => 'Kosena',
+  'kmm' => 'Kom (India)',
+  'ill' => 'Iranun',
+  'mfe' => 'Morisyen',
+  'aek' => 'Haeke',
+  'ime' => 'Imeraguen',
+  'xha' => 'Harami',
+  'mbs' => 'Sarangani Manobo',
+  'grr' => 'Taznatit',
+  'dhd' => 'Dhundari',
+  'ssq' => 'So\'a',
+  'kax' => 'Kao',
+  'sum' => 'Sumo-Mayangna',
+  'spm' => 'Akukem',
+  'dta' => 'Daur',
+  'xtd' => 'Diuxi-Tilantongo Mixtec',
+  'rmc' => 'Carpathian Romani',
+  'hrm' => 'Horned Miao',
+  'mgy' => 'Mbunga',
+  'anp' => 'Angika',
+  'jao' => 'Yanyuwa',
+  'ckj' => 'Santo Domingo Xenacoj Cakchiquel',
+  'zts' => 'Tilquiapan Zapotec',
+  'bcc' => 'Southern Balochi',
+  'wwr' => 'Warrwa',
+  'viv' => 'Iduna',
+  'dse' => 'Dutch Sign Language',
+  'ngp' => 'Ngulu',
+  'had' => 'Hatam',
+  'fij' => 'Fijian',
+  'wku' => 'Kunduvadi',
+  'pef' => 'Northeastern Pomo',
+  'pns' => 'Ponosakan',
+  'xly' => 'Elymian',
+  'thp' => 'Thompson',
+  'cwd' => 'Woods Cree',
+  'emk' => 'Eastern Maninkakan',
+  'yac' => 'Pass Valley Yali',
+  'naf' => 'Nabak',
+  'ggo' => 'Southern Gondi',
+  'kjx' => 'Ramopa',
+  'jor' => "Jor\x{e1}",
+  'lbo' => 'Laven',
+  'aia' => 'Arosi',
+  'tiw' => 'Tiwi',
+  'ncd' => 'Nachering',
+  'mqv' => 'Mosimo',
+  'tyh' => 'O\'du',
+  'puo' => 'Puoc',
+  'cbv' => 'Cacua',
+  'apd' => 'Sudanese Arabic',
+  'bbz' => 'Babalia Creole Arabic',
+  'ppo' => 'Folopa',
+  'fnb' => 'Fanbak',
+  'aud' => 'Anuta',
+  'iqu' => 'Iquito',
+  'bpu' => 'Bongu',
+  'buu' => 'Budu',
+  'fqs' => 'Fas',
+  'gih' => 'Githabul',
+  'dov' => 'Dombe',
+  'mvp' => 'Duri',
+  'myt' => 'Sangab Mandaya',
+  'cdf' => 'Chiru',
+  'yty' => 'Yatay',
+  'swv' => 'Shekhawati',
+  'osi' => 'Osing',
+  'idt' => "Idat\x{e9}",
+  'umg' => 'Morrobalama',
+  'dgg' => 'Doga',
+  'wbl' => 'Wakhi',
+  'djj' => 'Djeebbana',
+  'lir' => 'Liberian English',
+  'kew' => 'West Kewa',
+  'iii' => 'Sichuan Yi',
+  'xmr' => 'Meroitic',
+  'rif' => 'Tarifit',
+  'sbd' => 'Southern Samo',
+  'kal' => 'Kalaallisut',
+  'mhc' => 'Mocho',
+  'neh' => 'Nyenkha',
+  'kne' => 'Kankanaey',
+  'mxj' => 'Miju-Mishmi',
+  'inm' => 'Minaean',
+  'msm' => 'Agusan Manobo',
+  'vmh' => 'Maraghei',
+  'yym' => 'Yuanjiang-Mojiang Yi',
+  'juh' => "H\x{f5}ne",
+  'xag' => 'Aghwan',
+  'tkw' => 'Teanu',
+  'aka' => 'Akan',
+  'blf' => 'Buol',
+  'lei' => 'Lemio',
+  'bvg' => 'Bonkeng',
+  'zmi' => 'Negeri Sembilan Malay',
+  'yev' => 'Yapunda',
+  'rnd' => 'Ruund',
+  'mpq' => "Mat\x{ed}s",
+  'drt' => 'Drents',
+  'muq' => 'Eastern Xiangxi Miao',
+  'rtw' => 'Rathawi',
+  'cpg' => 'Cappadocian Greek',
+  'cnb' => 'Chinbon Chin',
+  'cug' => 'Chungmboko',
+  'tmq' => 'Tumleo',
+  'rup' => 'Macedo-Romanian',
+  'uar' => 'Tairuma',
+  'mlj' => 'Miltu',
+  'nhb' => 'Beng',
+  'wiu' => 'Wiru',
+  'tgb' => 'Tobilung',
+  'byi' => 'Buyu',
+  'bxf' => 'Bilur',
+  'daj' => 'Dar Fur Daju',
+  'pah' => 'Tenharim',
+  'abm' => 'Abanyom',
+  'tcg' => 'Tamagario',
+  'kjl' => 'Western Parbate Kham',
+  'kho' => 'Khotanese',
+  'czn' => 'Zenzontepec Chatino',
+  'awg' => 'Anguthimri',
+  'hye' => 'Armenian',
+  'xcn' => 'Cotoname',
+  'mmw' => 'Emae',
+  'bqi' => 'Bakhtiari',
+  'orh' => 'Oroqen',
+  'ghl' => 'Ghulfan',
+  'kgx' => 'Kamaru',
+  'ttp' => 'Tombelala',
+  'sni' => 'Sensi',
+  'zpe' => 'Petapa Zapotec',
+  'kjz' => 'Bumthangkha',
+  'zhs' => 'Chinese (simplified)',
+  'okr' => 'Kirike',
+  'xse' => 'Sempan',
+  'may' => 'Malay (macrolanguage)',
+  'haa' => 'Han',
+  'dee' => 'Dewoin',
+  'lln' => 'Lele (Chad)',
+  'cwa' => 'Kabwa',
+  'bbx' => 'Bubia',
+  'adb' => 'Atauran',
+  'fuj' => 'Ko',
+  'pnk' => 'Paunaka',
+  'ywq' => 'Wuding-Luquan Yi',
+  'ems' => 'Pacific Gulf Yupik',
+  'jrr' => 'Jiru',
+  'mkq' => 'Bay Miwok',
+  'nca' => 'Iyo',
+  'aid' => 'Alngith',
+  'pio' => 'Piapoco',
+  'tuw' => 'Tungus languages',
+  'apa' => 'Apache languages',
+  'tpw' => "Tup\x{ed}",
+  'aua' => 'Asumboa',
+  'tan' => 'Tangale',
+  'ngf' => 'Trans-New Guinea languages',
+  'vit' => 'Viti',
+  'gao' => 'Gants',
+  'loh' => 'Narim',
+  'pep' => 'Kunja',
+  'kaz' => 'Kazakh',
+  'thf' => 'Thangmi',
+  'hmu' => 'Hamap',
+  'aes' => 'Alsea',
+  'kru' => 'Kurukh',
+  'jcs' => 'Jamaican Country Sign Language',
+  'mjy' => 'Mahican',
+  'bfh' => 'Blafe',
+  'anf' => 'Animere',
+  'noi' => 'Noiri',
+  'kwh' => 'Kowiai',
+  'mzr' => "Mar\x{fa}bo",
+  'mbk' => 'Malol',
+  'bwr' => 'Bura-Pabir',
+  'kfr' => 'Kachhi',
+  'mqt' => 'Mok',
+  'seq' => "Senara S\x{e9}noufo",
+  'gor' => 'Gorontalo',
+  'obo' => 'Obo Manobo',
+  'xhd' => 'Hadrami',
+  'ask' => 'Ashkun',
+  'jgo' => 'Ngomba',
+  'dha' => 'Dhanwar (India)',
+  'cbt' => 'Chayahuita',
+  'dtd' => 'Ditidaht',
+  'xta' => 'Alcozauca Mixtec',
+  'dnw' => 'Western Dani',
+  'bku' => 'Buhid',
+  'tjn' => 'Tonjon',
+  'sim' => 'Mende (Papua New Guinea)',
+  'nap' => 'Neapolitan',
+  'hom' => 'Homa',
+  'utu' => 'Utu',
+  'gdf' => 'Guduf-Gava',
+  'aax' => 'Mandobo Atas',
+  'zza' => 'Zaza',
+  'jig' => 'Jingulu',
+  'soz' => 'Temi',
+  'mlh' => 'Mape',
+  'kek' => "Kekch\x{ed}",
+  'dah' => 'Gwahatike',
+  'amm' => 'Ama (Papua New Guinea)',
+  'nsg' => 'Ngasa',
+  'cih' => 'Chinali',
+  'vgr' => 'Vaghri',
+  'otm' => 'Eastern Highland Otomi',
+  'dwz' => 'Dewas Rai',
+  'paj' => 'Ipeka-Tapuia',
+  'tzo' => 'Tzotzil',
+  'hds' => 'Honduras Sign Language',
+  'tbq' => 'Tibeto-Burman languages',
+  'etc' => 'Etchemin',
+  'frr' => 'Northern Frisian',
+  'srx' => 'Sirmauri',
+  'mve' => 'Marwari (Pakistan)',
+  'vmj' => 'Ixtayutla Mixtec',
+  'prt' => 'Phai',
+  'nej' => 'Neko',
+  'mxh' => 'Mvuba',
+  'btt' => 'Bete-Bendi',
+  'hux' => "N\x{fc}pode Huitoto",
+  'quz' => 'Cusco Quechua',
+  'aze' => 'Azerbaijani',
+  'kss' => 'Southern Kisi',
+  'xko' => 'Kiorr',
+  'qxi' => "San Andr\x{e9}s Quich\x{e9}",
+  'nya' => 'Nyanja',
+  'aou' => 'A\'ou',
+  'bsy' => 'Sabah Bisaya',
+  'pcb' => 'Pear',
+  'smd' => 'Sama',
+  'lhm' => 'Lhomi',
+  'oyy' => 'Oya\'oya',
+  'rue' => 'Rusyn',
+  'gug' => "Paraguayan Guaran\x{ed}",
+  'gnb' => 'Gangte',
+  'mti' => 'Maiwa (Papua New Guinea)',
+  'tdl' => 'Sur',
+  'xbr' => 'Kambera',
+  'agz' => 'Mt. Iriga Agta',
+  'kpd' => 'Koba',
+  'zkp' => "S\x{e3}o Paulo Kaing\x{e1}ng",
+  'kud' => '\'Auhelawa',
+  'heb' => 'Hebrew',
+  'vro' => "V\x{f5}ro",
+  'nnz' => 'Nda\'nda\'',
+  'wle' => 'Wolane',
+  'mon' => 'Mongolian',
+  'kia' => 'Kim',
+  'pgg' => 'Pangwali',
+  'fcs' => 'Quebec Sign Language',
+  'chz' => "Ozumac\x{ed}n Chinantec",
+  'bhv' => 'Bahau',
+  'knp' => 'Kwanja',
+  'gzn' => 'Gane',
+  'tkk' => 'Takpa',
+  'pov' => 'Upper Guinea Crioulo',
+  'toy' => 'Topoiyo',
+  'sgu' => 'Salas',
+  'szc' => 'Semaq Beri',
+  'enr' => 'Emumu',
+  'brd' => 'Baraamu',
+  'lrg' => 'Laragia',
+  'boa' => 'Bora',
+  'mct' => 'Mengisa',
+  'ato' => 'Atong (Cameroon)',
+  'pnw' => 'Banyjima',
+  'gwa' => 'Mbato',
+  'uiv' => 'Iyive',
+  'rmi' => 'Lomavren',
+  'omo' => 'Utarmbung',
+  'lfa' => 'Lefa',
+  'cjo' => "Ash\x{e9}ninka Pajonal",
+  'pha' => 'Pa-Hng',
+  'chl' => 'Cahuilla',
+  'cmt' => 'Camtho',
+  'shr' => 'Shi',
+  'mff' => 'Naki',
+  'tuk' => 'Turkmen',
+  'tpk' => 'Tupinikin',
+  'znd' => 'Zande languages',
+  'zdj' => 'Ngazidja Comorian',
+  'loj' => 'Lou',
+  'ifk' => 'Tuwali Ifugao',
+  'tis' => 'Masadiit Itneg',
+  'mmk' => 'Mukha-Dora',
+  'kzf' => 'Da\'a Kaili',
+  'zpp' => 'El Alto Zapotec',
+  'kkd' => 'Kinuku',
+  'bjm' => 'Bajelani',
+  'nnl' => 'Northern Rengma Naga',
+  'tte' => 'Bwanabwana',
+  'dep' => 'Pidgin Delaware',
+  'dyb' => 'Dyaberdyaber',
+  'kwj' => 'Kwanga',
+  'bfj' => 'Bafanji',
+  'hbu' => 'Habu',
+  'agl' => 'Fembe',
+  'nrc' => 'Noric',
+  'xsp' => 'Silopi',
+  'xpo' => 'Pochutec',
+  'xuo' => 'Kuo',
+  'yai' => 'Yagnobi',
+  'oog' => 'Ong',
+  'egy' => 'Egyptian (Ancient)',
+  'ted' => 'Tepo Krumen',
+  'qul' => 'North Bolivian Quechua',
+  'lav' => 'Latvian',
+  'asw' => 'Australian Aborigines Sign Language',
+  'tsa' => 'Tsaangi',
+  'kdn' => 'Kunda',
+  'dio' => 'Dibo',
+  'dnk' => 'Dengka',
+  'nae' => 'Naka\'ela',
+  'cao' => "Ch\x{e1}cobo",
+  'hwo' => 'Hwana',
+  'efe' => 'Efe',
+  'pee' => 'Taje',
+  'hsn' => 'Xiang Chinese',
+  'dwl' => 'Walo Kumbe Dogon',
+  'bci' => "Baoul\x{e9}",
+  'xns' => 'Kanashi',
+  'tlv' => 'Taliabu',
+  'ply' => 'Bolyu',
+  'bmx' => 'Baimak',
+  'mrb' => 'Marino',
+  'wra' => 'Warapu',
+  'bam' => 'Bambara',
+  'wod' => 'Wolani',
+  'sol' => 'Solos',
+  'hil' => 'Hiligaynon',
+  'mbw' => 'Maring',
+  'fuh' => 'Western Niger Fulfulde',
+  'wfg' => 'Yafi',
+  'lgt' => 'Pahi',
+  'cor' => 'Cornish',
+  'gdr' => 'Wipi',
+  'gnu' => 'Gnau',
+  'ams' => 'Southern Amami-Oshima',
+  'mho' => 'Mashi (Zambia)',
+  'mjl' => 'Mandeali',
+  'skw' => 'Skepi Creole Dutch',
+  'ots' => "Estado de M\x{e9}xico Otomi",
+  'dbp' => 'Duwai',
+  'klj' => 'Khalaj',
+  'nxk' => 'Koki Naga',
+  'zoh' => 'Chimalapa Zoque',
+  'nit' => 'Southeastern Kolami',
+  'ldh' => 'Lamja-Dengsa-Tola',
+  'vap' => 'Vaiphei',
+  'yde' => 'Yangum Dey',
+  'scg' => 'Sanggau',
+  'gla' => 'Scottish Gaelic',
+  'kuq' => 'Karipuna',
+  'kpq' => 'Korupun-Sela',
+  'ksm' => 'Kumba',
+  'kxj' => 'Kulfa',
+  'ndi' => 'Samba Leko',
+  'mne' => 'Naba',
+  'ise' => 'Italian Sign Language',
+  'sgb' => 'Mag-antsi Ayta',
+  'nlk' => 'Ninia Yali',
+  'smq' => 'Samo',
+  'pbe' => 'Mezontla Popoloca',
+  'dme' => 'Dugwor',
+  'nuv' => 'Northern Nuni',
+  'zln' => 'Lianshan Zhuang',
+  'khc' => 'Tukang Besi North',
+  'mal' => 'Malayalam',
+  'esk' => 'Northwest Alaska Inupiatun',
+  'lhs' => "Mlahs\x{f6}",
+  'acv' => 'Achumawi',
+  'lpe' => 'Lepki',
+  'afp' => 'Tapei',
+  'ita' => 'Italian',
+  'yph' => 'Phupha',
+  'lue' => 'Luvale',
+  'mew' => 'Maaka',
+  'tbd' => 'Kaki Ae',
+  'fai' => 'Faiwol',
+  'enf' => 'Forest Enets',
+  'uge' => 'Ughele',
+  'kyt' => 'Kayagar',
+  'kvp' => 'Kompane',
+  'aob' => 'Abom',
+  'pic' => 'Pinji',
+  'nbj' => 'Ngarinyman',
+  'lmi' => 'Lombi',
+  'kqt' => 'Klias River Kadazan',
+  'mfr' => 'Marrithiyel',
+  'xii' => 'Xiri',
+  'imr' => 'Imroing',
+  'dui' => 'Dumun',
+  'nmh' => 'Monsang Naga',
+  'gre' => 'Modern Greek (1453-)',
+  'bzh' => 'Mapos Buang',
+  'mwh' => 'Mouk-Aria',
+  'tim' => 'Timbe',
+  'kjy' => 'Erave',
+  'sjn' => 'Sindarin',
+  'lke' => 'Kenyi',
+  'mru' => 'Mono (Cameroon)',
+  'crp' => 'Creoles and pidgins',
+  'jvn' => 'Caribbean Javanese',
+  'kbk' => 'Grass Koiari',
+  'kzr' => 'Karang',
+  'bjs' => 'Bajan',
+  'wak' => 'Wakashan languages',
+  'nkv' => 'Nyika (Malawi and Zambia)',
+  'bgk' => 'Bit',
+  'teq' => 'Temein',
+  'maz' => 'Central Mazahua',
+  'unx' => 'Munda',
+  'arn' => 'Mapudungun',
+  'ytl' => 'Tanglang',
+  'ulm' => 'Ulumanda\'',
+  'ahi' => 'Tiagbamrin Aizi',
+  'tni' => 'Tandia',
+  'stp' => 'Southeastern Tepehuan',
+  'kkq' => 'Kaeku',
+  'rav' => 'Sampang',
+  'kay' => "Kamayur\x{e1}",
+  'san' => 'Sanskrit',
+  'xnm' => 'Ngumbarl',
+  'suw' => 'Sumbwa',
+  'hrw' => 'Warwar Feni',
+  'bas' => 'Basa (Cameroon)',
+  'xer' => "Xer\x{e9}nte",
+  'eka' => 'Ekajuk',
+  'mgx' => 'Omati',
+  'dyu' => 'Dyula',
+  'zir' => 'Ziriya',
+  'cof' => 'Colorado',
+  'gac' => 'Mixed Great Andamanese',
+  'xvs' => 'Vestinian',
+  'ptq' => 'Pattapu',
+  'hbb' => 'Huba',
+  'kmw' => 'Komo (Democratic Republic of Congo)',
+  'mjz' => 'Majhi',
+  'brq' => 'Breri',
+  'xkc' => 'Kho\'ini',
+  'ona' => 'Ona',
+  'lso' => 'Laos Sign Language',
+  'wdd' => 'Wandji',
+  'vae' => 'Vale',
+  'sdl' => 'Saudi Arabian Sign Language',
+  'bsz' => 'Souletin Basque',
+  'uri' => 'Urim',
+  'csv' => 'Sumtu Chin',
+  'uhn' => 'Damal',
+  'zav' => 'Yatzachi Zapotec',
+  'egl' => 'Emilian',
+  'quy' => 'Ayacucho Quechua',
+  'tmd' => 'Haruai',
+  'nlw' => 'Walangama',
+  'cdr' => 'Cinda-Regi-Tiyal',
+  'yig' => 'Wusa Nasu',
+  'cnu' => 'Chenoua',
+  'mnp' => 'Min Bei Chinese',
+  'tzc' => 'Chamula Tzotzil',
+  'olu' => 'Kuvale',
+  'lif' => 'Limbu',
+  'mud' => 'Mednyj Aleut',
+  'wib' => 'Southern Toussian',
+  'mpd' => 'Machinere',
+  'nhu' => 'Noone',
+  'tgu' => 'Tanggu',
+  'mia' => 'Miami',
+  'eto' => 'Eton (Cameroon)',
+  'kon' => 'Kongo',
+  'soy' => 'Miyobe',
+  'rir' => 'Ribun',
+  'yuj' => 'Karkar-Yuri',
+  'skk' => 'Sok',
+  'bex' => 'Jur Modo',
+  'pme' => 'Pwaamei',
+  'kti' => 'North Muyu',
+  'dbe' => 'Dabe',
+  'dwy' => 'Dhuwaya',
+  'xmf' => 'Mingrelian',
+  'cla' => 'Ron',
+  'pll' => 'Shwe Palaung',
+  'lnd' => 'Lundayeh',
+  'bpb' => 'Barbacoas',
+  'ldj' => 'Lemoro',
+  'bng' => 'Benga',
+  'mss' => 'West Masela',
+  'bub' => 'Bua',
+  'ins' => 'Indian Sign Language',
+  'sbq' => 'Sileibi',
+  'blr' => 'Blang',
+  'rei' => 'Reli',
+  'chy' => 'Cheyenne',
+  'cet' => "Cent\x{fa}\x{fa}m",
+  'kxh' => 'Karo (Ethiopia)',
+  'kve' => 'Kalabakan',
+  'toz' => 'To',
+  'zrg' => 'Mirgan',
+  'tfo' => 'Tefaro',
+  'ipo' => 'Ipiko',
+  'bda' => 'Bayot',
+  'agy' => 'Southern Alta',
+  'bxr' => 'Russia Buriat',
+  'pbp' => 'Badyara',
+  'klh' => 'Weliki',
+  'abs' => 'Ambonese Malay',
+  'nny' => 'Nyangga',
+  'lup' => 'Lumbu',
+  'afe' => 'Putukwam',
+  'trx' => 'Tringgus-Sembaan Bidayuh',
+  'mek' => 'Mekeo',
+  'wel' => 'Welsh',
+  'pyu' => 'Puyuma',
+  'ush' => 'Ushojo',
+  'cre' => 'Cree',
+  'kbw' => 'Kaiep',
+  'hmb' => 'Humburi Senni Songhay',
+  'krb' => 'Karkin',
+  'wun' => 'Bungu',
+  'tdy' => 'Tadyawan',
+  'bgw' => 'Bhatri',
+  'eze' => 'Uzekwe',
+  'waw' => 'Waiwai',
+  'ssa' => 'Nilo-Saharan languages',
+  'iko' => 'Olulumo-Ikom',
+  'sed' => 'Sedang',
+  'psr' => 'Portuguese Sign Language',
+  'omc' => 'Mochica',
+  'ynn' => 'Yana',
+  'emm' => 'Mamulique',
+  'tol' => 'Tolowa',
+  'bkb' => 'Finallig',
+  'mdn' => 'Mbati',
+  'atc' => 'Atsahuaca',
+  'slv' => 'Slovenian',
+  'spk' => 'Sengo',
+  'suk' => 'Sukuma',
+  'mwj' => 'Maligo',
+  'thr' => 'Rana Tharu',
+  'plz' => 'Paluan',
+  'ngr' => 'Engdewu',
+  'aiq' => 'Aimaq',
+  'hrk' => 'Haruku',
+  'mkd' => 'Macedonian',
+  'kmk' => 'Limos Kalinga',
+  'mzf' => 'Aiku',
+  'aem' => 'Arem',
+  'alg' => 'Algonquian languages',
+  'jai' => 'Western Jacalteco',
+  'roh' => 'Romansh',
+  'adu' => 'Aduge',
+  'anr' => 'Andh',
+  'gof' => 'Gofa',
+  'pui' => 'Puinave',
+  'cac' => 'Chuj',
+  'nbh' => 'Ngamo',
+  'bsl' => 'Basa-Gumna',
+  'ppi' => 'Paipai',
+  'sdz' => 'Sallands',
+  'bwf' => 'Boselewa',
+  'kff' => 'Koya',
+  'hwc' => 'Hawai\'i Creole English',
+  'ibr' => 'Ibuoro',
+  'lbi' => 'La\'bi',
+  'kct' => 'Kaian',
+  'ste' => 'Liana-Seti',
+  'bin' => 'Bini',
+  'xpc' => 'Pecheneg',
+  'dic' => 'Lakota Dida',
+  'hos' => 'Ho Chi Minh City Sign Language',
+  'axg' => "Mato Grosso Ar\x{e1}ra",
+  'sis' => 'Siuslaw',
+  'nmj' => 'Ngombe (Central African Republic)',
+  'bzj' => 'Belize Kriol English',
+  'azr' => 'Adzera',
+  'tau' => 'Upper Tanana',
+  'oso' => 'Ososo',
+  'rsi' => 'Rennellese Sign Language',
+  'lna' => 'Langbashe',
+  'cst' => 'Northern Ohlone',
+  'abk' => 'Abkhazian',
+  'bib' => 'Bissa',
+  'mes' => 'Masmaje',
+  'zat' => 'Tabaa Zapotec',
+  'mnf' => 'Mundani',
+  'mvr' => 'Marau',
+  'trz' => "Tor\x{e1}",
+  'ndc' => 'Ndau',
+  'bnj' => 'Eastern Tawbuid',
+  'bdd' => 'Bunama',
+  'ldg' => 'Lenyima',
+  'llu' => 'Lau',
+  'sqj' => 'Albanian languages',
+  'xmp' => 'Kuku-Mu\'inh',
+  'fre' => 'French',
+  'sch' => 'Sakachep',
+  'lip' => 'Sekpele',
+  'msk' => 'Mansaka',
+  'nfl' => 'Ayiwo',
+  'xcu' => 'Curonian',
+  'tox' => 'Tobian',
+  'aqt' => "Angait\x{e9}",
+  'sks' => 'Maia',
+  'otw' => 'Ottawa',
+  'tju' => 'Tjurruru',
+  'mdb' => 'Morigi',
+  'zmo' => 'Molo',
+  'bkn' => 'Bukitan',
+  'aay' => 'Aariya',
+  'leo' => 'Leti (Cameroon)',
+  'cym' => 'Welsh',
+  'ypg' => 'Phola',
+  'yug' => 'Yug',
+  'tma' => 'Tama (Chad)',
+  'amw' => 'Western Neo-Aramaic',
+  'bez' => 'Bena (Tanzania)',
+  'huy' => "Hulaul\x{e1}",
+  'mua' => 'Mundang',
+  'khi' => 'Khoisan languages',
+  'mpa' => 'Mpoto',
+  'luf' => 'Laua',
+  'wlr' => 'Wailapa',
+  'krn' => 'Sapo',
+  'wub' => 'Wunambal',
+  'wng' => 'Wanggom',
+  'mid' => 'Mandaic',
+  'sry' => 'Sera',
+  'bsx' => 'Yangkam',
+  'hmn' => 'Hmong',
+  'akq' => 'Ak',
+  'byo' => 'Biyo',
+  'pbf' => 'Coyotepec Popoloca',
+  'dmf' => 'Medefaidrin',
+  'cld' => 'Chaldean Neo-Aramaic',
+  'xbe' => 'Bigambal',
+  'ntu' => "Nat\x{fc}gu",
+  'yij' => 'Yindjibarndi',
+  'sdx' => 'Sibu Melanau',
+  'auq' => 'Anus',
+  'pdt' => 'Plautdietsch',
+  'apq' => 'A-Pucikwar',
+  'sik' => 'Sikiana',
+  'ncq' => 'Northern Katang',
+  'egx' => 'Egyptian languages',
+  'hok' => 'Hokan languages',
+  'ywa' => 'Kalou',
+  'mka' => 'Mbre',
+  'qwc' => 'Classical Quechua',
+  'sno' => 'Snohomish',
+  'wkb' => 'Kumbaran',
+  'gji' => 'Geji',
+  'bzg' => 'Babuza',
+  'ttr' => 'Tera',
+  'nmg' => 'Kwasio',
+  'asm' => 'Assamese',
+  'fla' => 'Kalispel-Pend d\'Oreille',
+  'bqo' => 'Balo',
+  'lmc' => 'Limilngan',
+  'ykg' => 'Northern Yukaghir',
+  'njr' => 'Njerep',
+  'mwg' => 'Aiklep',
+  'kms' => 'Kamasau',
+  'pii' => 'Pini',
+  'she' => 'Sheko',
+  'bel' => 'Belarusian',
+  'bmy' => 'Bemba (Democratic Republic of Congo)',
+  'haq' => 'Ha',
+  'nzy' => 'Nzakambay',
+  'slt' => 'Sila',
+  'mbm' => 'Ombamba',
+  'duc' => 'Duna',
+  'sps' => 'Saposa',
+  'sus' => 'Susu',
+  'cvn' => 'Valle Nacional Chinantec',
+  'alj' => 'Alangan',
+  'baw' => 'Bambili-Bambui',
+  'bpn' => 'Dzao Min',
+  'wgw' => 'Wagawaga',
+  'bun' => 'Sherbro',
+  'mzp' => 'Movima',
+  'cgc' => 'Kagayanen',
+  'xtq' => 'Tumshuqese',
+  'noo' => 'Nootka',
+  'ztm' => "San Agust\x{ed}n Mixtepec Zapotec",
+  'coe' => 'Koreguaje',
+  'kob' => 'Kohoroxitari',
+  'ssd' => 'Siroi',
+  'per' => 'Persian',
+  'ayt' => 'Magbukun Ayta',
+  'win' => 'Ho-Chunk',
+  'pnm' => 'Punan Batu 1',
+  'sea' => 'Semai',
+  'gai' => 'Borei',
+  'nar' => 'Iguta',
+  'kcv' => 'Kete',
+  'trl' => 'Traveller Scottish',
+  'gop' => 'Yeretuar',
+  'obi' => "Obispe\x{f1}o",
+  'bwp' => 'Mandobo Bawah',
+  'tnc' => "Tanimuca-Retuar\x{e3}",
+  'kfp' => 'Korwa',
+  'bjw' => "Bakw\x{e9}",
+  'pmf' => 'Pamona',
+  'nyq' => 'Nayini',
+  'dbf' => 'Edopi',
+  'xme' => 'Median',
+  'frp' => 'Arpitan',
+  'hbn' => 'Heiban',
+  'rtm' => 'Rotuman',
+  'niv' => 'Gilyak',
+  'ktc' => 'Kholok',
+  'msw' => 'Mansoanka',
+  'lts' => 'Tachoni',
+  'itd' => 'Southern Tidung',
+  'lie' => 'Likila',
+  'lcl' => 'Lisela',
+  'yih' => 'Western Yiddish',
+  'tkm' => 'Takelma',
+  'sab' => 'Buglere',
+  'tba' => "Aikan\x{e3}",
+  'abw' => 'Pal',
+  'qxo' => 'Southern Conchucos Ancash Quechua',
+  'xki' => 'Kenyan Sign Language',
+  'vaf' => 'Vafsi',
+  'ess' => 'Central Siberian Yupik',
+  'xzm' => 'Zemgalian',
+  'arb' => 'Standard Arabic',
+  'urc' => 'Urningangg',
+  'pkc' => 'Paekche',
+  'bnh' => "Banaw\x{e1}",
+  'zkr' => 'Zakhring',
+  'gev' => 'Eviya',
+  'sqh' => 'Shau',
+  'mto' => 'Totontepec Mixe',
+  'xbp' => 'Bibbulman',
+  'oue' => 'Oune',
+  'nut' => 'Nung (Viet Nam)',
+  'twt' => "Turiw\x{e1}ra",
+  'kxg' => 'Katingan',
+  'ope' => 'Old Persian',
+  'sjb' => 'Sajau Basap',
+  'gym' => "Ng\x{e4}bere",
+  'act' => 'Achterhoeks',
+  'jet' => 'Manem',
+  'mgl' => 'Maleu-Kilenge',
+  'otk' => 'Old Turkish',
+  'kiq' => 'Kosadle',
+  'kyv' => 'Kayort',
+  'gld' => 'Nanai',
+  'kvf' => 'Kabalai',
+  'kdu' => 'Kadaru',
+  'knr' => 'Kaningra',
+  'klg' => 'Tagakaulo',
+  'kem' => 'Kemak',
+  'amk' => 'Ambai',
+  'kqv' => 'Okolod',
+  'aon' => 'Bumbita Arapesh',
+  'shp' => 'Shipibo-Conibo',
+  'rmo' => 'Sinte Romani',
+  'cji' => 'Chamalal',
+  'omi' => 'Omi',
+  'mgz' => 'Mbugwe',
+  'ati' => "Atti\x{e9}",
+  'mjx' => 'Mahali',
+  'yhl' => 'Hlepho Phowa',
+  'ymt' => 'Mator-Taygi-Karagas',
+  'bak' => 'Bashkir',
+  'oke' => 'Okpe (Southwestern Edo)',
+  'nkt' => 'Nyika (Tanzania)',
+  'gvn' => 'Kuku-Yalanji',
+  'xsr' => 'Sherpa',
+  'how' => 'Honi',
+  'der' => 'Deori',
+  'siw' => 'Siwai',
+  'phq' => 'Phana\'',
+  'svc' => 'Vincentian Creole English',
+  'crf' => 'Caramanta',
+  'uya' => 'Doko-Uyanga',
+  'zpr' => 'Santiago Xanica Zapotec',
+  'boq' => 'Bogaya',
+  'igg' => 'Igana',
+  'bgs' => 'Tagabawa',
+  'was' => 'Washo',
+  'ccm' => 'Malaccan Creole Malay',
+  'kgy' => 'Kyerung',
+  'cai' => 'Central American Indian languages',
+  'puc' => 'Punan Merap',
+  'sgn' => 'sign languages',
+  'stf' => 'Seta',
+  'ijj' => 'Ede Ije',
+  'rat' => 'Razajerdi',
+  'dii' => 'Dimbong',
+  'ifm' => 'Teke-Fuumu',
+  'bwe' => 'Bwe Karen',
+  'bby' => 'Befang',
+  'kfe' => 'Kota (India)',
+  'mmm' => 'Maii',
+  'max' => 'North Moluccan Malay',
+  'goe' => 'Gongduk',
+  'rog' => 'Northern Roglai',
+  'bjk' => 'Barok',
+  'unz' => 'Unde Kaili',
+  'lbc' => 'Lakkia',
+  'xpi' => 'Pictish',
+  'alh' => 'Alawa',
+  'tvo' => 'Tidore',
+  'yao' => 'Yao',
+  'kbs' => 'Kande',
+  'nbg' => 'Nagarchal',
+  'mou' => 'Mogum',
+  'cop' => 'Coptic',
+  'mze' => 'Morawa',
+  'nqq' => 'Kyan-Karyaw Naga',
+  'tpm' => 'Tampulma',
+  'nwm' => 'Nyamusa-Molo',
+  'tum' => 'Tumbuka',
+  'tsq' => 'Thai Sign Language',
+  'jac' => 'Popti\'',
+  'yor' => 'Yoruba',
+  'ave' => 'Avestan',
+  'bco' => 'Kaluli',
+  'nik' => 'Southern Nicobarese',
+  'scq' => 'Sa\'och',
+  'wec' => "W\x{e8} Western",
+  'knb' => 'Lubuagan Kalinga',
+  'kug' => 'Kupa',
+  'kpg' => 'Kapingamarangi',
+  'ndx' => 'Nduga',
+  'ago' => 'Tainae',
+  'pgd' => "G\x{101}ndh\x{101}r\x{12b}",
+  'vau' => 'Vanuma',
+  'pom' => 'Southeastern Pomo',
+  'gia' => 'Kija',
+  'smg' => 'Simbali',
+  'mfn' => 'Cross River Mbembe',
+  'imn' => 'Imonda',
+  'gud' => "Yocobou\x{e9} Dida",
+  'bhm' => 'Bathari',
+  'nno' => 'Norwegian Nynorsk',
+  'nhe' => 'Eastern Huasteca Nahuatl',
+  'oml' => 'Ombo',
+  'oht' => 'Old Hittite',
+  'szy' => 'Sakizaya',
+  'ole' => 'Olekha',
+  'kzn' => 'Kokola',
+  'cho' => 'Choctaw',
+  'toc' => 'Coyutla Totonac',
+  'kij' => 'Kilivila',
+  'tge' => 'Eastern Gorkha Tamang',
+  'sjr' => 'Siar-Lak',
+  'pcp' => 'Pacahuara',
+  'acs' => "Acro\x{e1}",
+  'wyy' => 'Western Fijian',
+  'atl' => 'Mt. Iraya Agta',
+  'nps' => 'Nipsan',
+  'zkb' => 'Koibal',
+  'yrn' => 'Yerong',
+  'pmu' => 'Mirpur Panjabi',
+  'nus' => 'Nuer',
+  'dbu' => 'Bondum Dom Dogon',
+  'soo' => 'Songo',
+  'qvm' => 'Margos-Yarowilca-Lauricocha Quechua',
+  'hio' => 'Tsoa',
+  'gek' => 'Ywom',
+  'nyj' => 'Nyanga',
+  'arr' => 'Karo (Brazil)',
+  'kdf' => 'Mamusi',
+  'tzz' => "Zinacant\x{e1}n Tzotzil",
+  'kvu' => 'Yinbaw Karen',
+  'est' => 'Estonian',
+  'jid' => 'Bu',
+  'vma' => 'Martuyhunira',
+  'dkx' => 'Mazagway',
+  'fax' => 'Fala',
+  'nea' => 'Eastern Ngad\'a',
+  'nsd' => 'Southern Nisu',
+  'akh' => 'Angal Heneng',
+  'jua' => "J\x{fa}ma",
+  'jpa' => 'Jewish Palestinian Aramaic',
+  'hsf' => 'Southeastern Huastec',
+  'pqe' => 'Eastern Malayo-Polynesian languages',
+  'bsc' => 'Bassari',
+  'paa' => 'Papuan languages',
+  'kyk' => 'Kamayo',
+  'cal' => 'Carolinian',
+  'dsn' => 'Dusner',
+  'wtm' => 'Mewati',
+  'sar' => 'Saraveca',
+  'zsl' => 'Zambian Sign Language',
+  'lsy' => 'Mauritian Sign Language',
+  'xpl' => 'Port Sorell Tasmanian',
+  'xkz' => 'Kurtokha',
+  'amv' => 'Ambelau',
+  'xul' => 'Ngunawal',
+  'zzj' => 'Zuojiang Zhuang',
+  'gss' => 'Greek Sign Language',
+  'dil' => 'Dilling',
+  'zin' => 'Zinza',
+  'afu' => 'Awutu',
+  'gdn' => 'Umanakaina',
+  'yob' => 'Yoba',
+  'hah' => 'Hahon',
+  'xpz' => 'Bruny Island Tasmanian',
+  'xkl' => 'Mainstream Kenyah',
+  'diz' => 'Ding',
+  'cru' => "Car\x{fa}tana",
+  'mrp' => 'Morouas',
+  'kqk' => 'Kotafon Gbe',
+  'pye' => 'Pye Krumen',
+  'caz' => 'Canichana',
+  'teg' => 'Teke-Tege',
+  'dds' => 'Donno So Dogon',
+  'ood' => 'Tohono O\'odham',
+  'bav' => 'Vengo',
+  'sdc' => 'Sassarese Sardinian',
+  'ora' => 'Oroha',
+  'tlm' => 'Tolomako',
+  'xdk' => 'Dharuk',
+  'dux' => 'Duungooma',
+  'ras' => 'Tegali',
+  'tzl' => 'Talossan',
+  'nch' => 'Central Huasteca Nahuatl',
+  'bgt' => 'Bughotu',
+  'jka' => 'Kaera',
+  'icr' => 'Islander Creole English',
+  'aph' => 'Athpariya',
+  'xli' => 'Liburnian',
+  'auh' => 'Aushi',
+  'wat' => 'Kaninuwa',
+  'kbt' => 'Abadi',
+  'lmx' => 'Laimbue',
+  'lam' => 'Lamba',
+  'wog' => 'Wogamusin',
+  'plc' => 'Central Palawano',
+  'tsj' => 'Tshangla',
+  'txm' => 'Tomini',
+  'kwa' => "D\x{e2}w",
+  'bfa' => 'Bari',
+  'zng' => 'Mang',
+  'zpb' => 'Yautepec Zapotec',
+  'nks' => 'North Asmat',
+  'kcw' => 'Kabwari',
+  'atz' => 'Arta',
+  'mgi' => 'Lijili',
+  'loa' => 'Loloda',
+  'xsb' => 'Sambal',
+  'bjv' => 'Bedjond',
+  'brg' => 'Baure',
+  'rzh' => "R\x{101}zi\x{1e25}\x{12b}",
+  'mof' => 'Mohegan-Montauk-Narragansett',
+  'ade' => 'Adele',
+  'evn' => 'Evenki',
+  'rjs' => 'Rajbanshi',
+  'xth' => 'Yitha Yitha',
+  'gkd' => "Mag\x{268} (Madang Province)",
+  'tnx' => 'Tanema',
+  'wmo' => 'Wom (Papua New Guinea)',
+  'kkg' => 'Mabaka Valley Kalinga',
+  'boj' => 'Anjam',
+  'yms' => 'Mysian',
+  'stu' => 'Samtao',
+  'rgk' => 'Rangkas',
+  'tdo' => 'Teme',
+  'gwj' => "\x{1c0}Gwi",
+  'bvd' => 'Baeggu',
+  'tgp' => 'Tangoa',
+  'yxg' => 'Yagara',
+  'ktx' => "Kaxarar\x{ed}",
+  'cia' => 'Cia-Cia',
+  'bei' => 'Bekati\'',
+  'pce' => 'Ruching Palaung',
+  'pil' => 'Yom',
+  'abv' => 'Baharna Arabic',
+  'nhp' => 'Isthmus-Pajapan Nahuatl',
+  'rub' => 'Gungu',
+  'rng' => 'Ronga',
+  'gne' => 'Ganang',
+  'vkm' => 'Kamakan',
+  'psn' => 'Panasuan',
+  'mla' => 'Malo',
+  'llf' => 'Hermit',
+  'wur' => 'Wurrugu',
+  'xad' => 'Adai',
+  'daa' => "Dangal\x{e9}at",
+  'tcd' => 'Tafi',
+  'niw' => 'Nimo',
+  'ylg' => 'Yelogu',
+  'skt' => 'Sakata',
+  'pwo' => 'Pwo Western Karen',
+  'urx' => 'Urimo',
+  'awd' => 'Arawakan languages',
+  'nyh' => 'Nyikina',
+  'mdr' => 'Mandar',
+  'mnu' => 'Mer',
+  'mxa' => 'Northwest Oaxaca Mixtec',
+  'cnp' => 'Northern Ping Chinese',
+  'isu' => 'Isu (Menchum Division)',
+  'gho' => 'Ghomara',
+  'yiq' => 'Miqie',
+  'msv' => 'Maslam',
+  'khz' => 'Keapara',
+  'taf' => "Tapirap\x{e9}",
+  'akj' => 'Aka-Jeru',
+  'tri' => "Tri\x{f3}",
+  'kyw' => 'Kudmali',
+  'ngn' => 'Ngwo',
+  'pbu' => 'Northern Pashto',
+  'dmu' => 'Dubu',
+  'kih' => 'Kilmeri',
+  'umd' => 'Umbindhamu',
+  'thn' => 'Thachanadan',
+  'cek' => 'Eastern Khumi Chin',
+  'ann' => 'Obolo',
+  'luu' => 'Lumba-Yakkha',
+  'obl' => 'Oblo',
+  'dja' => 'Djadjawurrung',
+  'zas' => 'Santo Domingo Albarradas Zapotec',
+  'wsi' => 'Wusi',
+  'met' => 'Mato',
+  'gew' => 'Gera',
+  'sqq' => 'Sou',
+  'ibn' => 'Ibino',
+  'swm' => 'Samosa',
+  'mhy' => 'Ma\'anyan',
+  'mvb' => 'Mattole',
+  'bnq' => 'Bantik',
+  'sbg' => 'Seget',
+  'css' => 'Southern Ohlone',
+  'xrm' => 'Armazic',
+  'xga' => 'Galatian',
+  'dgd' => 'Dagaari Dioula',
+  'gal' => 'Galolen',
+  'azb' => 'South Azerbaijani',
+  'bir' => 'Bisorio',
+  'hov' => 'Hovongan',
+  'phh' => 'Phukha',
+  'xtj' => 'San Juan Teita Mixtec',
+  'gaz' => 'West Central Oromo',
+  'siv' => 'Sumariup',
+  'mjc' => 'San Juan Colorado Mixtec',
+  'kao' => 'Xaasongaxango',
+  'boh' => 'Boma',
+  'cdn' => 'Chaudangsi',
+  'nab' => "Southern Nambiku\x{e1}ra",
+  'occ' => 'Occidental',
+  'fvr' => 'Fur',
+  'gru' => 'Kistane',
+  'svx' => 'Skalvian',
+  'lku' => 'Kungkari',
+  'mre' => 'Martha\'s Vineyard Sign Language',
+  'peb' => 'Eastern Pomo',
+  'kor' => 'Korean',
+  'kqw' => 'Kandas',
+  'rsl' => 'Russian Sign Language',
+  'rin' => 'Nungu',
+  'ays' => 'Sorsogon Ayta',
+  'ncj' => 'Northern Puebla Nahuatl',
+  'sls' => 'Singapore Sign Language',
+  'iow' => 'Iowa-Oto',
+  'apj' => 'Jicarilla Apache',
+  'kjo' => 'Harijan Kinnauri',
+  'auj' => 'Awjilah',
+  'kmt' => 'Kemtuik',
+  'khl' => 'Lusi',
+  'bln' => 'Southern Catanduanes Bikol',
+  'mac' => 'Macedonian',
+  'lbx' => 'Lawangan',
+  'njb' => 'Nocte Naga',
+  'hrt' => "H\x{e9}rtevin",
+  'sut' => 'Subtiaba',
+  'tsh' => 'Tsuvan',
+  'spt' => 'Spiti Bhoti',
+  'pux' => 'Puare',
+  'aig' => 'Antigua and Barbuda Creole English',
+  'jax' => 'Jambi Malay',
+  'sxs' => 'Sasaru',
+  'vum' => 'Vumbu',
+  'haj' => 'Hajong',
+  'ttb' => 'Gaa',
+  'bxn' => 'Burduna',
+  'kck' => 'Kalanga',
+  'wkr' => 'Keerray-Woorroong',
+  'piz' => 'Pije',
+  'adp' => 'Adap',
+  'alq' => 'Algonquin',
+  'rkb' => 'Rikbaktsa',
+  'ckd' => 'South Central Cakchiquel',
+  'wrh' => 'Wiradjuri',
+  'xmu' => 'Kamu',
+  'toi' => 'Tonga (Zambia)',
+  'kph' => 'Kplang',
+  'kuh' => 'Kushi',
+  'llp' => 'North Efate',
+  'ldq' => 'Lufu',
+  'uma' => 'Umatilla',
+  'sbj' => 'Surbakhal',
+  'ilo' => 'Iloko',
+  'bxb' => 'Belanda Bor',
+  'smh' => 'Samei',
+  'zak' => 'Zanaki',
+  'tgf' => 'Chalikha',
+  'ttn' => 'Towei',
+  'abt' => 'Ambulas',
+  'nhf' => 'Nhuwala',
+  'csk' => 'Jola-Kasa',
+  'liu' => 'Logorik',
+  'djd' => 'Djamindjung',
+  'ces' => 'Czech',
+  'int' => 'Intha',
+  'mst' => 'Cataelano Mandaya',
+  'wei' => 'Kiunum',
+  'gsw' => 'Swiss German',
+  'tap' => 'Taabwa',
+  'njn' => 'Liangmai Naga',
+  'xom' => 'Komo (Sudan)',
+  'blb' => 'Bilua',
+  'zoq' => 'Tabasco Zoque',
+  'bur' => 'Burmese',
+  'xgd' => 'Gudang',
+  'dga' => 'Southern Dagaare',
+  'bpr' => 'Koronadal Blaan',
+  'skv' => 'Skou',
+  'mty' => 'Nabi',
+  'cid' => 'Chimariko',
+  'bva' => 'Barein',
+  'cua' => 'Cua',
+  'bsi' => 'Bassossi',
+  'ppl' => 'Pipil',
+  'cpa' => 'Palantla Chinantec',
+  'urz' => 'Uru-Eu-Wau-Wau',
+  'ntp' => 'Northern Tepehuan',
+  'wir' => "Wiraf\x{e9}d",
+  'mld' => 'Malakhel',
+  'xaa' => 'Andalusian Arabic',
+  'pen' => 'Penesak',
+  'ggl' => 'Ganglau',
+  'dad' => 'Marik',
+  'akg' => 'Anakalangu',
+  'lbl' => 'Libon Bikol',
+  'khx' => 'Kanu',
+  'ktz' => "Ju\x{1c0}\x{2bc}hoan",
+  'mym' => 'Me\'en',
+  'tca' => 'Ticuna',
+  'acw' => 'Hijazi Arabic',
+  'tjp' => 'Tjupany',
+  'nan' => 'Min Nan Chinese',
+  'tww' => 'Tuwari',
+  'nuw' => 'Nguluwan',
+  'awa' => 'Awadhi',
+  'mev' => 'Mano',
+  'kde' => 'Makonde',
+  'mxd' => 'Modang',
+  'jal' => 'Yalahatan',
+  'yuq' => 'Yuqui',
+  'jaz' => 'Jawe',
+  'aij' => 'Lishanid Noshan',
+  'cbm' => 'Yepocapa Southwestern Cakchiquel',
+  'hag' => 'Hanga',
+  'xlc' => 'Lycian',
+  'mqm' => 'South Marquesan',
+  'cwg' => 'Chewong',
+  'azn' => 'Western Durango Nahuatl',
+  'mwq' => "M\x{fc}n Chin",
+  'sxk' => 'Southern Kalapuya',
+  'bcy' => 'Bacama',
+  'pli' => 'Pali',
+  'hot' => 'Hote',
+  'pix' => 'Piu',
+  'sit' => 'Sino-Tibetan languages',
+  'ktl' => 'Koroshi',
+  'teh' => 'Tehuelche',
+  'ibb' => 'Ibibio',
+  'jru' => "Japrer\x{ed}a",
+  'nkw' => 'Nkutu',
+  'kcs' => 'Koenoem',
+  'mvn' => 'Minaveha',
+  'lcc' => 'Legenyem',
+  'ncg' => 'Nisga\'a',
+  'oku' => 'Oku',
+  'kgo' => 'Krongo',
+  'fia' => 'Nobiin',
+  'fud' => 'East Futuna',
+  'aug' => 'Aguna',
+  'anb' => 'Andoa',
+  'lbz' => 'Lardil',
+  'apg' => 'Ampanang',
+  'tvy' => 'Timor Pidgin',
+  'slk' => 'Slovak',
+  'yay' => 'Agwagwune',
+  'bzq' => 'Buli (Indonesia)',
+  'nmq' => 'Nambya',
+  'url' => 'Urali',
+  'cka' => 'Khumi Awa Chin',
+  'bbo' => "Northern Bobo Madar\x{e9}",
+  'puz' => 'Purum Naga',
+  'sdi' => 'Sindang Kelingi',
+  'ngb' => 'Northern Ngbandi',
+  'bkr' => 'Bakumpai',
+  'ddw' => 'Dawera-Daweloor',
+  'hrv' => 'Croatian',
+  'utr' => 'Etulo',
+  'ayk' => 'Akuku',
+  'spv' => 'Sambalpuri',
+  'suv' => 'Puroik',
+  'fss' => 'Finland-Swedish Sign Language',
+  'brh' => 'Brahui',
+  'kfu' => 'Katkari',
+  'bwu' => 'Buli (Ghana)',
+  'pth' => "Patax\x{f3} H\x{e3}-Ha-H\x{e3}e",
+  'gou' => 'Gavar',
+  'kmv' => "Karip\x{fa}na Creole French",
+  'gax' => 'Borana-Arsi-Guji Oromo',
+  'xtg' => 'Transalpine Gaulish',
+  'rmy' => 'Vlax Romani',
+  'moe' => 'Innu',
+  'wln' => 'Walloon',
+  'adf' => 'Dhofari Arabic',
+  'mgc' => 'Morokodo',
+  'krr' => 'Krung',
+  'rel' => 'Rendille',
+  'mzu' => 'Inapang',
+  'gmm' => 'Gbaya-Mbodomo',
+  'rpn' => 'Repanbitip',
+  'run' => 'Rundi',
+  'kkh' => "Kh\x{fc}n",
+  'raw' => 'Rawang',
+  'ybk' => 'Bokha',
+  'hmr' => 'Hmar',
+  'avu' => 'Avokaya',
+  'dhg' => 'Dhangu-Djangu',
+  'sro' => 'Campidanese Sardinian',
+  'tae' => 'Tariana',
+  'aor' => 'Aore',
+  'huo' => 'Hu',
+  'hpo' => 'Hpon',
+  'ned' => 'Nde-Gbite',
+  'kys' => 'Baram Kayan',
+  'xkx' => 'Karore',
+  'xwo' => 'Written Oirat',
+  'jia' => 'Jina',
+  'vmd' => 'Mudu Koraga',
+  'byy' => 'Buya',
+  'jud' => 'Worodougou',
+  'nsa' => 'Sangtam Naga',
+  'lle' => 'Lele (Papua New Guinea)',
+  'den' => 'Slave (Athapascan)',
+  'aao' => 'Algerian Saharan Arabic',
+  'ley' => 'Lemolang',
+  'pad' => "Paumar\x{ed}",
+  'lml' => 'Hano',
+  'lht' => 'Lo-Toga',
+  'zmy' => 'Mariyedi',
+  'gvr' => 'Gurung',
+  'nyg' => 'Nyindu',
+  'hns' => 'Caribbean Hindustani',
+  'bec' => 'Iceve-Maci',
+  'xsn' => 'Sanga (Nigeria)',
+  'faz' => 'Northwestern Fars',
+  'zaw' => 'Mitla Zapotec',
+  'ges' => 'Geser-Gorom',
+  'tzx' => 'Tabriak',
+  'zun' => 'Zuni',
+  'dul' => 'Alabat Island Agta',
+  'nlv' => 'Orizaba Nahuatl',
+  'zpn' => "Santa In\x{e9}s Yatzechi Zapotec",
+  'xil' => 'Illyrian',
+  'xce' => 'Celtiberian',
+  'pcf' => 'Paliyan',
+  'csw' => 'Swampy Cree',
+  'sgr' => 'Sangisari',
+  'ack' => 'Aka-Kora',
+  'jek' => 'Jeri Kuo',
+  'btm' => 'Batak Mandailing',
+  'enu' => 'Enu',
+  'nuk' => 'Nuu-chah-nulth',
+  'prm' => 'Kibiri',
+  'kig' => 'Kimaama',
+  'pga' => 'Sudanese Creole Arabic',
+  'gid' => 'Gidar',
+  'gua' => 'Shiki',
+  'gpa' => 'Gupa-Abawa',
+  'kdp' => 'Kaningdon-Nindem',
+  'klq' => 'Rumu',
+  'amt' => 'Amto',
+  'ahl' => 'Igo',
+  'kpj' => "Karaj\x{e1}",
+  'kuj' => 'Kuria',
+  'sbh' => 'Sori-Harengan',
+  'trc' => 'Copala Triqui',
+  'ndz' => 'Ndogo',
+  'uba' => 'Ubang',
+  'nis' => 'Nimi',
+  'smj' => 'Lule Sami',
+  'tnl' => 'Lenakel',
+  'ott' => 'Temoaya Otomi',
+  'nte' => 'Nathembo',
+  'cto' => "Ember\x{e1}-Cat\x{ed}o",
+  'yon' => 'Yongkom',
+  'gdb' => 'Pottangi Ollar Gadaba',
+  'kxq' => "Sm\x{e4}rky Kanum",
+  'ymk' => 'Makwe',
+  'bat' => 'Baltic languages',
+  'zib' => 'Zimbabwe Sign Language',
+  'bfd' => 'Bafut',
+  'phg' => 'Phuong',
+  'kwd' => 'Kwaio',
+  'tnz' => 'Ten\'edn',
+  'rgs' => 'Southern Roglai',
+  'lra' => 'Rara Bakati\'',
+  'lgm' => 'Lega-Mwenga',
+  'kkj' => 'Kako',
+  'lod' => 'Berawan',
+  'dsb' => 'Lower Sorbian',
+  'slw' => 'Sialum',
+  'bog' => 'Bamako Sign Language',
+  'gbm' => 'Garhwali',
+  'mrf' => 'Elseng',
+  'xeb' => 'Eblan',
+  'ndl' => 'Ndolo',
+  'gwg' => 'Moo',
+  'dth' => 'Adithinngithigh',
+  'irk' => 'Iraqw',
+  'mji' => 'Kim Mun',
+  'vol' => "Volap\x{fc}k",
+  'kbv' => 'Dera (Indonesia)',
+  'noy' => 'Noy',
+  'atx' => 'Arutani',
+  'gka' => 'Guya',
+  'shu' => 'Chadian Arabic',
+  'omx' => 'Old Mon',
+  'oci' => 'Occitan (post 1500)',
+  'sxw' => 'Saxwe Gbe',
+  'brj' => 'Bieria',
+  'bgv' => 'Warkay-Bipim',
+  'uum' => 'Urum',
+  'wav' => 'Waka',
+  'nkk' => 'Nokuku',
+  'dkl' => 'Kolum So Dogon',
+  'zkn' => 'Kanan',
+  'bmo' => 'Bambalang',
+  'yrb' => 'Yareba',
+  'duz' => 'Duli-Gey',
+  'nqg' => 'Southern Nago',
+  'cze' => 'Czech',
+  'bjt' => 'Balanta-Ganja',
+  'fal' => 'South Fali',
+  'cou' => 'Wamey',
+  'mop' => "Mop\x{e1}n Maya",
+  'nbq' => 'Nggem',
+  'lmz' => 'Lumbee',
+  'rak' => 'Tulu-Bohuai',
+  'tsg' => 'Tausug',
+  'kzb' => 'Kaibobo',
+  'xpx' => 'Southwestern Tasmanian',
+  'mfb' => 'Bangka',
+  'aih' => 'Ai-Cham',
+  'mai' => 'Maithili',
+  'mcm' => 'Malaccan Creole Portuguese',
+  'tya' => 'Tauya',
+  'dix' => 'Dixon Reef',
+  'bqy' => 'Bengkala Sign Language',
+  'cax' => 'Chiquitano',
+  'knn' => 'Konkani (individual language)',
+  'kqs' => 'Northern Kissi',
+  'wrg' => 'Warungu',
+  'sny' => 'Saniyo-Hiyewe',
+  'cmm' => 'Michigamea',
+  'kxd' => 'Brunei',
+  'aof' => 'Bragat',
+  'nni' => 'North Nuaulu',
+  'mde' => 'Maba (Chad)',
+  'kev' => 'Kanikkaran',
+  'ixc' => 'Ixcatec',
+  'enb' => 'Markweeta',
+  'lnh' => 'Lanoh',
+  'yne' => 'Lang\'e',
+  'kym' => 'Kpatili',
+  'agi' => 'Agariya',
+  'mtz' => 'Tacanec',
+  'wtk' => 'Watakataui',
+  'dow' => 'Doyayo',
+  'gvf' => 'Golin',
+  'kld' => 'Gamilaraay',
+  'her' => 'Herero',
+  'xrw' => 'Karawa',
+  'mhx' => 'Maru',
+  'giq' => 'Green Gelao',
+  'sww' => 'Sowa',
+  'gem' => 'Germanic languages',
+  'pcr' => 'Panang',
+  'sjp' => 'Surjapuri',
+  'crn' => 'El Nayar Cora',
+  'glg' => 'Galician',
+  'xbb' => 'Lower Burdekin',
+  'chi' => 'Chinese',
+  'sca' => 'Sansu',
+  'rey' => 'Reyesano',
+  'gnr' => 'Gureng Gureng',
+  'rml' => 'Baltic Romani',
+  'gdu' => 'Gudu',
+  'bts' => 'Batak Simalungun',
+  'stn' => 'Owa',
+  'prs' => 'Dari',
+  'uks' => "Urub\x{fa}-Kaapor Sign Language",
+  'kty' => "Kango (Bas-U\x{e9}l\x{e9} District)",
+  'bie' => 'Bepour',
+  'bcl' => 'Central Bikol',
+  'tmh' => 'Tamashek',
+  'arp' => 'Arapaho',
+  'tbj' => 'Tiang',
+  'hii' => 'Hinduri',
+  'paq' => 'Parya',
+  'kst' => "Winy\x{e9}",
+  'soi' => 'Sonha',
+  'tkv' => 'Mur Pano',
+  'ury' => 'Orya',
+  'vmq' => 'Soyaltepec Mixtec',
+  'qui' => 'Quileute',
+  'tvl' => 'Tuvalu',
+  'yal' => 'Yalunka',
+  'bhk' => 'Albay Bicolano',
+  'neq' => 'North Central Mixe',
+  'nim' => 'Nilamba',
+  'sap' => "Sanapan\x{e1}",
+  'muh' => "M\x{fc}nd\x{fc}",
+  'mph' => 'Maung',
+  'pok' => "Pokang\x{e1}",
+  'lby' => 'Lamalama',
+  'mkh' => 'Mon-Khmer languages',
+  'dbn' => 'Duriankere',
+  'zbl' => 'Blissymbols',
+  'pmn' => 'Pam',
+  'lwe' => 'Lewo Eleng',
+  'xnt' => 'Narragansett',
+  'flh' => 'Foau',
+  'cob' => 'Chicomuceltec',
+  'rod' => 'Rogo',
+  'bbc' => 'Batak Toba',
+  'mrr' => 'Maria (India)',
+  'gbs' => 'Gbesi Gbe',
+  'puy' => "Purisime\x{f1}o",
+  'tuv' => 'Turkana',
+  'tpv' => 'Tanapag',
+  'kgc' => 'Kasseng',
+  'qxl' => 'Salasaca Highland Quichua',
+  'koe' => 'Kacipo-Balesi',
+  'yaz' => 'Lokaa',
+  'kzu' => 'Kayupulau',
+  'mfu' => 'Mbwela',
+  'mmv' => 'Miriti',
+  'jay' => 'Yan-nhangu',
+  'xlo' => 'Loup A',
+  'nbd' => 'Ngbinda',
+  'van' => 'Valman',
+  'bcz' => 'Bainouk-Gunyaamolo',
+  'jmw' => 'Mouwase',
+  'afn' => 'Defaka',
+  'seh' => 'Sena',
+  'tit' => 'Tinigua',
+  'rmz' => 'Marma',
+  'lak' => 'Laka (Nigeria)',
+  'xdm' => 'Edomite',
+  'mgo' => 'Meta\'',
+  'fon' => 'Fon',
+  'xeu' => 'Keoru-Ahia',
+  'dnv' => 'Danu',
+  'mtl' => 'Montol',
+  'tdi' => 'Tomadino',
+  'jbk' => 'Barikewa',
+  'loq' => 'Lobala',
+  'kvn' => 'Border Kuna',
+  'mcs' => 'Mambai',
+  'shb' => 'Ninam',
+  'tlk' => 'Taloki',
+  'wmi' => 'Wamin',
+  'kwq' => 'Kwak',
+  'cms' => 'Messapic',
+  'ojs' => 'Severn Ojibwa',
+  'ekg' => 'Ekari',
+  'bfq' => 'Badaga',
+  'kqm' => 'Khisa',
+  'yud' => 'Judeo-Tripolitanian Arabic',
+  'dok' => 'Dondo',
+  'riu' => 'Riung',
+  'lez' => 'Lezghian',
+  'mxq' => 'Juquila Mixe',
+  'etx' => 'Eten',
+  'zmz' => 'Mbandja',
+  'yia' => 'Yinggarda',
+  'oub' => 'Glio-Oubi',
+  'ong' => 'Olo',
+  'muj' => 'Mabire',
+  'nhr' => 'Naro',
+  'mpj' => 'Martu Wangka',
+  'qvw' => 'Huaylla Wanca Quechua',
+  'olr' => 'Olrat',
+  'ufi' => 'Ufim',
+  'aac' => 'Ari',
+  'swk' => 'Malawi Sena',
+  'fay' => 'Southwestern Fars',
+  'beo' => 'Beami',
+  'sje' => 'Pite Sami',
+  'tgr' => 'Tareng',
+  'lkn' => 'Lakon',
+  'xwc' => 'Woccon',
+  'grn' => 'Guarani',
+  'daq' => 'Dandami Maria',
+  'snl' => 'Sangil',
+  'cnr' => 'Montenegrin',
+  'mlq' => 'Western Maninkakan',
+  'tmj' => 'Samarokena',
+  'mdp' => 'Mbala',
+  'bql' => 'Bilakura',
+  'drs' => 'Gedeo',
+  'byz' => 'Banaro',
+  'src' => 'Logudorese Sardinian',
+  'tbh' => 'Dharawal',
+  'pwi' => 'Patwin',
+  'oda' => 'Odut',
+  'mig' => 'San Miguel El Grande Mixtec',
+  'huc' => "\x{1c2}Hua",
+  'wnd' => 'Wandarang',
+  'wdj' => 'Wadjiginy',
+  'buf' => 'Bushoong',
+  'wtw' => 'Wotu',
+  'xmb' => 'Mbonga',
+  'rbl' => 'Miraya Bikol',
+  'ndy' => 'Lutos',
+  'bhw' => 'Biak',
+  'ctc' => 'Chetco',
+  'dcr' => 'Negerhollands',
+  'zra' => 'Kara (Korea)',
+  'zgm' => 'Minz Zhuang',
+  'bxu' => 'China Buriat',
+  'bna' => 'Bonerate',
+  'wif' => 'Wik-Keyangan',
+  'pow' => 'San Felipe Otlaltepec Popoloca',
+  'sqa' => 'Shama-Sambuga',
+  'sae' => "Saban\x{ea}",
+  'tro' => 'Tarao Naga',
+  'lib' => 'Likum',
+  'vkk' => 'Kaur',
+  'mys' => 'Mesmes',
+  'bip' => 'Bila',
+  'yss' => 'Yessan-Mayo',
+  'blu' => 'Hmong Njua',
+  'ldd' => 'Luri',
+  'lnj' => 'Leningitij',
+  'ids' => 'Idesa',
+  'bdg' => 'Bonggi',
+  'are' => 'Western Arrarnta',
+  'nol' => 'Nomlaki',
+  'cbs' => 'Cashinahua',
+  'ssg' => 'Seimat',
+  'wbi' => 'Vwanji',
+  'noz' => 'Nayi',
+  'isn' => 'Isanzu',
+  'mqs' => 'West Makian',
+  'mnn' => 'Southern Mnong',
+  'kai' => 'Karekare',
+  'kfb' => 'Northwestern Kolami',
+  'bwb' => 'Namosi-Naitasiri-Serua',
+  'ice' => 'Icelandic',
+  'kcm' => 'Gula (Central African Republic)',
+  'gob' => 'Playero',
+  'pnv' => 'Pinigura',
+  'tny' => 'Tongwe',
+  'oin' => 'Inebu One',
+  'nrx' => 'Ngurmbur',
+  'vis' => 'Vishavan',
+  'ljw' => 'Yirandali',
+  'psu' => "Sauraseni Pr\x{101}krit",
+  'sej' => 'Sene',
+  'mzb' => 'Tumzabt',
+  'sya' => 'Siang',
+  'ikx' => 'Ik',
+  'iwo' => 'Iwur',
+  'jct' => 'Krymchak',
+  'kop' => 'Waube',
+  'avb' => 'Avau',
+  'ugn' => 'Ugandan Sign Language',
+  'byl' => 'Bayono',
+  'jbw' => 'Yawijibaya',
+  'ala' => 'Alago',
+  'bkf' => 'Beeke',
+  'bzd' => 'Bribri',
+  'tlw' => 'South Wemale',
+  'nmd' => 'Ndumu',
+  'ved' => 'Veddah',
+  'mbv' => 'Mbulungish',
+  'snz' => 'Kou',
+  'kji' => 'Zabana',
+  'fuq' => 'Central-Eastern Niger Fulfulde',
+  'bqz' => 'Bakaka',
+  'ibu' => 'Ibu',
+  'jrb' => 'Judeo-Arabic',
+  'asv' => 'Asoa',
+  'xiy' => 'Xipaya',
+  'mkj' => 'Mokilese',
+  'okb' => 'Okobo',
+  'lpn' => 'Long Phuri Naga',
+  'duy' => 'Dicamay Agta',
+  'anu' => 'Anuak',
+  'lun' => 'Lunda',
+  'adr' => 'Adonara',
+  'krf' => 'Koro (Vanuatu)',
+  'law' => 'Lauje',
+  'thu' => 'Thuri',
+  'hmf' => 'Hmong Don',
+  'mwd' => 'Mudbura',
+  'bmc' => 'Biem',
+  'lmy' => 'Lamboya',
+  'dmn' => 'Mande languages',
+  'zml' => 'Matngala',
+  'zht' => 'Chinese (traditional)',
+  'pbn' => 'Kpasam',
+  'ngu' => 'Guerrero Nahuatl',
+  'zle' => 'East Slavic languages',
+  'lel' => 'Lele (Democratic Republic of Congo)',
+  'dmb' => 'Mombo Dogon',
+  'pbb' => "P\x{e1}ez",
+  'xcr' => 'Carian',
+  'ili' => 'Ili Turki',
+  'myk' => 'Mamara Senoufo',
+  'chc' => 'Catawba',
+  'btw' => 'Butuanon',
+  'bnd' => 'Banda (Indonesia)',
+  'bdj' => 'Bai (South Sudan)',
+  'lub' => 'Luba-Katanga',
+  'lng' => 'Langobardic',
+  'ukw' => 'Ukwuani-Aboh-Ndoni',
+  'prw' => 'Parawen',
+  'okn' => 'Oki-No-Erabu',
+  'gve' => 'Duwet',
+  'too' => "Xicotepec De Ju\x{e1}rez Totonac",
+  'osx' => 'Old Saxon',
+  'ikl' => 'Ikulu',
+  'mvu' => 'Marfa',
+  'nnc' => 'Nancere',
+  'jhi' => 'Jehai',
+  'bpp' => 'Kaure',
+  'ixi' => 'Nebaj Ixil',
+  'bup' => 'Busoa',
+  'ivv' => 'Ivatan',
+  'yes' => 'Nyankpa',
+  'lda' => 'Kla-Dan',
+  'weo' => 'Wemale',
+  'tar' => 'Central Tarahumara',
+  'aoe' => 'Angal Enen',
+  'mdf' => 'Moksha',
+  'nrl' => 'Ngarluma',
+  'ugb' => 'Kuku-Ugbanh',
+  'agc' => 'Agatu',
+  'glh' => 'Northwest Pashai',
+  'quc' => 'K\'iche\'',
+  'avn' => 'Avatime',
+  'xok' => 'Xokleng',
+  'yua' => 'Yucateco',
+  'ypa' => 'Phala',
+  'tmg' => "Ternate\x{f1}o",
+  'ntr' => 'Delo',
+  'yid' => 'Yiddish',
+  'ruu' => 'Lanas Lobu',
+  'clj' => 'Laitu Chin',
+  'mzn' => 'Mazanderani',
+  'aqm' => 'Atohwaim',
+  'bso' => 'Buso',
+  'byx' => 'Qaqet',
+  'wdg' => 'Wadaginam',
+  'xky' => 'Uma\' Lasan',
+  'mij' => 'Abar',
+  'wlu' => 'Wuliwuli',
+  'tcq' => 'Kaiy',
+  'xaq' => 'Aquitanian',
+  'sws' => 'Seluwasan',
+  'gon' => 'Gondi',
+  'zam' => "Miahuatl\x{e1}n Zapotec",
+  'zmx' => 'Bomitaba',
+  'csm' => 'Central Sierra Miwok',
+  'bwn' => 'Wunai Bunu',
+  'lex' => 'Luang',
+  'etz' => 'Semimi',
+  'kfn' => 'Kuk',
+  'mpg' => 'Marba',
+  'dos' => "Dogos\x{e9}",
+  'sge' => 'Segai',
+  'onj' => 'Onjob',
+  'mnb' => 'Muna',
+  'mug' => 'Musgu',
+  'soc' => 'So (Democratic Republic of Congo)',
+  'gti' => 'Gbati-ri',
+  'bif' => 'Biafada',
+  'cuq' => 'Cun',
+  'bvq' => 'Birri',
+  'ywg' => 'Yinhawangka',
+  'ckq' => 'Kajakse',
+  'mkg' => 'Mak (China)',
+  'ybm' => 'Yaben',
+  'ald' => 'Alladian',
+  'bza' => 'Bandi',
+  'plo' => 'Oluta Popoluca',
+  'nma' => 'Maram Naga',
+  'nju' => 'Ngadjunmaya',
+  'ecs' => 'Ecuadorian Sign Language',
+  'job' => 'Joba',
+  'ztt' => 'Tejalapan Zapotec',
+  'lin' => 'Lingala',
+  'diy' => 'Diuwe',
+  'sdo' => 'Bukar-Sadung Bidayuh',
+  'bbi' => 'Barombi',
+  'ego' => 'Eggon',
+  'ttu' => 'Torau',
+  'rwr' => 'Marwari (India)',
+  'xpy' => 'Puyo',
+  'ojw' => 'Western Ojibwa',
+  'kof' => 'Kubi',
+  'yka' => 'Yakan',
+  'snx' => 'Sam',
+  'mwa' => 'Mwatebu',
+  'lsl' => 'Latvian Sign Language',
+  'pnt' => 'Pontic',
+  'kgi' => 'Selangor Sign Language',
+  'aym' => 'Aymara',
+  'wwb' => 'Wakabunga',
+  'cay' => 'Cayuga',
+  'bqx' => 'Baangi',
+  'mcw' => 'Mawa (Chad)',
+  'xmn' => 'Manichaean Middle Persian',
+  'gct' => 'Colonia Tovar German',
+  'gbw' => 'Gabi-Gabi',
+  'slm' => 'Pangutaran Sama',
+  'mbt' => 'Matigsalug Manobo',
+  'tdc' => "Ember\x{e1}-Tad\x{f3}",
+  'nrz' => 'Lala',
+  'seg' => 'Segeju',
+  'ikz' => 'Ikizu',
+  'utp' => 'Amba (Solomon Islands)',
+  'nau' => 'Nauru',
+  'wmc' => 'Wamas',
+  'bkp' => 'Boko (Democratic Republic of Congo)',
+  'grb' => 'Grebo',
+  'sxm' => 'Samre',
+  'hmp' => 'Northern Mashan Hmong',
+  'lkb' => 'Kabras',
+  'ssj' => 'Sausi',
+  'aty' => 'Aneityum',
+  'uan' => 'Kuan',
+  'err' => 'Erre',
+  'jms' => 'Mashi (Nigeria)',
+  'oun' => "\x{1c3}O\x{1c3}ung",
+  'cbk' => 'Chavacano',
+  'ast' => 'Asturian',
+  'syd' => 'Samoyedic languages',
+  'szl' => 'Silesian',
+  'mqk' => 'Rajah Kabunsuwan Manobo',
+  'krp' => 'Korop',
+  'cjy' => 'Jinyu Chinese',
+  'ghc' => 'Hiberno-Scottish Gaelic',
+  'bue' => 'Beothuk',
+  'pos' => 'Sayula Popoluca',
+  'nvo' => 'Nyokon',
+  'hui' => 'Huli',
+  'kvb' => 'Kubu',
+  'khy' => 'Kele (Democratic Republic of Congo)',
+  'shn' => 'Shan',
+  'ket' => 'Ket',
+  'udl' => 'Wuzlam',
+  'bhs' => 'Buwal',
+  'sri' => 'Siriano',
+  'nsq' => 'Northern Sierra Miwok',
+  'clh' => 'Chilisso',
+  'jiq' => 'Guanyinqiao',
+  'acm' => 'Mesopotamian Arabic',
+  'tbg' => 'North Tairora',
+  'gvp' => "Par\x{e1} Gavi\x{e3}o",
+  'btk' => 'Batak languages',
+  'myw' => 'Muyuw',
+  'num' => 'Niuafo\'ou',
+  'twm' => 'Tawang Monpa',
+  'ukk' => 'Muak Sa-aak',
+  'aai' => 'Arifama-Miniafia',
+  'tqq' => 'Tunni',
+  'prk' => 'Parauk',
+  'afb' => 'Gulf Arabic',
+  'mih' => 'Chayuco Mixtec',
+  'whk' => 'Wahau Kenyah',
+  'arf' => 'Arafundi',
+  'qvs' => "San Mart\x{ed}n Quechua",
+  'kxa' => 'Kairiru',
+  'knu' => 'Kono (Guinea)',
+  'kdr' => 'Karaim',
+  'ygl' => 'Yangum Gel',
+  'mhz' => 'Mor (Mor Islands)',
+  'hvk' => 'Haveke',
+  'ksv' => 'Kusu',
+  'glj' => 'Gula Iro',
+  'sgp' => 'Singpho',
+  'cti' => 'Tila Chol',
+  'drw' => 'Darwazi',
+  'saf' => 'Safaliba',
+  'guq' => "Ach\x{e9}",
+  'wie' => 'Wik-Epa',
+  'kla' => 'Klamath-Modoc',
+  'xow' => 'Kowaki',
+  'bdh' => 'Baka (South Sudan)',
+  'mtx' => "Tida\x{e1} Mixtec",
+  'tkt' => 'Kathoriya Tharu',
+  'con' => "Cof\x{e1}n",
+  'aji' => "Aji\x{eb}",
+  'zku' => 'Kaurna',
+  'gsm' => 'Guatemalan Sign Language',
+  'dbb' => 'Deno',
+  'pmb' => 'Pambia',
+  'tpt' => 'Tlachichilco Tepehua',
+  'ssh' => 'Shihhi Arabic',
+  'tut' => 'Altaic languages',
+  'cmk' => 'Chimakum',
+  'zpu' => "Yal\x{e1}lag Zapotec",
+  'xsu' => "Sanum\x{e1}",
+  'mck' => 'Mbunda',
+  'tls' => 'Tambotalo',
+  'deu' => 'German',
+  'usa' => 'Usarufa',
+  'ram' => 'Canela',
+  'gay' => 'Gayo',
+  'rmx' => 'Romam',
+  'oco' => 'Old Cornish',
+  'stb' => 'Northern Subanen',
+  'gmw' => 'West Germanic languages',
+  'kac' => 'Kachin',
+  'txs' => 'Tonsea',
+  'mhl' => 'Mauwake',
+  'mmt' => 'Malalamai',
+  'las' => 'Lama (Togo)',
+  'mjo' => 'Malankuravan',
+  'xbn' => 'Kenaboi',
+  'roa' => 'Romance languages',
+  'hme' => 'Eastern Huishui Hmong',
+  'crb' => 'Island Carib',
+  'nkm' => 'Namat',
+  'dnt' => 'Mid Grand Valley Dani',
+  'lzh' => 'Literary Chinese',
+  'mor' => 'Moro',
+  'kre' => "Panar\x{e1}",
+  'cbw' => 'Kinabalian',
+  'tiv' => 'Tiv',
+  'piy' => 'Piya-Kwonci',
+  'bmi' => 'Bagirmi',
+  'nzi' => 'Nzima',
+  'mqw' => 'Murupi',
+  'bcx' => 'Pamona',
+  'lgk' => 'Lingarak',
+  'gbk' => 'Gaddi',
+  'ymm' => 'Maay',
+  'bke' => 'Bengkulu',
+  'enn' => 'Engenni',
+  'uis' => 'Uisai',
+  'nba' => 'Nyemba',
+  'mao' => 'Maori',
+  'ute' => 'Ute-Southern Paiute',
+  'yax' => 'Yauma',
+  'tvx' => 'Taivoan',
+  'kjc' => 'Coastal Konjo',
+  'cyb' => 'Cayubaba',
+  'meu' => 'Motu',
+  'tas' => 'Tay Boi',
+  'kxc' => 'Konso',
+  'mdm' => 'Mayogo',
+  'yer' => 'Tarok',
+  'trq' => "San Mart\x{ed}n Itunyoso Triqui",
+  'emn' => 'Eman',
+  'kye' => 'Krache',
+  'djo' => 'Jangkang',
+  'hne' => 'Chhattisgarhi',
+  'wum' => 'Wumbvu',
+  'dhl' => 'Dhalandji',
+  'zhn' => 'Nong Zhuang',
+  'pbt' => 'Southern Pashto',
+  'sbx' => 'Seberuang',
+  'klc' => 'Kolbila',
+  'lls' => 'Lithuanian Sign Language',
+  'lut' => 'Lushootseed',
+  'bni' => 'Bangi',
+  'xtl' => 'Tijaltepec Mixtec',
+  'gly' => 'Gule',
+  'reg' => 'Kara (Tanzania)',
+  'sqi' => 'Albanian',
+  'ity' => 'Moyadan Itneg',
+  'bim' => 'Bimoba',
+  'xrr' => 'Raetic',
+  'gha' => "Ghadam\x{e8}s",
+  'mxo' => 'Mbowe',
+  'sku' => 'Sakao',
+  'tjs' => 'Southern Tujia',
+  'dor' => 'Dori\'o',
+  'ktg' => 'Kalkutung',
+  'ist' => 'Istriot',
+  'mnt' => 'Maykulan',
+  'gnw' => "Western Bolivian Guaran\x{ed}",
+  'pwa' => 'Pawaia',
+  'tgk' => 'Tajik',
+  'zaf' => 'Ayoquesco Zapotec',
+  'csf' => 'Cuba Sign Language',
+  'xkh' => 'Karahawyana',
+  'beq' => 'Beembe',
+  'pcw' => 'Pyapun',
+  'nhk' => 'Isthmus-Cosoleacaque Nahuatl',
+  'hal' => 'Halang',
+  'swr' => 'Saweru',
+  'olk' => 'Olkol',
+  'pkg' => 'Pak-Tong',
+  'urg' => 'Urigina',
+  'cnk' => 'Khumi Chin',
+  'dao' => 'Daai Chin',
+  'aen' => 'Armenian Sign Language',
+  'mlo' => 'Mlomp',
+  'yii' => 'Yidiny',
+  'liv' => 'Liv',
+  'xmv' => 'Antankarana Malagasy',
+  'aul' => 'Aulua',
+  'apl' => 'Lipan Apache',
+  'akz' => 'Alabama',
+  'nts' => 'Natagaimas',
+  'khj' => 'Kuturmi',
+  'ncl' => "Michoac\x{e1}n Nahuatl",
+  'tzh' => 'Tzeltal',
+  'nie' => 'Niellim',
+  'ggg' => 'Gurgula',
+  'rge' => 'Romano-Greek',
+  'lbg' => 'Laopang',
+  'apz' => 'Safeyoka',
+  'roc' => 'Cacgia Roglai',
+  'akl' => 'Aklanon',
+  'bbd' => 'Bau',
+  'auz' => 'Uzbeki Arabic',
+  'lwm' => 'Laomian',
+  'avv' => "Av\x{e1}-Canoeiro",
+  'ncz' => 'Natchez',
+  'rws' => 'Rawas',
+  'pnb' => 'Western Panjabi',
+  'pug' => 'Phuie',
+  'kgd' => 'Kataang',
+  'mzv' => 'Manza',
+  'kom' => 'Komi',
+  'dih' => 'Kumiai',
+  'kfv' => 'Kurmukar',
+  'vsi' => 'Moldova Sign Language',
+  'bwv' => 'Bahau River Kenyah',
+  'ecr' => 'Eteocretan',
+  'aix' => 'Aighon',
+  'haz' => 'Hazaragi',
+  'xph' => 'North Midlands Tasmanian',
+  'ali' => 'Amaimon',
+  'kmu' => 'Kanite',
+  'hru' => 'Hruso',
+  'kja' => 'Mlap',
+  'eng-simple' => 'Simplified English',
+  'pzn' => 'Para Naga',
+  'cah' => 'Cahuarano',
+  'nbc' => 'Chang Naga',
+  'spu' => 'Sapuan',
+  'pij' => 'Pijao',
+  'suu' => 'Sungkai',
+  'kcp' => 'Kanga',
+  'lkt' => 'Lakota',
+  'gaj' => 'Gadsup',
+  'xtz' => 'Tasmanian',
+  'asb' => 'Assiniboine',
+  'jmr' => 'Kamara',
+  'okv' => 'Orokaiva',
+  'syi' => 'Seki',
+  'ers' => 'Ersu',
+  'mbb' => 'Western Bukidnon Manobo',
+  'ath' => 'Athapascan languages',
+  'wba' => 'Warao',
+  'slf' => 'Swiss-Italian Sign Language',
+  'kqe' => 'Kalagan',
+  'kaa' => 'Kara-Kalpak',
+  'eky' => 'Eastern Kayah',
+  'cjh' => 'Upper Chehalis',
+  'grt' => 'Garo',
+  'mrw' => 'Maranao',
+  'acf' => 'Saint Lucian Creole French',
+  'tsl' => "Ts'\x{fc}n-Lao",
+  'jns' => 'Jaunsari',
+  'nuf' => 'Nusu',
+  'yuc' => 'Yuchi',
+  'twf' => 'Northern Tiwa',
+  'qua' => 'Quapaw',
+  'khh' => 'Kehu',
+  'sjm' => 'Mapun',
+  'gyb' => 'Garus',
+  'tin' => 'Tindi',
+  'nql' => 'Ngendelengo',
+  'aft' => 'Afitti',
+  'ltu' => 'Latu',
+  'tzj' => 'Tz\'utujil',
+  'pao' => 'Northern Paiute',
+  'aad' => 'Amal',
+  'fag' => 'Finongan',
+  'wrl' => 'Warlmanpa',
+  'bhr' => 'Bara Malagasy',
+  'juo' => 'Jiba',
+  'cly' => 'Eastern Highland Chatino',
+  'vmo' => 'Muko-Muko',
+  'xwd' => 'Wadi Wadi',
+  'dwa' => 'Diri',
+  'neo' => "N\x{e1}-Meo",
+  'esu' => 'Central Yupik',
+  'kvt' => 'Lahta Karen',
+  'wnc' => 'Wantoat',
+  'hud' => 'Huaulu',
+  'keb' => "K\x{e9}l\x{e9}",
+  'por' => 'Portuguese',
+  'kyp' => 'Kang',
+  'pqw' => 'Western Malayo-Polynesian languages',
+  'env' => 'Enwan (Edu State)',
+  'soa' => 'Thai Song',
+  'miy' => 'Ayutla Mixtec',
+  'xkj' => 'Kajali',
+  'hia' => 'Lamang',
+  'srd' => 'Sardinian',
+  'ohu' => 'Old Hungarian',
+  'ndg' => 'Ndengereko',
+  'ctd' => 'Tedim Chin',
+  'zoc' => "Copainal\x{e1} Zoque",
+  'nlu' => 'Nchumbulu',
+  'cnw' => 'Ngawn Chin',
+  'kpx' => 'Mountain Koiali',
+  'kux' => 'Kukatja',
+  'bol' => 'Bole',
+  'sam' => 'Samaritan Aramaic',
+  'tkb' => 'Buksa',
+  'hss' => 'Harsusi',
+  'xnn' => 'Northern Kankanay',
+  'dbt' => 'Ben Tey Dogon',
+  'sci' => 'Sri Lankan Creole Malay',
+  'cha' => 'Chamorro',
+  'phl' => 'Phalura',
+  'pmt' => 'Tuamotuan',
+  'smx' => 'Samba',
+  'kiz' => 'Kisi',
+  'nna' => 'Nyangumarta',
+  'nxu' => 'Narau',
+  'gio' => 'Gelao',
+  'tgw' => 'Tagwana Senoufo',
+  'arm' => 'Armenian',
+  'bdy' => 'Bandjalang',
+  'aga' => 'Aguano',
+  'gnk' => "\x{1c1}Gana",
+  'kds' => 'Lahu Shi',
+  'uln' => 'Unserdeutsch',
+  'nhw' => 'Western Huasteca Nahuatl',
+  'pck' => 'Paite Chin',
+  'lar' => 'Larteh',
+  'ksn' => 'Kasiguranin',
+  'atj' => 'Atikamekw',
+  'ssy' => 'Saho',
+  'adw' => 'Amundava',
+  'txr' => 'Tartessian',
+  'cfm' => 'Falam Chin',
+  'tda' => 'Tagdal',
+  'dyk' => 'Land Dayak',
+  'raf' => 'Western Meohang',
+  'mgq' => 'Malila',
+  'wma' => 'Mawa (Nigeria)',
+  'kce' => 'Kaivi',
+  'stt' => 'Budeh Stieng',
+  'kil' => 'Kariya',
+  'cgg' => 'Chiga',
+  'mmb' => 'Momina',
+  'brx' => 'Bodo (India)',
+  'ifb' => 'Batad Ifugao',
+  'iai' => 'Iaai',
+  'tub' => "T\x{fc}batulabal",
+  'tng' => 'Tobanga',
+  'nwb' => 'Nyabwa',
+  'tlr' => 'Talise',
+  'jbr' => 'Jofotek-Bromnya',
+  'loo' => 'Lombo',
+  'gah' => 'Alekano',
+  'hdn' => 'Northern Haida',
+  'boz' => "Ti\x{e9}yaxo Bozo",
+  'ahg' => 'Qimant',
+  'kwo' => 'Kwomtari',
+  'cov' => 'Cao Miao',
+  'kkx' => 'Kohin',
+  'bfo' => 'Malba Birifor',
+  'nmc' => 'Ngam',
+  'bzc' => 'Southern Betsimisaraka Malagasy',
+  'fse' => 'Finnish Sign Language',
+  'vec' => 'Venetian',
+  'dij' => 'Dai',
+  'xuj' => 'Jennu Kurumba',
+  'xpj' => 'Mpalitjanh',
+  'bgu' => 'Mbongno',
+  'wau' => "Waur\x{e1}",
+  'dzn' => 'Dzando',
+  'jko' => 'Kubo',
+  'wrz' => 'Waray (Australia)',
+  'kbu' => 'Kabutra',
+  'pih' => 'Pitcairn-Norfolk',
+  'tex' => 'Tennet',
+  'mrk' => 'Hmwaveke',
+  'kqp' => "Kimr\x{e9}",
+  'caj' => "Chan\x{e9}",
+  'shv' => 'Shehri',
+  'crt' => 'Iyojwa\'ja Chorote',
+  'lcq' => 'Luhu',
+  'dug' => 'Duruma',
+  'oro' => 'Orokolo',
+  'rri' => 'Ririo',
+  'mos' => 'Mossi',
+  'nyl' => 'Nyeu',
+  'zlm' => 'Malay (individual language)',
+  'tsz' => 'Purepecha',
+  'mwc' => 'Are',
+  'zeg' => 'Zenag',
+  'lmg' => 'Lamogai',
+  'nkf' => 'Inpui Naga',
+  'bmd' => 'Baga Manduri',
+  'nzd' => 'Nzadi',
+  'amu' => 'Guerrero Amuzgo',
+  'kli' => 'Kalumpang',
+  'gqn' => 'Guana (Brazil)',
+  'gef' => 'Gerai',
+  'kix' => 'Khiamniungan Naga',
+  'cta' => 'Tataltepec Chatino',
+  'kdk' => "Num\x{e8}\x{e8}",
+  'brl' => 'Birwa',
+  'dnn' => "Dz\x{f9}\x{f9}ngoo",
+  'gvm' => 'Gurmana',
+  'acp' => 'Eastern Acipa',
+  'elo' => 'El Molo',
+  'chd' => 'Highland Oaxaca Chontal',
+  'twp' => 'Ere',
+  'otu' => 'Otuke',
+  'nup' => 'Nupe-Nupe-Tako',
+  'bnc' => 'Bontok',
+  'tjw' => 'Djabwurrung',
+  'aja' => 'Aja (South Sudan)',
+  'kvv' => 'Kola',
+  'nnd' => 'West Ambae',
+  'ndj' => 'Ndamba',
+  'guo' => 'Guayabero',
+  'kxi' => 'Keningau Murut',
+  'ntw' => 'Nottoway',
+  'kyf' => 'Kouya',
+  'ffm' => 'Maasina Fulfulde',
+  'kpz' => 'Kupsabiny',
+  'kkl' => 'Kosarek Yale',
+  'kuz' => 'Kunza',
+  'aom' => "\x{d6}mie",
+  'agd' => 'Agarabi',
+  'smz' => 'Simeku',
+  'vgt' => 'Vlaamse Gebarentaal',
+  'nif' => 'Nek',
+  'lhu' => 'Lahu',
+  'frt' => 'Fortsenal',
+  'kth' => 'Karanga',
+  'qud' => "Calder\x{f3}n Highland Quichua",
+  'tel' => 'Telugu',
+  'tmy' => 'Tami',
+  'dbv' => 'Dungu',
+  'taw' => 'Tai',
+  'aaa' => 'Ghotuo',
+  'tun' => 'Tunica',
+  'wdy' => 'Wadjabangayi',
+  'tpn' => "Tupinamb\x{e1}",
+  'xkg' => 'Kagoro',
+  'gsp' => 'Wasembo',
+  'wol' => 'Wolof',
+  'cse' => 'Czech Sign Language',
+  'nyx' => 'Nganyaywana',
+  'xcw' => 'Coahuilteco',
+  'mmn' => 'Mamanwa',
+  'urh' => 'Urhobo',
+  'nso' => 'Pedi',
+  'pkh' => 'Pankhu',
+  'zae' => 'Yareni Zapotec',
+  'xwa' => 'Kwaza',
+  'jio' => 'Jiamao',
+  'ccn' => 'North Caucasian languages',
+  'mpy' => 'Mapia',
+  'prr' => 'Puri',
+  'ukr' => 'Ukrainian',
+  'muy' => 'Muyang',
+  'sra' => 'Saruga',
+  'hid' => 'Hidatsa',
+  'sgm' => 'Singa',
+  'vav' => 'Varli',
+  'faj' => 'Faita',
+  'ksb' => 'Shambala',
+  'sod' => 'Songoora',
+  'tqo' => 'Toaripi',
+  'btr' => 'Baetora',
+  'ybe' => 'West Yugur',
+  'uur' => 'Ura (Vanuatu)',
+  'mky' => 'East Makian',
+  'rap' => 'Rapanui',
+  'hka' => 'Kahe',
+  'erw' => 'Erokwanas',
+  'ggh' => 'Garreh-Ajuran',
+  'stv' => 'Silt\'e',
+  'alc' => 'Qawasqar',
+  'ulb' => 'Ulukwumi',
+  'oar' => 'Old Aramaic (up to 700 BCE)',
+  'fly' => 'Flaaitaal',
+  'duj' => 'Dhuwal',
+  'nbi' => 'Mao Naga',
+  'tsx' => 'Mubami',
+  'mok' => 'Morori',
+  'lmj' => 'West Lembata',
+  'bju' => 'Busuu',
+  'dig' => 'Digo',
+  'xpg' => 'Phrygian',
+  'jah' => 'Jah Hut',
+  'tkn' => 'Toku-No-Shima',
+  'lgr' => 'Lengo',
+  'cot' => 'Caquinte',
+  'xug' => 'Kunigami',
+  'xnb' => 'Kanakanabu',
+  'mrs' => 'Maragus',
+  'gbr' => 'Gbagyi',
+  'aye' => 'Ayere',
+  'wrx' => 'Wae Rana',
+  'bma' => 'Lame',
+  'maq' => "Chiquihuitl\x{e1}n Mazatec",
+  'nza' => 'Tigon Mbembe',
+  'cag' => "Nivacl\x{e9}",
+  'tez' => 'Tetserret',
+  'cmr' => 'Mro-Khimi Chin',
+  'tnj' => 'Tanjong',
+  'tdd' => "Tai N\x{fc}a",
+  'ken' => 'Kenyang',
+  'sle' => 'Sholaga',
+  'xyk' => 'Mayi-Kulan',
+  'sey' => 'Secoya',
+  'sht' => 'Shasta',
+  'sml' => 'Central Sama',
+  'kqf' => 'Kakabai',
+  'ymp' => 'Yamap',
+  'wmd' => "Mamaind\x{e9}",
+  'mcr' => 'Menya',
+  'gwx' => 'Gua',
+  'gko' => 'Kok-Nar',
+  'box' => 'Buamu',
+  'kul' => 'Kulere',
+  'kpl' => 'Kpala',
+  'kkz' => 'Kaska',
+  'atg' => 'Ivbie North-Okpela-Arhe',
+  'bau' => 'Bada (Nigeria)',
+  'wgu' => 'Wirangu',
+  'sxe' => 'Sighu',
+  'gyn' => 'Guyanese Creole English',
+  'tib' => 'Tibetan',
+  'lro' => 'Laro',
+  'nkp' => 'Niuatoputapu',
+  'brz' => 'Bilbil',
+  'usi' => 'Usui',
+  'crv' => 'Chaura',
+  'omg' => 'Omagua',
+  'syc' => 'Classical Syriac',
+  'mjq' => 'Malaryan',
+  'ntk' => 'Ikoma-Nata-Isenye',
+  'urj' => 'Uralic languages',
+  'xor' => 'Korubo',
+  'bum' => 'Bulu (Cameroon)',
+  'zca' => 'Coatecas Altas Zapotec',
+  'bpm' => 'Biyom',
+  'drr' => 'Dororo',
+  'bsq' => 'Bassa',
+  'gta' => "Guat\x{f3}",
+  'awo' => 'Awak',
+  'khg' => 'Khams Tibetan',
+  'akx' => 'Aka-Kede',
+  'cns' => 'Central Asmat',
+  'fah' => 'Baissa Fali',
+  'wni' => 'Ndzwani Comorian',
+  'mbn' => "Macagu\x{e1}n",
+  'tco' => 'Taungyo',
+  'ivb' => 'Ibatan',
+  'tgs' => 'Nume',
+  'yui' => "Yurut\x{ed}",
+  'xao' => 'Khao',
+  'luv' => 'Luwati',
+  'kdw' => 'Koneraw',
+  'ktj' => 'Plapo Krumen',
+  'asn' => "Xing\x{fa} Asurin\x{ed}",
+  'nhs' => 'Southeastern Puebla Nahuatl',
+  'opt' => 'Opata',
+  'twe' => 'Tewa (Indonesia)',
+  'nue' => 'Ngundu',
+  'cpo' => 'Kpeego',
+  'tby' => 'Tabaru',
+  'pbv' => 'Pnar',
+  'cuo' => 'Cumanagoto',
+  'dmv' => 'Dumpas',
+  'jee' => 'Jerung',
+  'ail' => 'Aimele',
+  'ace' => 'Achinese',
+  'bvo' => 'Bolgo',
+  'mnv' => 'Rennell-Bellona',
+  'sbz' => 'Sara Kaba',
+  'ndh' => 'Ndali',
+  'zap' => 'Zapotec',
+  'hto' => 'Minica Huitoto',
+  'idr' => 'Indri',
+  'yyu' => 'Yau (Sandaun Province)',
+  'msu' => 'Musom',
+  'csp' => 'Southern Ping Chinese',
+  'dgo' => 'Dogri (individual language)',
+  'ldi' => 'Laari',
+  'llk' => 'Lelak',
+  'ysr' => 'Sirenik Yupik',
+  'myr' => 'Muniche',
+  'toq' => 'Toposa',
+  'rej' => 'Rejang',
+  'gcn' => 'Gaina',
+  'xmt' => 'Matbat',
+  'wim' => 'Wik-Mungkan',
+  'pnn' => 'Pinai-Hagahai',
+  'ila' => 'Ile Ape',
+  'aqp' => 'Atakapa',
+  'gse' => 'Ghanaian Sign Language',
+  'umo' => "Umot\x{ed}na",
+  'scc' => 'Serbian',
+  'abu' => 'Abure',
+  'tak' => 'Tala',
+  'lit' => 'Lithuanian',
+  'ztn' => 'Santa Catarina Albarradas Zapotec',
+  'pys' => 'Paraguayan Sign Language',
+  'mzt' => 'Mintil',
+  'aeb' => 'Tunisian Arabic',
+  'ayp' => 'North Mesopotamian Arabic',
+  'dde' => 'Doondo',
+  'avt' => 'Au',
+  'erk' => 'South Efate',
+  'tnh' => 'Maiani',
+  'gag' => 'Gagauz',
+  'rae' => 'Ranau',
+  'kcf' => 'Ukaan',
+  'mqr' => 'Mander',
+  'kft' => 'Kanjari',
+  'kad' => 'Adara',
+  'sbl' => 'Botolan Sambal',
+  'bwt' => 'Bafaw-Balong',
+  'dhx' => 'Dhungaloo',
+  'cbr' => 'Cashibo-Cacataibo',
+  'got' => 'Gothic',
+  'czk' => 'Knaanic',
+  'mow' => 'Moi (Congo)',
+  'ahh' => 'Aghu',
+  'hmm' => 'Central Mashan Hmong',
+  'bba' => 'Baatonum',
+  'cko' => 'Anufo',
+  'nke' => 'Duke',
+  'qwh' => 'Huaylas Ancash Quechua',
+  'aiz' => 'Aari',
+  'jaj' => 'Zazao',
+  'plq' => 'Palaic',
+  'hax' => 'Southern Haida',
+  'mwi' => 'Labo',
+  'ads' => 'Adamorobe Sign Language',
+  'gmr' => 'Mirning',
+  'yki' => 'Yoke',
+  'rnl' => 'Ranglong',
+  'zhb' => 'Zhaba',
+  'ire' => 'Iresim',
+  'yxl' => 'Yardliyawarra',
+  'krm' => 'Krim',
+  'kga' => 'Koyaga',
+  'pig' => 'Pisabo',
+  'slp' => 'Lamaholot',
+  'apx' => 'Aputai',
+  'sdq' => 'Semandang',
+  'emb' => 'Embaloh',
+  'aux' => "Aur\x{e1}",
+  'rwk' => 'Rwa',
+  'lbj' => 'Ladakhi',
+  'bzi' => 'Bisu',
+  'nmi' => 'Nyam',
+  'ncx' => 'Central Puebla Nahuatl',
+  'duh' => 'Dungra Bhil',
+  'grv' => 'Central Grebo',
+  'ijc' => 'Izon',
+  'siu' => 'Sinagen',
+  'puj' => 'Punan Tubu',
+  'kjd' => 'Southern Kiwai',
+  'jrt' => 'Jorto',
+  'yme' => 'Yameo',
+  'bkm' => 'Kom (Cameroon)',
+  'lmh' => 'Lambichhong',
+  'yll' => 'Yil',
+  'zeh' => 'Eastern Hongshuihe Zhuang',
+  'kuy' => 'Kuuku-Ya\'u',
+  'hhi' => 'Hoia Hoia',
+  'spn' => "Sanapan\x{e1}",
+  'kpy' => 'Koryak',
+  'sun' => 'Sundanese',
+  'poe' => 'San Juan Atzingo Popoloca',
+  'saw' => 'Sawi',
+  'wsa' => 'Warembori',
+  'bps' => 'Sarangani Blaan',
+  'inb' => 'Inga',
+  'msb' => 'Masbatenyo',
+  'wed' => 'Wedau',
+  'bus' => 'Bokobaru',
+  'smy' => 'Semnani',
+  'cnm' => "Ixtat\x{e1}n Chuj",
+  'kmn' => 'Awtuw',
+  'blt' => 'Tai Dam',
+  'guc' => 'Wayuu',
+  'sel' => 'Selkup',
+  'bhe' => 'Bhaya',
+  'xgi' => 'Garingbal',
+  'oyd' => 'Oyda',
+  'szg' => 'Sengele',
+  'tod' => 'Toma',
+  'sqo' => 'Sorkhei',
+  'arw' => 'Arawak',
+  'tra' => 'Tirahi',
+  'nhm' => 'Morelos Nahuatl',
+  'bno' => 'Bantoanon',
+  'olm' => 'Oloma',
+  'wlv' => "Wich\x{ed} Lhamt\x{e9}s Vejoz",
+  'vkp' => 'Korlai Creole Portuguese',
+  'bxt' => 'Buxinhua',
+  'zro' => "Z\x{e1}paro",
+  'bik' => 'Bikol',
+  'lnz' => 'Lonzo',
+  'abb' => 'Bankon',
+  'dji' => 'Djinang',
+  'bdx' => 'Budong-Budong',
+  'mth' => 'Munggui',
+  'zmj' => 'Maridjabin',
+  'sjw' => 'Shawnee',
+  'lej' => 'Lengola',
+  'swp' => 'Suau',
+  'qxh' => "Panao Hu\x{e1}nuco Quechua",
+  'qve' => "Eastern Apur\x{ed}mac Quechua",
+  'nsc' => 'Nshi',
+  'myf' => 'Bambassi',
+  'dop' => 'Lukpa',
+  'mxi' => 'Mozarabic',
+  'fll' => 'North Fali',
+  'mvv' => 'Tagal Murut',
+  'onx' => 'Onin Based Pidgin',
+  'lya' => 'Layakha',
+  'ywl' => 'Western Lalu',
+  'jic' => 'Tol',
+  'muz' => 'Mursi',
+  'mkl' => 'Mokole',
+  'mpz' => 'Mpi',
+  'bea' => 'Beaver',
+  'tmz' => 'Tamanaku',
+  'rit' => 'Ritharrngu',
+  'ynk' => 'Naukan Yupik',
+  'bsd' => 'Sarawak Bisaya',
+  'lsg' => 'Lyons Sign Language',
+  'pqm' => 'Malecite-Passamaquoddy',
+  'mix' => 'Mixtepec Mixtec',
+  'yio' => 'Dayao Yi',
+  'mli' => 'Malimpung',
+  'zgr' => 'Magori',
+  'dai' => 'Day',
+  'mdk' => 'Mangbutu',
+  'byj' => 'Bina (Nigeria)',
+  'pym' => 'Fyam',
+  'kjq' => 'Western Keres',
+  'fui' => 'Bagirmi Fulfulde',
+  'ant' => 'Antakarinya',
+  'bch' => 'Bariai',
+  'tht' => 'Tahltan',
+  'tml' => 'Tamnim Citak',
+  'tey' => 'Tulishi',
+  'pev' => "P\x{e9}mono",
+  'bqj' => 'Bandial',
+  'tle' => 'Southern Marakwet',
+  'jbe' => 'Judeo-Berber',
+  'snj' => 'Riverain Sango',
+  'sdd' => 'Semendo',
+  'ngt' => 'Kriang',
+  'oge' => 'Old Georgian',
+  'vif' => 'Vili',
+  'zlw' => 'West Slavic languages',
+  'emu' => 'Eastern Muria',
+  'kcr' => 'Katla',
+  'nav' => 'Navajo',
+  'mkz' => 'Makasae',
+  'mpl' => 'Middle Watut',
+  'mul' => 'Multiple languages',
+  'yah' => 'Yazgulyam',
+  'pld' => 'Polari',
+  'hob' => 'Mari (Madang Province)',
+  'lae' => 'Pattani',
+  'alo' => 'Larike-Wakasihu',
+  'sib' => 'Sebop',
+  'txe' => 'Totoli',
+  'mqf' => 'Momuna',
+  'woy' => 'Weyto',
+  'men' => 'Mende (Sierra Leone)',
+  'eja' => 'Ejamat',
+  'noj' => 'Nonuya',
+  'hms' => 'Southern Qiandong Miao',
+  'syo' => 'Suoy',
+  'kaq' => 'Capanahua',
+  'ssx' => 'Samberigi',
+  'pst' => 'Central Pashto',
+  'lnl' => 'South Central Banda',
+  'bry' => 'Burui',
+  'wbq' => 'Waddar',
+  'aeu' => 'Akeu',
+  'krs' => 'Gbaya (Sudan)',
+  'pty' => 'Pathiya',
+  'ttv' => 'Titan',
+  'lrc' => 'Northern Luri',
+  'gfk' => 'Patpatar',
+  'sez' => 'Senthang Chin',
+  'nrg' => 'Narango',
+  'rmh' => 'Murkim',
+  'kok' => 'Konkani (macrolanguage)',
+  'nfa' => 'Dhao',
+  'kky' => 'Guugu Yimidhirr',
+  'skn' => 'Kolibugan Subanon',
+  'lje' => 'Rampi',
+  'eaa' => 'Karenggapa',
+  'bks' => 'Northern Sorsoganon',
+  'cuc' => 'Usila Chinantec',
+  'pai' => 'Pe',
+  'yxy' => 'Yabula Yabula',
+  'ark' => "Arikap\x{fa}",
+  'cpc' => "Ajy\x{ed}ninka Apurucayali",
+  'soq' => 'Kanasi',
+  'gnm' => 'Ginuman',
+  'bvc' => 'Baelelea',
+  'itx' => 'Itik',
+  'pcm' => 'Nigerian Pidgin',
+  'zkv' => 'Krevinian',
+  'ger' => 'German',
+  'biw' => 'Kol (Cameroon)',
+  'xac' => 'Kachari',
+  'gvs' => 'Gumawana',
+  'hem' => 'Hemba',
+  'byh' => 'Bhujel',
+  'tbz' => 'Ditammari',
+  'yly' => "Ny\x{e2}layu",
+  'leh' => 'Lenje',
+  'awc' => 'Cicipu',
+  'sak' => 'Sake',
+  'yee' => 'Yimas',
+  'zmh' => 'Makolkol',
+  'tcc' => 'Datooga',
+  'kyr' => "Kuru\x{e1}ya",
+  'pop' => "Pwapw\x{e2}",
+  'nei' => 'Neo-Hittite',
+  'aos' => 'Taikat',
+  'vmi' => 'Miwa',
+  'knv' => 'Tabo',
+  'quq' => 'Quinqui',
+  'jui' => 'Ngadjuri',
+  'ksu' => 'Khamyang',
+  'bhp' => 'Bima',
+  'umc' => 'Marrucinian',
+  'sco' => 'Scots',
+  'amb' => 'Ambo',
+  'rxw' => 'Karuwali',
+  'agq' => 'Aghem',
+  'nir' => 'Nimboran',
+  'gxx' => "W\x{e8} Southern",
+  'yha' => 'Baha Buyang',
+  'otb' => 'Old Tibetan',
+  'mtj' => 'Moskona',
+  'gdt' => 'Kungardutyi',
+  'mdw' => 'Mbosi',
+  'nnq' => 'Ngindo',
+  'mhg' => 'Margu',
+  'sjk' => 'Kemi Sami',
+  'chq' => 'Quiotepec Chinantec',
+  'qvp' => 'Pacaraos Quechua',
+  'sby' => 'Soli',
+  'kbn' => 'Kare (Central African Republic)',
+  'swe' => 'Swedish',
+  'wan' => 'Wan',
+  'btf' => 'Birgit',
+  'bgn' => 'Western Balochi',
+  'fmp' => 'Fe\'fe\'',
+  'xre' => 'Kreye',
+  'dgc' => 'Casiguran Dumagat Agta',
+  'doe' => 'Doe',
+  'sgs' => 'Samogitian',
+  'prf' => 'Paranan',
+  'wkw' => 'Wakawaka',
+  'mjd' => 'Northwest Maidu',
+  'esn' => 'Salvadoran Sign Language',
+  'lap' => 'Laka (Chad)',
+  'bfi' => 'British Sign Language',
+  'ltn' => "Latund\x{ea}",
+  'dty' => 'Dotyali',
+  'bab' => "Bainouk-Gunyu\x{f1}o",
+  'kwi' => 'Awa-Cuaiquer',
+  'noh' => 'Nomu',
+  'wgb' => 'Wagawaga',
+  'gbf' => 'Gaikundi',
+  'iqw' => 'Ikwo',
+  'ior' => 'Inor',
+  'mrm' => 'Merlav',
+  'mga' => 'Middle Irish (900-1200)',
+  'tiu' => 'Adasen',
+  'rgr' => "Res\x{ed}garo",
+  'ewo' => 'Ewondo',
+  'loi' => "Loma (C\x{f4}te d'Ivoire)",
+  'xet' => "Xet\x{e1}",
+  'tdq' => 'Tita',
+  'hbs' => 'Serbo-Croatian',
+  'tlp' => "Filomena Mata-Coahuitl\x{e1}n Totonac",
+  'udg' => 'Muduga',
+  'mad' => 'Madurese',
+  'mft' => 'Mokerang',
+  'ijo' => 'Ijo languages',
+  'ulu' => 'Uma\' Lung',
+  'kqr' => 'Kimaragang',
+  'kow' => 'Kugama',
+  'xla' => 'Kamula',
+  'yaj' => 'Banda-Yangere',
+  'nxn' => 'Ngawun',
+  'lww' => 'Lewo',
+  'mcf' => "Mats\x{e9}s",
+  'ebu' => 'Embu',
+  'ljp' => 'Lampung Api',
+  'xsv' => 'Sudovian',
+  'aiy' => 'Ali',
+  'una' => 'North Watut',
+  'bjb' => 'Banggarla',
+  'xnu' => 'Nukunul',
+  'tbl' => 'Tboli',
+  'dev' => 'Domung',
+  'ori' => 'Oriya (macrolanguage)',
+  'bqh' => 'Baima',
+  'rro' => 'Waima',
+  'ckc' => 'Northern Cakchiquel',
+  'bcj' => 'Bardi',
+  'kzt' => 'Tambunan Dusun',
+  'snh' => 'Shinabo',
+  'nln' => 'Durango Nahuatl',
+  'zpv' => 'Chichicapan Zapotec',
+  'dym' => 'Yanda Dom Dogon',
+  'nur' => 'Nukuria',
+  'mhj' => 'Mogholi',
+  'twr' => 'Southwestern Tarahumara',
+  'jer' => 'Jere',
+  'acr' => 'Achi',
+  'sgk' => 'Sangkong',
+  'yta' => 'Talu',
+  'eli' => 'Nding',
+  'yhd' => 'Judeo-Iraqi Arabic',
+  'ubi' => 'Ubi',
+  'sjs' => 'Senhaja De Srair',
+  'tku' => 'Upper Necaxa Totonac',
+  'djc' => 'Dar Daju Daju',
+  'bjn' => 'Banjar',
+  'klo' => 'Kapya',
+  'zkt' => 'Kitan',
+  'ekl' => 'Kol (Bangladesh)',
+  'knt' => "Panoan Katuk\x{ed}na",
+  'pgi' => 'Pagi',
+  'bhf' => 'Odiai',
+  'mtg' => 'Una',
+  'dre' => 'Dolpo',
+  'pof' => 'Poke',
+  'wiw' => 'Wirangu',
+  'kxo' => "Kano\x{e9}",
+  'gui' => "Eastern Bolivian Guaran\x{ed}",
+  'aok' => "Arh\x{f6}",
+  'srq' => "Sirion\x{f3}",
+  'xvn' => 'Vandalic',
+  'eth' => 'Ethiopian Sign Language',
+  'cic' => 'Chickasaw',
+  'huq' => 'Tsat',
+  'dac' => 'Dambi',
+  'sas' => 'Sasak',
+  'jdt' => 'Judeo-Tat',
+  'bpw' => 'Bo (Papua New Guinea)',
+  'aky' => 'Aka-Kol',
+  'wtf' => 'Watiwa',
+  'buw' => 'Bubi',
+  'mlc' => 'Cao Lan',
+  'ban' => 'Balinese',
+  'aaq' => 'Eastern Abnaki',
+  'btp' => 'Budibud',
+  'mye' => 'Myene',
+  'lsh' => 'Lish',
+  'ukp' => 'Ukpe-Bayobiri',
+  'prp' => 'Parsi',
+  'itz' => "Itz\x{e1}",
+  'jii' => 'Jiiddu',
+  'ars' => 'Najdi Arabic',
+  'keu' => 'Akebu',
+  'tbx' => 'Kapin',
+  'ide' => 'Idere',
+  'nsi' => 'Nigerian Sign Language',
+  'ycn' => 'Yucuna',
+  'mxc' => 'Manyika',
+  'kdm' => 'Kagoma',
+  'maa' => "San Jer\x{f3}nimo Tec\x{f3}atl Mazatec",
+  'bmq' => 'Bomu',
+  'hay' => 'Haya',
+  'mqe' => 'Matepi',
+  'laf' => 'Lafofa',
+  'cbe' => 'Chipiajes',
+  'krw' => 'Western Krahn',
+  'bgb' => 'Bobongko',
+  'tyi' => 'Teke-Tsaayi',
+  'wab' => 'Wab',
+  'nbo' => 'Nkukoli',
+  'xld' => 'Lydian',
+  'bcg' => 'Baga Pokur',
+  'kbb' => "Kaxui\x{e2}na",
+  'hmw' => 'Western Mashan Hmong',
+  'lcd' => 'Lola',
+  'rar' => 'Rarotongan',
+  'itl' => 'Itelmen',
+  'yot' => 'Yotti',
+  'fuc' => 'Pulaar',
+  'und' => 'Undetermined',
+  'udj' => 'Ujir',
+  'vie' => 'Vietnamese',
+  'otn' => 'Tenango Otomi',
+  'igo' => 'Isebe',
+  'tlf' => 'Telefol',
+  'auy' => 'Awiyaana',
+  'dnu' => 'Danau',
+  'ddr' => 'Dhudhuroa',
+  'apy' => "Apala\x{ed}",
+  'bkw' => 'Bekwel',
+  'roo' => 'Rotokas',
+  'gbp' => 'Gbaya-Bossangoa',
+  'yag' => "Y\x{e1}mana",
+  'gqu' => 'Qau',
+  'amn' => 'Amanab',
+  'mja' => 'Mahei',
+  'mcp' => 'Makaa',
+  'ymr' => 'Malasar',
+  'mfv' => 'Mandjak',
+  'oca' => 'Ocaina',
+  'mmu' => 'Mmaala',
+  'ojp' => 'Old Japanese',
+  'ifu' => 'Mayoyao Ifugao',
+  'tuu' => 'Tututni',
+  'gll' => 'Garlali',
+  'tpu' => 'Tampuan',
+  'xty' => 'Yoloxochitl Mixtec',
+  'gme' => 'East Germanic languages',
+  'rmg' => 'Traveller Norwegian',
+  'zpt' => "San Vicente Coatl\x{e1}n Zapotec",
+  'irr' => 'Ir',
+  'mom' => 'Mangue',
+  'kzv' => 'Komyandaret',
+  'mgd' => 'Moru',
+  'xst' => 'Silt\'e',
+  'zls' => 'South Slavic languages',
+  'nkr' => 'Nukuoro',
+  'lri' => 'Marachi',
+  'lhn' => 'Lahanan',
+  'blv' => 'Kibala',
+  'tmx' => 'Tomyang',
+  'tci' => "W\x{e1}ra",
+  'wno' => 'Wano',
+  'awi' => 'Aekyom',
+  'skb' => 'Saek',
+  'tam' => 'Tamil',
+  'mds' => 'Maria (Papua New Guinea)',
+  'juc' => 'Jurchen',
+  'lzl' => 'Litzlitz',
+  'xop' => 'Kopar',
+  'miz' => 'Coatzospan Mixtec',
+  'nec' => 'Nedebang',
+  'wik' => 'Wikalkan',
+  'byg' => 'Baygo',
+  'vmc' => 'Juxtlahuaca Mixtec',
+  'yns' => 'Yansi',
+  'bxv' => 'Berakou',
+  'zmg' => 'Marti Ke',
+  'bvi' => 'Belanda Viri',
+  'bed' => 'Bedoanas',
+  'leg' => 'Lengua',
+  'bsa' => 'Abinomn',
+  'cpi' => 'Chinese Pidgin English',
+  'pac' => 'Pacoh',
+  'llm' => 'Lasalimu',
+  'cui' => 'Cuiba',
+  'rut' => 'Rutul',
+  'nyy' => 'Nyakyusa-Ngonde',
+  'rpt' => 'Rapting',
+  'sgw' => 'Sebat Bet Gurage',
+  'xcm' => 'Comecrudo',
+  'hve' => 'San Dionisio Del Mar Huave',
+  'mux' => 'Bo-Ung',
+  'mpx' => 'Misima-Panaeati',
+  'ypo' => 'Alo Phola',
+  'xai' => "Kaimb\x{e9}",
+  'toki' => 'Toki Pona',
+  'bis' => 'Bislama',
+  'myp' => "Pirah\x{e3}",
+  'ysp' => 'Southern Lolopo',
+  'meb' => 'Ikobi',
+  'pre' => 'Principense',
+  'mvt' => 'Mpotovoro',
+  'dof' => 'Domu',
+  'sin' => 'Sinhala',
+  'ldo' => 'Loo',
+  'kiy' => 'Kirikiri',
+  'tjm' => 'Timucua',
+  'bte' => 'Gamo-Ningi',
+  'wea' => 'Wewaw',
+  'dgi' => 'Northern Dagara',
+  'csr' => 'Costa Rican Sign Language',
+  'swf' => 'Sere',
+  'azt' => 'Faire Atta',
+  'bdz' => 'Badeshi',
+  'hti' => 'Hoti',
+  'ssl' => 'Western Sisaala',
+  'zar' => "Rinc\x{f3}n Zapotec",
+  'gic' => 'Gail',
+  'trd' => 'Turi',
+  'mhh' => 'Maskoy Pidgin',
+  'aqr' => "Arh\x{e2}",
+  'umi' => 'Ukit',
+  'ntm' => 'Nateni',
+  'zoo' => "Asunci\x{f3}n Mixtepec Zapotec",
+  'bpk' => 'Orowe',
+  'buk' => 'Bugawac',
+  'thv' => 'Tahaggart Tamahaq',
+  'ayr' => 'Central Aymara',
+  'bfc' => 'Panyi Bai',
+  'bkk' => 'Brokskat',
+  'lws' => 'Malawian Sign Language',
+  'ngv' => 'Nagumi',
+  'kwc' => 'Likwala',
+  'asu' => 'Tocantins Asurini',
+  'boy' => 'Bodo (Central African Republic)',
+  'rwm' => 'Amba (Uganda)',
+  'anv' => 'Denya',
+  'kos' => 'Kosraean',
+  'gbe' => 'Niksek',
+  'loc' => 'Inonhan',
+  'mbu' => 'Mbula-Bwazza',
+  'nog' => 'Nogai',
+  'ssz' => 'Sengseng',
+  'cqu' => 'Chilean Quechua',
+  'mqp' => 'Manipa',
+  'krk' => 'Kerek',
+  'bdl' => 'Indonesian Bajau',
+  'hmk' => 'Maek',
+  'yzk' => 'Zokhuo',
+  'nat' => "Ca\x{331}hungwa\x{331}rya\x{331}",
+  'nfd' => 'Ahwai',
+  'fer' => 'Feroge',
+  'ztu' => "G\x{fc}il\x{e1} Zapotec",
+  'abn' => 'Abua',
+  'nqy' => 'Akyaung Ari Naga',
+  'ttt' => 'Muslim Tat',
+  'yko' => 'Yasa',
+  'mkx' => 'Kinamiging Manobo',
+  'mwo' => 'Central Maewo',
+  'ega' => 'Ega',
+  'pnu' => 'Jiongnai Bunu',
+  'sda' => 'Toraja-Sa\'dan',
+  'rkt' => 'Rangpuri',
+  'sxr' => 'Saaroa',
+  'orc' => 'Orma',
+  'tsy' => 'Tebul Sign Language',
+  'cki' => "Santa Mar\x{ed}a De Jes\x{fa}s Cakchiquel",
+  'mce' => 'Itundujia Mixtec',
+  'mil' => "Pe\x{f1}oles Mixtec",
+  'kgq' => 'Kamoro',
+  'lzz' => 'Laz',
+  'kmb' => 'Kimbundu',
+  'njt' => 'Ndyuka-Trio Pidgin',
+  'cme' => 'Cerma',
+  'veo' => "Venture\x{f1}o",
+  'pla' => 'Miani',
+  'nmo' => 'Moyon Naga',
+  'bzo' => 'Bozaba',
+  'cll' => 'Chala',
+  'inn' => 'Isinai',
+  'bqg' => 'Bago-Kusuntu',
+  'msn' => "Vur\x{eb}s",
+  'bbq' => 'Bamali',
+  'slr' => 'Salar',
+  'spb' => 'Sepa (Indonesia)',
+  'wry' => 'Merwari',
+  'sub' => 'Suku',
+  'sng' => 'Sanga (Democratic Republic of Congo)',
+  'bdi' => 'Burun',
+  'sbo' => "Sab\x{fc}m",
+  'dgz' => 'Daga',
+  'blk' => 'Pa\'o Karen',
+  'cth' => 'Thaiphum Chin',
+  'wiv' => 'Vitu',
+  'vku' => 'Kurrama',
+  'yeu' => 'Yerukula',
+  'csb' => 'Kashubian',
+  'zab' => 'Western Tlacolula Valley Zapotec',
+  'bit' => 'Berinomo',
+  'rea' => 'Rerau',
+  'bxk' => 'Bukusu',
+  'mvs' => 'Massep',
+  'kcn' => 'Nubi',
+  'mer' => 'Meru',
+  'kse' => 'Kuni',
+  'ixj' => 'Chajul Ixil',
+  'ism' => 'Masimasi',
+  'mnm' => 'Mapena',
+  'pwg' => 'Gapapaiwa',
+  'khd' => "B\x{e4}di Kanum",
+  'rus' => 'Russian',
+  'dax' => 'Dayi',
+  'dmm' => 'Dama',
+  'pbm' => 'Puebla Mazatec',
+  'mlx' => 'Malfaxal',
+  'ylo' => 'Naluo Yi',
+  'mii' => "Chigmecatitl\x{e1}n Mixtec",
+  'aah' => 'Abu\' Arapesh',
+  'wut' => 'Wutung',
+  'jye' => 'Judeo-Yemeni Arabic',
+  'wls' => 'Wallisian',
+  'lum' => 'Luimbi',
+  'cli' => 'Chakali',
+  'tcz' => 'Thado Chin',
+  'kta' => 'Katua',
+  'huh' => 'Huilliche',
+  'mdt' => 'Mbere',
+  'oni' => 'Onin',
+  'mxx' => 'Mahou',
+  'swu' => 'Suwawa',
+  'srh' => 'Sarikoli',
+  'fil' => 'Filipino',
+  'tbc' => 'Takia',
+  'bpv' => 'Bian Marind',
+  'pka' => "Ardham\x{101}gadh\x{12b} Pr\x{101}krit",
+  'ura' => 'Urarina',
+  'buv' => 'Bun',
+  'ckl' => 'Cibak',
+  'dze' => 'Djiwarli',
+  'bvz' => 'Bauzi',
+  'skr' => 'Saraiki',
+  'xru' => 'Marriammu',
+  'ngk' => 'Dalabon',
+  'ckz' => "Cakchiquel-Quich\x{e9} Mixed Language",
+  'ppa' => 'Pao',
+  'cul' => 'Culina',
+  'bkv' => 'Bekwarra',
+  'hrr' => 'Horuru',
+  'pua' => 'Western Highland Purepecha',
+  'pid' => 'Piaroa',
+  'sur' => 'Mwaghavul',
+  'spr' => 'Saparua',
+  'aio' => 'Aiton',
+  'slb' => 'Kahumamahon Saluan',
+  'thk' => 'Tharaka',
+  'emp' => "Northern Ember\x{e1}",
+  'bvl' => 'Bolivian Sign Language',
+  'gga' => 'Gao',
+  'grm' => 'Kota Marudu Talantang',
+  'cen' => 'Cen',
+  'xal' => 'Kalmyk',
+  'ank' => 'Goemai',
+  'lba' => 'Lui',
+  'kmr' => 'Northern Kurdish',
+  'ziw' => 'Zigula',
+  'fiz' => 'Izere',
+  'njs' => 'Nisa',
+  'mbf' => 'Baba Malay',
+  'kjg' => 'Khmu',
+  'krv' => 'Kavet',
+  'tts' => 'Northeastern Thai',
+  'izr' => 'Izere',
+  'sxb' => 'Suba',
+  'lkm' => 'Kalaamaya',
+  'tie' => 'Tingal',
+  'asf' => 'Auslan',
+  'tcl' => 'Taman (Myanmar)',
+  'bmh' => 'Kein',
+  'kgj' => 'Gamale Kham',
+  'bbj' => "Ghom\x{e1}l\x{e1}'",
+  'jaa' => "Jamamad\x{ed}",
+  'hmv' => "Hmong D\x{f4}",
+  'kzw' => "Karir\x{ed}-Xoc\x{f3}",
+  'ule' => 'Lule',
+  'ybb' => 'Yemba',
+  'dto' => 'Tommo So Dogon',
+  'xho' => 'Xhosa',
+  'yrw' => 'Yarawata',
+  'nas' => 'Naasioi',
+  'lwt' => 'Lewotobi',
+  'gcf' => 'Guadeloupean Creole French',
+  'kag' => 'Kajaman',
+  'uvh' => 'Uri',
+  'pes' => 'Iranian Persian',
+  'kot' => 'Lagwan',
+  'ssi' => 'Sansi',
+  'ayb' => 'Ayizo Gbe',
+  'sva' => 'Svan',
+  'gad' => 'Gaddang',
+  'zgn' => 'Guibian Zhuang',
+  'mfw' => 'Mulaha',
+  'dgl' => 'Andaandi',
+  'gft' => 'Gafat',
+  'pou' => 'Southern Pokomam',
+  'vam' => 'Vanimo',
+  'jpx' => 'Japanese (family)',
+  'huj' => 'Northern Guiyang Hmong',
+  'xkd' => 'Mendalam Kayan',
+  'srj' => 'Serawai',
+  'bxw' => 'Bankagooma',
+  'vmx' => 'Tamazola Mixtec',
+  'dka' => 'Dakpakha',
+  'nex' => 'Neme',
+  'faa' => 'Fasu',
+  'ksp' => 'Kaba',
+  'bhu' => 'Bhunjia',
+  'tmc' => 'Tumak',
+  'zch' => 'Central Hongshuihe Zhuang',
+  'yiy' => 'Yir Yoront',
+  'xwj' => 'Wajuk',
+  'qug' => 'Chimborazo Highland Quichua',
+  'art' => 'Artificial languages',
+  'nsz' => 'Nisenan',
+  'tyl' => 'Thu Lao',
+  'blw' => 'Balangao',
+  'tkf' => "Tukumanf\x{e9}d",
+  'sog' => 'Sogdian',
+  'muc' => 'Ajumbu',
+  'mpc' => 'Mangarrayi',
+  'hig' => 'Kamwe',
+  'dbm' => 'Duguri',
+  'pmm' => 'Pomo',
+  'iti' => 'Inlaod Itneg',
+  'rgn' => 'Romagnol',
+  'sat' => 'Santali',
+  'pax' => "Pankarar\x{e9}",
+  'gdk' => 'Gadang',
+  'bny' => 'Bintulu',
+  'lnc' => 'Languedocien',
+  'mhq' => 'Mandan',
+  'gix' => 'Gilima',
+  'kef' => 'Kpessi',
+  'kqn' => 'Kaonde',
+  'gli' => 'Guliguli',
+  'kns' => 'Kensiu',
+  'chg' => 'Chagatai',
+  'nda' => 'Ndasa',
+  'nxr' => 'Ninggerum',
+  'fmu' => 'Far Western Muria',
+  'lrl' => 'Lari',
+  'kvm' => 'Kendem',
+  'agg' => 'Angor',
+  'fom' => 'Foma',
+  'guz' => 'Gusii',
+  'gyf' => 'Gungabula',
+  'kuo' => 'Kumukio',
+  'kpo' => 'Ikposo',
+  'nlr' => 'Ngarla',
+  'pgz' => 'Papua New Guinean Sign Language',
+  'rhp' => 'Yahang',
+  'twb' => 'Western Tawbuid',
+  'npb' => 'Nupbikha',
+  'nng' => 'Maring Naga',
+  'nub' => 'Nubian languages',
+  'sjt' => 'Ter Sami',
+  'smo' => 'Samoan',
+  'acb' => "\x{c1}nc\x{e1}",
+  'epi' => 'Epie',
+  'jeb' => 'Jebero',
+  'nkb' => 'Khoibu Naga',
+  'zps' => "Coatl\x{e1}n Zapotec",
+  'pgl' => 'Primitive Irish',
+  'crm' => 'Moose Cree',
+  'cga' => 'Changriwa',
+  'gen' => 'Geman Deng',
+  'tip' => 'Trimuris',
+  'lox' => 'Loun',
+  'eki' => 'Eki',
+  'sec' => 'Sechelt',
+  'tlu' => 'Tulehu',
+  'gul' => 'Sea Island Creole English',
+  'tdg' => 'Western Tamang',
+  'des' => 'Desano',
+  'hnn' => 'Hanunoo',
+  'kko' => 'Karko',
+  'ogu' => 'Ogbronuagum',
+  'kwx' => 'Khirwar',
+  'xss' => 'Assan',
+  'jbu' => 'Jukun Takum',
+  'bfx' => 'Bantayanon',
+  'ell' => 'Modern Greek (1453-)',
+  'syy' => 'Al-Sayyid Bedouin Sign Language',
+  'kyn' => 'Northern Binukidnon',
+  'ngw' => 'Ngwaba',
+  'eme' => 'Emerillon',
+  'thw' => 'Thudam',
+  'aha' => 'Ahanta',
+  'rjb' => 'Rajbanshi',
+  'lrz' => 'Lemerig',
+  'anw' => 'Anaang',
+  'tna' => 'Tacana',
+  'txu' => "Kayap\x{f3}",
+  'atd' => 'Ata Manobo',
+  'lau' => 'Laba',
+  'pto' => "Zo'\x{e9}",
+  'ymb' => 'Yambes',
+  'ubl' => 'Buhi\'non Bikol',
+  'bro' => 'Brokkat',
+  'zik' => 'Zimakani',
+  'nin' => 'Ninzo',
+  'bmj' => 'Bote-Majhi',
+  'yos' => 'Yos',
+  'kgh' => 'Upper Tanudan Kalinga',
+  'tql' => 'Lehali',
+  'orx' => 'Oro',
+  'woo' => 'Manombai',
+  'tyz' => "T\x{e0}y",
+  'nsl' => 'Norwegian Sign Language',
+  'bbh' => 'Bugan',
+  'mfk' => 'North Mofu',
+  'mkc' => 'Siliput',
+  'qwa' => 'Corongo Ancash Quechua',
+  'aee' => 'Northeast Pashai',
+  'jil' => 'Jilim',
+  'tpf' => 'Tarpia',
+  'aly' => 'Alyawarr',
+  'tuf' => 'Central Tunebo',
+  'kbr' => 'Kafa',
+  'iff' => 'Ifo',
+  'mmf' => 'Mundat',
+  'kzk' => 'Kazukuru',
+  'cad' => 'Caddo',
+  'zea' => 'Zeeuws',
+  'ofo' => 'Ofo',
+  'lma' => 'East Limba',
+  'rab' => 'Camling',
+  'did' => 'Didinga',
+  'xia' => 'Xiandao',
+  'zyj' => 'Youjiang Zhuang',
+  'psw' => 'Port Sandwich',
+  'teo' => 'Teso',
+  'stm' => 'Setaman',
+  'war' => 'Waray (Philippines)',
+  'xud' => 'Umiida',
+  'bgr' => 'Bawm Chin',
+  'dua' => 'Duala',
+  'yrk' => 'Nenets',
+  'xpd' => 'Oyster Bay Tasmanian',
+  'zkk' => 'Karankawa',
+  'gux' => "Gourmanch\x{e9}ma",
+  'agj' => 'Argobba',
+  'ksf' => 'Bafia',
+  'wlw' => 'Walak',
+  'kwl' => 'Kofyar',
+  'bfl' => "Banda-Nd\x{e9}l\x{e9}",
+  'ajg' => 'Aja (Benin)',
+  'arv' => 'Arbore',
+  'mtq' => 'Muong',
+  'ran' => 'Riantana',
+  'nnj' => 'Nyangatom',
+  'ndd' => 'Nde-Nsele-Nta',
+  'ctg' => 'Chittagonian',
+  'sgt' => 'Brokpake',
+  'xzp' => 'Ancient Zapotec',
+  'lol' => 'Mongo',
+  'frm' => 'Middle French (ca. 1400-1600)',
+  'ddn' => 'Dendi (Benin)',
+  'kio' => 'Kiowa',
+  'wxw' => 'Wardandi',
+  'bdc' => "Ember\x{e1}-Baud\x{f3}",
+  'otr' => 'Otoro',
+  'vra' => 'Vera\'a',
+  'chj' => "Ojitl\x{e1}n Chinantec",
+  'giz' => 'South Giziga',
+  'sav' => 'Saafi-Saafi',
+  'elx' => 'Elamite',
+  'amr' => 'Amarakaeri',
+  'gds' => 'Ghandruk Sign Language',
+  'knk' => 'Kuranko',
+  'tkp' => 'Tikopia',
+  'nib' => 'Nakame',
+  'whu' => 'Wahau Kayan',
+  'ymn' => 'Yamna',
+  'pru' => 'Puragi',
+  'nyo' => 'Nyoro',
+  'uku' => 'Ukue',
+  'nsx' => 'Nsongo',
+  'tbi' => 'Gaam',
+  'enm' => 'Middle English (1100-1500)',
+  'soj' => 'Soi',
+  'aag' => 'Ambrak',
+  'btu' => 'Batu',
+  'fad' => 'Wagi',
+  'hij' => 'Hijuk',
+  'xka' => 'Kalkoti',
+  'yuy' => 'East Yugur',
+  'kep' => 'Kaikadi',
+  'kyb' => 'Butbut Kalinga',
+  'paz' => "Pankarar\x{fa}",
+  'ghh' => 'Northern Ghale',
+  'aot' => 'Atong (India)',
+  'irn' => "Ir\x{e1}ntxe",
+  'qxq' => 'Qashqa\'i',
+  'hug' => 'Huachipaeri',
+  'mic' => 'Mi\'kmaq',
+  'wny' => 'Wanyi',
+  'nez' => 'Nez Perce',
+  'srg' => 'Sulod',
+  'tza' => 'Tanzanian Sign Language',
+  'vmz' => "Mazatl\x{e1}n Mazatec",
+  'ihi' => 'Ihievbe',
+  'clc' => 'Chilcotin',
+  'xbm' => 'Middle Breton',
+  'geb' => 'Kire',
+  'quj' => "Joyabaj Quich\x{e9}",
+  'nkn' => 'Nkangala',
+  'xwg' => 'Kwegu',
+  'mvw' => 'Machinga',
+  'acn' => 'Achang',
+  'jen' => 'Dza',
+  'twn' => 'Twendi',
+  'npn' => 'Mondropolon',
+  'nun' => 'Anong',
+  'yrs' => 'Yarsun',
+  'naw' => 'Nawuri',
+  'wro' => 'Worrorra',
+  'bjr' => 'Binumarien',
+  'kzs' => 'Sugut Dusun',
+  'ase' => 'American Sign Language',
+  'tif' => 'Tifal',
+  'zyg' => 'Yang Zhuang',
+  'jul' => 'Jirel',
+  'bzy' => 'Obanliku',
+  'vml' => 'Malgana',
+  'gbu' => 'Gagadu',
+  'nmy' => 'Namuyi',
+  'lgu' => 'Longgu',
+  'yaq' => 'Yaqui',
+  'shm' => 'Shahrudi',
+  'zsa' => 'Sarasira',
+  'hwa' => "Wan\x{e9}",
+  'mwy' => 'Mosiro',
+  'mbe' => 'Molale',
+  'kjh' => 'Khakas',
+  'yky' => 'Yakoma',
+  'bmg' => 'Bamwe',
+  'ims' => 'Marsian',
+  'nqo' => 'N\'Ko',
+  'orz' => 'Ormu',
+  'lmd' => 'Lumun',
+  'caa' => "Chort\x{ed}",
+  'pal' => 'Pahlavi',
+  'mfs' => 'Mexican Sign Language',
+  'kqb' => 'Kovai',
+  'tso' => 'Tsonga',
+  'uuu' => 'U',
+  'tyx' => 'Teke-Tyee',
+  'dia' => 'Dia',
+  'xua' => 'Alu Kurumba',
+  'dud' => 'Hun-Saare',
+  'xpa' => 'Pirriya',
+  'bcq' => 'Bench',
+  'yok' => 'Yokuts',
+  'com' => 'Comanche',
+  'zte' => 'Elotepec Zapotec',
+  'rmq' => "Cal\x{f3}",
+  'tup' => 'Tupi languages',
+  'tpp' => 'Pisaflores Tepehua',
+  'gsn' => 'Nema',
+  'pne' => 'Western Penan',
+  'xes' => 'Kesawai',
+  'bar' => 'Bavarian',
+  'ssc' => 'Suba-Simbiti',
+  'gce' => 'Galice',
+  'gil' => 'Gilbertese',
+  'dek' => 'Dek',
+  'kah' => 'Kara (Central African Republic)',
+  'rkw' => 'Arakwal',
+  'ccp' => 'Chakma',
+  'mcu' => 'Cameroon Mambila',
+  'oma' => 'Omaha-Ponca',
+  'cja' => 'Western Cham',
+  'loz' => 'Lozi',
+  'pho' => 'Phunoi',
+  'xsk' => 'Sakan',
+  'ata' => 'Pele-Ata',
+  'ttw' => 'Long Wat',
+  'mmp' => 'Siawi',
+  'zpk' => 'Tlacolulita Zapotec',
+  'tnd' => 'Angosturas Tunebo',
+  'tdj' => 'Tajio',
+  'wbh' => 'Wanda',
+  'ulf' => 'Usku',
+  'bfz' => 'Mahasu Pahari',
+  'kwz' => 'Kwadi',
+  'boo' => "Tiemac\x{e8}w\x{e8} Bozo",
+  'zgb' => 'Guibei Zhuang',
+  'wit' => 'Wintu',
+  'mpi' => 'Mpade',
+  'kha' => 'Khasi',
+  'mui' => 'Musi',
+  'zmq' => 'Mituku',
+  'ayn' => 'Sanaani Arabic',
+  'leq' => 'Lembena',
+  'mxz' => 'Central Masela',
+  'xmm' => 'Manado Malay',
+  'tke' => 'Takwane',
+  'lim' => 'Limburgan',
+  'cux' => 'Tepeuxila Cuicatec',
+  'cpx' => 'Pu-Xian Chinese',
+  'quh' => 'South Bolivian Quechua',
+  'ktd' => 'Kokata',
+  'knw' => 'Kung-Ekoka',
+  'bvx' => 'Dibole',
+  'itc' => 'Italic languages',
+  'wlk' => 'Wailaki',
+  'hyw' => 'Western Armenian',
+  'daz' => 'Dao',
+  'cds' => 'Chadian Sign Language',
+  'ful' => 'Fulah',
+  'hih' => 'Pamosu',
+  'soh' => 'Aka',
+  'mlz' => 'Malaynon',
+  'ruk' => 'Che',
+  'byq' => 'Basay',
+  'ako' => 'Akurio',
+  'urd' => 'Urdu',
+  'awx' => 'Awara',
+  'ybn' => "Yaba\x{e2}na",
+  'biv' => 'Southern Birifor',
+  'dru' => 'Rukai',
+  'tcx' => 'Toda',
+  'tmi' => 'Tutuba',
+  'chh' => 'Chinook',
+  'abr' => 'Abron',
+  'sxn' => 'Sangir',
+  'gye' => 'Gyem',
+  'kxy' => 'Kayong',
+  'bxs' => 'Busam',
+  'uam' => "Uamu\x{e9}",
+  'mvk' => 'Mekmek',
+  'wuv' => 'Wuvulu-Aua',
+  'pdn' => 'Podena',
+  'opm' => 'Oksapmin',
+  'oum' => 'Ouma',
+  'but' => 'Bungain',
+  'bpt' => 'Barrow Point',
+  'lni' => 'Daantanai\'',
+  'htx' => 'Middle Hittite',
+  'agh' => 'Ngelima',
+  'glc' => 'Bon Gula',
+  'myu' => "Munduruk\x{fa}",
+  'dgx' => 'Doghoro',
+  'ceb' => 'Cebuano',
+  'sln' => 'Salinan',
+  'nnh' => 'Ngiemboon',
+  'kee' => 'Eastern Keres',
+  'kly' => 'Kalao',
+  'mdv' => "Santa Luc\x{ed}a Monteverde Mixtec",
+  'bls' => 'Balaesang',
+  'ilg' => 'Garig-Ilgar',
+  'msr' => 'Mongolian Sign Language',
+  'idu' => 'Idoma',
+  'yyr' => 'Yir Yoront',
+  'wmh' => 'Waima\'a',
+  'kaj' => 'Jju',
+  'mqu' => 'Mandari',
+  'xto' => 'Tokharian A',
+  'noq' => 'Ngongo',
+  'cbu' => 'Candoshi-Shapra',
+  'mbp' => 'Malayo',
+  'djl' => 'Djiwarli',
+  'tdh' => 'Thulung',
+  'dho' => 'Dhodia',
+  'bkt' => 'Boloki',
+  'pek' => 'Penchal',
+  'wbj' => 'Alagwa',
+  'ekc' => 'Eastern Karnic',
+  'pss' => 'Kaulong',
+  'dne' => 'Ndendeule',
+  'nak' => 'Nakanai',
+  'okm' => 'Middle Korean (10th-16th cent.)',
+  'hmt' => 'Hamtai',
+  'krt' => 'Tumari Kanuri',
+  'vlp' => 'Valpei',
+  'gaa' => 'Ga',
+  'xgl' => 'Galindan',
+  'sei' => 'Seri',
+  'asp' => 'Algerian Sign Language',
+  'auo' => 'Auyokawa',
+  'apo' => 'Ambul',
+  'kjj' => 'Khinalugh',
+  'sir' => 'Siri',
+  'pud' => 'Punan Aput',
+  'hor' => 'Horo',
+  'nco' => 'Sibe',
+  'pia' => 'Pima Bajo',
+  'kgg' => 'Kusunda',
+  'cce' => 'Chopi',
+  'bbg' => 'Barama',
+  'gom' => 'Goan Konkani',
+  'zpw' => 'Zaniza Zapotec',
+  'kcb' => 'Kawacha',
+  'dal' => 'Dahalo',
+  'ggd' => 'Gugadj',
+  'snq' => 'Sangu (Gabon)',
+  'ttk' => 'Totoro',
+  'ife' => "If\x{e8}",
+  'bwm' => 'Biwat',
+  'mll' => 'Malua Bay',
+  'csn' => 'Colombian Sign Language',
+  'mme' => 'Mae',
+  'kfm' => 'Khunsari',
+  'bqq' => 'Biritai',
+  'ans' => 'Anserma',
+  'ckx' => 'Caka',
+  'gmu' => 'Gumalu',
+  'nby' => 'Ningera',
+  'aqn' => 'Northern Alta',
+  'kov' => 'Kudu-Camo',
+  'mzm' => 'Mumuye',
+  'tue' => 'Tuyuca',
+  'nwe' => 'Ngwe',
+  'tpe' => 'Tippera',
+  'hao' => "Hak\x{f6}",
+  'ztp' => 'Loxicha Zapotec',
+  'mki' => 'Dhatki',
+  'avm' => 'Angkamuthi',
+  'ngs' => 'Gvoko',
+  'ths' => 'Thakali',
+  'jad' => 'Jahanka',
+  'mxl' => 'Maxi Gbe',
+  'pnp' => 'Pancana',
+  'fli' => 'Fali',
+  'giy' => 'Giyug',
+  'xms' => 'Moroccan Sign Language',
+  'bnx' => 'Bangubangu',
+  'kvw' => 'Wersing',
+  'rim' => 'Nyaturu',
+  'kic' => 'Kickapoo',
+  'lis' => 'Lisu',
+  'wsg' => 'Adilabad Gondi',
+  'toj' => 'Tojolabal',
+  'sbi' => 'Seti',
+  'bdo' => 'Morom',
+  'wya' => 'Wyandot',
+  'cdm' => 'Chepang',
+  'luk' => 'Lunanakha',
+  'myb' => 'Mbay',
+  'mep' => 'Miriwoong',
+  'sza' => 'Semelai',
+  'trg' => "Lish\x{e1}n Did\x{e1}n",
+  'ese' => 'Ese Ejja',
+  'dmk' => 'Domaaki',
+  'idb' => 'Indo-Portuguese',
+  'olt' => 'Old Lithuanian',
+  'nle' => 'East Nyala',
+  'vel' => 'Veluws',
+  'ney' => 'Neyo',
+  'nml' => 'Ndemli',
+  'nht' => 'Ometepec Nahuatl',
+  'abf' => 'Abai Sungai',
+  'bzl' => 'Boano (Sulawesi)',
+  'vmy' => 'Ayautla Mazatec',
+  'clo' => 'Lowland Oaxaca Chontal',
+  'lyg' => 'Lyngngam',
+  'byd' => 'Benyadu\'',
+  'tgt' => 'Central Tagbanwa',
+  'juy' => 'Juray',
+  'xcv' => 'Chuvantsy',
+  'isk' => 'Ishkashimi',
+  'mnk' => 'Mandinka',
+  'yli' => 'Angguruk Yali',
+  'mio' => 'Pinotepa Nacional Mixtec',
+  'yix' => 'Axi Yi',
+  'vun' => 'Vunjo',
+  'jmn' => 'Makuri Naga',
+  'bsj' => 'Bangwinji',
+  'ydk' => 'Yoidik',
+  'bxm' => 'Mongolia Buriat',
+  'nxe' => 'Nage',
+  'nvh' => 'Nasarian',
+  'dbw' => 'Bankan Tey Dogon',
+  'skp' => 'Sekapan',
+  'pmw' => 'Plains Miwok',
+  'ktq' => 'Katabaga',
+  'led' => 'Lendu',
+  'tav' => 'Tatuyo',
+  'pay' => 'Pech',
+  'beg' => 'Belait',
+  'zmd' => 'Maridan',
+  'msf' => 'Mekwei',
+  'lvi' => 'Lavi',
+  'nyc' => 'Nyanga-li',
+  'yuz' => 'Yuracare',
+  'drb' => 'Dair',
+  'ono' => 'Onondaga',
+  'ypz' => 'Phuza',
+  'ykl' => 'Khlula',
+  'lsa' => 'Lasgerdi',
+  'cnt' => 'Tepetotutla Chinantec',
+  'mwl' => 'Mirandese',
+  'blm' => 'Beli (South Sudan)',
+  'ory' => 'Odia',
+  'kmp' => 'Gimme',
+  'plj' => 'Polci',
+  'jaq' => 'Yaqay',
+  'tsc' => 'Tswa',
+  'mwz' => 'Moingi',
+  'ypl' => 'Pula Yi',
+  'yul' => 'Yulu',
+  'alx' => 'Amol',
+  'spp' => 'Supyire Senoufo',
+  'kcu' => 'Kami (Tanzania)',
+  'mah' => 'Marshallese',
+  'aii' => 'Assyrian Neo-Aramaic',
+  'yen' => 'Yendang',
+  'hrp' => 'Nhirrpi',
+  'bqd' => 'Bung',
+  'gmb' => 'Gula\'alaa',
+  'psm' => 'Pauserna',
+  'snd' => 'Sindhi',
+  'sdj' => 'Suundi',
+  'oks' => 'Oko-Eni-Osayen',
+  'stw' => 'Satawalese',
+  'lbq' => 'Wampar',
+  'axx' => "X\x{e2}r\x{e2}gur\x{e8}",
+  'bzz' => 'Evant',
+  'nmz' => 'Nawdm',
+  'puq' => 'Puquina',
+  'adt' => 'Adnyamathanha',
+  'ppq' => 'Pei',
+  'och' => 'Old Chinese',
+  'gwc' => 'Gawri',
+  'xrn' => 'Arin',
+  'don' => 'Toura (Papua New Guinea)',
+  'loy' => 'Loke',
+  'mqb' => 'Mbuko',
+  'wae' => 'Walser',
+  'boc' => 'Bakung Kenyah',
+  'sif' => 'Siamou',
+  'cbb' => "Cabiyar\x{ed}",
+  'bge' => 'Bauria',
+  'bfy' => 'Bagheli',
+  'mjh' => 'Mwera (Nyasa)',
+  'crw' => 'Chrau',
+  'kbe' => 'Kanju',
+  'dti' => 'Ana Tinga Dogon',
+  'kwy' => 'San Salvador Kongo',
+  'gos' => 'Gronings',
+  'ibm' => 'Agoi',
+  'swn' => 'Sawknah',
+  'kfs' => 'Bilaspuri',
+  'bws' => 'Bomboma',
+  'nfg' => 'Nyeng',
+  'grk' => 'Greek languages',
+  'mzs' => 'Macanese',
+  'anm' => 'Anal',
+  'syx' => 'Samay',
+  'sso' => 'Sissano',
+  'aer' => 'Eastern Arrernte',
+  'ngm' => 'Ngatik Men\'s Creole',
+  'nra' => 'Ngom',
+  'avs' => 'Aushiri',
+  'nod' => 'Northern Thai',
+  'ldl' => 'Kaan',
+  'eot' => "Beti (C\x{f4}te d'Ivoire)",
+  'thm' => 'Aheu',
+  'kdv' => 'Kado',
+  'prb' => 'Lua\'',
+  'afk' => 'Nanubae',
+  'rol' => 'Romblomanon',
+  'akc' => 'Mpur',
+  'mly' => 'Malay (individual language)',
+  'hla' => 'Halia',
+  'mee' => 'Mengen',
+  'day' => 'Land Dayak languages',
+  'btb' => 'Beti (Cameroon)',
+  'ksr' => 'Borong',
+  'lan' => 'Laru',
+  'luw' => 'Luo (Cameroon)',
+  'txn' => 'West Tarangan',
+  'ciy' => 'Chaima',
+  'igl' => 'Igala',
+  'kyu' => 'Western Kayah',
+  'dmw' => 'Mudburra',
+  'jbn' => 'Nafusi',
+  'frs' => 'Eastern Frisian',
+  'mxy' => "Southeastern Nochixtl\x{e1}n Mixtec",
+  'ogn' => 'Ogan',
+  'hnu' => 'Hung',
+  'ito' => 'Itonama',
+  'kvk' => 'Korean Sign Language',
+  'tln' => 'Talondo\'',
+  'gdm' => 'Laal',
+  'nbl' => 'South Ndebele',
+  'amf' => 'Hamer-Banna',
+  'bsh' => 'Kati',
+  'pmk' => 'Pamlico',
+  'ske' => 'Seke (Vanuatu)',
+  'glo' => 'Galambu',
+  'klz' => 'Kabola',
+  'weh' => 'Weh',
+  'smi' => 'Sami languages',
+  'scx' => 'Sicel',
+  'epo' => 'Esperanto',
+  'gnt' => 'Guntai',
+  'ndq' => 'Ndombe',
+  'mnw' => 'Mon',
+  'mtd' => 'Mualang',
+  'mha' => 'Manda (India)',
+  'kui' => "Kuik\x{fa}ro-Kalap\x{e1}lo",
+  'hhy' => 'Hoyahoya',
+  'kpi' => 'Kofei',
+  'toh' => 'Gitonga',
+  'kxz' => 'Kerewo',
+  'niu' => 'Niuean',
+  'jow' => 'Jowulu',
+  'kki' => 'Kagulu',
+  'rgu' => 'Ringgou',
+  'tnq' => 'Taino',
+  'stk' => 'Arammba',
+  'yga' => 'Malyangapa',
+  'yrm' => 'Yirrk-Mel',
+  'jqr' => 'Jaqaru',
+  'kxl' => 'Nepali Kurux',
+  'eko' => 'Koti',
+  'kzm' => 'Kais',
+  'mov' => 'Mohave',
+  'bjf' => 'Barzani Jewish Neo-Aramaic',
+  'tir' => 'Tigrinya',
+  'iou' => 'Tuma-Irumu',
+  'www' => 'Wawa',
+  'bri' => 'Mokpwe',
+  'mcb' => 'Machiguenga',
+  'shs' => 'Shuswap',
+  'wca' => "Yanom\x{e1}mi",
+  'mfm' => 'Marghi South',
+  'pti' => 'Pindiini',
+  'kme' => 'Bakole',
+  'kll' => 'Kagan Kalagan',
+  'bhn' => 'Bohtan Neo-Aramaic',
+  'rmd' => 'Traveller Danish',
+  'mjj' => 'Mawak',
+  'ojb' => 'Northwestern Ojibwa',
+  'hre' => 'Hre',
+  'spe' => 'Sepa (Papua New Guinea)',
+  'sue' => 'Suena',
+  'mgg' => 'Mpumpong',
+  'pon' => 'Pohnpeian',
+  'xtc' => 'Katcha-Kadugli-Miri',
+  'cos' => 'Corsican',
+  'bcd' => 'North Babar',
+  'duq' => 'Dusun Malang',
+  'mrt' => 'Marghi Central',
+  'grw' => 'Gweda',
+  'woi' => 'Kamang',
+  'zim' => 'Mesme',
+  'sdh' => 'Southern Kurdish',
+  'uda' => 'Uda',
+  'lmq' => 'Lamatuka',
+  'xem' => 'Kembayan',
+  'xlg' => 'Ligurian (Ancient)',
+  'gbb' => 'Kaytetye',
+  'hac' => 'Gurani',
+  'baf' => 'Nubaca',
+  'xnr' => 'Kangri',
+  'lgb' => 'Laghu',
+  'wap' => 'Wapishana',
+  'plh' => 'Paulohi',
+  'yad' => 'Yagua',
+  'tvd' => 'Tsuvadi',
+  'tei' => 'Torricelli',
+  'bgp' => 'Eastern Balochi',
+  'ebr' => "Ebri\x{e9}",
+  'jwi' => 'Jwira-Pepesa',
+  'kqu' => 'Seroa',
+  'maj' => "Jalapa De D\x{ed}az Mazatec",
+  'apc' => 'North Levantine Arabic',
+  'ung' => 'Ngarinyin',
+  'auc' => 'Waorani',
+  'qvn' => "North Jun\x{ed}n Quechua",
+  'crk' => 'Plains Cree',
+  'fuy' => 'Fuyug',
+  'kbp' => "Kabiy\x{e8}",
+  'ncc' => 'Ponam',
+  'vas' => 'Vasavi',
+  'uun' => 'Kulon-Pazeh',
+  'kdt' => 'Kuy',
+  'kxx' => 'Likuba',
+  'tkr' => 'Tsakhur',
+  'lgn' => 'T\'apo',
+  'gbn' => 'Mo\'da',
+  'mta' => 'Cotabato Manobo',
+  'amp' => 'Alamblak',
+  'sbc' => 'Kele (Papua New Guinea)',
+  'trh' => 'Turaka',
+  'mhd' => 'Mbugu',
+  'npu' => 'Puimei Naga',
+  'twu' => 'Termanu',
+  'nuu' => 'Ngbundu',
+  'pms' => 'Piemontese',
+  'kii' => 'Kitsai',
+  'xqt' => 'Qatabanian',
+  'klx' => 'Koluwawa',
+  'jeu' => 'Jonkor Bourmataguil',
+  'acu' => 'Achuar-Shiwiar',
+  'hld' => 'Halang Doan',
+  'pob' => "Western Pokomch\x{ed}",
+  'ker' => 'Kera',
+  'liw' => 'Col',
+  'zba' => 'Balaibalan',
+  'cmn' => 'Mandarin Chinese',
+  'knm' => "Kanamar\x{ed}",
+  'xay' => 'Kayan Mahakam',
+  'mse' => 'Musey',
+  'ine' => 'Indo-European languages',
+  'bvy' => 'Baybayanon',
+  'bhb' => 'Bhili',
+  'frk' => 'Frankish',
+  'mcn' => 'Masana',
+  'xmw' => 'Tsimihety Malagasy',
+  'kvs' => 'Kunggara',
+  'cpy' => "South Ucayali Ash\x{e9}ninka",
+  'tbo' => 'Tawala',
+  'cuy' => 'Cuitlatec',
+  'nyi' => 'Ama (Sudan)',
+  'qxa' => "Chiqui\x{e1}n Ancash Quechua",
+  'gyr' => 'Guarayu',
+  'fos' => 'Siraya',
+  'lhp' => 'Lhokpu',
+  'tcy' => 'Tulu',
+  'beh' => 'Biali',
+  'xkq' => 'Koroni',
+  'afs' => 'Afro-Seminole Creole',
+  'awy' => 'Edera Awyu',
+  'abe' => 'Western Abnaki',
+  'xpq' => 'Mohegan-Pequot',
+  'crs' => 'Seselwa Creole French',
+  'zpm' => 'Mixtepec Zapotec',
+  'mot' => "Bar\x{ed}",
+  'zum' => 'Kumzari',
+  'bca' => 'Central Bai',
+  'gow' => 'Gorowa',
+  'gqr' => 'Gor',
+  'kfw' => 'Kharam Naga',
+  'bjp' => 'Fanamaket',
+  'hvn' => 'Sabu',
+  'wri' => 'Wariyangga',
+  'bww' => 'Bwa',
+  'diq' => 'Dimli (individual language)',
+  'dem' => 'Dem',
+  'mag' => 'Magahi',
+  'caq' => 'Car Nicobarese',
+  'dnr' => 'Danaru',
+  'xsm' => 'Kasem',
+  'dlg' => 'Dolgan',
+  'yaa' => 'Yaminahua',
+  'tva' => 'Vaghua',
+  'tsi' => 'Tsimshian',
+  'rau' => 'Raute',
+  'cky' => 'Cakfem-Mushere',
+  'nbx' => 'Ngura',
+  'mzw' => 'Deg',
+  'cok' => 'Santa Teresa Cora',
+  'aic' => 'Ainbai',
+  'nku' => 'Bouna Kulango',
+  'atq' => 'Aralle-Tabulahan',
+  'yom' => 'Yombe',
+  'bap' => 'Bantawa',
+  'omq' => 'Oto-Manguean languages',
+  'shk' => 'Shilluk',
+  'tlb' => 'Tobelo',
+  'nwr' => 'Nawaru',
+  'tpr' => "Tupar\x{ed}",
+  'mjg' => 'Tu',
+  'mrv' => 'Mangareva',
+  'tur' => 'Turkish',
+  'xyt' => 'Mayi-Thakurti',
+  'mgj' => 'Abureni',
+  'ogb' => 'Ogbia',
+  'iru' => 'Irula',
+  'boi' => "Barbare\x{f1}o",
+  'xhc' => 'Hunnic',
+  'kbf' => 'Kakauhua',
+  'gwi' => "Gwich\x{2bc}in",
+  'ycp' => 'Chepya',
+  'mmr' => 'Western Xiangxi Miao',
+  'phi' => 'Philippine languages',
+  'sie' => 'Simaa',
+  'scl' => 'Shina',
+  'waf' => "Wakon\x{e1}",
+  'txb' => 'Tokharian B',
+  'btn' => 'Ratagnon',
+  'bgf' => 'Bangandu',
+  'hoe' => 'Horom',
+  'rma' => 'Rama',
+  'lab' => 'Linear A',
+  'prn' => 'Prasuni',
+  'sts' => 'Shumashti',
+  'ccr' => 'Cacaopera',
+  'jiy' => 'Buyuan Jinuo',
+  'all' => 'Allar',
+  'ame' => 'Yanesha\'',
+  'vsl' => 'Venezuelan Sign Language',
+  'nsy' => 'Nasal',
+  'bya' => 'Batak',
+  'enw' => 'Enwan (Akwa Ibom State)',
+  'bej' => 'Beja',
+  'mpo' => 'Miu',
+  'muo' => 'Nyong',
+  'vin' => 'Vinza',
+  'yux' => 'Southern Yukaghir',
+  'ote' => 'Mezquital Otomi',
+  'xbw' => "Kambiw\x{e1}",
+  'tmo' => 'Temoq',
+  'axl' => 'Lower Southern Aranda',
+  'aki' => 'Aiome',
+  'mvm' => 'Muya',
+  'yds' => 'Yiddish Sign Language',
+  'swb' => 'Maore Comorian',
+  'opk' => 'Kopkaka',
+  'zma' => 'Manda (Australia)',
+  'cbn' => 'Nyahkur',
+  'yiz' => 'Azhe',
+  'lea' => 'Lega-Shabunda',
+  'lsd' => 'Lishana Deni',
+  'dob' => 'Dobu',
+  'azm' => 'Ipalapa Amuzgo',
+  'bsg' => 'Bashkardi',
+  'mns' => 'Mansi',
+  'mqn' => 'Moronene',
+  'mef' => 'Megam',
+  'khq' => 'Koyra Chiini Songhay',
+  'xrb' => 'Eastern Karaboro',
+  'rum' => 'Romanian',
+  'pfe' => 'Pere',
+  'smc' => 'Som',
+  'pbs' => 'Central Pame',
+  'dms' => 'Dampelas',
+  'wlm' => 'Middle Welsh',
+  'nhv' => 'Temascaltepec Nahuatl',
+  'trj' => 'Toram',
+  'abp' => 'Abellen Ayta',
+  'kpc' => 'Curripaco',
+  'pgy' => 'Pongyong',
+  'tgv' => 'Tingui-Boto',
+  'kuc' => 'Kwinsu',
+  'weg' => 'Wergaia',
+  'gmn' => 'Gimnime',
+  'xct' => 'Classical Tibetan',
+  'lus' => 'Lushai',
+  'yvt' => 'Yavitero',
+  'lik' => 'Lika',
+  'uby' => 'Ubykh',
+  'tat' => 'Tatar',
+  'inp' => "I\x{f1}apari",
+  'csu' => 'Central Sudanic languages',
+  'msp' => "Maritsau\x{e1}",
+  'zau' => 'Zangskari',
+  'bnz' => 'Beezen',
+  'tog' => 'Tonga (Nyasa)',
+  'skf' => "Sakirabi\x{e1}",
+  'szd' => 'Seru',
+  'syl' => 'Sylheti',
+  'osa' => 'Osage',
+  'eee' => 'E',
+  'xmk' => 'Ancient Macedonian',
+  'lno' => 'Lango (South Sudan)',
+  'suf' => 'Tarpia',
+  'avk' => 'Kotava',
+  'gaq' => 'Gata\'',
+  'xon' => 'Konkomba',
+  'drn' => 'West Damar',
+  'dhi' => 'Dhimal',
+  'brc' => 'Berbice Creole Dutch',
+  'mzk' => 'Nigeria Mambila',
+  'kmf' => 'Kare (Papua New Guinea)',
+  'cow' => 'Cowlitz',
+  'xti' => 'Sinicahua Mixtec',
+  'grs' => 'Gresi',
+  'mbr' => "Nukak Mak\x{fa}",
+  'bnl' => 'Boon',
+  'njm' => 'Angami Naga',
+  'bje' => 'Biao-Jiao Mien',
+  'gok' => 'Gowli',
+  'czt' => 'Zotung Chin',
+  'ttm' => 'Northern Tutchone',
+  'jmb' => 'Zumbun',
+  'asr' => 'Asuri',
+  'seo' => 'Suarmin',
+  'bwk' => 'Bauwaki',
+  'lks' => 'Kisa',
+  'kkc' => 'Odoodee',
+  'vlr' => 'Vatrata',
+  'kfk' => 'Kinnauri',
+  'noa' => 'Woun Meu',
+  'hji' => 'Haji',
+  'rkm' => 'Marka',
+  'ayu' => 'Ayu',
+  'mgh' => 'Makhuwa-Meetto',
+  'ert' => 'Eritai',
+  'yil' => 'Yindjilandji',
+  'lch' => 'Luchazi',
+  'sdg' => 'Savi',
+  'slu' => 'Selaru',
+  'tec' => 'Terik',
+  'myn' => 'Mayan languages',
+  'jos' => 'Jordanian Sign Language',
+  'ysn' => 'Sani',
+  'nci' => 'Classical Nahuatl',
+  'bzx' => "K\x{25b}l\x{25b}ngaxo Bozo",
+  'nmx' => 'Nama (Papua New Guinea)',
+  'sip' => 'Sikkimese',
+  'nam' => 'Ngan\'gityemerri',
+  'okk' => 'Kwamtim One',
+  'hop' => 'Hopi',
+  'aui' => 'Anuki',
+  'api' => "Apiak\x{e1}",
+  'pdu' => 'Kayan',
+  'pnr' => 'Panim',
+  'bqa' => 'Tchumbuli',
+  'woc' => 'Wogeo',
+  'plg' => "Pilag\x{e1}",
+  'bae' => "Bar\x{e9}",
+  'pem' => 'Phende',
+  'gcr' => 'Guianese Creole French',
+  'sxu' => 'Upper Saxon',
+  'mwx' => 'Mediak',
+  'sna' => 'Shona',
+  'mko' => 'Mingang Doso',
+  'hai' => 'Haida',
+  'alz' => 'Alur',
+  'shw' => 'Shwai',
+  'xve' => 'Venetic',
+  'wmb' => 'Wambaya',
+  'ocu' => 'Atzingo Matlatzinca',
+  'lmf' => 'South Lembata',
+  'nkg' => 'Nekgini',
+  'zns' => 'Mangas',
+  'grc' => 'Ancient Greek (to 1453)',
+  'ifa' => 'Amganad Ifugao',
+  'atp' => 'Pudtol Atta',
+  'mma' => 'Mama',
+  'baq' => 'Basque',
+  'hmy' => 'Southern Guiyang Hmong',
+  'mju' => 'Manna-Dora',
+  'srn' => 'Sranan Tongo',
+  'omp' => 'Old Manipuri',
+  'cjp' => "Cab\x{e9}car",
+  'tdb' => 'Panchpargania',
+  'kry' => 'Kryts',
+  'duf' => 'Dumbea',
+  'rmr' => "Cal\x{f3}",
+  'gnl' => 'Gangulu',
+  'brs' => 'Baras',
+  'haw' => 'Hawaiian',
+  'pie' => 'Piro',
+  'pcl' => 'Pardhi',
+  'shi' => 'Tachelhit',
+  'cca' => 'Cauca',
+  'hun' => 'Hungarian',
+  'zpo' => "Amatl\x{e1}n Zapotec",
+  'rjg' => 'Rajong',
+  'bok' => 'Bonjo',
+  'aan' => "Anamb\x{e9}",
+  'bky' => 'Bokyi',
+  'apw' => 'Western Apache',
+  'tua' => 'Wiarumus',
+  'nwa' => 'Nawathinehena',
+  'auw' => 'Awyi',
+  'tpa' => 'Taupota',
+  'tid' => 'Tidong',
+  'lkc' => 'Kucong',
+  'ymg' => 'Yamongeri',
+  'xso' => 'Solano',
+  'kks' => 'Giiwo',
+  'phk' => 'Phake',
+  'nbt' => 'Na',
+  'xup' => 'Upper Umpqua',
+  'wrk' => 'Garrwa',
+  'xpp' => 'Puyo-Paekche',
+  'jge' => 'Judeo-Georgian',
+  'yar' => 'Yabarana',
+  'bjq' => 'Southern Betsimisaraka Malagasy',
+  'ofs' => 'Old Frisian',
+  'dip' => 'Northeastern Dinka',
+  'mrz' => 'Marind',
+  'kch' => 'Vono',
+  'kqj' => 'Koromira',
+  'mau' => 'Huautla Mazatec',
+  'cap' => 'Chipaya',
+  'tnf' => 'Tangshewi',
+  'tes' => 'Tengger',
+  'ddg' => 'Fataluku',
+  'dhw' => 'Dhanwar (Nepal)',
+  'tsk' => 'Tseku',
+  'bcr' => 'Babine',
+  'gae' => 'Guarequena',
+  'rag' => 'Logooli',
+  'mox' => 'Molima',
+  'gqa' => 'Ga\'anda',
+  'ctn' => 'Chhintange',
+  'wos' => 'Hanga Hundi',
+  'ajn' => 'Andajin',
+  'nqk' => 'Kura Ede Nago',
+  'dna' => 'Upper Grand Valley Dani',
+  'xnd' => 'Na-Dene languages',
+  'xtw' => "Tawand\x{ea}",
+  'gya' => 'Northwest Gbaya',
+  'zgh' => 'Standard Moroccan Tamazight',
+  'hnj' => 'Hmong Njua',
+  'nyk' => 'Nyaneka',
+  'qub' => "Huallaga Hu\x{e1}nuco Quechua",
+  'fri' => 'Western Frisian',
+  'scv' => 'Sheni',
+  'gej' => 'Gen',
+  'kea' => 'Kabuverdianu',
+  'wiy' => 'Wiyot',
+  'hib' => 'Hibito',
+  'isc' => 'Isconahua',
+  'mnc' => 'Manchu',
+  'sob' => 'Sobei',
+  'ksd' => 'Kuanua',
+  'gsg' => 'German Sign Language',
+  'xkp' => 'Kabatei',
+  'mrl' => 'Mortlockese',
+  'ndf' => 'Nadruvian',
+  'qxr' => "Ca\x{f1}ar Highland Quichua",
+  'kyj' => 'Karao',
+  'tka' => "Truk\x{e1}",
+  'buy' => 'Bullom So',
+  'akw' => 'Akwa',
+  'bpy' => 'Bishnupriya',
+  'kps' => 'Tehit',
+  'mtr' => 'Mewari',
+  'chb' => 'Chibcha',
+  'kus' => 'Kusaal',
+  'xbi' => 'Kombio',
+  'luc' => 'Aringa',
+  'klt' => 'Nukna',
+  'bmn' => 'Bina (Papua New Guinea)',
+  'zko' => 'Kott',
+  'khe' => 'Korowai',
+  'nij' => 'Ngaju',
+  'sms' => 'Skolt Sami',
+  'dmc' => 'Gavak',
+  'pbc' => 'Patamona',
+  'gnz' => 'Ganzi',
+  'dzd' => 'Daza',
+  'agb' => 'Legbo',
+  'faf' => 'Fagani',
+  'kno' => 'Kono (Sierra Leone)',
+  'hkn' => 'Mel-Khaonh',
+  'amq' => 'Amahai',
+  'zyn' => 'Yongnan Zhuang',
+  'nnb' => 'Nande',
+  'nug' => 'Nungali',
+  'kxt' => 'Koiwat',
+  'npg' => 'Ponyo-Gongwang Naga',
+  'twg' => 'Tereweng',
+  'otq' => "Quer\x{e9}taro Otomi",
+  'kik' => 'Kikuyu',
+  'jeg' => 'Jeng',
+  'eni' => 'Enim',
+  'tbm' => 'Tagbu',
+  'kdx' => 'Kam',
+  'gww' => 'Kwini',
+  'pna' => 'Punan Bah-Biau',
+  'cnl' => 'Lalana Chinantec',
+  'mwt' => 'Moken',
+  'tto' => 'Lower Ta\'oih',
+  'sem' => 'Semitic languages',
+  'bqr' => 'Burusu',
+  'ykt' => 'Kathu',
+  'ozm' => 'Koonzime',
+  'zhd' => 'Dai Zhuang',
+  'bow' => 'Rema',
+  'slg' => 'Selungai Murut',
+  'sdu' => 'Sarudu',
+  'snr' => 'Sihan',
+  'apk' => 'Kiowa Apache',
+  'auk' => 'Heyo',
+  'crc' => 'Lonwolwol',
+  'oki' => 'Okiek',
+  'phw' => 'Phangduwali',
+  'siq' => 'Sonia',
+  'nck' => 'Na-kara',
+  'ate' => 'Atemble',
+  'plu' => "Palik\x{fa}r",
+  'kjb' => 'Q\'anjob\'al',
+  'sxg' => 'Shuhi',
+  'ryn' => 'Northern Amami-Oshima',
+  'ais' => 'Nataoran Amis',
+  'kqh' => 'Kisankasa',
+  'adz' => 'Adzera',
+  'pip' => 'Pero',
+  'tgl' => 'Tagalog',
+  'kcj' => 'Kobiana',
+  'ome' => 'Omejes',
+  'nmt' => 'Namonuito',
+  'cje' => 'Chru',
+  'bzt' => 'Brithenig',
+  'njo' => 'Ao Naga',
+  'hak' => 'Hakka Chinese',
+  'gap' => 'Gal',
+  'flm' => 'Falam Chin',
+  'asa' => 'Asu (Tanzania)',
+  'tsw' => 'Tsishingini',
+  'aed' => 'Argentine Sign Language',
+  'peo' => 'Old Persian (ca. 600-400 B.C.)',
+  'ywm' => 'Wumeng Yi',
+  'avi' => 'Avikam',
+  'mkm' => 'Moklen',
+  'nor' => 'Norwegian',
+  'jaf' => 'Jara',
+  'mzi' => "Ixcatl\x{e1}n Mazatec",
+  'kfi' => 'Kannada Kurumba',
+  'kab' => 'Kabyle',
+  'vsv' => 'Valencian Sign Language',
+  'bwi' => 'Baniwa',
+  'wrw' => 'Gugu Warra',
+  'dts' => 'Toro So Dogon',
+  'xpe' => 'Liberia Kpelle',
+  'alv' => 'Atlantic-Congo languages',
+  'stc' => 'Santa Cruz',
+  'goi' => 'Gobasi',
+  'puf' => 'Punan Merah',
+  'ayg' => 'Ginyanga',
+  'mba' => 'Higaonon',
+  'wbb' => 'Wabo',
+  'nao' => 'Naaba',
+  'lbf' => 'Tinani',
+  'cae' => 'Lehar',
+  'tmm' => 'Tai Thanh',
+  'mvo' => 'Marovo',
+  'tax' => 'Tamki',
+  'abq' => 'Abaza',
+  'cya' => 'Nopala Chatino',
+  'urf' => 'Uradhi',
+  'azo' => 'Awing',
+  'aqg' => 'Arigidi',
+  'weu' => 'Rawngtu Chin',
+  'xke' => 'Kereho',
+  'csg' => 'Chilean Sign Language',
+  'sbs' => 'Subiya',
+  'uji' => 'Tanjijili',
+  'msq' => 'Caac',
+  'pmc' => 'Palumata',
+  'llx' => 'Lauan',
+  'sfe' => 'Eastern Subanen',
+  'bbn' => 'Uneapa',
+  'yiv' => 'Northern Nisu',
+  'lii' => 'Lingkhim',
+  'zag' => 'Zaghawa',
+  'iir' => 'Indo-Iranian languages',
+  'xmi' => "Miarr\x{e3}",
+  'tou' => 'Tho',
+  'sgy' => 'Sanglechi',
+  'nyw' => 'Nyaw',
+  'kgn' => 'Karingani',
+  'ktf' => 'Kwami',
+  'mpm' => "Yosond\x{fa}a Mixtec",
+  'mum' => 'Maiwala',
+  'nih' => 'Nyiha (Tanzania)',
+  'tze' => "Chenalh\x{f3} Tzotzil",
+  'tgz' => 'Tagalaka',
+  'adl' => 'Galo',
+  'pwb' => 'Panawa',
+  'kvc' => 'Kove',
+  'lvs' => 'Standard Latvian',
+  'nhz' => "Santa Mar\x{ed}a La Alta Nahuatl",
+  'kiw' => 'Northeast Kiwai',
+  'zmr' => 'Maranunggu',
+  'ler' => 'Lenkau',
+  'kyh' => 'Karok',
+  'gvy' => 'Guyani',
+  'lnm' => 'Langam',
+  'ruo' => 'Istro Romanian',
+  'oui' => 'Old Uighur',
+  'hnh' => "\x{1c1}Ani",
+  'akk' => 'Akkadian',
+  'byr' => 'Baruya',
+  'wlo' => 'Wolio',
+  'ntx' => 'Tangkhul Naga (Myanmar)',
+  'yut' => 'Yopno',
+  'bnv' => 'Bonerif',
+  'geh' => 'Hutterite German',
+  'bsu' => 'Bahonsuai',
+  'khp' => 'Kapori',
+  'asd' => 'Asas',
+  'nkh' => 'Khezha Naga',
+  'pso' => 'Polish Sign Language',
+  'pyx' => 'Pyu (Myanmar)',
+  'qwe' => 'Quechuan (family)',
+  'aea' => 'Areba',
+  'ikr' => 'Ikaranggal',
+  'tew' => 'Tewa (USA)',
+  'lki' => 'Laki',
+  'mwv' => 'Mentawai',
+  'nrr' => 'Norra',
+  'dtk' => 'Tene Kan Dogon',
+  'irh' => 'Irarutu',
+  'tal' => 'Tal',
+  'ybj' => 'Hasha',
+  'ghn' => 'Ghanongga',
+  'xcl' => 'Classical Armenian',
+  'wow' => 'Wawonii',
+  'nfu' => 'Mfumte',
+  'pif' => 'Pingelapese',
+  'bzv' => 'Naami',
+  'nmv' => 'Ngamini',
+  'gri' => 'Ghari',
+  'due' => 'Umiray Dumaget Agta',
+  'xts' => 'Sindihui Mixtec',
+  'mbd' => 'Dibabawon Manobo',
+  'dhs' => 'Dhaiso',
+  'shc' => 'Sonde',
+  'pwn' => 'Paiwan',
+  'cqd' => 'Chuanqiandian Cluster Miao',
+  'lll' => 'Lilau',
+  'ymh' => 'Mili',
+  'lme' => "P\x{e9}v\x{e9}",
+  'kmq' => 'Kwama',
+  'ptw' => 'Pentlatch',
+  'pnd' => 'Mpinda',
+  'jap' => "Jaru\x{e1}ra",
+  'ano' => 'Andoque',
+  'brw' => 'Bellari',
+  'has' => 'Haisla',
+  'kgb' => 'Kawe',
+  'zha' => 'Zhuang',
+  'gcd' => 'Ganggalida',
+  'ssm' => 'Semnam',
+  'suq' => 'Suri',
+  'ngo' => 'Ngoni',
+  'adx' => 'Amdo Tibetan',
+  'spq' => 'Loreto-Ucayali Spanish',
+  'gaf' => 'Gende',
+  'coc' => 'Cocopa',
+  'kcg' => 'Tyap',
+  'bbb' => 'Barai',
+  'aik' => 'Ake',
+  'tjl' => 'Tai Laing',
+  'tne' => 'Tinoc Kallahan',
+  'aps' => 'Arop-Sissano',
+  'aus' => 'Australian languages',
+  'slj' => "Salum\x{e1}",
+  'ncs' => 'Nicaraguan Sign Language',
+  'kkw' => 'Teke-Kukuya',
+  'rah' => 'Rabha',
+  'ibo' => 'Igbo',
+  'ema' => 'Emai-Iuleha-Ora',
+  'ahe' => 'Ahe',
+  'ppp' => 'Pelende',
+  'pup' => 'Pulabu',
+  'alt' => 'Southern Altai',
+  'nde' => 'North Ndebele',
+  'mni' => 'Manipuri',
+  'odt' => 'Old Dutch',
+  'isi' => 'Nkem-Nkum',
+  'cdo' => 'Min Dong Chinese',
+  'urp' => 'Uru-Pa-In',
+  'smw' => 'Sumbawa',
+  'pkp' => 'Pukapuka',
+  'cnx' => 'Middle Cornish',
+  'aks' => 'Akaselem',
+  'ntz' => 'Natanzi',
+  'kpw' => 'Kobon',
+  'kuw' => 'Kpagua',
+  'say' => 'Saya',
+  'kan' => 'Kannada',
+  'lsr' => 'Aruop',
+  'ktp' => 'Kaduo',
+  'tgx' => 'Tagish',
+  'skq' => 'Sininkere',
+  'nhx' => 'Isthmus-Mecayapan Nahuatl',
+  'frc' => 'Cajun French',
+  'etr' => 'Edolo',
+  'beu' => 'Blagar',
+  'yit' => 'Eastern Lalu',
+  'lvk' => 'Lavukaleve',
+  'bdm' => 'Buduma',
+  'ary' => 'Moroccan Arabic',
+  'wyr' => "Wayor\x{f3}",
+  'csj' => 'Songlai Chin',
+  'tfr' => 'Teribe',
+  'zaj' => 'Zaramo',
+  'enc' => 'En',
+  'wsu' => 'Wasu',
+  'sbk' => 'Safwa',
+  'kjn' => 'Kunjen',
+  'blo' => 'Anii',
+  'xbc' => 'Bactrian',
+  'clm' => 'Clallam',
+  'lui' => 'Luiseno',
+  'bnt' => 'Bantu languages',
+  'ceg' => 'Chamacoco',
+  'taz' => 'Tocho',
+  'meq' => 'Merey',
+  'khf' => 'Khuen',
+  'sqt' => 'Soqotri',
+  'mim' => 'Alacatlatzala Mixtec',
+  'tru' => 'Turoyo',
+  'twh' => "Tai D\x{f3}n",
+  'pbi' => 'Parkwa',
+  'nph' => 'Phom Naga',
+  'nuh' => 'Ndunda',
+  'ilb' => 'Ila',
+  'ach' => 'Acoli',
+  'jeh' => 'Jeh',
+  'bxo' => 'Barikanchi',
+  'wok' => 'Longto',
+  'dpp' => 'Papar',
+  'dup' => 'Duano',
+  'mfo' => 'Mbe',
+  'raj' => 'Rajasthani',
+  'xip' => "Xipin\x{e1}wa",
+  'nnn' => 'Ngete',
+  'slh' => 'Southern Puget Sound Salish',
+  'imo' => 'Imbongu',
+  'moz' => 'Mukulu',
+  'zyb' => 'Yongbei Zhuang',
+  'jnl' => 'Rawat',
+  'ula' => 'Fungwa',
+  'tss' => 'Taiwan Sign Language',
+  'lmp' => 'Limbum',
+  'atf' => 'Atuence',
+  'agn' => 'Agutaynen',
+  'wky' => 'Wangkayutyuru',
+  'xlu' => 'Cuneiform Luwian',
+  'waq' => 'Wagiman',
+  'bgq' => 'Bagri',
+  'jje' => 'Jejueo',
+  'sve' => 'Serili',
+  'mrx' => 'Maremgi',
+  'tek' => 'Ibali Teke',
+  'yro' => "Yaroam\x{eb}",
+  'nzb' => 'Njebi',
+  'bmb' => 'Bembe',
+  'hgw' => 'Haigwai',
+  'unu' => 'Unubahe',
+  'kzo' => 'Kaningi',
+  'ekm' => 'Elip',
+  'chn' => 'Chinook jargon',
+  'wrs' => 'Waris',
+  'kqg' => 'Khe',
+  'cri' => "S\x{e3}otomense",
+  'kbq' => 'Kamano',
+  'ddj' => 'Jaru',
+  'dnd' => 'Daonda',
+  'xna' => 'Ancient North Arabian',
+  'rrt' => 'Arritinngithigh',
+  'gge' => 'Gurr-goni',
+  'hsl' => 'Hausa Sign Language',
+  'ybh' => 'Yakha',
+  'caf' => 'Southern Carrier',
+  'lbe' => 'Lak',
+  'sti' => 'Bulo Stieng',
+  'goc' => 'Gorakor',
+  'mmd' => 'Maonan',
+  'kkk' => 'Kokota',
+  'kfc' => 'Konda-Dora',
+  'tnp' => 'Whitesands',
+  'bwc' => 'Bwile',
+  'son' => 'Songhai languages',
+  'xpf' => 'Southeast Tasmanian',
+  'xuf' => 'Kunfal',
+  'nbv' => 'Ngamambo',
+  'ahp' => 'Aproumu Aizi',
+  'koy' => 'Koyukon',
+  'hin' => 'Hindi',
+  'ppe' => 'Papi',
+  'pue' => 'Puelche',
+  'bos' => 'Bosnian',
+  'ymj' => 'Muji Yi',
+  'ccd' => 'Cafundo Creole',
+  'dif' => 'Dieri',
+  'qun' => 'Quinault',
+  'nkj' => 'Nakai',
+  'jae' => 'Yabem',
+  'brk' => 'Birked',
+  'ygr' => 'Yagaria',
+  'kdl' => 'Tsikimba',
+  'tud' => "Tux\x{e1}",
+  'znk' => 'Manangkari',
+  'mzc' => 'Madagascar Sign Language',
+  'ayh' => 'Hadrami Arabic',
+  'dso' => 'Desiya',
+  'mgu' => 'Mailu',
+  'aiw' => 'Aari',
+  'tia' => 'Tidikelt Tamazight',
+  'kis' => 'Kis',
+  'jya' => 'Jiarong',
+  'tkd' => 'Tukudede',
+  'lic' => 'Hlai',
+  'itm' => 'Itu Mbon Uzo',
+  'biy' => 'Birhor',
+  'nxq' => 'Naxi',
+  'pmi' => 'Northern Pumi',
+  'sct' => 'Southern Katang',
+  'dbi' => 'Doka',
+  'kte' => 'Nubri',
+  'gdo' => 'Ghodoberi',
+  'rnw' => 'Rungwa',
+  'mhr' => 'Eastern Mari',
+  'nuj' => 'Nyole',
+  'kdz' => 'Kwaja',
+  'xmc' => 'Makhuwa-Marrevone',
+  'ure' => 'Uru',
+  'xkf' => 'Khengkha',
+  'dza' => 'Tunzu',
+  'csh' => 'Asho Chin',
+  'ndp' => 'Ndo',
+  'zah' => 'Zangwal',
+  'xyl' => 'Yalakalore',
+  'nlq' => 'Lao Naga',
+  'smk' => 'Bolinao',
+  'vai' => 'Vai',
+  'nig' => 'Ngalakgan',
+  'kpk' => 'Kpan',
+  'kuk' => 'Kepo\'',
+  'klv' => 'Maskelynes',
+  'gyd' => 'Kayardild',
+  'mdy' => 'Male (Ethiopia)',
+  'afi' => 'Akrukay',
+  'aab' => 'Alumu-Tesu',
+  'foi' => 'Foi',
+  'kyg' => 'Keyagana',
+  'esq' => 'Esselen',
+  'kxv' => 'Kuvi',
+  'hub' => 'Huambisa',
+  'hng' => 'Hungu',
+  'kvi' => 'Kwang',
+  'ked' => 'Kerewe',
+  'nys' => 'Nyungar',
+  'ksa' => 'Shuwa-Zamani',
+  'srb' => 'Sora',
+  'tdn' => 'Tondano',
+  'wuy' => 'Wauyai',
+  'sbw' => 'Simba',
+  'fap' => 'Paloor',
+  'mol' => 'Moldavian',
+  'ree' => 'Rejang Kayan',
+  'wmn' => 'Waamwang',
+  'geg' => 'Gengle',
+  'sho' => 'Shanga',
+  'sjl' => 'Sajalong',
+  'cjr' => 'Chorotega',
+  'nqm' => 'Ndom',
+  'omr' => 'Old Marathi',
+  'tpq' => 'Tukpa',
+  'tuq' => 'Tedaga',
+  'rmp' => 'Rempi',
+  'tsm' => 'Turkish Sign Language',
+  'atr' => 'Waimiri-Atroari',
+  'laj' => 'Lango (Uganda)',
+  'txj' => 'Tarjumo',
+  'mkw' => 'Kituba (Congo)',
+  'yww' => 'Yawarawarga',
+  'xsi' => 'Sio',
+  'mcg' => 'Mapoyo',
+  'ccq' => 'Chaungtha',
+  'lrt' => 'Larantuka Malay',
+  'dei' => 'Demisa',
+  'wga' => 'Wagaya',
+  'wrm' => 'Warumungu',
+  'cmg' => 'Classical Mongolian',
+  'orv' => 'Old Russian',
+  'ojg' => 'Eastern Ojibwa',
+  'bqe' => 'Navarro-Labourdin Basque',
+  'psc' => 'Persian Sign Language',
+  'baa' => 'Babatana',
+  'mmq' => 'Musak',
+  'tlj' => 'Talinga-Bwisi',
+  'jbj' => 'Arandai',
+  'zpi' => "Santa Mar\x{ed}a Quiegolani Zapotec",
+  'mgb' => 'Mararit',
+  'sne' => 'Bau Bidayuh',
+  'zsr' => 'Southern Rincon Zapotec',
+  'sal' => 'Salishan languages',
+  'kbd' => 'Kabardian',
+  'phm' => 'Phimbi',
+  'car' => 'Galibi Carib',
+  'sew' => 'Sewa Bay',
+  'uzn' => 'Northern Uzbek',
+  'gwm' => 'Awngthim',
+  'dir' => 'Dirim',
+  'xpr' => 'Parthian',
+  'lgg' => 'Lugbara',
+  'bgd' => 'Rathwi Bareli',
+  'xur' => 'Urartian',
+  'tyt' => "T\x{e0}y Tac",
+  'yap' => 'Yapese',
+  'wad' => 'Wandamen',
+  'gbg' => 'Gbanziri',
+  'bom' => 'Berom',
+  'xlb' => 'Loup B',
+  'noe' => 'Nimadi',
+  'arl' => 'Arabela',
+  'coo' => 'Comox',
+  'kwv' => "Sara Kaba N\x{e1}\x{e0}",
+  'ngc' => 'Ngombe (Democratic Republic of Congo)',
+  'thc' => 'Tai Hang Tong',
+  'bmu' => 'Somba-Siawari',
+  'nzu' => 'Teke-Nzikou',
+  'anc' => 'Ngas',
+  'yoi' => 'Yonaguni',
+  'bja' => 'Budza',
+  'lov' => 'Lopi',
+  'bcp' => 'Bali (Democratic Republic of Congo)',
+  'xxb' => 'Boro (Ghana)',
+  'icl' => 'Icelandic Sign Language',
+  'fro' => 'Old French (842-ca. 1400)',
+  'kim' => 'Karagas',
+  'prg' => 'Prussian',
+  'ukg' => 'Ukuriguma',
+  'tbk' => 'Calamian Tagbanwa',
+  'lnw' => 'Lanima',
+  'btg' => "Gagnoa B\x{e9}t\x{e9}",
+  'aau' => 'Abau',
+  'its' => 'Isekiri',
+  'lha' => 'Laha (Viet Nam)',
+  'arz' => 'Egyptian Arabic',
+  'pfa' => "P\x{e1}\x{e1}fang",
+  'mhf' => 'Mamaa',
+  'keq' => 'Kamar',
+  'jit' => 'Jita',
+  'huu' => 'Murui Huitoto',
+  'poj' => 'Lower Pokomo',
+  'qxp' => 'Puno Quechua',
+  'nst' => 'Tase Naga',
+  'swh' => 'Swahili (individual language)',
+  'sru' => "Suru\x{ed}",
+  'mjn' => 'Ma (Papua New Guinea)',
+  'xkr' => "Xakriab\x{e1}",
+  'aox' => 'Atorada',
+  'tqt' => 'Western Totonac',
+  'cdc' => 'Chadic languages',
+  'uwa' => 'Kuku-Uwanh',
+  'saz' => 'Saurashtra',
+  'bhj' => 'Bahing',
+  'doh' => 'Dong',
+  'nty' => 'Mantsi',
+  'pav' => "Paka\x{e1}snovos",
+  'tay' => 'Atayal',
+  'fgr' => 'Fongoro',
+  'eus' => 'Basque',
+  'bxc' => 'Molengue',
+  'aju' => 'Judeo-Moroccan Arabic',
+  'ota' => 'Ottoman Turkish (1500-1928)',
+  'ctu' => 'Chol',
+  'mtp' => "Wich\x{ed} Lhamt\x{e9}s Nocten",
+  'tmw' => 'Temuan',
+  'nld' => 'Dutch',
+  'ama' => "Amanay\x{e9}",
+  'xbo' => 'Bolgarian',
+  'bye' => 'Pouye',
+  'zme' => 'Mangerr',
+  'nym' => 'Nyamwezi',
+  'lee' => "Ly\x{e9}l\x{e9}",
+  'dln' => 'Darlong',
+  'eno' => 'Enggano',
+  'blc' => 'Bella Coola',
+  'man' => 'Mandingo',
+  'muw' => 'Mundari',
+  'mpw' => 'Mapidian',
+  'gut' => "Mal\x{e9}ku Ja\x{ed}ka",
+  'qvj' => 'Loja Highland Quichua',
+  'nev' => 'Nyaheun',
+  'nxd' => 'Ngando (Democratic Republic of Congo)',
+  'vmv' => 'Valley Maidu',
+  'kni' => 'Kanufi',
+  'tkq' => 'Tee',
+  'sgx' => 'Sierra Leone Sign Language',
+  'whg' => 'North Wahgi',
+  'ext' => 'Extremaduran',
+  'xcy' => 'Cayuse',
+  'kzc' => 'Bondoukou Kulango',
+  'ynl' => 'Yangulam',
+  'rki' => 'Rakhine',
+  'kgu' => 'Kobol',
+  'oko' => 'Old Korean (3rd-9th cent.)',
+  'ckt' => 'Chukot',
+  'ton' => 'Tonga (Tonga Islands)',
+  'fit' => 'Tornedalen Finnish',
+  'snp' => 'Siane',
+  'bbu' => 'Kulung (Nigeria)',
+  'tti' => 'Tobati',
+  'mdl' => 'Maltese Sign Language',
+  'nrf' => "J\x{e8}rriais",
+  'bqp' => 'Busa',
+  'gjr' => 'Gurindji Kriol',
+  'sia' => 'Akkala Sami',
+  'nji' => 'Gudanji',
+  'moy' => 'Shekkacho',
+  'hoa' => 'Hoava',
+  'wen' => 'Sorbian languages',
+  'rme' => 'Angloromani',
+  'gmg' => "Mag\x{268}yi",
+  'xtm' => "Magdalena Pe\x{f1}asco Mixtec",
+  'spd' => 'Saep',
+  'ztq' => "Quioquitani-Quier\x{ed} Zapotec",
+  'pir' => 'Piratapuyo',
+  'wul' => 'Silimo',
+  'dhm' => 'Zemba',
+  'pnq' => 'Pana (Burkina Faso)',
+  'mfc' => 'Mba',
+  'mkk' => 'Byep',
+  'kmd' => 'Majukayang Kalinga',
+  'mqg' => 'Kota Bangun Kutai Malay',
+  'bsn' => 'Barasana-Eduria',
+  'hmx' => 'Hmong-Mien languages',
+  'mzo' => 'Matipuhy',
+  'nop' => 'Numanggang',
+  'fuv' => 'Nigerian Fulfulde',
+  'sss' => "S\x{f4}",
+  'cbg' => 'Chimila',
+  'ham' => 'Hewa',
+  'mbq' => 'Maisin',
+  'tlh' => 'Klingon',
+  'avo' => 'Agavotaguerra',
+  'pei' => 'Chichimeca-Jonaz',
+  'bce' => 'Bamenyam',
+  'bil' => 'Bile',
+  'gar' => 'Galeya',
+  'krx' => 'Karon',
+  'aum' => 'Asu (Nigeria)',
+  'apm' => 'Mescalero-Chiricahua Apache',
+  'nai' => 'North American Indian languages',
+  'vig' => 'Viemo',
+  'ncm' => 'Nambo',
+  'efi' => 'Efik',
+  'goo' => 'Gone Dau',
+  'obr' => 'Old Burmese',
+  'txh' => 'Thracian',
+  'sek' => 'Sekani',
+  'yae' => "Pum\x{e9}",
+  'tve' => 'Te\'un',
+  'xyy' => 'Yorta Yorta',
+  'lah' => 'Lahnda',
+  'rbp' => 'Barababaraba',
+  'bwo' => 'Boro (Ethiopia)',
+  'koz' => 'Korak',
+  'bkx' => 'Baikeno',
+  'kfo' => "Koro (C\x{f4}te d'Ivoire)",
+  'asq' => 'Austrian Sign Language',
+  'dgt' => 'Ndra\'ngith',
+  'yej' => 'Yevanic',
+  'osp' => 'Old Spanish',
+  'ihw' => 'Bidhawal',
+  'qvh' => "Huamal\x{ed}es-Dos de Mayo Hu\x{e1}nuco Quechua",
+  'bpx' => 'Palya Bareli',
+  'kol' => 'Kol (Papua New Guinea)',
+  'bux' => 'Boghom',
+  'med' => 'Melpa',
+  'mvi' => 'Miyako',
+  'akm' => 'Aka-Bo',
+  'ryu' => 'Central Okinawan',
+  'mxv' => "Metlat\x{f3}noc Mixtec",
+  'zbe' => 'East Berawan',
+  'lwl' => 'Eastern Lawa',
+  'pln' => 'Palenquero',
+  'msa' => 'Malay (macrolanguage)',
+  'ina' => 'Interlingua (International Auxiliary Language Association)',
+  'biz' => 'Baloi',
+  'gdc' => 'Gugu Badhun',
+  'wth' => 'Wathawurrung',
+  'ysg' => 'Sonaga',
+  'myg' => 'Manta',
+  'xjt' => 'Jaitmatang',
+  'tbw' => 'Tagbanwa',
+  'aba' => "Ab\x{e9}",
+  'xmo' => 'Morerebi',
+  'sdn' => 'Gallurese Sardinian',
+  'kdy' => 'Keder',
+  'trb' => 'Terebu',
+  'lio' => 'Liki',
+  'mlv' => 'Motlav',
+  'bds' => 'Burunge',
+  'vkj' => 'Kujarge',
+  'dav' => 'Taita',
+  'fkv' => 'Kven Finnish',
+  'ilu' => 'Ili\'uun',
+  'poh' => 'Poqomchi\'',
+  'wkl' => 'Kalanadi',
+  'gtu' => 'Aghu-Tharnggala',
+  'muk' => 'Mugom',
+  'zmp' => 'Mpuono',
+  'mpk' => 'Mbara (Chad)',
+  'lep' => 'Lepcha',
+  'swj' => 'Sira',
+  'tct' => 'T\'en',
+  'bhh' => 'Bukharic',
+  'awt' => "Arawet\x{e9}",
+  'skd' => 'Southern Sierra Miwok',
+  'ons' => 'Ono',
+  'wdk' => 'Wadikali',
+  'khr' => 'Kharia',
+  'wli' => 'Waioli',
+  'mdz' => "Suru\x{ed} Do Par\x{e1}",
+  'xat' => 'Katawixi',
+  'tmk' => 'Northwestern Tamang',
+  'bvt' => 'Bati (Indonesia)',
+  'beb' => 'Bebele',
+  'mis' => 'Uncoded languages',
+  'byp' => 'Bumaji',
+  'xog' => 'Soga',
+  'mte' => 'Mono (Solomon Islands)',
+  'cut' => 'Teutila Cuicatec',
+  'opo' => 'Opao',
+  'rui' => 'Rufiji',
+  'drg' => 'Rungus',
+  'ses' => 'Koyraboro Senni Songhai',
+  'ude' => 'Udihe',
+  'dec' => 'Dagik',
+  'snf' => 'Noon',
+  'nrp' => 'North Picene',
+  'ben' => 'Bengali',
+  'xsc' => 'Scythian',
+  'lko' => 'Khayo',
+  'bqf' => 'Baga Kaloum',
+  'gfx' => "Mangetti Dune \x{1c3}Xung",
+  'zpc' => 'Choapan Zapotec',
+  'ikp' => 'Ikpeshi',
+  'jjr' => 'Bankal',
+  'svr' => 'Savara',
+  'bul' => 'Bulgarian',
+  'ckv' => 'Kavalan',
+  'kox' => 'Coxima',
+  'bpl' => 'Broome Pearling Lugger Pidgin',
+  'bkz' => 'Bungku',
+  'psi' => 'Southeast Pashai',
+  'kau' => 'Kanuri',
+  'mqj' => 'Mamasa',
+  'mch' => 'Maquiritari',
+  'hmz' => 'Hmong Shua',
+  'cbj' => 'Ede Cabe',
+  'aim' => 'Aimol',
+  'gro' => 'Groma',
+  'dyy' => 'Djabugay',
+  'lyn' => 'Luyana',
+  'aeq' => 'Aer',
+  'krz' => 'Sota Kanum',
+  'ssk' => 'Sunam',
+  'thi' => 'Tai Long',
+  'mks' => 'Silacayoapan Mixtec',
+  'ngi' => 'Ngizim',
+  'sdb' => 'Shabak',
+  'trn' => 'Trinitario',
+  'wwo' => 'Wetamut',
+  'gbh' => 'Defi Gbe',
+  'ani' => 'Andi',
+  'fut' => 'Futuna-Aniwa',
+  'nof' => 'Nomane',
+  'lgh' => 'Laghuu',
+  'jar' => 'Jarawa (Nigeria)',
+  'hod' => 'Holma',
+  'plb' => 'Polonombauk',
+  'mry' => 'Mandaya',
+  'sid' => 'Sidamo',
+  'hgm' => "Hai\x{1c1}om",
+  'pur' => "Purubor\x{e1}",
+  'hra' => 'Hrangkhol',
+  'ppr' => 'Piru',
+  'kju' => 'Kashaya',
+  'spa' => 'Spanish',
+  'sua' => 'Sulka',
+  'ibi' => 'Ibilo',
+  'dtm' => 'Tomo Kan Dogon',
+  'ggr' => 'Aghu Tharnggalu',
+  'lbr' => 'Lohorung',
+  'wil' => 'Wilawila',
+  'kma' => 'Konni',
+  'ukh' => 'Ukhwejo',
+  'prh' => 'Porohanon',
+  'mik' => 'Mikasuki',
+  'tms' => 'Tima',
+  'lsp' => 'Panamanian Sign Language',
+  'mxt' => 'Jamiltepec Mixtec',
+  'bth' => 'Biatah Bidayuh',
+  'mdx' => 'Dizin',
+  'pkr' => 'Attapady Kurumba',
+  'urr' => 'Lehalurup',
+  'clk' => 'Idu-Mishmi',
+  'cdi' => 'Chodri',
+  'iyx' => 'Yaka (Congo)',
+  'owl' => 'Old Welsh',
+  'iso' => 'Isoko',
+  'mno' => 'Manobo languages',
+  'ska' => 'Skagit',
+  'wux' => 'Wulna',
+  'mhe' => 'Besisi',
+  'sbm' => 'Sagala',
+  'mlt' => 'Maltese',
+  'glw' => 'Glavda',
+  'dat' => 'Darang Deng',
+  'xfa' => 'Faliscan',
+  'onk' => 'Kabore One',
+  'swg' => 'Swabian',
+  'cit' => 'Chittagonian',
+  'xrg' => 'Minang',
+  'bsb' => 'Brunei Bisaya',
+  'mus' => 'Creek',
+  'mps' => 'Dadibi',
+  'ktr' => 'Kota Marudu Tinagas',
+  'bli' => 'Bolia',
+  'bix' => 'Bijori',
+  'myj' => 'Mangayat',
+  'oyb' => 'Oy',
+  'szp' => 'Suabo',
+  'awv' => 'Jair Awyu',
+  'yxm' => 'Yinwum',
+  'bdk' => 'Budukh',
+  'rer' => 'Rer Bare',
+  'krl' => 'Karelian',
+  'hml' => 'Luopohe Hmong',
+  'ugo' => 'Ugong',
+  'hle' => 'Hlersu',
+  'mea' => 'Menka',
+  'lns' => 'Lamnso\'',
+  'msd' => 'Yucatec Maya Sign Language',
+  'zmf' => 'Mfinu',
+  'ind' => 'Indonesian',
+  'knc' => 'Central Kanuri',
+  'lef' => 'Lelemi',
+  'itw' => 'Ito',
+  'bvv' => 'Baniva',
+  'bxi' => 'Pirlatapa',
+  'byf' => 'Bete',
+  'dmo' => 'Kemedzung',
+  'cuv' => 'Cuvok',
+  'bkl' => 'Berik',
+  'pbo' => 'Papel',
+  'bpz' => 'Bilba',
+  'vwa' => 'Awa (China)',
+  'abd' => 'Manide',
+  'buz' => 'Bukwen',
+  'ylm' => 'Limi',
+  'tob' => 'Toba',
+  'luo' => 'Luo (Kenya and Tanzania)',
+  'lpo' => 'Lipo',
+  'xav' => "Xav\x{e1}nte",
+  'gvl' => 'Gulay',
+  'kba' => 'Kalarko',
+  'lmr' => 'Lamalera',
+  'xir' => "Xiri\x{e2}na",
+  'imi' => 'Anamgura',
+  'mab' => 'Yutanduchi Mixtec',
+  'mfi' => 'Wandala',
+  'ssw' => 'Swati',
+  'waa' => 'Walla Walla',
+  'dur' => 'Dii',
+  'rmf' => 'Kalo Finnish Romani',
+  'brm' => 'Barambu',
+  'bga' => 'Gwamhi-Wuri',
+  'ady' => 'Adyghe',
+  'gmh' => 'Middle High German (ca. 1050-1500)',
+  'nre' => 'Southern Rengma Naga',
+  'ort' => 'Adivasi Oriya',
+  'aol' => 'Alor',
+  'cro' => 'Crow',
+  'kzi' => 'Kelabit',
+  'yri' => "Yar\x{ed}",
+  'ttc' => 'Tektiteko',
+  'lrv' => 'Larevat',
+  'bjd' => 'Bandjigali',
+  'kkm' => 'Kiong',
+  'uig' => 'Uighur',
+  'ike' => 'Eastern Canadian Inuktitut',
+  'gbj' => 'Bodo Gadaba',
+  'mcj' => 'Mvanip',
+  'tiq' => "Ti\x{e9}fo",
+  'ekk' => 'Standard Estonian',
+  'mqh' => 'Tlazoyaltepec Mixtec',
+  'ahr' => 'Ahirani',
+  'tyv' => 'Tuvinian',
+  'pyy' => 'Pyen',
+  'cbh' => 'Cagua',
+  'nac' => 'Narak',
+  'yaf' => 'Yaka (Democratic Republic of Congo)',
+  'tnr' => "M\x{e9}nik",
+  'mjb' => 'Makalero',
+  'tdu' => 'Tempasuk Dusun',
+  'tlg' => 'Tofanma',
+  'zxx' => 'No linguistic content',
+  'tem' => 'Timne',
+  'sto' => 'Stoney',
+  'wja' => 'Waja',
+  'ogg' => 'Ogbogolo',
+  'lot' => 'Otuho',
+  'dsi' => 'Disa',
+  'sgl' => 'Sanglechi-Ishkashimi',
+  'bcf' => 'Bamu',
+  'dva' => 'Duau',
+  'bft' => 'Balti',
+  'wom' => 'Wom (Nigeria)',
+  'lag' => 'Langi',
+  'bad' => 'Banda languages',
+  'txg' => 'Tangut',
+  'ygp' => 'Gepo',
+  'kwt' => 'Kwesten',
+  'pec' => 'Southern Pesisir',
+  'glk' => 'Gilaki',
+  'chu' => 'Church Slavic',
+  'mhp' => 'Balinese Malay',
+  'otd' => 'Ot Danum',
+  'gdi' => 'Gundi',
+  'unn' => 'Kurnai',
+  'vor' => 'Voro',
+  'onw' => 'Old Nubian',
+  'dbo' => 'Dulbu',
+  'nla' => 'Ngombale',
+  'pmo' => 'Pom',
+  'amd' => "Amap\x{e1} Creole",
+  'pjt' => 'Pitjantjatjara',
+  'sgz' => 'Sursurunga',
+  'xln' => 'Alanic',
+  'vao' => 'Vao',
+  'git' => 'Gitxsan',
+  'miw' => 'Akoye',
+  'agu' => 'Aguacateco',
+  'lse' => 'Lusengo',
+  'uzb' => 'Uzbek',
+  'myh' => 'Makah',
+  'azc' => 'Uto-Aztecan languages',
+  'nnu' => 'Dwang',
+  'nxa' => 'Nauete',
+  'jiv' => 'Shuar',
+  'ndr' => 'Ndoola',
+  'clw' => 'Chulym',
+  'nsv' => 'Southwestern Nisu',
+  'mvc' => 'Central Mam',
+  'mgn' => 'Mbangi',
+  'mtf' => 'Murik (Papua New Guinea)',
+  'wlc' => 'Mwali Comorian',
+  'pog' => "Potigu\x{e1}ra",
+  'kum' => 'Kumyk',
+  'kpm' => 'Koho',
+  'afo' => 'Eloyi',
+  'pat' => 'Papitalai',
+  'sax' => 'Sa',
+  'ksq' => 'Kwaami',
+  'bhg' => 'Binandere',
+  'aoz' => 'Uab Meto',
+  'ruc' => 'Ruuli',
+  'quu' => "Eastern Quich\x{e9}",
+  'smm' => 'Musasa',
+  'net' => 'Nete',
+  'sze' => 'Seze',
+  'nhy' => 'Northern Oaxaca Nahuatl',
+  'bdw' => 'Baham',
+  'dkr' => 'Kuijau',
+  'jut' => 'Jutish',
+  'tgy' => 'Togoyo',
+  'sou' => 'Southern Thai',
+  'btj' => 'Bacanese Malay',
+  'far' => 'Fataleka',
+  'arx' => "Aru\x{e1} (Rodonia State)",
+  'jls' => 'Jamaican Sign Language',
+  'drh' => 'Darkhat',
+  'itk' => 'Judeo-Italian',
+  'tbs' => 'Tanguat',
+  'guv' => 'Gey',
+  'dwu' => 'Dhuwal',
+  'kvo' => 'Dobel',
+  'tzn' => 'Tugun',
+  'zpx' => 'San Baltazar Loxicha Zapotec',
+  'koc' => 'Kpati',
+  'mcq' => 'Ese',
+  'ira' => 'Iranian languages',
+  'igm' => 'Kanggape',
+  'los' => 'Loniu',
+  'kge' => 'Komering',
+  'ccg' => 'Samba Daka',
+  'tij' => 'Tilung',
+  'kfy' => 'Kumaoni',
+  'bbe' => 'Bangba',
+  'rom' => 'Romany',
+  'bwy' => 'Cwi Bwamu',
+  'nka' => 'Nkoya',
+  'bfs' => 'Southern Bai',
+  'goy' => 'Goundo',
+  'mmg' => 'North Ambrym',
+  'kws' => 'Kwese',
+  'gdl' => 'Dirasha',
+  'rmu' => 'Tavringer Romani',
+  'nwg' => 'Ngayawung',
+  'tpg' => 'Kula',
+  'xkn' => 'Kayan River Kayan',
+  'mjr' => 'Malavedan',
+  'tug' => 'Tunia',
+  'tnb' => 'Western Tunebo',
+  'yma' => 'Yamphe',
+  'ziz' => 'Zizilivakan',
+  'fiw' => 'Fiwaga',
+  'nbm' => 'Ngbaka Ma\'bo',
+  'mzy' => 'Mozambican Sign Language',
+  'ckw' => 'Western Cakchiquel',
+  'lrk' => 'Loarki',
+  'ahb' => 'Axamb',
+  'bmp' => 'Bulgebi',
+  'moo' => 'Monom',
+  'ors' => 'Orang Seletar',
+  'dda' => 'Dadi Dadi',
+  'mfz' => 'Mabaan',
+  'yox' => 'Yoron',
+  'bcu' => 'Awad Bing',
+  'kqd' => 'Koy Sanjaq Surat',
+  'mar' => 'Marathi',
+  'xib' => 'Iberian',
+  'dub' => 'Dubli',
+  'dng' => 'Dungan',
+  'tdf' => 'Talieng',
+  'yau' => 'Yuwana',
+  'lgq' => 'Logba',
+  'tvu' => 'Tunen',
+  'kzz' => 'Kalabra',
+  'gbq' => 'Gbaya-Bozoum',
+  'raa' => 'Dungmali',
+  'lmb' => 'Merei',
+  'zyp' => 'Zyphe Chin',
+  'srp' => 'Serbian',
+  'jus' => 'Jumla Sign Language',
+  'cjn' => 'Chenapian',
+  'omn' => 'Minoan',
+  'kzl' => 'Kayeli',
+  'nes' => 'Bhoti Kinnauri',
+  'qxu' => "Arequipa-La Uni\x{f3}n Quechua",
+  'kyd' => 'Karey',
+  'glv' => 'Manx',
+  'aoi' => 'Anindilyakwa',
+  'nnf' => 'Ngaing',
+  'vms' => 'Moksela',
+  'hup' => 'Hupa',
+  'opy' => "Ofay\x{e9}",
+  'gyg' => 'Gbayi',
+  'tbt' => 'Tembo (Kitembo)',
+  'fab' => 'Fa d\'Ambu',
+  'ksj' => 'Uare',
+  'atn' => 'Ashtiani',
+  'agf' => 'Arguni',
+  'ffi' => 'Foia Foia',
+  'yrl' => 'Nhengatu',
+  'kxm' => 'Northern Khmer',
+  'mdc' => 'Male (Papua New Guinea)',
+  'aap' => "Par\x{e1} Ar\x{e1}ra",
+  'btq' => 'Batek',
+  'ged' => 'Gade',
+  'prq' => "Ash\x{e9}ninka Peren\x{e9}",
+  'ukq' => 'Ukwa',
+  'keg' => 'Tese',
+  'nsk' => 'Naskapi',
+  'hnd' => 'Southern Hindko',
+  'chf' => 'Tabasco Chontal',
+  'wpc' => 'Maco',
+  'pas' => 'Papasena',
+  'mfl' => 'Putai',
+  'dgw' => 'Daungwurrung',
+  'ile' => 'Interlingue',
+  'iml' => 'Miluk',
+  'klm' => 'Migum',
+  'elk' => 'Elkei',
+  'cuw' => 'Chukwa',
+  'xmy' => 'Mayaguduna',
+  'sgi' => 'Suga',
+  'ndb' => 'Kenswei Nsei',
+  'xel' => 'Kelo',
+  'can' => 'Chambri',
+  'knx' => 'Kendayan',
+  'bvw' => 'Boga',
+  'dsl' => 'Danish Sign Language',
+  'gis' => 'North Giziga',
+  'xun' => 'Unggaranggu',
+  'bic' => 'Bikaru',
+  'tkg' => 'Tesaka Malagasy',
+  'xpn' => "Kapinaw\x{e1}",
+  'xaw' => 'Kawaiisu',
+  'hif' => 'Fiji Hindi',
+  'din' => 'Dinka',
+  'zil' => 'Zialo',
+  'liy' => 'Banda-Bambari',
+  'kdo' => 'Kordofanian languages',
+  'npa' => 'Nar Phu',
+  'twa' => 'Twana',
+  'nua' => 'Yuanga',
+  'aww' => 'Awun',
+  'eit' => 'Eitiep',
+  'pgk' => 'Rerep',
+  'ajp' => 'South Levantine Arabic',
+  'quf' => 'Lambayeque Quechua',
+  'tcw' => "Tecpatl\x{e1}n Totonac",
+  'aca' => 'Achagua',
+  'nid' => 'Ngandi',
+  'guk' => 'Gumuz',
+  'hyx' => 'Armenian (family)',
+  'itv' => 'Itawit',
+  'mtu' => 'Tututepec Mixtec',
+  'ctp' => 'Western Highland Chatino',
+  'anz' => 'Anem',
+  'kcd' => "Ngk\x{e2}lmpw Kanum",
+  'lbb' => 'Label',
+  'ggb' => 'Gbii',
+  'ztg' => "Xanagu\x{ed}a Zapotec",
+  'wbf' => 'Wara',
+  'coy' => 'Coyaima',
+  'gmq' => 'North Germanic languages',
+  'ckk' => 'Acatenango Southwestern Cakchiquel',
+  'pub' => 'Purum',
+  'png' => 'Pongu',
+  'ngz' => 'Ngungwel',
+  'plr' => 'Palaka Senoufo',
+  'thz' => 'Tayart Tamajeq',
+  'sla' => 'Slavic languages',
+  'ril' => 'Riang Lang',
+  'kaf' => 'Katso',
+  'njx' => 'Kunyi',
+  'uve' => 'West Uvean',
+  'mkt' => 'Vamale',
+  'ttx' => 'Tutong 1',
+  'kgp' => 'Kaingang',
+  'ywt' => 'Xishanba Lalo',
+  'jab' => 'Hyam',
+  'xnh' => 'Kuanhua',
+  'bqu' => 'Boguru',
+  'ssv' => 'Shark Bay',
+  'rwo' => 'Rawa',
+  'pda' => 'Anam',
+  'owi' => 'Owiniga',
+  'snu' => 'Senggi',
+  'sdr' => 'Oraon Sadri',
+  'bbp' => 'West Central Banda',
+  'bki' => 'Baki',
+  'bxl' => 'Jalkunan',
+  'yba' => 'Yala',
+  'vem' => 'Vemgo-Mabas',
+  'hke' => 'Hunde',
+  'nmm' => 'Manangba',
+  'bzm' => 'Bolondo',
+  'asg' => 'Cishingini',
+  'kjf' => 'Khalaj',
+  'nax' => 'Nakwi',
+  'aya' => 'Awar',
+  'cbq' => 'Tsucuba',
+  'kri' => 'Krio',
+  'nou' => 'Ewage-Notu',
+  'mbg' => "Northern Nambiku\x{e1}ra",
+  'pex' => 'Petats',
+  'mqq' => 'Minokok',
+  'set' => 'Sentani',
+  'ykm' => 'Kap',
+  'bme' => 'Limassa',
+  'tih' => 'Timugon Murut',
+  'svb' => 'Ulau-Suain',
+  'shy' => 'Tachawit',
+  'mwm' => 'Sar',
+  'khn' => 'Khandesi',
+  'czo' => 'Min Zhong Chinese',
+  'bll' => 'Biloxi',
+  'ero' => 'Horpa',
+  'hmi' => 'Northern Huishui Hmong',
+  'myq' => 'Forest Maninka',
+  'tor' => 'Togbo-Vara Banda',
+  'aqa' => 'Alacalufan languages',
+  'aae' => "Arb\x{eb}resh\x{eb} Albanian",
+  'llo' => 'Khlor',
+  'tqw' => 'Tonkawa',
+  'miv' => 'Mimi',
+  'nsw' => 'Navut',
+  'xco' => 'Chorasmian',
+  'ilp' => 'Iranun (Philippines)',
+  'gjn' => 'Gonja',
+  'blz' => 'Balantak',
+  'ypm' => 'Phuma',
+  'dgk' => 'Dagba',
+  'yum' => 'Quechan',
+  'wnm' => 'Wanggamala',
+  'pin' => 'Piame',
+  'hue' => 'San Francisco Del Mar Huave',
+  'sre' => 'Sara',
+  'mvx' => 'Meoswar',
+  'wer' => 'Weri',
+  'osu' => 'Southern One',
+  'tao' => 'Yami',
+  'bui' => 'Bongili',
+  'csa' => 'Chiltepec Chinantec',
+  'psl' => 'Puerto Rican Sign Language',
+  'lnt' => 'Lintang',
+  'bpi' => 'Bagupi',
+  'bxz' => 'Binahari',
+  'reb' => 'Rembong',
+  'xby' => 'Batjala',
+  'zaa' => "Sierra de Ju\x{e1}rez Zapotec",
+  'xwe' => 'Xwela Gbe',
+  'zqe' => 'Qiubei Zhuang',
+  'bdv' => 'Bodo Parja',
+  'das' => 'Daho-Doo',
+  'cdz' => 'Koda',
+  'awk' => 'Awabakal',
+  'sac' => 'Meskwaki',
+  'ibl' => 'Ibaloi',
+  'ktb' => 'Kambaata',
+  'bsr' => 'Bassa-Kontagora',
+  'tck' => 'Tchitchege',
+  'mls' => 'Masalit',
+  'gan' => 'Gan Chinese',
+  'nto' => 'Ntomba',
+  'wlx' => 'Wali (Ghana)',
+  'mpt' => 'Mian',
+  'guw' => 'Gun',
+  'wii' => 'Minidien',
+  'zom' => 'Zou',
+  'mut' => 'Western Muria',
+  'cte' => 'Tepinapa Chinantec',
+  'drq' => 'Dura',
+  'byu' => 'Buyang',
+  'ehu' => 'Ehueun',
+  'leu' => 'Kara (Papua New Guinea)',
+  'ngl' => 'Lomwe',
+  'cuk' => 'San Blas Kuna',
+  'zmu' => 'Muruwari',
+  'arc' => 'Official Aramaic (700-300 BCE)',
+  'urb' => "Urub\x{fa}-Kaapor",
+  'pkb' => 'Pokomo',
+  'fry' => 'Western Frisian',
+  'ldm' => 'Landoma',
+  'tjo' => 'Temacine Tamazight',
+  'bvk' => 'Bukat',
+  'mxs' => 'Huitepec Mixtec',
+  'tmt' => 'Tasmate',
+  'thl' => 'Dangaura Tharu',
+  'xak' => "M\x{e1}ku",
+  'anl' => 'Anu-Hkongso Chin',
+  'ksh' => "K\x{f6}lsch",
+  'jgb' => 'Ngbee',
+  'mbj' => "Nad\x{eb}b",
+  'cch' => 'Atsam',
+  'pez' => 'Eastern Penan',
+  'kap' => 'Bezhta',
+  'nfr' => 'Nafaanra',
+  'alm' => 'Amblong',
+  'wbp' => 'Warlpiri',
+  'ybd' => 'Yangbye',
+  'mmh' => "Mehin\x{e1}ku",
+  'urn' => 'Uruangnirin',
+  'pkn' => 'Pakanha',
+  'orw' => 'Oro Win',
+  'tuh' => 'Taulil',
+  'sst' => 'Sinasina',
+  'koi' => 'Komi-Permyak',
+  'nru' => 'Narua',
+  'ayd' => 'Ayabadhu',
+  'bbf' => 'Baibai',
+  'gab' => 'Gabri',
+  'mkv' => 'Mafea',
+  'axm' => 'Middle Armenian',
+  'ktn' => "Kariti\x{e2}na",
+  'kgf' => 'Kube',
+  'asj' => 'Sari',
+  'sty' => 'Siberian Tatar',
+  'iku' => 'Inuktitut',
+  'mvl' => 'Mbara (Australia)',
+  'naz' => 'Coatepec Nahuatl',
+  'wll' => 'Wali (Sudan)',
+  'ttz' => 'Tsum',
+  'ren' => 'Rengao',
+  'wme' => 'Wambule',
+  'kca' => 'Khanty',
+  'cry' => 'Cori',
+  'kjp' => 'Pwo Eastern Karen',
+  'bfw' => 'Bondo',
+  'kww' => 'Kwinti',
+  'tde' => 'Tiranige Diga Dogon',
+  'pib' => 'Yine',
+  'low' => 'Tampias Lobu',
+  'sld' => 'Sissala',
+  'anx' => 'Andra-Hus',
+  'cks' => 'Tayo',
+  'emg' => 'Eastern Meohang',
+  'sym' => 'Maya Samo',
+  'pnj' => 'Pinjarup',
+  'ngx' => 'Nggwahyi',
+  'ado' => 'Abu',
+  'sev' => 'Nyarafolo Senoufo',
+  'njz' => 'Nyishi',
+  'thx' => 'The',
+  'vbk' => 'Southwestern Bontok',
+  'ber' => 'Berber languages',
+  'sqm' => 'Suma',
+  'swq' => 'Sharwa',
+  'xas' => 'Kamas',
+  'etu' => 'Ejagham',
+  'tgo' => 'Sudest',
+  'gvc' => 'Guanano',
+  'nho' => 'Takuu',
+  'clt' => 'Lautu Chin',
+  'bnm' => 'Batanga',
+  'njl' => 'Njalgulgule',
+  'che' => 'Chechen',
+  'olo' => 'Livvi',
+  'xrq' => 'Karranga',
+  'cus' => 'Cushitic languages',
+  'khb' => "L\x{fc}",
+  'kvy' => 'Yintale Karen',
+  'cps' => 'Capiznon',
+  'zga' => 'Kinga',
+  'doq' => 'Dominican Sign Language',
+  'bvs' => 'Belgian Sign Language',
+  'mxk' => 'Monumbo',
+  'mit' => 'Southern Puebla Mixtec',
+  'giw' => 'White Gelao',
+  'age' => 'Angal',
+  'aoc' => 'Pemon',
+  'ruz' => 'Ruma',
+  'cik' => 'Chitkuli Kinnauri',
+  'fkk' => "Kirya-Konz\x{259}l",
+  'cno' => 'Con',
+  'aws' => 'South Awyu',
+  'keh' => 'Keak',
+  'ont' => 'Ontenu',
+  'ttl' => 'Totela',
+  'nne' => 'Ngandyera',
+  'mdi' => 'Mamvu',
+  'dak' => 'Dakota',
+  'tcs' => 'Torres Strait Creole',
+  'mlk' => 'Ilwana',
+  'trr' => 'Taushiro',
+  'muv' => 'Muthuvan',
+  'rth' => 'Ratahan',
+  'mpv' => 'Mungkip',
+  'nal' => 'Nalik',
+  'vay' => 'Wayu',
+  'aqd' => 'Ampari Dogon',
+  'mvz' => 'Mesqan',
+  'juw' => "W\x{e3}pha",
+  'ums' => 'Pendau',
+  'bdt' => 'Bokoto',
+  'yim' => 'Yimchungru Naga',
+  'jan' => 'Jandai',
+  'new' => 'Newari',
+  'bxx' => 'Borna (Democratic Republic of Congo)',
+  'que' => 'Quechua',
+  'azz' => 'Highland Puebla Nahuatl',
+  'vmw' => 'Makhuwa',
+  'hts' => 'Hadza',
+  'wsr' => 'Owenia',
+  'soe' => 'Songomeno',
+  'dgs' => 'Dogoso',
+  'paw' => 'Pawnee',
+  'ppn' => 'Papapana',
+  'pun' => 'Pubian',
+  'sgc' => 'Kipsigis',
+  'rsb' => 'Romano-Serbian',
+  'djk' => 'Eastern Maroon Creole',
+  'xzh' => 'Zhang-Zhung',
+  'csd' => 'Chiangmai Sign Language',
+  'zad' => 'Cajonos Zapotec',
+  'ggn' => 'Eastern Gurung',
+  'bii' => 'Bisu',
+  'cea' => 'Lower Chehalis',
+  'pel' => 'Pekal',
+  'pmy' => 'Papuan Malay',
+  'tmv' => 'Tembo (Motembo)',
+  'blx' => 'Mag-Indi Ayta',
+  'dby' => 'Dibiyaso',
+  'lbn' => 'Rmeet',
+  'unr' => 'Mundari',
+  'udu' => 'Uduk',
+  'ddd' => 'Dongotono',
+  'xxr' => "Korop\x{f3}",
+  'dnj' => 'Dan',
+  'mro' => 'Mru',
+  'oos' => 'Old Ossetic',
+  'xda' => 'Darkinyung',
+  'pnh' => 'Penrhyn',
+  'kzx' => 'Kamarian',
+  'ebg' => 'Ebughu',
+  'dib' => 'South Central Dinka',
+  'rcf' => "R\x{e9}union Creole French",
+  'kqa' => 'Mum',
+  'kae' => 'Ketangalan',
+  'mfx' => 'Melo',
+  'xng' => 'Middle Mongolian',
+  'xub' => 'Betta Kurumba',
+  'xpb' => 'Northeastern Tasmanian',
+  'tys' => "T\x{e0}y Sa Pa",
+  'cab' => 'Garifuna',
+  'ndn' => 'Ngundi',
+  'wbe' => 'Waritai',
+  'rad' => 'Rade',
+  'ork' => 'Orokaiva',
+  'tuj' => 'Tugutil',
+  'tpj' => "Tapiet\x{e9}",
+  'krc' => 'Karachay-Balkar',
+  'mgr' => 'Mambwe-Lungu',
+  'bmf' => 'Bom-Kim',
+  'ash' => 'Abishira',
+  'nkd' => 'Koireng',
+  'rga' => 'Roria',
+  'hmc' => 'Central Huishui Hmong',
+  'laq' => 'Qabiao',
+  'ygu' => 'Yugul',
+  'knl' => 'Keninjal',
+  'txq' => 'Tii',
+  'dyo' => 'Jola-Fonyi',
+  'gry' => 'Barclayville Grebo',
+  'lky' => 'Lokoya',
+  'mbh' => 'Mangseng',
+  'kje' => 'Kisar',
+  'zpz' => 'Texmelucan Zapotec',
+  'fan' => 'Fang (Equatorial Guinea)',
+  'atb' => 'Zaiwa',
+  'kwk' => 'Kwakiutl',
+  'tig' => 'Tigre',
+  'ccj' => 'Kasanga',
+  'ymd' => 'Muda',
+  'bfk' => 'Ban Khor Sign Language',
+  'bkc' => 'Baka (Cameroon)',
+  'dez' => 'Dengese',
+  'lok' => 'Loko',
+  'tlq' => 'Tai Loi',
+  'omb' => 'East Ambae',
+  'mmj' => 'Majhwar',
+  'del' => 'Delaware',
+  'zen' => 'Zenaga',
+  'pby' => 'Pyu (Papua New Guinea)',
+  'tbv' => 'Tobo',
+  'gus' => 'Guinean Sign Language',
+  'dmy' => 'Demta',
+  'lmn' => 'Lambadi',
+  'agp' => 'Paranan',
+  'ciw' => 'Chippewa',
+  'xsl' => 'South Slavey',
+  'daw' => 'Davawenyo',
+  'srf' => 'Nafi',
+  'pgs' => 'Pangseng',
+  'zkz' => 'Khazar',
+  'zpl' => "Lachix\x{ed}o Zapotec",
+  'luy' => 'Luyia',
+  'zul' => 'Zulu',
+  'dun' => 'Dusun Deyah',
+  'rhg' => 'Rohingya',
+  'ghe' => 'Southern Ghale',
+  'buc' => 'Bushi',
+  'xin' => 'Xinca',
+  'huf' => 'Humene',
+  'nnp' => 'Wancho Naga',
+  'mlw' => 'Moloko',
+  'mhu' => 'Digaro-Mishmi',
+  'chp' => 'Chipewyan',
+  'twd' => 'Twents',
+  'gno' => 'Northern Gondi',
+  'nud' => 'Ngala',
+  'nia' => 'Nias',
+  'knz' => "Kalams\x{e9}",
+  'acd' => 'Gikyode',
+  'aaf' => 'Aranadan',
+  'gdx' => 'Godwari',
+  'dzg' => 'Dazaga',
+  'ugy' => 'Uruguayan Sign Language',
+  'mxw' => 'Namo',
+  'sop' => 'Songe',
+  'nss' => 'Nali',
+  'ahn' => "\x{c0}h\x{e0}n",
+  'ari' => 'Arikara',
+  'kya' => 'Kwaya',
+  'pak' => "Parakan\x{e3}",
+  'kej' => 'Kadar',
+  'hlu' => 'Hieroglyphic Luwian',
+  'djw' => 'Djawi',
+  'xkb' => 'Northern Nago',
+  'tnn' => 'North Tanna',
+  'yol' => 'Yola',
+  'itt' => 'Maeng Itneg',
+  'sai' => 'South American Indian languages',
+  'poq' => 'Texistepec Popoluca',
+  'gea' => 'Geruma',
+  'sfb' => 'Langue des signes de Belgique Francophone',
+  'mny' => 'Manyawa',
+  'hna' => 'Mina (Cameroon)',
+  'qup' => 'Southern Pastaza Quechua',
+  'juk' => 'Wapan',
+  'eiv' => 'Askopan',
+  'tzb' => "Bachaj\x{f3}n Tzeltal",
+  'vmk' => 'Makhuwa-Shirima',
+  'ksg' => 'Kusaghe',
+  'bhq' => 'Tukang Besi South',
+  'xgw' => 'Guwa',
+  'nek' => 'Neku',
+  'wic' => 'Wichita',
+  'tld' => 'Talaud',
+  'nmw' => 'Nimoa',
+  'bzw' => 'Basa (Nigeria)',
+  'sde' => 'Surubu',
+  'ues' => 'Kioko',
+  'ymq' => 'Qila Muji',
+  'val' => 'Vehes',
+  'nay' => 'Ngarrindjeri',
+  'hbo' => 'Ancient Hebrew',
+  'dbl' => 'Dyirbal',
+  'cma' => 'Maa',
+  'pml' => 'Lingua Franca',
+  'pht' => 'Phu Thai',
+  'wgg' => 'Wangkangurru',
+  'shx' => 'She',
+  'bag' => 'Tuki',
+  'atu' => 'Reel',
+  'ple' => 'Palu\'e',
+  'tev' => 'Teor',
+  'pey' => 'Petjo',
+  'lad' => 'Ladino',
+  'nkq' => 'Nkami',
+  'mca' => 'Maca',
+  'bot' => 'Bongo',
+  'usk' => 'Usaghade',
+  'qxn' => 'Northern Conchucos Ancash Quechua',
+  'mww' => 'Hmong Daw',
+  'lcf' => 'Lubu',
+  'gwt' => 'Gawar-Bati',
+  'omu' => 'Omurano',
+  'mjp' => 'Malapandaram',
+  'raq' => 'Saam',
+  'mgf' => 'Maklew',
+  'mtn' => 'Matagalpa',
+  'cox' => 'Nanti',
+  'kkv' => 'Kangean',
+  'lga' => 'Lungga',
+  'lrm' => 'Marama',
+  'gba' => 'Gbaya (Central African Republic)',
+  'kvl' => 'Kayaw',
+  'njy' => 'Njyem',
+  'izh' => 'Ingrian',
+  'moi' => 'Mboi',
+  'bmr' => 'Muinane',
+  'nbk' => 'Nake',
+  'bjg' => 'Bidyogo',
+  'brv' => 'Western Bru',
+  'diu' => 'Diriku',
+  'ijs' => 'Southeast Ijo',
+  'crz' => "Cruze\x{f1}o",
+  'oaa' => 'Orok',
+  'gzi' => 'Gazi',
+  'ptv' => 'Port Vato',
+  'waj' => 'Waffa',
+  'tty' => 'Sikaritai',
+  'xuu' => 'Kxoe',
+  'bgj' => 'Bangolan',
+  'kmh' => 'Kalam',
+  'xpu' => 'Punic',
+  'kbj' => 'Kari',
+  'zsu' => 'Sukurum',
+  'cau' => 'Caucasian languages',
+  'map' => 'Austronesian languages',
+  'tst' => 'Tondi Songway Kiini',
+  'suh' => 'Suba',
+  'bhd' => 'Bhadrawahi',
+  'gum' => 'Guambiano',
+  'cnc' => "C\x{f4}\x{f4}ng",
+  'skh' => 'Sikule',
+  'nyt' => 'Nyawaygi',
+  'ruy' => 'Mala (Nigeria)',
+  'xwr' => 'Kwerba Mamberamo',
+  'hlb' => 'Halbi',
+  'pod' => 'Ponares',
+  'pra' => 'Prakrit languages',
+  'hur' => 'Halkomelem',
+  'uka' => 'Kaburi',
+  'crl' => 'Northern East Cree',
+  'afz' => 'Obokuitai',
+  'xku' => 'Kaamba',
+  'srr' => 'Serer',
+  'bta' => 'Bata',
+  'wly' => 'Waling',
+  'rmn' => 'Balkan Romani',
+  'smv' => 'Samvedi',
+  'ubm' => 'Upper Baram Kenyah',
+  'tgc' => 'Tigak',
+  'kpv' => 'Komi-Zyrian',
+  'gvo' => "Gavi\x{e3}o Do Jiparan\x{e1}",
+  'elm' => 'Eleme',
+  'kuv' => 'Kur',
+  'toe' => 'Tomedes',
+  'aar' => 'Afar',
+  'tzu' => "Huixt\x{e1}n Tzotzil",
+  'kvz' => 'Tsakwambo',
+  'jni' => 'Janji',
+  'nhc' => 'Tabasco Nahuatl',
+  'nxj' => 'Nyadu',
+  'kdi' => 'Kumam',
+  'meh' => 'Southwestern Tlaxiaco Mixtec',
+  'amg' => 'Amurdak',
+  'enx' => 'Enxet',
+  'nsm' => 'Sumi Naga',
+  'yuw' => 'Yau (Morobe Province)',
+  'ypw' => 'Puwa Yi',
+  'klk' => 'Kono (Nigeria)',
+  'yan' => 'Mayangna',
+  'jim' => 'Jimi (Cameroon)',
+  'tvn' => 'Tavoyan',
+  'acq' => 'Ta\'izzi-Adeni Arabic',
+  'pmz' => 'Southern Pame',
+  'nuq' => 'Nukumanu',
+  'sgo' => 'Songa',
+  'twq' => 'Tasawaq',
+  'tqm' => 'Turumsa',
+  'nlj' => 'Nyali',
+  'dcc' => 'Deccan',
+  'mvy' => 'Indus Kohistani',
+  'mhb' => 'Mahongwe',
+  'hva' => "San Lu\x{ed}s Potos\x{ed} Huastec",
+  'scs' => 'North Slavey',
+  'wha' => 'Sou Upaa',
+  'stl' => 'Stellingwerfs',
+  'kit' => 'Agob',
+  'kxk' => 'Zayein Karen',
+  'bcn' => 'Bali (Nigeria)',
+  'wnw' => 'Wintu',
+  'xbx' => "Kabix\x{ed}",
+  'ytp' => 'Thopho',
+  'bse' => 'Wushi',
+  'yoy' => 'Yoy',
+  'nct' => 'Chothe Naga',
+  'kmj' => 'Kumarbhag Paharia',
+  'bgh' => 'Bogan',
+  'aut' => 'Austral',
+  'xhv' => 'Khua',
+  'wah' => 'Watubela',
+  'fni' => 'Fania',
+  'plp' => 'Palpa',
+  'apt' => 'Apatani',
+  'als' => 'Tosk Albanian',
+  'mje' => 'Muskum',
+  'kbh' => "Cams\x{e1}",
+  'piu' => 'Pintupi-Luritja',
+  'ykk' => 'Yakaikeke',
+  'suj' => 'Shubi',
+  'mwk' => 'Kita Maninkakan',
+  'bbr' => 'Girawa',
+  'hat' => 'Haitian',
+  'sdp' => 'Sherdukpen',
+  'slq' => 'Salchuq',
+  'nmk' => 'Namakura',
+  'bzk' => 'Nicaragua Creole English',
+  'okx' => 'Okpe (Northwestern Edo)',
+  'gju' => 'Gujari',
+  'isl' => 'Icelandic',
+  'mnl' => 'Tiale',
+  'cwt' => 'Kuwaataay',
+  'sig' => 'Paasaal',
+  'gma' => 'Gambera',
+  'iin' => 'Thiin',
+  'kgr' => 'Abun',
+  'mrc' => 'Maricopa',
+  'vnp' => 'Vunapu',
+  'obu' => 'Obulom',
+  'row' => 'Dela-Oenale',
+  'xtt' => 'Tacahua Mixtec',
+  'lul' => 'Olu\'bo',
+  'zpy' => 'Mazaltepec Zapotec',
+  'zuy' => 'Zumaya',
+  'xsy' => 'Saisiyat',
+  'mae' => 'Bo-Rukul',
+  'mqa' => 'Maba (Indonesia)',
+  'gox' => 'Gobu',
+  'cba' => 'Chibchan languages',
+  'dml' => 'Dameli',
+  'ayq' => 'Ayi (Papua New Guinea)',
+  'zmn' => 'Mbangwe',
+  'pbl' => 'Mak (Nigeria)',
+  'bko' => 'Kwa\'',
+  'bwx' => 'Bu-Nao Bunu',
+  'igw' => 'Igwe',
+  'len' => 'Lenca',
+  'kfx' => 'Kullu Pahari',
+  'mzx' => 'Mawayana',
+  'hmo' => 'Hiri Motu',
+  'ckm' => 'Chakavian',
+  'nrb' => 'Nara',
+  'byn' => 'Bilin',
+  'gau' => 'Mudhili Gadaba',
+  'sys' => 'Sinyar',
+  'eri' => 'Ogea',
+  'jmd' => 'Yamdena',
+  'grz' => 'Guramalum',
+  'nbw' => 'Southern Ngbandi',
+  'kro' => 'Kru languages',
+  'xam' => "\x{1c0}Xam",
+  'snn' => 'Siona',
+  'sqs' => 'Sri Lankan Sign Language',
+  'zaq' => "Alo\x{e1}pam Zapotec",
+  'kny' => 'Kanyok',
+  'csq' => 'Croatia Sign Language',
+  'bef' => 'Benabena',
+  'xmx' => 'Maden',
+  'msg' => 'Moraid',
+  'bns' => 'Bundeli',
+  'bqn' => 'Bulgarian Sign Language',
+  'ing' => 'Degexit\'an',
+  'lix' => 'Liabuku',
+  'zrs' => 'Mairasi',
+  'gnc' => 'Guanche',
+  'cum' => 'Cumeral',
+  'lli' => 'Teke-Laali',
+  'ldk' => 'Leelau',
+  'pcc' => 'Bouyei',
+  'top' => 'Papantla Totonac',
+  'bvm' => 'Bamunka',
+  'szb' => 'Ngalum',
+  'mej' => 'Meyah',
+  'ida' => 'Idakho-Isukha-Tiriki',
+  'buo' => 'Terei',
+  'bpo' => 'Anasi',
+  'pbz' => 'Palu',
+  'tai' => 'Tai languages',
+  'wyb' => 'Wangaaybuwan-Ngiyambaa',
+  'awm' => 'Arawum',
+  'wep' => 'Westphalien',
+  'mya' => 'Burmese',
+  'abg' => 'Abaga',
+  'lkl' => 'Laeko-Libuat',
+  'tcm' => 'Tanahmerah',
+  'luz' => 'Southern Luri',
+  'etb' => 'Etebi',
+  'kxw' => 'Konai',
+  'trf' => 'Trinidadian Creole English',
+  'nti' => 'Natioro',
+  'bsp' => 'Baga Sitemu',
+  'khu' => 'Nkhumbi',
+  'yis' => 'Yis',
+  'umm' => 'Umon',
+  'wnk' => 'Wanukaka',
+  'non' => 'Old Norse',
+  'mnz' => 'Moni',
+  'sbv' => 'Sabine',
+  'lth' => 'Thur',
+  'klw' => 'Tado',
+  'dra' => 'Dravidian languages',
+  'yuk' => 'Yuki',
+  'xrd' => 'Gundungurra',
+  'skj' => 'Seke (Nepal)',
+  'ypk' => 'Yupik languages',
+  'esh' => 'Eshtehardi',
+  'tji' => 'Northern Tujia',
+  'akt' => 'Akolet',
+  'ych' => 'Chesu',
+  'dtt' => 'Toro Tegu Dogon',
+  'lce' => 'Loncong',
+  'lil' => 'Lillooet',
+  'mzz' => 'Maiadomu',
+  'wbr' => 'Wagdi',
+  'grx' => 'Guriaso',
+  'kar' => 'Karen languages',
+  'lsn' => 'Tibetan Sign Language',
+  'mqd' => 'Madang',
+  'syk' => 'Sukur',
+  'xle' => 'Lemnian',
+  'rbb' => 'Rumai Palaung',
+  'cbd' => 'Carijona',
+  'apv' => 'Alapmunte',
+  'plf' => 'Central Malayo-Polynesian languages',
+  'auv' => 'Auvergnat',
+  'xml' => 'Malaysian Sign Language',
+  'xht' => 'Hattic',
+  'bah' => 'Bahamas Creole English',
+  'nob' => "Norwegian Bokm\x{e5}l",
+  'lwo' => 'Luwo',
+  'jma' => 'Dima',
+  'vid' => 'Vidunda',
+  'sdf' => 'Sarli',
+  'hav' => 'Havu',
+  'goz' => 'Gozarkhani',
+  'fum' => 'Fum',
+  'une' => 'Uneme',
+  'etn' => 'Eton (Vanuatu)',
+  'kfz' => "Koromf\x{e9}",
+  'koo' => 'Konzo',
+  'bwz' => 'Bwisi',
+  'yry' => 'Yarluyandi',
+  'axk' => 'Yaka (Central African Republic)',
+  'lbu' => 'Labu',
+  'ggu' => 'Gagu',
+  'ait' => 'Arikem',
+  'dhv' => 'Dehu',
+  'tfn' => 'Tanaina',
+  'sij' => 'Numbami',
+  'ppu' => 'Papora',
+  'kjr' => 'Kurudu',
+  'bzs' => 'Brazilian Sign Language',
+  'nms' => 'Letemboi',
+  'puu' => 'Punu',
+  'hoj' => 'Hadothi',
+  'xtv' => 'Thawa',
+  'kzy' => 'Kango (Tshopo District)',
+  'szn' => 'Sula',
+  'alk' => 'Alak',
+  'imy' => 'Milyan',
+  'mfy' => 'Mayo',
+  'bjh' => 'Bahinemo',
+  'jau' => 'Yaur',
+  'mws' => 'Mwimbi-Muthambi',
+  'kmg' => "K\x{e2}te",
+  'adi' => 'Adi',
+  'gmd' => "M\x{e1}ghd\x{ec}",
+  'bqb' => 'Bagusa',
+  'snb' => 'Sebuyau',
+  'sug' => 'Suganga',
+  'mge' => 'Mango',
+  'spg' => 'Sian',
+  'kcq' => 'Kamo',
+  'moc' => "Mocov\x{ed}",
+  'djm' => 'Jamsay Dogon',
+  'lhh' => 'Laha (Indonesia)',
+  'ktu' => 'Kituba (Democratic Republic of Congo)',
+  'tof' => 'Gizrra',
+  'skg' => 'Sakalava Malagasy',
+  'nhi' => "Zacatl\x{e1}n-Ahuacatl\x{e1}n-Tepetzintla Nahuatl",
+  'yus' => 'Chan Santa Cruz Maya',
+  'nrn' => 'Norn',
+  'bep' => 'Besoa',
+  'byb' => 'Bikya',
+  'tgi' => 'Lawunuia',
+  'odk' => 'Od',
+  'leb' => 'Lala-Bisa',
+  'zmb' => 'Zimba',
+  'yik' => 'Dongshanba Lalo',
+  'pku' => 'Paku',
+  'uru' => 'Urumi',
+  'mdo' => 'Southwest Gbaya',
+  'drd' => 'Darmiya',
+  'ghr' => 'Ghera',
+  'xra' => "Krah\x{f4}",
+  'xgm' => 'Dharumbal',
+  'cni' => "Ash\x{e1}ninka",
+  'doa' => 'Dom',
+  'xod' => 'Kokoda',
+  'pwr' => 'Powari',
+  'scw' => 'Sha',
+  'yno' => 'Yong',
+  'iyo' => 'Mesaka',
+  'okl' => 'Old Kentish Sign Language',
+  'swa' => 'Swahili (macrolanguage)',
+  'mnx' => 'Manikion',
+  'gol' => 'Gola',
+  'bsf' => 'Bauchi',
+  'amh' => 'Amharic',
+  'dam' => 'Damakawa',
+  'meg' => 'Mea',
+  'sbt' => 'Kimki',
+  'bwl' => 'Bwela',
+  'mlm' => 'Mulam',
+  'vka' => 'Kariyarra',
+  'dmx' => 'Dema',
+  'kfl' => 'Kung',
+  'zos' => "Francisco Le\x{f3}n Zoque",
+  'lpx' => 'Lopit',
+  'cim' => 'Cimbrian',
+  'abj' => 'Aka-Bea',
+  'trp' => 'Kok Borok',
+  'avl' => 'Eastern Egyptian Bedawi Arabic',
+  'bio' => 'Nai',
+  'xmz' => 'Mori Bawah',
+  'mxm' => 'Meramera',
+  'kdc' => 'Kutu',
+  'akv' => 'Akhvakh',
+  'idd' => 'Ede Idaca',
+  'inj' => 'Jungle Inga',
+  'msj' => 'Ma (Democratic Republic of Congo)',
+  'sqk' => 'Albanian Sign Language',
+  'mzl' => "Mazatl\x{e1}n Mixe",
+  'yea' => 'Ravula',
+  'liz' => 'Libinza',
+  'bnk' => 'Bierebo',
+  'myd' => 'Maramba',
+  'ysd' => 'Samatao',
+  'bjj' => 'Kanauji',
+  'crx' => 'Carrier',
+  'gbd' => 'Karajarri',
+  'wag' => 'Wa\'ema',
+  'lom' => 'Loma (Liberia)',
+  'igs' => 'Interglossa',
+  'bgg' => 'Bugun',
+  'vto' => 'Vitou',
+  'kbg' => 'Khamba',
+  'bcb' => 'Bainouk-Samik',
+  'mri' => 'Maori',
+  'mhn' => "M\x{f3}cheno",
+  'kwm' => 'Kwambi',
+  'iby' => 'Ibani',
+  'bfm' => 'Mmen',
+  'unp' => 'Worora',
+  'kqq' => 'Krenak',
+  'bov' => 'Tuwuli',
+  'coz' => 'Chochotec',
+  'lja' => 'Golpa',
+  'any' => 'Anyin',
+  'duu' => 'Drung',
+  'lcp' => 'Western Lawa',
+  'nbs' => 'Namibian Sign Language',
+  'yab' => 'Yuhup',
+  'hoh' => "Hoby\x{f3}t",
+  'thy' => 'Tha',
+  'phv' => 'Pahlavani',
+  'xlp' => 'Lepontic',
+  'sih' => 'Zire',
+  'tet' => 'Tetum',
+  'lmu' => 'Lamenu',
+  'ngy' => 'Tibea',
+  'syw' => 'Kagate',
+  'dyi' => 'Djimini Senoufo',
+  'uss' => 'us-Saare',
+  'alw' => "Alaba-K\x{2019}abeena",
+  'tla' => 'Southwestern Tepehuan',
+  'baj' => 'Barakai',
+  'shz' => 'Syenara Senoufo',
+  'orm' => 'Oromo',
+  'wrv' => 'Waruna',
+  'mgp' => 'Eastern Magar',
+  'kkt' => 'Koi',
+  'enl' => 'Enlhet',
+  'laa' => 'Southern Subanen',
+  'rmb' => 'Rembarrnga',
+  'tdr' => 'Todrah',
+  'tnu' => 'Tay Khang',
+  'txa' => 'Tombonuo',
+  'maf' => 'Mafa',
+  'psy' => 'Piscataway',
+  'tsv' => 'Tsogo',
+  'brt' => 'Bitare',
+  'jkm' => 'Mobwa Karen',
+  'mcd' => 'Sharanahua',
+  'ptt' => 'Enrekang',
+  'nlg' => 'Gela',
+  'ndu' => 'Dugun',
+  'jum' => 'Jumjum',
+  'nnr' => 'Narungga',
+  'vmm' => 'Mitlatongo Mixtec',
+  'inh' => 'Ingush',
+  'msh' => 'Masikoro Malagasy',
+  'nem' => 'Nemi',
+  'agr' => 'Aguaruna',
+  'niq' => 'Nandi',
+  'sck' => 'Sadri',
+  'tac' => 'Lowland Tarahumara',
+  'kxs' => 'Kangjia',
+  'qva' => 'Ambo-Pasco Quechua',
+  'nyv' => 'Nyulnyul',
+  'kut' => 'Kutenai',
+  'nxg' => 'Ngad\'a',
+  'kpt' => 'Karata',
+  'xcc' => 'Camunic',
+  'hei' => 'Heiltsuk',
+  'amj' => 'Amdang',
+  'smt' => 'Simte',
+  'bee' => 'Byangsi',
+  'shl' => 'Shendu',
+  'pci' => 'Duruwa',
+  'pmx' => 'Poumei Naga',
+  'bly' => 'Notre',
+  'sjo' => 'Xibe',
+  'gni' => 'Gooniyandi',
+  'kls' => 'Kalasha',
+  'abh' => 'Tajiki Arabic',
+  'pam' => 'Pampanga',
+  'llc' => 'Lele (Guinea)',
+  'chr' => 'Cherokee',
+  'mtb' => 'Anyin Morofo',
+  'eya' => 'Eyak',
+  'bha' => 'Bharia',
+  'dwr' => 'Dawro',
+  'gim' => 'Gimi (Eastern Highlands)',
+  'prd' => 'Parsi-Dari',
+  'aro' => 'Araona',
+  'geq' => 'Geme',
+  'poa' => 'Eastern Pokomam',
+  'col' => 'Columbia-Wenatchi',
+  'btd' => 'Batak Dairi',
+  'fau' => 'Fayu',
+  'ltg' => 'Latgalian',
+  'sor' => 'Somrai',
+  'kvx' => 'Parkari Koli',
+  'bnw' => 'Bisis',
+  'hir' => "Himarim\x{e3}",
+  'fox' => 'Formosan languages',
+  'cdy' => 'Chadong',
+  'qur' => 'Yanahuanca Pasco Quechua',
+  'sao' => 'Sause',
+  'kyq' => 'Kenga',
+  'tre' => 'East Tarangan',
+  'esg' => 'Aheri Gondi',
+  'kiv' => 'Kimbu',
+  'ogc' => 'Ogbah',
+  'sdm' => 'Semandang',
+  'fuf' => 'Pular',
+  'not' => 'Nomatsiguenga',
+  'era' => 'Eravallan',
+  'seu' => 'Serui-Laut',
+  'tlc' => 'Yecuatla Totonac',
+  'pxm' => 'Quetzaltepec Mixe',
+  'nag' => 'Naga Pidgin',
+  'dsh' => 'Daasanach',
+  'bkq' => "Bakair\x{ed}",
+  'ayo' => 'Ayoreo',
+  'asx' => 'Muratayak',
+  'dtb' => 'Labuk-Kinabatangan Kadazan',
+  'bay' => 'Batuley',
+  'hmq' => 'Eastern Qiandong Miao',
+  'peg' => 'Pengo',
+  'wgy' => 'Warrgamay',
+  'akn' => 'Amikoana',
+  'ybo' => 'Yabong',
+  'txc' => 'Tsetsaut',
+  'kas' => 'Kashmiri',
+  'mbx' => 'Mari (East Sepik Province)',
+  'lac' => 'Lacandon',
+  'plm' => 'Palembang',
+  'aez' => 'Aeka',
+  'wbs' => 'West Bengal Sign Language',
+  'mqi' => 'Mariri',
+  'bmw' => 'Bomwali',
+  'tye' => 'Kyanga',
+  'cbi' => 'Chachi',
+  'krq' => 'Krui',
+  'lre' => 'Laurentian',
+  'mku' => 'Konyanka Maninka',
+  'sxo' => 'Sorothaptic',
+  'ywu' => 'Wumeng Nasu',
+  'ikv' => 'Iku-Gora-Ankwa',
+  'add' => 'Lidzonka',
+  'anj' => 'Anor',
+  'ztx' => 'Zaachila Zapotec',
+  'pdo' => 'Padoe',
+  'rwa' => 'Rawo',
+  'ykr' => 'Yekora',
+  'bqt' => 'Bamukumbit',
+  'mwr' => 'Marwari',
+  'pnx' => 'Phong-Kniang',
+  'kzh' => 'Kenuzi-Dongola',
+  'ngj' => 'Ngie',
+  'fip' => 'Fipa',
+  'slo' => 'Slovak',
+  'vnm' => 'Vinmavis',
+  'bjy' => 'Bayali',
+  'mfh' => 'Matal',
+  'aib' => 'Ainu (China)',
+  'bbk' => 'Babanki',
+  'ver' => 'Mom Jango',
+  'bzr' => 'Biri',
+  'ttg' => 'Tutong',
+  'nmr' => 'Nimbari',
+  'kjs' => 'East Kewa',
+  'kgk' => "Kaiw\x{e1}",
+  'gke' => 'Ndai',
+  'let' => 'Lesing-Gelimi',
+  'dhn' => 'Dhanki',
+  'oym' => 'Wayampi',
+  'zmt' => 'Maringarr',
+  'gue' => 'Gurindji',
+  'rug' => 'Roviana',
+  'bhc' => 'Biga',
+  'dri' => 'C\'Lela',
+  'gpe' => 'Ghanaian Pidgin English',
+  'xoi' => 'Kominimung',
+  'tmu' => 'Iau',
+  'cdj' => 'Churahi',
+  'tja' => 'Tajuasohn',
+  'ajw' => 'Ajawa',
+  'wem' => 'Weme Gbe',
+  'ghs' => 'Guhu-Samane',
+  'szv' => 'Isu (Fako Division)',
+  'poc' => 'Poqomam',
+  'wlg' => 'Kunbarlang',
+  'xgf' => "Gabrielino-Fernande\x{f1}o",
+  'xtn' => 'Northern Tlaxiaco Mixtec',
+  'tcp' => 'Tawr Chin',
+  'evh' => 'Uvbie',
+  'wdu' => 'Wadjigu',
+  'xap' => 'Apalachee',
+  'ylb' => 'Yaleba',
+  'yur' => 'Yurok',
+  'djf' => 'Djangun',
+  'old' => 'Mochi',
+  'cup' => "Cupe\x{f1}o",
+  'muu' => 'Yaaku',
+  'cpp' => 'Creoles and pidgins, Portuguese-based',
+  'nhd' => "Chirip\x{e1}",
+  'mpu' => "Makur\x{e1}p",
+  'tgd' => 'Ciwogai',
+  'byt' => 'Berti',
+  'ele' => 'Elepi',
+  'eml' => 'Emiliano-Romagnolo',
+  'tom' => 'Tombulu',
+  'bvp' => 'Bumang',
+  'amy' => 'Ami',
+  'ilk' => 'Ilongot',
+  'jie' => 'Jilbe',
+  'ael' => 'Ambele',
+  'zao' => 'Ozolotepec Zapotec',
+  'cso' => 'Sochiapam Chinantec',
+  'idi' => 'Idi',
+  'nse' => 'Nsenga',
+  'ost' => 'Osatu',
+  'lnu' => 'Longuda',
+  'apn' => "Apinay\x{e9}",
+  'aun' => 'Molmo One',
+  'qvc' => 'Cajamarca Quechua',
+  'taa' => 'Lower Tanana',
+  'blj' => 'Bolongan',
+  'yva' => 'Yawa',
+  'aaw' => 'Solong',
+  'mxf' => 'Malgbe',
+  'oty' => 'Old Tamil',
+  'lsv' => 'Sivia Sign Language',
+  'ncn' => 'Nauna',
+  'myi' => 'Mina (India)',
+  'xww' => 'Wemba Wemba',
+  'mvg' => "Yucua\x{f1}e Mixtec",
+  'sbb' => 'Simbo',
+  'zor' => "Ray\x{f3}n Zoque",
+  'buq' => 'Brem',
+  'bpq' => 'Banda Malay',
+  'azg' => 'San Pedro Amuzgos Amuzgo',
+  'lla' => 'Lala-Roba',
+  'bsm' => 'Busami',
+  'cycl' => 'Cyc Language',
+  'srw' => 'Serua',
+  'ump' => 'Umpila',
+  'bxj' => 'Bayungu',
+  'daf' => 'Dan',
+  'mlf' => 'Mal',
+  'huw' => 'Hukumina',
+  'gdh' => 'Gadjerawang',
+  'han' => 'Hangaza',
+  'gza' => 'Ganza',
+  'mfj' => 'Mefele',
+  'rao' => 'Rao',
+  'xnz' => 'Kenzi',
+  'upi' => 'Umeda',
+  'yog' => 'Yogad',
+  'tvt' => 'Tutsa Naga',
+  'yat' => 'Yambeta',
+  'nzk' => 'Nzakara',
+  'bmk' => 'Ghayavi',
+  'nbr' => 'Numana',
+  'typ' => 'Thaypan',
+  'teb' => 'Tetete',
+  'ibh' => 'Bih',
+  'mjm' => 'Medebur',
+  'ksl' => 'Kumalu',
+  'kwf' => 'Kwara\'ae',
+  'anh' => 'Nend',
+  'ror' => 'Rongga',
+  'gbi' => 'Galela',
+  'hkk' => 'Hunjara-Kaina Ke',
+  'bff' => 'Bofi',
+  'lgi' => 'Lengilu',
+  'bct' => 'Bendi',
+  'thh' => 'Northern Tarahumara',
+  'moa' => 'Mwan',
+  'hoy' => 'Holiya',
+  'kin' => 'Kinyarwanda',
+  'mrd' => 'Western Magar',
+  'siy' => 'Sivandi',
+  'ddo' => 'Dido',
+  'lof' => 'Logol',
+  'kzj' => 'Coastal Kadazan',
+  'wob' => "W\x{e8} Northern",
+  'ngh' => "N\x{1c1}ng",
+  'rmt' => 'Domari',
+  'tiz' => 'Tai Hongjin',
+  'ccx' => 'Northern Zhuang',
+  'cmi' => "Ember\x{e1}-Cham\x{ed}",
+  'oji' => 'Ojibwa',
+  'wms' => 'Wambon',
+  'zpg' => 'Guevea De Humboldt Zapotec',
+  'bbw' => 'Baba',
+  'brb' => 'Lave',
+  'ymo' => 'Yangum Mon',
+  'nyn' => 'Nyankole',
+  'kgw' => 'Karon Dori',
+  'mmx' => 'Madak',
+  'gkp' => 'Guinea Kpelle',
+  'dlm' => 'Dalmatian',
+  'mci' => 'Mese',
+  'tds' => 'Doutai',
+  'deg' => 'Degema',
+  'mam' => 'Mam',
+  'xya' => 'Yaygir',
+  'dyd' => 'Dyugun',
+  'cke' => 'Eastern Cakchiquel',
+  'dzl' => 'Dzalakha',
+  'nko' => 'Nkonya',
+  'psh' => 'Southwest Pashai',
+  'tux' => "Tuxin\x{e1}wa",
+  'nwx' => 'Middle Newar',
+  'tpx' => 'Acatepec Me\'phaa',
+  'iro' => 'Iroquoian languages',
+  'kkb' => 'Kwerisa',
+  'fie' => 'Fyer',
+  'jmc' => 'Machame',
+  'chs' => 'Chumash',
+  'kpb' => 'Mullu Kurumba',
+  'wrn' => 'Warnang',
+  'kub' => 'Kutep',
+  'kng' => 'Koongo',
+  'hed' => "Herd\x{e9}",
+  'klr' => 'Khaling',
+  'xae' => 'Aequian',
+  'msy' => 'Aruamu',
+  'zwa' => 'Zay',
+  'xqa' => 'Karakhanid',
+  'paf' => "Paranaw\x{e1}t",
+  'elp' => 'Elpaputih',
+  'bxh' => 'Buhutu',
+  'smb' => 'Simbari',
+  'pcd' => 'Picard',
+  'bve' => 'Berau Malay',
+  'tkx' => 'Tangko',
+  'nuo' => "Ngu\x{f4}n",
+  'two' => 'Tswapong',
+  'gdj' => 'Gurdjar',
+  'gnd' => 'Zulgo-Gemzek',
+  'npo' => 'Pochuri Naga',
+  'mtt' => 'Mota',
+  'cpe' => "Creoles and pidgins, English\x{2011}based",
+  'gup' => 'Gunwinggu',
+  'tsn' => 'Tswana',
+  'kda' => 'Worimi',
+  'kxr' => 'Koro (Papua New Guinea)',
+  'nvm' => 'Namiae',
+  'ags' => 'Esimbi',
+  'blh' => 'Kuwaa',
+  'til' => 'Tillamook',
+  'tce' => 'Southern Tutchone',
+  'aby' => 'Aneme Wake',
+  'nqn' => 'Nen',
+  'vmf' => "Mainfr\x{e4}nkisch",
+  'nns' => 'Ningye',
+  'zkg' => 'Koguryo',
+  'yec' => 'Yeniche',
+  'nef' => 'Nefamese',
+  'awe' => "Awet\x{ed}",
+  'xwk' => 'Wangkumara',
+  'srk' => 'Serudung Murut',
+  'qus' => 'Santiago del Estero Quichua',
+  'mhv' => 'Arakanese',
+  'ksz' => 'Kodaku',
+  'ull' => 'Ullatan',
+  'jna' => 'Jangshung',
+  'gso' => 'Southwest Gbaya',
+  'huk' => 'Hulung',
+  'doc' => 'Northern Dong',
+  'nsp' => 'Nepalese Sign Language',
+  'gwn' => 'Gwandara',
+  'sos' => 'Seeku',
+  'ilw' => 'Talur',
+  'dge' => 'Degenan',
+  'qxt' => 'Santa Ana de Tusi Pasco Quechua',
+  'cdh' => 'Chambeali',
+  'bon' => 'Bine',
+  'pri' => "Paic\x{ee}",
+  'swc' => 'Congo Swahili',
+  'uki' => 'Kui (India)',
+  'aak' => 'Ankave',
+  'tbu' => 'Tubar',
+  'dws' => 'Dutton World Speedwords',
+  'kex' => 'Kukna',
+  'bti' => 'Burate',
+  'lfn' => 'Lingua Franca Nova',
+  'jdg' => 'Jadgali',
+  'tqp' => 'Tomoip',
+  'zbt' => 'Batui',
+  'phn' => 'Phoenician',
+  'txi' => 'Ikpeng',
+  'yav' => 'Yangben',
+  'lai' => 'Lambya',
+  'lcm' => 'Tungag',
+  'tuz' => 'Turka',
+  'tkl' => 'Tokelau',
+  'tpz' => 'Tinputz',
+  'bob' => 'Aweer',
+  'zlq' => 'Liuqian Zhuang',
+  'cbc' => 'Carapana',
+  'nah' => 'Nahuatl languages',
+  'gwb' => 'Gwa',
+  'iar' => 'Purari',
+  'xeg' => "\x{1c1}Xegwi",
+  'mqc' => 'Mangole',
+  'tli' => 'Tlingit',
+  'bcv' => 'Shoo-Minda-Nye',
+  'peh' => 'Bonan',
+  'tix' => 'Southern Tiwa',
+  'dya' => 'Dyan',
+  'lop' => 'Lopa',
+  'jbi' => 'Badjiri',
+  'zpj' => 'Quiavicuzas Zapotec',
+  'tdk' => 'Tambas',
+  'mmz' => 'Mabaale',
+  'xxm' => 'Minkin',
+  'hch' => 'Huichol',
+  'xsj' => 'Subi',
+  'vic' => 'Virgin Islands Creole English',
+  'kwp' => 'Kodia',
+  'fue' => 'Borgu Fulfulde',
+  'unm' => 'Unami',
+  'fpe' => 'Fernando Po Creole English',
+  'bfp' => 'Beba',
+  'lji' => 'Laiyolo',
+  'gyl' => 'Gayil',
+  'jkp' => 'Paku Karen',
+  'njh' => 'Lotha Naga',
+  'rmv' => 'Romanova',
+  'kzg' => 'Kikai',
+  'kqo' => 'Eastern Krahn',
+  'hks' => 'Hong Kong Sign Language',
+  'tsb' => 'Tsamai',
+  'wbw' => 'Woi',
+  'mfg' => 'Mogofin',
+  'bms' => 'Bilma Kanuri',
+  'nzs' => 'New Zealand Sign Language',
+  'kel' => 'Kela (Democratic Republic of Congo)',
+  'tth' => 'Upper Ta\'oih',
+  'kmy' => 'Koma',
+  'smn' => 'Inari Sami',
+  'xdo' => 'Kwandu',
+  'mra' => 'Mlabri',
+  'mgm' => 'Mambae',
+  'mod' => 'Mobilian',
+  'kaw' => 'Kawi',
+  'rkh' => 'Rakahanga-Manihiki',
+  'suy' => "Suy\x{e1}",
+  'kpn' => "Kepkiriw\x{e1}t",
+  'wrb' => 'Waluwarra',
+  'spy' => 'Sabaot',
+  'kun' => 'Kunama',
+  'dwk' => 'Dawik Kui',
+  'aas' => "Aas\x{e1}x",
+  'itu' => 'Itutang',
+  'sky' => 'Sikaiana',
+  'hno' => 'Northern Hindko',
+  'kkn' => 'Kon Keu',
+  'dje' => 'Zarma',
+  'mtv' => 'Asaro\'o',
+  'ruh' => 'Ruga',
+  'sok' => 'Sokoro',
+  'arq' => 'Algerian Arabic',
+  'hik' => 'Seit-Kaitetu',
+  'geo' => 'Georgian',
+  'kez' => 'Kukele',
+  'jnd' => 'Jandavra',
+  'wlh' => 'Welaun',
+  'pap' => 'Papiamento',
+  'bhi' => 'Bhilali',
+  'drc' => 'Minderico',
+  'quk' => 'Chachapoyas Quechua',
+  'jup' => "Hupd\x{eb}",
+  'srs' => 'Sarsi',
+  'ptn' => 'Patani',
+  'xoc' => 'O\'chi\'chi\'',
+  'hps' => 'Hawai\'i Sign Language (HSL)',
+  'hus' => 'Huastec',
+  'vmp' => 'Soyaltepec Mazatec',
+  'nep' => 'Nepali (macrolanguage)',
+  'brn' => 'Boruca',
+  'nyb' => 'Nyangbo',
+  'ksx' => 'Kedang',
+  'saq' => 'Samburu',
+  'poi' => 'Highland Popoluca',
+  'hlt' => 'Matu Chin',
+  'guf' => 'Gupapuyngu',
+  'kyo' => 'Kelon',
+  'mey' => 'Hassaniyya',
+  'hea' => 'Northern Qiandong Miao',
+  'won' => 'Wongo',
+  'mle' => 'Manambu',
+  'mht' => 'Mandahuaca',
+  'mml' => 'Man Met',
+  'kib' => 'Koalib',
+  'nnk' => 'Nankina',
+  'dae' => 'Duupa',
+  'nio' => 'Nganasan',
+  'wti' => 'Berta',
+  'ccl' => 'Cutchi-Swahili',
+  'cie' => 'Cineni',
+  'pca' => "Santa In\x{e9}s Ahuatempan Popoloca",
+  'scr' => 'Croatian',
+  'cts' => 'Northern Catanduanes Bikol',
+  'agk' => 'Isarog Agta',
+  'pww' => 'Pwo Northern Karen',
+  'gna' => 'Kaansa',
+  'kdd' => 'Yankunytjatjara',
+  'knj' => 'Western Kanjobal',
+  'mxe' => 'Mele-Fila',
+  'idc' => 'Idon',
+  'mvh' => 'Mulgi',
+  'gip' => 'Gimi (West New Britain)',
+  'ten' => 'Tama (Colombia)',
+  'chk' => 'Chuukese',
+  'myc' => 'Mayeka',
+  'ysc' => 'Yassic',
+  'nsf' => 'Northwestern Nisu',
+  'qvi' => 'Imbabura Highland Quichua',
+  'gdg' => 'Ga\'dang',
+  'tkz' => 'Takua',
+  'tpl' => 'Tlacoapa Me\'phaa',
+  'tul' => 'Tula',
+  'glu' => 'Gula (Chad)',
+  'loe' => 'Saluan',
+  'gbc' => 'Garawa',
+  'kgs' => 'Kumbainggar',
+  'hab' => 'Hanoi Sign Language',
+  'bgy' => 'Benggoi',
+  'ada' => 'Adangme',
+  'cwb' => 'Maindo',
+  'ttj' => 'Tooro',
+  'way' => 'Wayana',
+  'kwe' => 'Kwerba',
+  'zhx' => 'Chinese (family)',
+  'nov' => 'Novial',
+  'kby' => 'Manga Kanuri',
+  'sbn' => 'Sindhi Bhil',
+  'bfe' => 'Betaf',
+  'iwm' => 'Iwam',
+  'wmw' => 'Mwani',
+  'kjk' => 'Highland Konjo',
+  'bbs' => 'Bakpinka',
+  'ibg' => 'Ibanag',
+  'ncb' => 'Central Nicobarese',
+  'oac' => 'Oroch',
+  'alr' => 'Alutor',
+  'apb' => 'Sa\'a',
+  'ang' => 'Old English (ca. 450-1100)',
+  'aub' => 'Alugu',
+  'emx' => 'Erromintxela',
+  'njj' => 'Njen',
+  'ngg' => 'Ngbaka Manza',
+  'pnz' => 'Pana (Central African Republic)',
+  'kco' => 'Kinalakna',
+  'bqv' => 'Koro Wachi',
+  'pej' => 'Northern Pomo',
+  'ssu' => 'Susuami',
+  'wbk' => 'Waigali',
+  'ore' => "Orej\x{f3}n",
+  'nrt' => 'Northern Kalapuya',
+  'zuh' => 'Tokano',
+  'mbz' => 'Amoltepec Mixtec',
+  'snv' => 'Sa\'ban',
+  'zph' => 'Totomachapan Zapotec',
+  'syr' => 'Syriac',
+  'ckf' => 'Southern Cakchiquel',
+  'xsh' => 'Shamang',
+  'aex' => 'Amerax',
+  'jmi' => 'Jimi (Nigeria)',
+  'ikt' => 'Inuinnaqtun',
+  'deh' => 'Dehwari',
+  'kak' => 'Kalanguya',
+  'yln' => 'Langnian Buyang',
+  'xtb' => 'Chazumba Mixtec',
+  'psg' => 'Penang Sign Language',
+  'ojc' => 'Central Ojibwa',
+  'cmc' => 'Chamic languages',
+  'naj' => 'Nalu',
+  'rnn' => 'Roon',
+  'asz' => 'As',
+  'mcc' => 'Bitur',
+  'koq' => 'Kota (Gabon)',
+  'quw' => 'Tena Lowland Quichua',
+  'vme' => 'East Masela',
+  'mvj' => "Todos Santos Cuchumat\x{e1}n Mam",
+  'knh' => 'Kayan River Kenyah',
+  'nee' => "N\x{ea}l\x{ea}mwa-Nixumwak",
+  'nly' => 'Nyamal',
+  'tcf' => 'Malinaltepec Me\'phaa',
+  'asl' => 'Asilulu',
+  'jhs' => 'Jhankot Sign Language',
+  'tad' => 'Tause',
+  'lev' => 'Lamma',
+  'tft' => 'Ternate',
+  'azj' => 'North Azerbaijani',
+  'zmv' => 'Mbariman-Gudhinma',
+  'yei' => 'Yeni',
+  'bxg' => 'Bangala',
+  'ain' => 'Ainu (Japan)',
+  'rys' => 'Yaeyama',
+  'cpf' => "Creoles and pidgins, French\x{2011}based",
+  'biq' => 'Bipi',
+  'dww' => 'Dawawa',
+  'hvc' => 'Haitian Vodoun Culture Language',
+  'byv' => 'Medumba',
+  'vki' => 'Ija-Zuba',
+  'bvf' => 'Boor',
+  'hiw' => 'Hiw',
+  'bdu' => 'Oroko',
+  'bnr' => 'Butmas-Tur',
+  'pqa' => 'Pa\'a',
+  'sow' => 'Sowanda',
+  'lld' => 'Ladin',
+  'pae' => 'Pagibete',
+  'blg' => 'Balau',
+  'ils' => 'International Sign',
+  'sqr' => 'Siculo Arabic',
+  'bem' => 'Bemba (Zambia)',
+  'zkh' => 'Khorezmian',
+  'mbl' => "Maxakal\x{ed}",
+  'gie' => "Ga\x{253}ogbo",
+  'gcl' => 'Grenadian Creole English',
+  'cna' => 'Changthang',
+  'doi' => 'Dogri (macrolanguage)',
+  'pnl' => 'Paleni',
+  'mxp' => 'Tlahuitoltepec Mixe',
+  'lst' => 'Trinidad and Tobago Sign Language',
+  'xri' => 'Krikati-Timbira',
+  'btc' => 'Bati (Cameroon)',
+  'chw' => 'Chuwabu',
+  'onu' => 'Unua',
+  'swi' => 'Sui',
+  'prc' => 'Parachi',
+  'akb' => 'Batak Angkola',
+  'dtn' => "Daats\x{2bc}i\x{301}in",
+  'ztl' => "Lapagu\x{ed}a-Guivini Zapotec",
+  'ghk' => 'Geko Karen',
+  'dap' => 'Nisi (India)',
+  'ett' => 'Etruscan',
+  'nnw' => 'Southern Nuni',
+  'mdq' => 'Mbole',
+  'clu' => 'Caluyanun',
+  'mlp' => 'Bargam',
+  'cdg' => 'Chamari',
+  'yir' => 'North Awyu',
+  'ntd' => 'Northern Tidung',
+  'nha' => 'Nhanda',
+  'esy' => 'Eskayan',
+  'ola' => 'Walungge',
+  'ynq' => 'Yendang',
+  'trm' => 'Tregami',
+  'tga' => 'Sagalla',
+  'miu' => 'Cacaloxtepec Mixtec',
+  'agw' => 'Kahua',
+  'cip' => 'Chiapanec',
+  'ige' => 'Igede',
+  'ssb' => 'Southern Sama',
+  'kod' => 'Kodi',
+  'ayi' => 'Leyigha',
+  'kra' => 'Kumhali',
+  'kgm' => "Karip\x{fa}na",
+  'lkj' => 'Remun',
+  'mun' => 'Munda languages',
+  'mpn' => 'Mindiri',
+  'ccy' => 'Southern Zhuang',
+  'maw' => 'Mampruli',
+  'gat' => 'Kenati',
+  'iws' => 'Sepik Iwam',
+  'vnk' => 'Vano',
+  'bwg' => 'Barwe',
+  'kfg' => 'Kudiya',
+  'jav' => 'Javanese',
+  'roe' => 'Ronji',
+  'gog' => 'Gogo',
+  'bbm' => 'Babango',
+  'mmy' => 'Migaama',
+  'hma' => 'Southern Mashan Hmong',
+  'mel' => 'Central Melanau',
+  'ify' => 'Keley-I Kallahan',
+  'nwy' => 'Nottoway-Meherrin',
+  'tpy' => 'Trumai',
+  'ppv' => "Papav\x{f4}",
+  'bka' => 'Kyak',
+  'alf' => 'Alege',
+  'cbo' => 'Izora',
+  'tuy' => 'Tugen',
+  'xtu' => 'Cuyamecalco Mixtec',
+  'obt' => 'Old Breton',
+  'nbe' => 'Konyak Naga',
+  'mqo' => 'Modole',
+  'mzg' => 'Monastic Sign Language',
+  'uta' => 'Otank',
+  'tmn' => 'Taman (Indonesia)',
+  'lbv' => 'Lavatbura-Lamusong',
+  'sth' => 'Shelta',
+  'ybi' => 'Yamphu',
+  'dhu' => 'Dhurga',
+  'grj' => 'Southern Grebo',
+  'hau' => 'Hausa',
+  'fir' => 'Firan',
+  'xdc' => 'Dacian',
+  'kmz' => 'Khorasani Turkish',
+  'mjw' => 'Karbi',
+  'wkd' => 'Wakde',
+  'crh' => 'Crimean Tatar',
+  'mwp' => 'Kala Lagaw Ya',
+  'gmo' => 'Gamo-Gofa-Dawro',
+  'pdi' => 'Pa Di',
+  'skl' => 'Selako',
+  'suz' => 'Sunwar',
+  'hrz' => 'Harzani',
+  'ckr' => 'Kairak',
+  'plk' => 'Kohistani Shina',
+  'okg' => 'Koko Babangk',
+  'ncu' => 'Chumburung',
+  'kqc' => 'Doromu-Koki',
+  'lnn' => 'Lorediakarkar',
+  'apu' => "Apurin\x{e3}",
+  'auu' => 'Auye',
+  'dny' => "Den\x{ed}",
+  'vep' => 'Veps',
+  'sdk' => 'Sos Kundi',
+  'nmp' => 'Nimanbur',
+  'bzp' => 'Kemberano',
+  'six' => 'Sumau',
+  'pit' => 'Pitta Pitta',
+  'izz' => 'Izii',
+  'sli' => 'Lower Silesian',
+  'bsk' => 'Burushaski',
+  'kyc' => 'Kyaka',
+  'ytw' => 'Yout Wam',
+  'wnp' => 'Wanap',
+  'ynd' => 'Yandruwandha',
+  'rxd' => 'Ngardi',
+  'awr' => 'Awera',
+  'kvh' => 'Komodo',
+  'xoo' => "Xukur\x{fa}",
+  'kxe' => 'Kakihum',
+  'dro' => 'Daro-Matu Melanau',
+  'gyy' => 'Gunya',
+  'mnj' => 'Munji',
+  'onb' => 'Lingao',
+  'mdd' => 'Mbum',
+  'aku' => 'Akum',
+  'sul' => 'Surigaonon',
+  'spl' => 'Selepet',
+  'skz' => 'Sekar',
+  'gec' => 'Gboloo Grebo',
+  'bvr' => 'Burarra',
+  'cur' => 'Chhulung',
+  'kml' => 'Tanudan Kalinga',
+  'ilm' => 'Iranun (Malaysia)',
+  'kht' => 'Khamti',
+  'sen' => "Nanerig\x{e9} S\x{e9}noufo",
+  'kle' => 'Kulung (Nepal)',
+  'key' => 'Kupia',
+  'xar' => 'Karami',
+  'bnf' => 'Masiwang',
+  'bes' => 'Besme',
+  'wud' => 'Wudu',
+  'yup' => 'Yukpa',
+  'afh' => 'Afrihili',
+  'ypp' => 'Phupa',
+  'mib' => "Atatl\x{e1}huca Mixtec",
+  'yso' => 'Nisi (China)',
+  'myo' => 'Anfillo',
+  'msx' => 'Moresada',
+  'xmg' => 'Mengaka',
+  'ldp' => 'Tso',
+  'vah' => 'Varhadi-Nagpuri',
+  'llq' => 'Lolak',
+  'ido' => 'Ido',
+  'dgr' => 'Dogrib',
+  'csi' => 'Coast Miwok',
+  'bpa' => 'Daakaka',
+  'bua' => 'Buriat',
+  'urv' => 'Uruava',
+  'bid' => 'Bidiyo',
+  'zai' => 'Isthmus Zapotec',
+  'lig' => 'Ligbi',
+  'wss' => 'Wasa',
+  'nic' => 'Niger-Kordofanian languages',
+  'yif' => 'Ache',
+  'mez' => 'Menominee',
+  'taq' => 'Tamasheq',
+  'umr' => 'Umbugarla',
+  'bdb' => 'Basap',
+  'luj' => 'Luna',
+  'fln' => 'Flinders Island',
+  'abx' => 'Inabaknon',
+  'ywn' => 'Yawanawa',
+  'ktv' => 'Eastern Katu',
+  'trs' => 'Chicahuaxtla Triqui',
+  'mkn' => 'Kupang Malay',
+  'pmh' => "M\x{101}h\x{101}r\x{101}\x{1e63}\x{1e6d}ri Pr\x{101}krit",
+  'zty' => 'Yatee Zapotec',
+  'dit' => 'Dirari',
+  'moq' => 'Mor (Bomberai Peninsula)',
+  'kcc' => 'Lubila',
+  'xpt' => 'Punthamara',
+  'cog' => 'Chong',
+  'nbp' => 'Nnam',
+  'xut' => 'Kuthant',
+  'tyr' => 'Tai Daeng',
+  'lcs' => 'Lisabata-Nuniali',
+  'pny' => 'Pinyin',
+  'xls' => 'Lusitanian',
+  'tnv' => 'Tangchangya',
+  'cfd' => 'Cara',
+  'cat' => 'Catalan',
+  'rai' => 'Ramoaaina',
+  'tsu' => 'Tsou',
+  'bgz' => 'Banggai',
+  'dlk' => 'Dahalik',
+  'waz' => 'Wampur',
+  'mak' => 'Makasar',
+  'ddi' => 'West Goodenough',
+  'bjx' => 'Banao Itneg',
+  'esl' => 'Egypt Sign Language',
+  'crj' => 'Southern East Cree',
+  'rop' => 'Kriol',
+  'oor' => 'Oorlams',
+  'gbo' => 'Northern Grebo',
+  'kbz' => 'Duhwa',
+  'wru' => 'Waru',
+  'phu' => 'Phuan',
+  'att' => 'Pamplona Atta',
+  'tbn' => 'Barro Negro Tunebo',
+  'lmv' => 'Lomaiviti',
+  'mco' => "Coatl\x{e1}n Mixe",
+  'ymi' => 'Moji',
+  'stj' => 'Matya Samo',
+  'bou' => 'Bondei',
+  'asy' => 'Yaosakor Asmat',
+  'xiv' => 'Indus Valley Language',
+  'rji' => 'Raji',
+  'gwu' => 'Guwamu',
+  'nll' => 'Nihali',
+  'duv' => 'Duvle',
+  'cmo' => 'Central Mnong',
+  'bze' => 'Jenaama Bozo',
+  'nme' => 'Mzieme Naga',
+  'grh' => 'Gbiri-Niragu',
+  'omt' => 'Omotik',
+  'nzm' => 'Zeme Naga',
+  'bmm' => 'Northern Betsimisaraka Malagasy',
+  'mby' => 'Memoni',
+  'hba' => 'Hamba',
+  'lkh' => 'Lakha',
+  'mwe' => 'Mwera (Chimwera)',
+  'usp' => 'Uspanteco',
+  'shg' => 'Shua',
+  'iri' => 'Rigwe',
+  'mjk' => 'Matukar',
+  'bax' => 'Bamun',
+  'nki' => 'Thangal Naga',
+  'lrr' => 'Southern Yamphu',
+  'mgs' => 'Manda (Tanzania)',
+  'plw' => 'Brooke\'s Point Palawano',
+  'nxl' => 'South Nuaulu',
+  'aam' => 'Aramanik',
+  'nui' => 'Ngumbi',
+  'npi' => 'Nepali (individual language)',
+  'pbh' => "E'\x{f1}apa Woromaipu",
+  'twi' => 'Twi',
+  'kiu' => 'Kirmanjki (individual language)',
+  'yhs' => "Yan-nha\x{14b}u Sign Language",
+  'jvd' => 'Javindo',
+  'sjd' => 'Kildin Sami',
+  'jei' => 'Yei',
+  'aci' => 'Aka-Cari',
+  'amx' => 'Anmatyerre',
+  'eng' => 'English',
+  'yue' => 'Yue Chinese',
+  'otx' => 'Texcatepec Otomi',
+  'ubr' => 'Ubir',
+  'dbj' => 'Ida\'an',
+  'vrt' => 'Burmbar',
+  'pmj' => 'Southern Pumi',
+  'klp' => 'Kamasa',
+  'kdq' => 'Koch',
+  'srm' => 'Saramaccan',
+  'sga' => 'Old Irish (to 900)',
+  'bsw' => 'Baiso',
+  'nlz' => "Nal\x{f6}go",
+  'hum' => 'Hungana',
+  'vaj' => 'Sekele',
+  'wne' => 'Waneci',
+  'gur' => 'Farefare',
+  'kxp' => 'Wadiyara Koli',
+  'xbg' => 'Bunganditj',
+  'wew' => 'Wejewa',
+  'itb' => 'Binongan Itneg',
+  'kbl' => 'Kanembu',
+  'gva' => 'Guana (Paraguay)',
+  'sad' => 'Sandawe',
+  'scf' => 'San Miguel Creole French',
+  'wal' => 'Wolaytta',
+  'bgl' => 'Bo (Laos)',
+  'tzt' => 'Western Tzutujil',
+  'ctm' => 'Chitimacha',
+  'tqr' => 'Torona',
+  'bto' => 'Rinconada Bikol',
+  'aoa' => 'Angolar',
+  'tow' => 'Jemez',
+  'ard' => 'Arabana',
+  'nyu' => 'Nyungwe',
+  'pro' => "Old Proven\x{e7}al (to 1500)",
+  'ish' => 'Esan',
+  'mnh' => 'Mono (Democratic Republic of Congo)',
+  'ltz' => 'Luxembourgish',
+  'kvj' => 'Psikye',
+  'ndv' => 'Ndut',
+  'xkt' => 'Kantosi',
+  'nsr' => 'Maritime Sign Language',
+  'mgk' => 'Mawes',
+  'iap' => 'Iapama',
+  'otl' => 'Tilapa Otomi',
+  'tnt' => 'Tontemboan',
+  'cav' => "Cavine\x{f1}a",
+  'shj' => 'Shatt',
+  'baz' => 'Tunen',
+  'bru' => 'Eastern Bru',
+  'div' => 'Dhivehi',
+  'kfh' => 'Kurichiya',
+  'bwh' => 'Bishuo',
+  'ale' => 'Aleut',
+  'ptu' => 'Bambam',
+  'mjs' => 'Miship',
+  'lao' => 'Lao',
+  'aey' => 'Amele',
+  'nbf' => 'Naxi',
+  'txo' => 'Toto',
+  'aht' => 'Ahtena',
+  'aml' => 'War-Jaintia',
+  'xpv' => 'Northern Tasmanian',
+  'goh' => 'Old High German (ca. 750-1050)',
+  'kwr' => 'Kwer',
+  'rof' => 'Rombo',
+  'bfr' => 'Bazigar',
+  'mzh' => "Wich\x{ed} Lhamt\x{e9}s G\x{fc}isnay",
+  'ayc' => 'Southern Aymara',
+  'lor' => "T\x{e9}\x{e9}n",
+  'stg' => 'Trieng',
+  'jbo' => 'Lojban',
+  'ogo' => 'Khana',
+  'kku' => 'Tumi',
+  'axe' => 'Ayerrerenge',
+  'tlo' => 'Talodi',
+  'wax' => 'Watam',
+  'ofu' => 'Efutop',
+  'xxk' => 'Ke\'o',
+  'kqi' => 'Koitabu',
+  'bgx' => 'Balkan Gagauz Turkish',
+  'ica' => 'Ede Ica',
+  'mrq' => 'North Marquesan',
+  'dut' => 'Dutch',
+  'jkr' => 'Koro (India)',
+  'cjv' => 'Chuave',
+  'omv' => 'Omotic languages',
+  'crg' => 'Michif',
+  'bjz' => 'Baruga',
+  'wmm' => 'Maiwa (Indonesia)',
+  'unk' => "Enawen\x{e9}-Naw\x{e9}",
+  'atv' => 'Northern Altai',
+  'slc' => "S\x{e1}liba",
+  'teu' => 'Soo',
+  'lhl' => 'Lahul Lohar',
+  'lmt' => 'Lematang',
+  'kbx' => 'Ap Ma',
+  'tdm' => 'Taruma',
+  'mas' => 'Masai',
+  'pfl' => 'Pfaelzisch',
+  'cfa' => 'Dijim-Bwilim',
+  'emy' => 'Epigraphic Mayan',
+  'okh' => 'Koresh-e Rostam',
+  'qwt' => 'Kwalhioqua-Tlatskanai',
+  'coj' => 'Cochimi',
+  'sxc' => 'Sicanian',
+  'orr' => 'Oruma',
+  'pdc' => 'Pennsylvania German',
+  'bne' => 'Bintauna',
+  'par' => 'Panamint',
+  'chm' => 'Mari (Russia)',
+  'gei' => 'Gebe',
+  'saa' => 'Saba',
+  'klf' => 'Kendeje',
+  'kvg' => 'Kuni-Boazi',
+  'hni' => 'Hani',
+  'ihb' => 'Iha Based Pidgin',
+  'agm' => 'Angaataha',
+  'ara' => 'Arabic',
+  'kyi' => 'Kiput',
+  'trw' => 'Torwali',
+  'aod' => 'Andarum',
+  'kxf' => 'Manumanaw Karen',
+  'poo' => 'Central Pomo',
+  'vmr' => 'Marenje',
+  'tbb' => 'Tapeba',
+  'ner' => 'Yahadian',
+  'eyo' => 'Keiyo',
+  'afg' => 'Afghan Sign Language',
+  'bjl' => 'Bulu (Papua New Guinea)',
+  'fat' => 'Fanti',
+  'bho' => 'Bhojpuri',
+  'esx' => 'Eskimo-Aleut languages',
+  'jpr' => 'Judeo-Persian',
+  'nnm' => 'Namia',
+  'jur' => "Jur\x{fa}na",
+  'kpu' => 'Kafoa',
+  'xmh' => 'Kugu-Muminh',
+  'kuu' => 'Upper Kuskokwim',
+  'scp' => 'Hyolmo',
+  'aqc' => 'Archi',
+  'nlx' => 'Nahali',
+  'vag' => 'Vagla',
+  'sja' => 'Epena',
+  'nii' => 'Nii',
+  'smu' => 'Somray',
+  'qum' => 'Sipacapense',
+  'vot' => 'Votic',
+  'xbj' => 'Birrpayi',
+  'lih' => 'Lihir',
+  'ycl' => 'Lolopo',
+  'som' => 'Somali',
+  'gnq' => 'Gana',
+  'uzs' => 'Southern Uzbek',
+  'qvo' => 'Napo Lowland Quechua',
+  'sgd' => 'Surigaonon',
+  'ndt' => 'Ndunga',
+  'xkv' => 'Kgalagadi',
+  'nxx' => 'Nafri',
+  'amz' => 'Atampaya',
+  'bew' => 'Betawi',
+  'gir' => 'Red Gelao',
+  'zac' => "Ocotl\x{e1}n Zapotec",
+  'otz' => 'Ixtenco Otomi',
+  'dbg' => 'Dogul Dom Dogon',
+  'bal' => 'Baluchi',
+  'csc' => 'Catalan Sign Language',
+  'mkb' => 'Mal Paharia',
+  'okj' => 'Oko-Juwoi',
+  'sds' => 'Sened',
+  'coh' => 'Chonyi-Dzihana-Kauma',
+  'jat' => 'Jakati',
+  'bdn' => 'Baldemu',
+  'wka' => 'Kw\'adza',
+  'fur' => 'Friulian',
+  'hoz' => 'Hozo',
+  'jog' => 'Jogi',
+  'gav' => 'Gabutamon',
+  'siz' => 'Siwi',
+  'ewe' => 'Ewe',
+  'kci' => 'Kamantan',
+  'lbt' => 'Lachi',
+  'kmx' => 'Waboda',
+  'mgw' => 'Matumbi',
+  'ggt' => 'Gitua',
+  'xny' => 'Nyiyaparli',
+  'pls' => 'San Marcos Tlacoyalco Popoloca',
+  'kam' => 'Kamba (Kenya)',
+  'put' => 'Putoh',
+  'spx' => 'South Picene',
+  'alp' => 'Alune',
+  'sux' => 'Sumerian',
+  'ppt' => 'Pare',
+  'adq' => 'Adangbe',
+  'wbm' => 'Wa',
+  'rac' => 'Rasawa',
+  'hrx' => 'Hunsrik',
+  'krd' => 'Kairui-Midiki',
+  'min' => 'Minangkabau',
+  'koa' => 'Konomala',
+  'seb' => 'Shempire Senoufo',
+  'mzj' => 'Manya',
+  'inl' => 'Indonesian Sign Language',
+  'msl' => 'Molof',
+  'lwa' => 'Lwalu',
+  'grg' => 'Madi',
+  'nkc' => 'Nkongho',
+  'nfk' => 'Shakara',
+  'mwf' => 'Murrinh-Patha',
+  'hmd' => 'Large Flowery Miao',
+  'dtu' => 'Tebul Ure Dogon',
+  'ymc' => 'Southern Muji',
+  'bzf' => 'Boikin',
+  'nmf' => 'Tangkhul Naga (India)',
+  'iwk' => 'I-Wak',
+  'abl' => 'Lampung Nyo',
+  'bkd' => 'Binukid',
+  'tiy' => 'Tiruray',
+  'kjm' => "Kh\x{e1}ng",
+  'piv' => 'Pileni',
+  'onn' => 'Onobasulu',
+  'ije' => 'Biseni',
+  'shh' => 'Shoshoni',
+  'uha' => 'Uhami',
+  'bwj' => "L\x{e1}\x{e1} L\x{e1}\x{e1} Bwamu",
+  'kfj' => 'Kemiehua',
+  'goj' => 'Gowlan',
+  'xhu' => 'Hurrian',
+  'pbg' => 'Paraujano',
+  'dmg' => 'Upper Kinabatangan',
+  'hhr' => 'Kerak',
+  'pwm' => 'Molbog',
+  'enh' => 'Tundra Enets',
+  'trk' => 'Turkic languages',
+  'lnb' => 'Mbalanhu',
+  'bpd' => 'Banda-Banda',
+  'lug' => 'Ganda',
+  'abz' => 'Abui',
+  'jyy' => 'Jaya',
+  'bud' => 'Ntcham',
+  'xgr' => 'Garza',
+  'wes' => 'Cameroon Pidgin',
+  'ret' => 'Retta',
+  'bia' => 'Badimaya',
+  'yyz' => 'Ayizi',
+  'msz' => 'Momare',
+  'inz' => "Inese\x{f1}o",
+  'khv' => 'Khvarshi',
+  'xmj' => 'Majera',
+  'acc' => "Cubulco Ach\x{ed}",
+  'bnp' => 'Bola',
+  'sbu' => 'Stod Bhoti',
+  'twc' => 'Teshenawa',
+  'yuf' => 'Havasupai-Walapai-Yavapai',
+  'wsk' => 'Waskia',
+  'nuc' => 'Nukuini',
+  'vko' => 'Kodeoha',
+  'lzn' => 'Leinong Naga',
+  'zrp' => 'Zarphatic',
+  'djr' => 'Djambarrpuyngu',
+  'lij' => 'Ligurian',
+  'tos' => 'Highland Totonac',
+  'iya' => 'Iyayu',
+  'yxu' => 'Yuyu',
+  'yna' => 'Aluo',
+  'urt' => 'Urat',
+  'lvu' => 'Levuka',
+  'swo' => 'Shanenawa',
+  'pkt' => 'Maleng',
+  'tgq' => 'Tring',
+  'skx' => 'Seko Padang',
+  'bek' => 'Bebeli',
+  'nhq' => 'Huaxcaleca Nahuatl',
+  'tmb' => 'Katbol',
+  'mxr' => 'Murik (Malaysia)',
+  'hdy' => 'Hadiyya',
+  'mda' => 'Mada (Nigeria)',
+  'doo' => 'Dongo',
+  'ylu' => 'Aribwaung',
+  'cir' => 'Tiri',
+  'ydg' => 'Yidgha',
+  'sce' => 'Dongxiang',
+  'sil' => 'Tumulung Sisaala',
+  'ktt' => 'Ketum',
+  'gsc' => 'Gascon',
+  'hol' => 'Holu',
+  'mlr' => 'Vame',
+  'mub' => 'Mubi',
+  'mng' => 'Eastern Mnong',
+  'bss' => 'Akoose',
+  'isg' => 'Irish Sign Language',
+  'mpb' => 'Malak Malak',
+  'yip' => 'Pholo',
+  'wua' => 'Wikngenchera',
+  'ssn' => 'Waata',
+  'dar' => 'Dargwa',
+  'ksy' => 'Kharia Thar',
+  'mzq' => 'Mori Atas',
+  'naa' => 'Namla',
+  'awn' => 'Awngi',
+  'ybx' => 'Yawiyo',
+  'efa' => 'Efai',
+  'xtp' => 'San Miguel Piedras Mixtec',
+  'tcn' => 'Tichurong',
+  'mbo' => 'Mbo (Cameroon)',
+  'gak' => 'Gamkonora',
+  'tse' => 'Tunisian Sign Language',
+  'aif' => 'Agi',
+  'erg' => 'Sie',
+  'caw' => 'Callawalla',
+  'cun' => "Cun\x{e9}n Quich\x{e9}",
+  'svs' => 'Savosavo',
+  'cpn' => 'Cherepon',
+  'hca' => 'Andaman Creole Hindi',
+  'mcy' => 'South Watut',
+  'bvn' => 'Buna',
+  'goq' => 'Gorap',
+  'pea' => 'Peranakan Indonesian',
+  'cel' => 'Celtic languages',
+  'xan' => 'Xamtanga',
+  'snm' => 'Southern Ma\'di',
+  'xpw' => 'Northwestern Tasmanian',
+  'diw' => 'Northwestern Dinka',
+  'bwq' => "Southern Bobo Madar\x{e9}",
+  'obk' => 'Southern Bontok',
+  'ayx' => 'Ayi (China)',
+  'wre' => 'Ware',
+  'jgk' => 'Gwak',
+  'kfq' => 'Korku',
+  'psd' => 'Plains Indian Sign Language',
+  'aso' => 'Dano',
+  'ser' => 'Serrano',
+  'bqm' => 'Wumboko',
+  'app' => 'Apma',
+  'slx' => 'Salampasu',
+  'aup' => 'Makayam',
+  'plt' => 'Plateau Malagasy',
+  'hoi' => 'Holikachuk',
+  'sii' => 'Shom Peng',
+  'nja' => 'Nzanyi',
+  'ibd' => 'Iwaidja',
+  'lbs' => 'Libyan Sign Language',
+  'ncp' => 'Ndaktup',
+  'kbc' => "Kadiw\x{e9}u",
+  'bgc' => 'Haryanvi',
+  'boe' => 'Mundabli',
+  'wac' => 'Wasco-Wishram',
+  'gjk' => 'Kachi Koli',
+  'pps' => "San Lu\x{ed}s Temalacayuca Popoloca",
+  'bzu' => 'Burmeso',
+  'gby' => 'Gbari',
+  'pus' => 'Pushto',
+  'nmu' => 'Northeast Maidu',
+  'gwe' => 'Gweno',
+  'dgn' => 'Dagoman',
+  'jas' => 'New Caledonian Javanese',
+  'thd' => 'Kuuk Thaayorre',
+  'mwu' => 'Mittu',
+  'umn' => 'Makyan Naga',
+  'omw' => 'South Tairora',
+  'yku' => 'Kuamasi',
+  'mrh' => 'Mara Chin',
+  'nom' => "Nocam\x{e1}n",
+  'hap' => 'Hupla',
+  'rka' => 'Kraol',
+  'ngd' => 'Ngando (Central African Republic)',
+  'sdt' => 'Shuadit',
+  'ywr' => 'Yawuru',
+  'mkr' => 'Malas',
+  'adj' => 'Adioukrou',
+  'and' => 'Ansus',
+  'fng' => 'Fanagalo',
+  'fub' => 'Adamawa Fulfulde',
+  'kcz' => 'Konongo',
+  'pno' => 'Panobo',
+  'flr' => 'Fuliiru',
+  'atw' => 'Atsugewi',
+  'tta' => 'Tutelo',
+  'kts' => 'South Muyu',
+  'mpr' => 'Vangunu',
+  'pry' => 'Pray 3',
+  'tjg' => 'Tunjung',
+  'nhj' => 'Tlalitzlipa Nahuatl',
+  'trv' => 'Taroko',
+  'uky' => 'Kuuk-Yak',
+  'mur' => 'Murle',
+  'ltc' => 'Late Middle Chinese',
+  'mlb' => 'Mbule',
+  'bty' => 'Bobot',
+  'wla' => 'Walio',
+  'tgj' => 'Tagin',
+  'kie' => 'Kibet',
+  'kcl' => 'Kela (Papua New Guinea)',
+  'yuu' => 'Yugh',
+  'cib' => 'Ci Gbe',
+  'sbf' => 'Chabu',
+  'uok' => 'Uokha',
+  'bst' => 'Basketo',
+  'wsv' => 'Wotapuri-Katarqalai',
+  'mxb' => "Tezoatl\x{e1}n Mixtec",
+  'wnu' => 'Usan',
+  'wxa' => 'Waxianghua',
+  'pks' => 'Pakistan Sign Language',
+  'khk' => 'Halh Mongolian',
+  'akp' => 'Siwu',
+  'tmr' => 'Jewish Babylonian Aramaic (ca. 200-1200 CE)',
+  'cdd' => 'Caddoan languages',
+  'ntg' => 'Ngantangarra',
+  'rdb' => 'Rudbari',
+  'vbb' => 'Southeast Babar',
+  'bxd' => 'Pela',
+  'xkw' => 'Kembra',
+  'pch' => 'Pardhan',
+  'bev' => "Daloa B\x{e9}t\x{e9}",
+  'tag' => 'Tagoi',
+  'abi' => 'Abidji',
+  'gnh' => 'Lere',
+  'fin' => 'Finnish',
+  'djb' => 'Djinba',
+  'tot' => 'Patla-Chicontla Totonac',
+  'ckn' => 'Kaang Chin',
+  'heh' => 'Hehe',
+  'bym' => 'Bidjara',
+  'fsl' => 'French Sign Language',
+  'nlc' => 'Nalca',
+  'bld' => 'Bolango',
+  'aza' => 'Azha',
+  'llg' => 'Lole',
+  'xgb' => 'Gbin',
+  'zax' => 'Xadani Zapotec',
+  'nye' => 'Nyengo',
+  'zmm' => 'Marimanindji',
+  'xmq' => 'Kuku-Mangk',
+  'cyo' => 'Cuyonon',
+  'lem' => 'Nomaande',
+  'res' => 'Reshe',
+  'mva' => 'Manam',
+  'liq' => 'Libido',
+  'sfw' => 'Sehwi',
+  'msi' => 'Sabah Malay',
+  'wet' => 'Perai',
+  'xcg' => 'Cisalpine Gaulish',
+  'dno' => 'Ndrulo',
+  'mrj' => 'Western Mari',
+  'kyl' => 'Kalapuya',
+  'cak' => 'Kaqchikel',
+  'qws' => 'Sihuas Ancash Quechua',
+  'kkf' => 'Kalaktang Monpa',
+  'zsk' => 'Kaskean',
+  'kzd' => 'Kadai',
+  'mgv' => 'Matengo',
+  'xpk' => 'Kulina Pano',
+  'wrp' => 'Waropen',
+  'bji' => 'Burji',
+  'kqz' => 'Korana',
+  'rou' => 'Runga',
+  'adh' => 'Adhola',
+  'dik' => 'Southwestern Dinka',
+  'mog' => 'Mongondow',
+  'gmy' => 'Mycenaean Greek',
+  'xte' => 'Ketengban',
+  'rax' => 'Rang',
+  'dus' => 'Dumi',
+  'nbu' => 'Rongmei Naga',
+  'coq' => 'Coquille',
+  'gel' => 'ut-Ma\'in',
+  'spc' => "Sap\x{e9}",
+  'pgn' => 'Paelignian',
+  'suc' => 'Western Subanon',
+  'hrc' => 'Niwer Mil',
+  'rmm' => 'Roma',
+  'xis' => 'Kisan',
+  'brf' => 'Bira',
+  'gun' => "Mby\x{e1} Guaran\x{ed}",
+  'lms' => 'Limousin',
+  'gpn' => 'Taiap',
+  'tsp' => 'Northern Toussian',
+  'mfd' => 'Mendankwe-Nkwen',
+  'gaw' => 'Nobonob',
+  'kmc' => 'Southern Dong',
+  'mat' => 'San Francisco Matlatzinca',
+  'wof' => 'Gambian Wolof',
+  'shq' => 'Sala',
+  'cjk' => 'Chokwe',
+  'omk' => 'Omok',
+  'piw' => 'Pimbwe',
+  'mqy' => 'Manggarai',
+  'lob' => 'Lobi',
+  'xsa' => 'Sabaean',
+  'hae' => 'Eastern Oromo',
+  'cwe' => 'Kwere',
+  'xed' => 'Hdi',
+  'usu' => 'Uya',
+  'tpo' => 'Tai Pao',
+  'xvi' => 'Kamviri',
+  'nwo' => 'Nauo',
+  'cby' => 'Carabayo',
+  'tuo' => 'Tucano',
+  'nkx' => 'Nkoroo',
+  'bai' => 'Bamileke languages',
+  'bfb' => 'Pauri Bareli',
+  'irx' => 'Kamberau',
+  'wgi' => 'Wahgi',
+  'kwb' => 'Kwa',
+  'atk' => 'Ati',
+  'bcm' => 'Bannoni',
+  'zua' => 'Zeem',
+  'zpa' => 'Lachiguiri Zapotec',
+  'nil' => 'Nila',
+  'nce' => 'Yale',
+  'cco' => 'Comaltepec Chinantec',
+  'tef' => 'Teressa',
+  'ape' => 'Bukiyip',
+  'jsl' => 'Japanese Sign Language',
+  'aue' => "\x{1c2}Kx\x{2bc}au\x{1c1}\x{2bc}ein",
+  'tns' => 'Tenis',
+  'tqn' => 'Tenino',
+  'ymx' => 'Northern Muji',
+  'mjt' => 'Sauria Paharia',
+  'nsn' => 'Nehan',
+  'ahs' => 'Ashe',
+  'mmo' => 'Mangga Buang',
+  'bop' => 'Bonkiman',
+  'tvm' => 'Tela-Masbuar',
+  'yam' => 'Yamba',
+  'tyn' => 'Kombai',
+  'gib' => 'Gibanawa',
+  'khw' => 'Khowar',
+  'nds' => 'Low German',
+  'kna' => 'Dera (Nigeria)',
+  'kxu' => 'Kui (India)',
+  'niz' => 'Ningil',
+  'mec' => 'Marra',
+  'ake' => 'Akawaio',
+  'kip' => 'Sheshi Kham',
+  'pcj' => 'Parenga',
+  'enq' => 'Enga',
+  'zka' => 'Kaimbulawa',
+  'oti' => 'Oti',
+  'ysy' => 'Sanie',
+  'myy' => 'Macuna',
+  'gnj' => 'Ngen',
+  'hya' => 'Hya',
+  'gdd' => 'Gedaged',
+  'ami' => 'Amis',
+  'klu' => 'Klao',
+  'acx' => 'Omani Arabic',
+  'kdg' => 'Seba',
+  'npx' => 'Noipx',
+  'twx' => 'Tewe',
+  'nux' => 'Mehek',
+  'oon' => "\x{d6}nge",
+  'neb' => "Toura (C\x{f4}te d'Ivoire)",
+  'tbr' => 'Tumtum',
+  'nyp' => 'Nyang\'i',
+  'frq' => 'Forak',
+  'gkn' => 'Gokana',
+  'vmb' => 'Barbaram',
+  'jub' => 'Wannu',
+  'jng' => 'Yangman',
+  'fas' => 'Persian',
+  'gez' => 'Geez',
+  'skc' => 'Ma Manda',
+  'dks' => 'Southeastern Dinka',
+  'keo' => 'Kakwa',
+  'cnh' => 'Hakha Chin',
+  'xkk' => 'Kaco\'',
+  'nhh' => 'Nahari',
+  'tgh' => 'Tobagonian Creole English',
+  'smf' => 'Auwe',
+  'kql' => 'Kyenele',
+  'jda' => 'Jad',
+  'mtm' => 'Mator',
+  'kyz' => "Kayab\x{ed}",
+  'pab' => "Parec\x{ed}s",
+  'lhi' => 'Lahu Shi',
+  'lrn' => 'Lorang',
+  'gyo' => 'Gyalsumdo',
+  'dry' => 'Darai',
+  'kuf' => 'Western Katu',
+  'kpf' => 'Komba',
+  'czh' => 'Huizhou Chinese',
+  'xsd' => 'Sidetic',
+  'ahk' => 'Akha',
+  'tio' => 'Teop',
+  'udm' => 'Udmurt',
+  'puw' => 'Puluwatese',
+  'ded' => 'Dedua',
+  'ekr' => 'Yace',
+  'pan' => 'Panjabi',
+  'xyj' => 'Mayi-Yapi',
+  'ymz' => 'Muzi',
+  'zia' => 'Zia',
+  'kkp' => 'Gugubera',
+  'zpd' => "Southeastern Ixtl\x{e1}n Zapotec",
+  'stq' => 'Saterfriesisch',
+  'tnk' => 'Kwamera',
+  'lbw' => 'Tolaki',
+  'ggw' => 'Gogodala',
+  'erh' => 'Eruwa',
+  'mgt' => 'Mongol',
+  'tsf' => 'Southwestern Tamang',
+  'aie' => 'Amara',
+  'acl' => 'Akar-Bale',
+  'jel' => 'Yelmek',
+  'mav' => "Sater\x{e9}-Maw\x{e9}",
+  'nul' => 'Nusa Laut',
+  'twl' => 'Tawara',
+  'npl' => 'Southeastern Puebla Nahuatl',
+  'nkz' => 'Nkari',
+  'cgk' => 'Chocangacakha',
+  'ats' => 'Gros Ventre',
+  'jun' => 'Juang',
+  'cjs' => 'Shor',
+  'ptp' => 'Patep',
+  'dyg' => 'Villa Viciosa Agta',
+  'jpn' => 'Japanese',
+  'wji' => 'Warji',
+  'nen' => 'Nengone',
+  'brp' => 'Barapasi',
+  'moj' => 'Monzombo',
+  'xno' => 'Anglo-Norman',
+  'raz' => 'Rahambuu',
+  'lmk' => 'Lamkang',
+  'kza' => 'Western Karaboro',
+  'yra' => 'Yerakai',
+  'duk' => 'Uyajitaya',
+  'ygm' => 'Yagomi',
+  'ecy' => 'Eteocypriot',
+  'xxt' => 'Tambora',
+  'mjv' => 'Mannan',
+  'mrg' => 'Mising',
+  'crq' => 'Iyo\'wujwa Chorote',
+  'kbi' => 'Kaptiau',
+  'xps' => 'Pisidian',
+  'gwf' => 'Gowro',
+  'hoc' => 'Ho',
+  'dis' => 'Dimasa',
+  'sic' => 'Malinguat',
+  'gsl' => 'Gusilay',
+  'bof' => 'Bolon',
+  'cas' => "Tsiman\x{e9}",
+  'mfa' => 'Pattani Malay',
+  'ebo' => 'Teke-Ebo',
+  'ima' => 'Mala Malasar',
+  'xhe' => 'Khetrani',
+  'bgi' => 'Giangan',
+  'gin' => 'Hinukh',
+  'tep' => 'Tepecano',
+  'kqx' => 'Mser',
+  'wai' => 'Wares',
+  'jib' => 'Jibu',
+  'esi' => 'North Alaskan Inupiatun',
+  'nsb' => 'Lower Nossob',
+  'xks' => 'Kumbewaha',
+  'kso' => 'Kofa',
+  'tqb' => "Temb\x{e9}",
+  'kyx' => 'Rapoisi',
+  'dkk' => 'Dakka',
+  'fak' => 'Fang (Cameroon)',
+  'sfs' => 'South African Sign Language',
+  'swy' => 'Sarua',
+  'mhm' => 'Makhuwa-Moniga',
+  'jnj' => 'Yemsa',
+  'kwn' => 'Kwangali',
+  'bfn' => 'Bunak',
+  'lti' => 'Leti (Indonesia)',
+  'sbe' => 'Saliba',
+  'tzs' => "San Andr\x{e9}s Larrainzar Tzotzil",
+  'itr' => 'Iteri',
+  'ral' => 'Ralte',
+  'gex' => 'Garre',
+  'kif' => 'Eastern Parbate Kham',
+  'lon' => 'Malawi Lomwe',
+  'doy' => 'Dompo',
+  'kvq' => 'Geba Karen',
+  'tah' => 'Tahitian',
+  'pcg' => 'Paniya',
+  'glr' => 'Glaro-Twabo',
+  'gng' => 'Ngangam',
+  'gub' => "Guajaj\x{e1}ra",
+  'ktw' => 'Kato',
+  'pmq' => 'Northern Pame',
+  'nyf' => 'Giryama',
+  'dbq' => 'Daba',
+  'inc' => 'Indic languages',
+  'msc' => 'Sankaran Maninka',
+  'heg' => 'Helong',
+  'qya' => 'Quenya',
+  'knd' => 'Konda',
+  'kdj' => 'Karamojong',
+  'acz' => 'Acheron',
+  'nxi' => 'Nindi',
+  'dzo' => 'Dzongkha',
+  'vky' => 'Kayu Agung',
+  'nuz' => 'Tlamacazapa Nahuatl',
+  'yml' => 'Iamalele',
+  'abc' => 'Ambala Ayta',
+  'llh' => 'Lamu',
+  'yey' => 'Yeyi',
+  'yle' => 'Yele',
+  'fwe' => 'Fwe',
+  'gda' => 'Gade Lohar',
+  'zkd' => 'Kadu',
+  'kpp' => 'Paku Karen',
+  'scu' => 'Shumcho',
+  'kup' => 'Kunimaipa',
+  'vrs' => 'Varisi',
+  'nix' => 'Hema',
+  'nli' => 'Grangali',
+  'eur' => 'Europanto',
+  'ndk' => 'Ndaka',
+  'xch' => 'Chemakum',
+  'urw' => 'Sop',
+  'smp' => 'Samaritan',
+  'orn' => 'Orang Kanaq',
+  'njd' => 'Ndonde Hamba',
+  'aip' => 'Burumakok',
+  'zne' => 'Zande (individual language)',
+  'emo' => 'Emok',
+  'sui' => 'Suki',
+  'iba' => 'Iban',
+  'spi' => 'Saponi',
+  'pis' => 'Pijin',
+  'bre' => 'Breton',
+  'jak' => 'Jakun',
+  'xgn' => 'Mongolian languages',
+  'adg' => 'Andegerebinha',
+  'alu' => '\'Are\'are',
+  'kmi' => 'Kami (Nigeria)',
+  'kcx' => 'Kachama-Ganjule',
+  'tha' => 'Thai',
+  'slz' => 'Ma\'ya',
+  'moh' => 'Mohawk',
+  'izi' => 'Izi-Ezaa-Ikwo-Mgbo',
+  'nrm' => 'Narom',
+  'nga' => 'Ngbaka',
+  'ppk' => 'Uma',
+  'ckb' => 'Central Kurdish',
+  'puk' => 'Pu Ko',
+  'djn' => 'Jawoyn',
+  'kke' => 'Kakabe',
+  'zho' => 'Chinese',
+  'ggk' => 'Kungarakany',
+  'ttd' => 'Tauade',
+  'ana' => 'Andaqui',
+  'bjc' => 'Bariji',
+  'tnw' => 'Tonsawang',
+  'lbk' => 'Central Bontok',
+  'aql' => 'Algic languages',
+  'nad' => 'Nijadali',
+  'dtp' => 'Kadazan Dusun',
+  'tly' => 'Talysh',
+  'svk' => 'Slovakian Sign Language',
+  'plv' => 'Southwest Palawano',
+  'auf' => 'Arauan languages',
+  'tee' => 'Huehuetla Tepehua',
+  'apf' => 'Pahanan Agta',
+  'ncf' => 'Notsi',
+  'mxn' => 'Moi (Indonesia)',
+  'ayz' => 'Mai Brat',
+  'lmw' => 'Lake Miwok',
+  'gas' => 'Adiwasi Garasia',
+  'cin' => 'Cinta Larga',
+  'txy' => 'Tanosy Malagasy',
+  'grq' => 'Gorovu',
+  'duw' => 'Dusun Witu',
+  'lay' => 'Lama Bai',
+  'ped' => 'Mala (Papua New Guinea)',
+  'dan' => 'Danish',
+  'zal' => 'Zauzou',
+  'ssr' => 'Swiss-French Sign Language',
+  'psa' => 'Asue Awyu',
+  'csl' => 'Chinese Sign Language',
+  'woe' => 'Woleaian',
+  'bac' => 'Badui',
+  'mln' => 'Malango',
+  'sdv' => 'Eastern Sudanic languages',
+  'haf' => 'Haiphong Sign Language',
+  'zaz' => 'Zari',
+  'llj' => 'Ladji Ladji',
+  'bnu' => 'Bentong',
+  'bxa' => 'Tairaha',
+  'fun' => "Fulni\x{f4}",
+  'sbp' => 'Sangu (Tanzania)',
+  'bdr' => 'West Coast Bajau',
+  'qvy' => 'Queyu',
+  'xjb' => 'Minjungbal',
+  'bsv' => "Baga Soban\x{e9}",
+  'squ' => 'Squamish',
+  'csz' => 'Coos',
+  'trt' => 'Tunggare',
+  'umb' => 'Umbundu',
+  'ybl' => 'Yukuben',
+  'amc' => 'Amahuaca',
+  'hsh' => 'Hungarian Sign Language',
+  'dgb' => 'Bunoge Dogon',
+  'bla' => 'Siksika',
+  'akf' => 'Akpa',
+  'taj' => 'Eastern Tamang',
+  'azd' => 'Eastern Durango Nahuatl',
+  'lsm' => 'Saamia',
+  'ayl' => 'Libyan Arabic',
+  'mei' => 'Midob',
+  'kdh' => 'Tem',
+  'aqz' => 'Akuntsu',
+  'mvd' => 'Mamboru',
+  'luq' => 'Lucumi',
+  'tov' => 'Upper Taromi',
+  'poy' => 'Pogolo',
+  'ium' => 'Iu Mien',
+  'kpe' => 'Kpelle',
+  'kue' => 'Kuman (Papua New Guinea)',
+  'mir' => 'Isthmus Mixe',
+  'xab' => 'Sambe',
+  'bhy' => 'Bhele',
+  'ria' => 'Riang (India)',
+  'bvb' => 'Bube',
+  'sll' => 'Salt-Yui',
+  'bet' => "Guiberoua B\x{e9}te",
+  'sme' => 'Northern Sami',
+  'ntj' => 'Ngaanyatjarra',
+  'cng' => 'Northern Qiang',
+  'cub' => 'Cubeo',
+  'urk' => 'Urak Lawoi\'',
+  'cpb' => "Ucayali-Yur\x{fa}a Ash\x{e9}ninka",
+  'yiu' => 'Awu',
+  'khs' => 'Kasua',
+  'mnq' => 'Minriq',
+  'ndw' => 'Ndobo',
+  'onr' => 'Northern One',
+  'tjj' => 'Tjungundji',
+  'nhg' => 'Tetelcingo Nahuatl',
+  'odu' => 'Odual',
+  'rnp' => 'Rongpo',
+  'tgg' => 'Tangga',
+  'tcb' => 'Tanacross',
+  'sxl' => 'Selian',
+  'ktk' => 'Kaniet',
+  'ski' => 'Sika',
+  'wym' => 'Wymysorys',
+  'awb' => 'Awa (Papua New Guinea)',
+  'cda' => 'Choni',
+  'vkl' => 'Kulisusu',
+  'nky' => 'Khiamniungan Naga',
+  'bwa' => 'Bwatoo',
+  'kfa' => 'Kodava',
+  'hmg' => 'Southwestern Guiyang Hmong',
+  'bcw' => 'Bana',
+  'goa' => 'Guro',
+  'mqx' => 'Mamuju',
+  'peq' => 'Southern Pomo',
+  'dhr' => 'Dhargari',
+  'grd' => 'Guruntum-Mbaaru',
+  'yzg' => 'E\'ma Buyang',
+  'xtr' => 'Early Tripuri',
+  'mbi' => 'Ilianen Manobo',
+  'wnn' => 'Wunumara',
+  'krg' => 'North Korowai',
+  'pim' => 'Powhatan',
+  'kjv' => 'Kaikavian Literary Language',
+  'nok' => 'Nooksack',
+  'iry' => 'Iraya',
+  'asi' => 'Buruwai',
+  'sep' => "S\x{ec}c\x{ec}t\x{e9} S\x{e9}noufo",
+  'syb' => 'Central Subanen',
+  'gjm' => 'Gunditjmara',
+  'rbk' => 'Northern Bontok',
+  'yaw' => "Yawalapit\x{ed}",
+  'ava' => 'Avaric',
+  'tvw' => 'Sedoa',
+  'yun' => 'Bena (Nigeria)',
+  'ypn' => 'Ani Phowa',
+  'bkg' => 'Buraka',
+  'iks' => 'Inuit Sign Language',
+  'fbl' => 'West Albay Bikol',
+  'lkd' => "Lakond\x{ea}",
+  'tic' => 'Tira',
+  'koj' => 'Sara Dunjo',
+  'mza' => "Santa Mar\x{ed}a Zacatepec Mixtec",
+  'yel' => 'Yela',
+  'naq' => 'Khoekhoe',
+  'ebc' => 'Beginci',
+  'snk' => 'Soninke',
+  'ttq' => 'Tawallammat Tamajaq',
+  'wbv' => 'Wajarri',
+  'jod' => 'Wojenaka',
+  'obm' => 'Moabite',
+  'bqk' => "Banda-Mbr\x{e8}s",
+  'jra' => 'Jarai',
+  'ncr' => 'Ncane',
+  'kav' => "Katuk\x{ed}na",
+  'ldn' => "L\x{e1}adan",
+  'aur' => 'Aruek',
+  'sio' => 'Siouan languages',
+  'apr' => 'Arop-Lokep',
+  'alb' => 'Albanian',
+  'ich' => 'Etkywan',
+  'hoo' => 'Holoholo',
+  'ulc' => 'Ulch',
+  'gam' => 'Kandawo',
+  'dol' => 'Doso',
+  'pni' => 'Aoheng',
+  'kgt' => 'Somyev',
+  'ray' => 'Rapa',
+  'cku' => 'Koasati',
+  'gmx' => 'Magoma',
+  'mkp' => 'Moikodi',
+  'oka' => 'Okanagan',
+  'fiu' => 'Finno-Ugrian languages',
+  'swl' => 'Swedish Sign Language',
+  'bbt' => 'Mburku',
+  'har' => 'Harari',
+  'rmw' => 'Welsh Romani',
+  'axb' => 'Abipon',
+  'ssf' => 'Thao',
+  'oua' => 'Tagargrent',
+  'opa' => 'Okpamheri',
+  'xau' => 'Kauwera',
+  'ets' => 'Yekhee',
+  'bdf' => 'Biage',
+  'bvu' => 'Bukit Malay',
+  'doz' => 'Dorze',
+  'mup' => 'Malvi',
+  'zmk' => 'Mandandanyi',
+  'cuu' => 'Tai Ya',
+  'mpp' => 'Migabac',
+  'yib' => 'Yinglish',
+  'cpu' => "Pichis Ash\x{e9}ninka",
+  'lek' => 'Leipon',
+  'sah' => 'Yakut',
+  'lss' => 'Lasi',
+  'wig' => 'Wik Ngathan',
+  'tmp' => "Tai M\x{e8}ne",
+  'ruq' => 'Megleno Romanian',
+  'mnd' => "Mond\x{e9}",
+  'mdj' => 'Mangbetu',
+  'isd' => 'Isnag',
+  'ksc' => 'Southern Kalinga',
+  'byk' => 'Biao',
+  'mtw' => 'Southern Binukidnon',
+  'akr' => 'Araki',
+  'tcu' => 'Southeastern Tarahumara',
+  'ydd' => 'Eastern Yiddish',
+  'awu' => 'Central Awyu',
+  'arh' => 'Arhuaco',
+  'rsm' => 'Miriwoong Sign Language',
+  'mif' => 'Mofu-Gudur',
+  'zbw' => 'West Berawan',
+  'bnb' => 'Bookan',
+  'bug' => 'Buginese',
+  'lud' => 'Ludian',
+  'bpg' => 'Bonggo',
+  'mvq' => 'Moere',
+  'lia' => 'West-Central Limba',
+  'cvg' => 'Chug',
+  'qxw' => 'Jauja Wanca Quechua',
+  'xma' => 'Mushungulu',
+  'abo' => 'Abon',
+  'dmd' => 'Madhi Madhi',
+  'ykn' => 'Kua-nsi',
+  'umu' => 'Munsee',
+  'mwn' => 'Nyamwanga',
+  'khm' => 'Khmer',
+  'ven' => 'Venda',
+  'myx' => 'Masaaba',
+  'dgu' => 'Degaru',
+  'ino' => 'Inoke-Yate',
+  'mso' => 'Mombum',
+  'nmn' => "\x{1c3}X\x{f3}\x{f5}",
+  'bzn' => 'Boano (Maluku)',
+  'htu' => 'Hitu',
+  'bij' => 'Vaghat-Ya-Bijim-Legeri',
+  'szs' => 'Solomon Islands Sign Language',
+  'tbe' => 'Tanimbili',
+  'nuy' => 'Nunggubuyu',
+  'npy' => 'Napu',
+  'twy' => 'Tawoyan',
+  'jml' => 'Jumli',
+  'acy' => 'Cypriot Arabic',
+  'jle' => 'Ngile',
+  'wrr' => 'Wardaman',
+  'bjo' => 'Mid-Southern Banda',
+  'yak' => 'Yakama',
+  'kln' => 'Kalenjin',
+  'gqi' => 'Guiqiong',
+  'see' => 'Seneca',
+  'bmt' => 'Biao Mon',
+  'bhl' => 'Bimin',
+  'tvk' => 'Southeast Ambrym',
+  'sly' => 'Selayar',
+  'gbx' => 'Eastern Xwla Gbe',
+  'crd' => 'Coeur d\'Alene',
+  'coa' => 'Cocos Islands Malay',
+  'dni' => 'Lower Grand Valley Dani',
+  'pol' => 'Polish',
+  'tdv' => 'Toro',
+  'tsr' => 'Akei',
+  'atm' => 'Ata',
+  'kxn' => 'Kanowit-Tanjong Melanau',
+  'bck' => 'Bunuba',
+  'cjm' => 'Eastern Cham',
+  'tyu' => 'Kua',
+  'now' => 'Nyambo',
+  'aec' => 'Saidi Arabic',
+  'lwh' => 'White Lachi',
+  'mke' => 'Mawchi',
+  'yby' => 'Yaweyuha',
+  'wgo' => 'Waigeo',
+  'bao' => 'Waimaha',
+  'ygs' => "Yol\x{14b}u Sign Language",
+  'nwi' => 'Southwest Tanna',
+  'koh' => 'Koyo',
+  'xvo' => 'Volscian',
+  'tpi' => 'Tok Pisin',
+  'tui' => 'Tupuri',
+  'qvl' => 'Cajatambo North Lima Quechua',
+  'laz' => 'Aribwatsa',
+  'rmk' => 'Romkun',
+  'zlj' => 'Liujiang Zhuang',
+  'xpm' => 'Pumpokol',
+  'snw' => 'Selee',
+  'xum' => 'Umbrian',
+  'std' => 'Sentinel',
+  'zpq' => 'Zoogocho Zapotec',
+  'bor' => "Bor\x{f4}ro",
+  'mcx' => 'Mpiemo',
+  'bqw' => 'Buru (Nigeria)',
+  'mmi' => 'Musar',
+  'dim' => 'Dime',
+  'gwr' => 'Gwere',
+  'deq' => 'Dendi (Central African Republic)',
+  'ayy' => 'Tayabas Ayta',
+  'phr' => 'Pahari-Potwari',
+  'cam' => "Cemuh\x{ee}",
+  'gku' => "\x{1c2}Ungkue",
+  'zsm' => 'Standard Malay',
+  'tlz' => 'Toala\'',
+  'sha' => 'Shall-Zwall',
+  'xsq' => 'Makhuwa-Saka',
+  'mtk' => 'Mbe\'',
+  'byw' => 'Belhariya',
+  'tme' => "Trememb\x{e9}",
+  'bih' => 'Bihari languages',
+  'guu' => "Yanomam\x{f6}",
+  'tll' => 'Tetela',
+  'xkm' => 'Mahakam Kenyah',
+  'pgu' => 'Pagu',
+  'ena' => 'Apali',
+  'sov' => 'Sonsorol',
+  'nbn' => 'Kuri',
+  'sfm' => 'Small Flowery Miao',
+  'ubu' => 'Umbu-Ungu',
+  'ron' => 'Romanian',
+  'qvz' => 'Northern Pastaza Quichua',
+  'csy' => 'Siyin Chin',
+  'eip' => 'Eipomek',
+  'quv' => 'Sacapulteco',
+  'ajt' => 'Judeo-Tunisian Arabic',
+  'lal' => 'Lalia',
+  'zay' => 'Zayse-Zergulla',
+  'knq' => 'Kintaq',
+  'mhs' => 'Buru (Indonesia)',
+  'xba' => 'Kamba (Brazil)',
+  'amo' => 'Amo',
+  'pmd' => 'Pallanganmiddang',
+  'dbd' => 'Dadiya',
+  'scb' => 'Chut',
+  'sgg' => 'Swiss-German Sign Language',
+  'mue' => 'Media Lengua',
+  'ctt' => 'Wayanad Chetti',
+  'mpe' => 'Majang',
+  'oto' => 'Otomian languages',
+  'tzm' => 'Central Atlas Tamazight',
+  'ign' => 'Ignaciano',
+  'lew' => 'Ledo Kaili',
+  'elu' => 'Elu',
+  'zmw' => 'Mbo (Democratic Republic of Congo)',
+  'kir' => 'Kirghiz',
+  'hut' => 'Humla',
+  'kvd' => 'Kui (Indonesia)',
+  'nnv' => 'Nugunu (Australia)',
+  'jiu' => 'Youle Jinuo',
+  'btx' => 'Batak Karo',
+  'mdh' => 'Maguindanaon',
+  'kei' => 'Kei',
+  'nsu' => 'Sierra Negra Nahuatl',
+  'prx' => 'Purik',
+  'srt' => 'Sauri',
+  'tqu' => 'Touo',
+  'ynh' => 'Yangho',
+  'agv' => 'Remontado Dumagat',
+  'tbp' => 'Taworta',
+  'nyr' => 'Nyiha (Malawi)',
+  'arj' => 'Arapaso',
+  'xwt' => 'Wotjobaluk',
+  'gyi' => 'Gyele',
+  'poz' => 'Malayo-Polynesian languages',
+  'ljl' => 'Li\'o',
+  'wuh' => 'Wutunhua',
+  'aat' => 'Arvanitika Albanian',
+  'afd' => 'Andai',
+  'ihp' => 'Iha',
+  'chv' => 'Chuvash',
+  'saj' => 'Sahu',
+  'aog' => 'Angoram',
+  'bhz' => 'Bada (Indonesia)',
+  'fod' => 'Foodo',
+  'fra' => 'French',
+  'kkr' => 'Kir-Balar',
+  'qwm' => 'Kuman (Russia)',
+  'lou' => 'Louisiana Creole',
+  'asc' => 'Casuarina Coast Asmat',
+  'mcz' => 'Mawan',
+  'hmh' => 'Southwestern Huishui Hmong',
+  'krh' => 'Kurama',
+  'bfu' => 'Gahri',
+  'ekp' => 'Ekpeye',
+  'kwu' => 'Kwakum',
+  'tii' => 'Tiene',
+  'bmv' => 'Bum',
+  'tlx' => 'Khehek',
+  'sta' => 'Settla',
+  'wmt' => 'Walmajarri',
+  'dum' => 'Middle Dutch (ca. 1050-1350)',
+  'brr' => 'Birao',
+  'rms' => 'Romanian Sign Language',
+  'ptr' => 'Piamatsina',
+  'tdt' => 'Tetun Dili',
+  'lmm' => 'Lamam',
+  'bkh' => 'Bakoko',
+  'mbc' => 'Macushi',
+  'lax' => 'Tiwa',
+  'dsq' => 'Tadaksahak',
+  'txx' => 'Tatana',
+  'uth' => 'ut-Hun',
+  'shd' => 'Kundal Shahi',
+  'oru' => 'Ormuri',
+  'eza' => 'Ezaa',
+  'gcc' => 'Mali',
+  'igb' => 'Ebira',
+  'sse' => 'Balangingi',
+  'wor' => 'Woria',
+  'mfq' => 'Moba',
+  'pnc' => 'Pannei',
+  'cfg' => 'Como Karim',
+  'kcy' => 'Korandje',
+  'scn' => 'Sicilian',
+  'btl' => 'Bhatola',
+  'xni' => 'Ngarigu',
+  'cod' => 'Cocama-Cocamilla',
+  'bcs' => 'Kohumono',
+  'ztc' => 'Lachirioag Zapotec',
+  'rob' => 'Tae\'',
+  'cra' => 'Chara',
+  'ukl' => 'Ukrainian Sign Language',
+  'prl' => 'Peruvian Sign Language',
+  'ter' => 'Tereno',
+  'ikw' => 'Ikwere',
+  'wao' => 'Wappo',
+  'nbb' => 'Ndoe',
+  'bgo' => 'Baga Koga',
+  'tnm' => 'Tabla',
+  'gbz' => 'Zoroastrian Dari',
+  'ahm' => 'Mobumrin Aizi',
+  'kzq' => 'Kaike',
+  'uli' => 'Ulithian',
+  'lgz' => 'Ligenza',
+  'kbo' => 'Keliko',
+  'yas' => 'Nugunu (Cameroon)',
+  'tvs' => 'Taveta',
+  'jku' => 'Labir',
+  'ljx' => 'Yuru',
+  'lgl' => 'Wala',
+  'neu' => 'Neo',
+  'qxs' => 'Southern Qiang',
+  'kva' => 'Bagvalal',
+  'vmu' => 'Muluridyi',
+  'gbl' => 'Gamit',
+  'juu' => 'Ju',
+  'hit' => 'Hittite',
+  'ndm' => 'Ndam',
+  'pox' => 'Polabian',
+  'sot' => 'Southern Sotho',
+  'ksi' => 'Krisa',
+  'ian' => 'Iatmul',
+  'sag' => 'Sango',
+  'aoj' => 'Mufian',
+  'eso' => 'Estonian Sign Language',
+  'bhx' => 'Bhalay',
+  'btz' => 'Batak Alas-Kluet',
+  'wih' => 'Wik-Me\'anha',
+  'prz' => 'Providencia Sign Language',
+  'afa' => 'Afro-Asiatic languages',
+  'pau' => 'Palauan',
+  'lto' => 'Tsotso',
+  'bde' => 'Bade',
+  'arg' => 'Aragonese',
+  'qut' => "West Central Quich\x{e9}",
+  'frd' => 'Fordata',
+  'gvj' => "Guaj\x{e1}",
+  'szw' => 'Sawai',
+  'bph' => 'Botlikh',
+  'buh' => 'Younuo Bunu',
+  'agt' => 'Central Cagayan Agta',
+  'giu' => 'Mulao',
+  'tbf' => 'Mandara',
+  'nxo' => 'Ndambomo',
+  'kxb' => 'Krobu',
+  'gdq' => 'Mehri',
+  'one' => 'Oneida',
+  'huv' => 'San Mateo Del Mar Huave',
+  'nnt' => 'Nanticoke',
+  'sgj' => 'Surgujia',
+  'ijn' => 'Kalabari',
+  'fam' => 'Fam',
+  'mhk' => 'Mungaka',
+  'end' => 'Ende',
+  'sjg' => 'Assangori',
+  'srv' => 'Southern Sorsoganon',
+  'vaa' => 'Vaagri Booli',
+  'smr' => 'Simeulue',
+  'xbd' => 'Bindal',
+  'nlo' => 'Ngul',
+  'pma' => 'Paama',
+  'dba' => 'Bangime',
+  'cml' => 'Campalagian',
+  'cht' => "Chol\x{f3}n",
+  'cey' => 'Ekai Chin',
+  'cle' => 'Lealao Chinantec',
+  'klb' => 'Kiliwa',
+  'kur' => 'Kurdish',
+  'mts' => 'Yora',
+  'kpr' => 'Korafe-Yegha',
+  'mcl' => 'Macaguaje',
+  'mie' => 'Ocotepec Mixtec',
+  'aav' => 'Austro-Asiatic languages',
+  'kmo' => 'Kwoma',
+  'ygw' => 'Yagwoia',
+  'kjt' => 'Phrae Pwo Karen',
+  'anq' => 'Jarawa (India)',
+  'gmz' => 'Mgbolizhia',
+  'ngq' => 'Ngurimi',
+  'emi' => 'Mussau-Emira',
+  'air' => 'Airoran',
+  'spo' => 'Spokane',
+  'nmb' => 'Big Nambas',
+  'bzb' => 'Andio',
+  'xdy' => 'Malayic Dayak',
+  'hro' => 'Haroi',
+  'thq' => 'Kochila Tharu',
+  'mwb' => 'Juwal',
+  'svm' => 'Slavomolisano',
+  'drl' => 'Paakantyi',
+  'zrn' => 'Zerenkel',
+  'zhi' => 'Zhire',
+  'wwa' => 'Waama',
+  'sqn' => 'Susquehannock',
+  'sns' => 'South West Bay',
+  'kqy' => 'Koorete',
+  'okd' => 'Okodia',
+  'sef' => 'Cebaara Senoufo',
+  'bqs' => 'Bosngun',
+  'fuu' => 'Furu',
+  'bnn' => 'Bunun',
+  'eke' => 'Ekit',
+  'kat' => 'Georgian',
+  'mmc' => "Michoac\x{e1}n Mazahua",
+  'kfd' => 'Korra Koraga',
+  'psq' => 'Pasi',
+  'ikk' => 'Ika',
+  'lwg' => 'Wanga',
+  'bwd' => 'Bwaidoka',
+  'gra' => 'Rajput Garasia',
+  'ggm' => 'Gugu Mini',
+  'xhr' => 'Hernican',
+  'lbm' => 'Lodhi',
+  'god' => "Godi\x{e9}",
+  'ccc' => 'Chamicuro',
+  'bkj' => 'Pande',
+  'dtr' => 'Lotud',
+  'kog' => 'Cogui',
+  'nrk' => 'Ngarla',
+  'wbt' => 'Warnman',
+  'pum' => 'Puma',
+  'ppm' => 'Papuma',
+  'yin' => 'Riang Lai',
+  'bbv' => 'Karnai',
+  'jam' => 'Jamaican Creole English',
+  'jmx' => 'Western Juxtlahuaca Mixtec',
+  'hmj' => 'Ge',
+  'ssp' => 'Spanish Sign Language',
+  'avd' => 'Alviri-Vidari',
+  'nos' => 'Eastern Nisu',
+  'mqz' => 'Pano',
+  'ysl' => 'Yugoslavian Sign Language',
+  'myl' => 'Moma',
+  'krj' => 'Kinaray-A',
+  'lka' => 'Lakalei',
+  'tuc' => 'Mutu',
+  'kgv' => 'Karas',
+  'tpc' => "Azoy\x{fa} Me'phaa",
+  'nwc' => 'Classical Newari',
+  'mzd' => 'Malimba',
+  'mkf' => 'Miya',
+  'lpa' => 'Lelepa',
+  'lua' => 'Luba-Lulua',
+  'ite' => 'Itene',
+  'myz' => 'Classical Mandaic',
+  'ktm' => 'Kurti',
+  'mpf' => 'Tajumulco Mam',
+  'lid' => 'Nyindrou',
+  'big' => 'Biangai',
+  'dju' => 'Kapriman',
+  'xmd' => 'Mbudum',
+  'dma' => 'Duma',
+  'cbl' => 'Bualkhaw Chin',
+  'mql' => 'Mbelime',
+  'szk' => 'Sizaki',
+  'bdp' => 'Bende',
+  'rtc' => 'Rungtu Chin',
+  'sbr' => 'Sembakung Murut',
+  'blq' => 'Baluan-Pam',
+  'aln' => 'Gheg Albanian',
+  'ldb' => "Du\x{303}ya",
+  'bpj' => 'Binji',
+  'xgu' => 'Unggumi',
+  'buj' => 'Basa-Gurmana',
+  'oss' => 'Ossetian',
+  'uga' => 'Ugaritic',
+  'urm' => 'Urapmin',
+  'meo' => 'Kedah Malay',
+  'tmf' => 'Toba-Maskoy',
+  'ipk' => 'Inupiaq',
+  'sgh' => 'Shughni',
+  'vil' => 'Vilela',
+  'bxq' => 'Beele',
+  'niy' => 'Ngiti',
+  'mdg' => 'Massalat',
+  'wij' => 'Wik-Iiyanh',
+  'mlu' => 'To\'abaita',
+  'dau' => 'Dar Sila Daju',
+  'oia' => 'Oirata',
+  'ilv' => 'Ilue',
+  'yub' => 'Yugambal',
+  'yng' => 'Yango',
+  'bys' => 'Burak',
+  'mip' => 'Apasco-Apoala Mixtec',
+  'ypb' => 'Labo Phowa',
+  'ylr' => 'Yalarnnga',
+  'kyy' => 'Kambaira',
+  'syn' => 'Senaya',
+  'sko' => 'Seko Tengah',
+  'mna' => 'Mbula',
+  'swx' => "Suruah\x{e1}",
+  'mxu' => 'Mada (Cameroon)',
+  'isa' => 'Isabi',
+  'les' => 'Lese',
+  'wnb' => 'Wanambre',
+  'kec' => 'Keiga',
+  'zms' => 'Mbesa',
+  'dox' => 'Bussa',
+  'yda' => 'Yanda',
+  'rem' => 'Remo',
+  'gey' => 'Enya',
+  'gle' => 'Irish',
+  'onp' => 'Sartang',
+  'mhw' => 'Mbukushu',
+  'aoh' => 'Arma',
+  'rnr' => 'Nari Nari',
+  'ght' => 'Kuke',
+  'gml' => 'Middle Low German'
+};
+#-*-perl-*-
 
 ## run the script if not called as a module
 __PACKAGE__->run() unless caller();
@@ -113,6 +18368,8 @@ sub run{
 }
 
 
+
+
 =head1 SUBROUTINES
 
 =head2 $converted = convert_iso639( $type, $id )
@@ -122,13 +18379,10 @@ Convert the language code or language name given in C<$id>. The C<$type> specifi
 =cut
 
 sub convert_iso639{
-    my $code = $_[1];
-    # my $code = lc($_[1]);
-    # $code=~s/[\-\_].*$//;
-    return get_iso639_1($code,$_[2])       if ($_[0] eq 'iso639-1');
-    return get_iso639_3($code,$_[2])       if ($_[0] eq 'iso639-3');
-    return get_macro_language($code,$_[2]) if ($_[0] eq 'macro');
-    return get_language_name($code);
+    return get_iso639_1($_[1],$_[2])       if ($_[0] eq 'iso639-1');
+    return get_iso639_3($_[1],$_[2])       if ($_[0] eq 'iso639-3');
+    return get_macro_language($_[1],$_[2]) if ($_[0] eq 'macro');
+    return get_language_name($_[1]);
 }
 
 
@@ -139,20 +18393,20 @@ Return the ISO 639-1 code for a given language or three-letter code. Returns the
 =cut
 
 sub get_iso639_1{
-    return $_[0]               if (exists $TwoToName{$_[0]});
-    return $_[0]               if (exists $TwoToThree{$_[0]});
-    return $ThreeToTwo{$_[0]}  if (exists $ThreeToTwo{$_[0]});
+    return $$ThreeToTwo{$$TwoToThree{$_[0]}} if (exists $$TwoToThree{$_[0]});
+    return $$ThreeToTwo{$_[0]}               if (exists $$ThreeToTwo{$_[0]});
+    return $_[0]                             if (exists $$TwoToName{$_[0]});
     my $lc = lc($_[0]);
-    return $lc                 if (exists $TwoToName{$lc});
-    return $ThreeToTwo{$lc}    if (exists $ThreeToTwo{$lc});
-    return $NameToTwo{$lc}     if (exists $NameToTwo{$lc});
-    return $lc                 if (exists $TwoToThree{$lc});
+    return $$ThreeToTwo{$$TwoToThree{$lc}}   if (exists $$TwoToThree{$lc});    
+    return $$ThreeToTwo{$lc}                 if (exists $$ThreeToTwo{$lc});
+    return $$NameToTwo{$lc}                  if (exists $$NameToTwo{$lc});
+    return $lc                               if (exists $$TwoToName{$lc});
     
     ## TODO: is it OK to fallback to macro language in this conversion?
     ##       (should we add some regional code?)
-    if (exists $ThreeToMacro{$_[0]}){
-	return $ThreeToTwo{$ThreeToMacro{$_[0]}} 
-	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
+    if (exists $$ThreeToMacro{$_[0]}){
+	return $$ThreeToTwo{$$ThreeToMacro{$_[0]}} 
+	if (exists $$ThreeToTwo{$$ThreeToMacro{$_[0]}});
     }
     ## try without regional/script extension
     if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
@@ -170,14 +18424,14 @@ Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx
 =cut
 
 sub get_iso639_3{
-    return $_[0]                    if (exists $ThreeToName{$_[0]});
-    return $TwoToThree{$_[0]}       if (exists $TwoToThree{$_[0]});
-    return $ThreeToThree{$_[0]}     if (exists $ThreeToThree{$_[0]});
+    return $$TwoToThree{$_[0]}      if (exists $$TwoToThree{$_[0]});
+    return $$ThreeToThree{$_[0]}    if (exists $$ThreeToThree{$_[0]});
+    return $_[0]                    if (exists $$ThreeToName{$_[0]});
     my $lc = lc($_[0]);
-    return $lc                      if (exists $ThreeToName{$lc});
-    return $TwoToThree{$lc}         if (exists $TwoToThree{$lc});
-    return $NameToThree{$lc}        if (exists $NameToThree{$lc});
-    return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
+    return $$TwoToThree{$lc}        if (exists $$TwoToThree{$lc});
+    return $$ThreeToThree{$lc}      if (exists $$ThreeToThree{$lc});
+    return $$NameToThree{$lc}       if (exists $$NameToThree{$lc});
+    return $lc                      if (exists $$ThreeToName{$lc});
 
     if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
 	return &get_iso639_3($1).$2 if ($_[1]);
@@ -197,7 +18451,7 @@ Return the ISO 639-3 code of the macro language for a given language or any ISO 
 
 sub get_macro_language{
     my $code = get_iso639_3($_[0],$_[1]);
-    return $ThreeToMacro{$code} if (exists $ThreeToMacro{$code});
+    return $$ThreeToMacro{$code} if (exists $$ThreeToMacro{$code});
     return $code;
 }
 
@@ -208,186 +18462,14 @@ Return the name of the language that corresponds to the given language code (any
 =cut
 
 sub get_language_name{
-    return $TwoToName{$_[0]}         if (exists $TwoToName{$_[0]});
-    return $ThreeToName{$_[0]}       if (exists $ThreeToName{$_[0]});
-    return $_[0]                     if (exists $NameToThree{$_[0]});
-    return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
+    return $$TwoToName{$_[0]}        if (exists $$TwoToName{$_[0]});
+    return $$ThreeToName{$_[0]}      if (exists $$ThreeToName{$_[0]});
+    return $_[0]                     if (exists $$NameToThree{$_[0]});
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_language_name($1);
+    }
     return &get_language_name(lc($_[0])) if ($_[0] ne lc($_[0]));
     return 'unknown';
-}
-
-
-
-
-
-
-
-
-####################################
-# internal functions that
-# read all codes from the data part
-####################################
-
-## read all codes
-sub _read_iso639_codes{
-    while (<DATA>){
-	chomp;
-	next unless($_);
-	my @f = split(/\t/);
-	if ($f[1] eq 'Part2B'){
-	    &_read_main_code_table();
-	}
-	elsif ($f[0] eq 'M_Id'){
-	    &_read_macrolanguage_table();
-	}
-	elsif ($f[0] eq 'NS_Id'){
-	    &_read_nonstandard_code_table();
-	}
-	elsif ($f[0] eq 'C_Id'){
-	    &_read_collective_language_table();
-	}
-	elsif ($f[0] eq 'URI'){
-	    &_read_iso639_5();
-	}
-	elsif ($f[4] eq 'Ret_Remedy'){
-	    &_read_retired_code_table();
-	}
-    }
-}
-
-
-sub _read_retired_code_table{    
-    ## retired codes
-    # print STDERR "read retired";
-    while (<DATA>){
-	chomp;
-	last unless ($_);
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	unless (exists $ThreeToThree{$f[0]}){
-	    $ThreeToName{$f[0]} = $f[1];
-	    $ThreeToThree{$f[0]} = $f[3] ? $f[3] : $f[0];
-	}
-    }
-}
-
-sub _read_macrolanguage_table{    
-    ## macro-languages
-    # print STDERR "read macrolanguages";
-    while (<DATA>){
-	chomp;
-	last unless ($_);
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	$ThreeToThree{$f[1]} = $f[1];
-	$ThreeToMacro{$f[1]} = $f[0];
-    }
-}
-
-sub _read_collective_language_table{
-    ## collective languages from ISO639-2
-    # print STDERR "read collective language codes";
-    while (<DATA>){
-	chomp;
-	last unless ($_);
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	unless (exists $ThreeToThree{$f[0]}){
-	    $ThreeToThree{$f[0]} = $f[0];
-	    if ($f[1]){
-		$ThreeToTwo{$f[0]} = $f[1];
-		$TwoToThree{$f[1]} = $f[0];
-		if ($f[2]){
-		    $TwoToName{$f[1]} = $f[2];
-		    $NameToTwo{$f[2]} = $f[1];
-		}
-	    }
-	    if ($f[2]){
-		$ThreeToName{$f[0]} = $f[2];
-		$NameToThree{lc($f[2])} = $f[0];
-	    }
-	}
-    }
-}
-
-sub _read_nonstandard_code_table{    
-    ## non-standard codes
-    # print STDERR "read non-standard codes";
-    while (<DATA>){
-	chomp;
-	last unless ($_);
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	unless (exists $ThreeToThree{$f[0]}){
-	    $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
-	    if ($f[2]){
-		$ThreeToTwo{$f[0]}   = $f[2];
-	    }
-	    $ThreeToMacro{$f[0]} = $f[3] if ($f[3]);
-	    if ($f[4]){
-		$ThreeToName{$f[0]}     = $f[4];
-	    }
-	}
-	if ($f[4]){
-	    $NameToThree{lc($f[4])} = $f[0] unless (exists $NameToThree{$f[4]});
-	    if ($f[2]){
-		$NameToTwo{lc($f[4])} = $f[2] unless (exists $NameToTwo{$f[4]});
-	    }
-	}
-	if ($f[2]){
-	    $TwoToThree{$f[2]} = $f[0] unless (exists $TwoToThree{$f[2]});
-	    if ($f[4]){
-		$TwoToName{$f[2]} = $f[4] unless (exists $TwoToName{$f[2]});
-	    }
-	}
-    }
-}
-
-
-sub _read_main_code_table{
-    while (<DATA>){
-	chomp;
-	return unless ($_);
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	$ThreeToName{$f[0]} = $f[6];
-	$ThreeToThree{$f[0]} = $f[0];
-	$NameToThree{lc($f[6])} = $f[0];
-	if ($f[3]){
-	    $ThreeToTwo{$f[0]}    = $f[3];
-	    $TwoToThree{$f[3]}    = $f[0];
-	    $TwoToName{$f[3]}     = $f[6];
-	    $NameToTwo{lc($f[6])} = $f[3];
-	}
-	if ($f[1]){
-	    $ThreeToThree{$f[1]} = $f[0];
-	    $ThreeToName{$f[1]} = $f[6];
-	    if ($f[3]){
-		$ThreeToTwo{$f[1]} = $f[3];
-	    }
-	}
-	if ($f[2]){
-	    $ThreeToThree{$f[2]} = $f[0];
-	    $ThreeToName{$f[2]} = $f[6];
-	    if ($f[3]){
-		$ThreeToTwo{$f[2]} = $f[3];
-	    }
-	}
-    }
-}
-
-sub _read_iso639_5{
-    ## collective languages from ISO639-2
-    # print STDERR "read collective language codes";
-    while (<DATA>){
-	chomp;
-	return unless ($_);
-	## URI code English-name French-name
-	my @f = split(/\t/);
-	next unless ($f[0]);
-	$ThreeToName{$f[1]} = $f[2];
-	$NameToThree{lc($f[2])} = $f[1];
-    }
 }
 
 
@@ -467,8884 +18549,3 @@ The language codes are taken from SIL International L<https://iso639-3.sil.org>.
 
 __DATA__
 
-Id	Part2B	Part2T	Part1	Scope	Language_Type	Ref_Name	Comment
-aaa				I	L	Ghotuo	
-aab				I	L	Alumu-Tesu	
-aac				I	L	Ari	
-aad				I	L	Amal	
-aae				I	L	Arbëreshë Albanian	
-aaf				I	L	Aranadan	
-aag				I	L	Ambrak	
-aah				I	L	Abu' Arapesh	
-aai				I	L	Arifama-Miniafia	
-aak				I	L	Ankave	
-aal				I	L	Afade	
-aan				I	L	Anambé	
-aao				I	L	Algerian Saharan Arabic	
-aap				I	L	Pará Arára	
-aaq				I	E	Eastern Abnaki	
-aar	aar	aar	aa	I	L	Afar	
-aas				I	L	Aasáx	
-aat				I	L	Arvanitika Albanian	
-aau				I	L	Abau	
-aaw				I	L	Solong	
-aax				I	L	Mandobo Atas	
-aaz				I	L	Amarasi	
-aba				I	L	Abé	
-abb				I	L	Bankon	
-abc				I	L	Ambala Ayta	
-abd				I	L	Manide	
-abe				I	L	Western Abnaki	
-abf				I	L	Abai Sungai	
-abg				I	L	Abaga	
-abh				I	L	Tajiki Arabic	
-abi				I	L	Abidji	
-abj				I	E	Aka-Bea	
-abk	abk	abk	ab	I	L	Abkhazian	
-abl				I	L	Lampung Nyo	
-abm				I	L	Abanyom	
-abn				I	L	Abua	
-abo				I	L	Abon	
-abp				I	L	Abellen Ayta	
-abq				I	L	Abaza	
-abr				I	L	Abron	
-abs				I	L	Ambonese Malay	
-abt				I	L	Ambulas	
-abu				I	L	Abure	
-abv				I	L	Baharna Arabic	
-abw				I	L	Pal	
-abx				I	L	Inabaknon	
-aby				I	L	Aneme Wake	
-abz				I	L	Abui	
-aca				I	L	Achagua	
-acb				I	L	Áncá	
-acd				I	L	Gikyode	
-ace	ace	ace		I	L	Achinese	
-acf				I	L	Saint Lucian Creole French	
-ach	ach	ach		I	L	Acoli	
-aci				I	E	Aka-Cari	
-ack				I	E	Aka-Kora	
-acl				I	E	Akar-Bale	
-acm				I	L	Mesopotamian Arabic	
-acn				I	L	Achang	
-acp				I	L	Eastern Acipa	
-acq				I	L	Ta'izzi-Adeni Arabic	
-acr				I	L	Achi	
-acs				I	E	Acroá	
-act				I	L	Achterhoeks	
-acu				I	L	Achuar-Shiwiar	
-acv				I	L	Achumawi	
-acw				I	L	Hijazi Arabic	
-acx				I	L	Omani Arabic	
-acy				I	L	Cypriot Arabic	
-acz				I	L	Acheron	
-ada	ada	ada		I	L	Adangme	
-adb				I	L	Atauran	
-add				I	L	Lidzonka	
-ade				I	L	Adele	
-adf				I	L	Dhofari Arabic	
-adg				I	L	Andegerebinha	
-adh				I	L	Adhola	
-adi				I	L	Adi	
-adj				I	L	Adioukrou	
-adl				I	L	Galo	
-adn				I	L	Adang	
-ado				I	L	Abu	
-adq				I	L	Adangbe	
-adr				I	L	Adonara	
-ads				I	L	Adamorobe Sign Language	
-adt				I	L	Adnyamathanha	
-adu				I	L	Aduge	
-adw				I	L	Amundava	
-adx				I	L	Amdo Tibetan	
-ady	ady	ady		I	L	Adyghe	
-adz				I	L	Adzera	
-aea				I	E	Areba	
-aeb				I	L	Tunisian Arabic	
-aec				I	L	Saidi Arabic	
-aed				I	L	Argentine Sign Language	
-aee				I	L	Northeast Pashai	
-aek				I	L	Haeke	
-ael				I	L	Ambele	
-aem				I	L	Arem	
-aen				I	L	Armenian Sign Language	
-aeq				I	L	Aer	
-aer				I	L	Eastern Arrernte	
-aes				I	E	Alsea	
-aeu				I	L	Akeu	
-aew				I	L	Ambakich	
-aey				I	L	Amele	
-aez				I	L	Aeka	
-afb				I	L	Gulf Arabic	
-afd				I	L	Andai	
-afe				I	L	Putukwam	
-afg				I	L	Afghan Sign Language	
-afh	afh	afh		I	C	Afrihili	
-afi				I	L	Akrukay	
-afk				I	L	Nanubae	
-afn				I	L	Defaka	
-afo				I	L	Eloyi	
-afp				I	L	Tapei	
-afr	afr	afr	af	I	L	Afrikaans	
-afs				I	L	Afro-Seminole Creole	
-aft				I	L	Afitti	
-afu				I	L	Awutu	
-afz				I	L	Obokuitai	
-aga				I	E	Aguano	
-agb				I	L	Legbo	
-agc				I	L	Agatu	
-agd				I	L	Agarabi	
-age				I	L	Angal	
-agf				I	L	Arguni	
-agg				I	L	Angor	
-agh				I	L	Ngelima	
-agi				I	L	Agariya	
-agj				I	L	Argobba	
-agk				I	L	Isarog Agta	
-agl				I	L	Fembe	
-agm				I	L	Angaataha	
-agn				I	L	Agutaynen	
-ago				I	L	Tainae	
-agq				I	L	Aghem	
-agr				I	L	Aguaruna	
-ags				I	L	Esimbi	
-agt				I	L	Central Cagayan Agta	
-agu				I	L	Aguacateco	
-agv				I	L	Remontado Dumagat	
-agw				I	L	Kahua	
-agx				I	L	Aghul	
-agy				I	L	Southern Alta	
-agz				I	L	Mt. Iriga Agta	
-aha				I	L	Ahanta	
-ahb				I	L	Axamb	
-ahg				I	L	Qimant	
-ahh				I	L	Aghu	
-ahi				I	L	Tiagbamrin Aizi	
-ahk				I	L	Akha	
-ahl				I	L	Igo	
-ahm				I	L	Mobumrin Aizi	
-ahn				I	L	Àhàn	
-aho				I	E	Ahom	
-ahp				I	L	Aproumu Aizi	
-ahr				I	L	Ahirani	
-ahs				I	L	Ashe	
-aht				I	L	Ahtena	
-aia				I	L	Arosi	
-aib				I	L	Ainu (China)	
-aic				I	L	Ainbai	
-aid				I	E	Alngith	
-aie				I	L	Amara	
-aif				I	L	Agi	
-aig				I	L	Antigua and Barbuda Creole English	
-aih				I	L	Ai-Cham	
-aii				I	L	Assyrian Neo-Aramaic	
-aij				I	L	Lishanid Noshan	
-aik				I	L	Ake	
-ail				I	L	Aimele	
-aim				I	L	Aimol	
-ain	ain	ain		I	L	Ainu (Japan)	
-aio				I	L	Aiton	
-aip				I	L	Burumakok	
-aiq				I	L	Aimaq	
-air				I	L	Airoran	
-ait				I	E	Arikem	
-aiw				I	L	Aari	
-aix				I	L	Aighon	
-aiy				I	L	Ali	
-aja				I	L	Aja (South Sudan)	
-ajg				I	L	Aja (Benin)	
-aji				I	L	Ajië	
-ajn				I	L	Andajin	
-ajp				I	L	South Levantine Arabic	
-ajt				I	L	Judeo-Tunisian Arabic	
-aju				I	L	Judeo-Moroccan Arabic	
-ajw				I	E	Ajawa	
-ajz				I	L	Amri Karbi	
-aka	aka	aka	ak	M	L	Akan	
-akb				I	L	Batak Angkola	
-akc				I	L	Mpur	
-akd				I	L	Ukpet-Ehom	
-ake				I	L	Akawaio	
-akf				I	L	Akpa	
-akg				I	L	Anakalangu	
-akh				I	L	Angal Heneng	
-aki				I	L	Aiome	
-akj				I	E	Aka-Jeru	
-akk	akk	akk		I	A	Akkadian	
-akl				I	L	Aklanon	
-akm				I	E	Aka-Bo	
-ako				I	L	Akurio	
-akp				I	L	Siwu	
-akq				I	L	Ak	
-akr				I	L	Araki	
-aks				I	L	Akaselem	
-akt				I	L	Akolet	
-aku				I	L	Akum	
-akv				I	L	Akhvakh	
-akw				I	L	Akwa	
-akx				I	E	Aka-Kede	
-aky				I	E	Aka-Kol	
-akz				I	L	Alabama	
-ala				I	L	Alago	
-alc				I	L	Qawasqar	
-ald				I	L	Alladian	
-ale	ale	ale		I	L	Aleut	
-alf				I	L	Alege	
-alh				I	L	Alawa	
-ali				I	L	Amaimon	
-alj				I	L	Alangan	
-alk				I	L	Alak	
-all				I	L	Allar	
-alm				I	L	Amblong	
-aln				I	L	Gheg Albanian	
-alo				I	L	Larike-Wakasihu	
-alp				I	L	Alune	
-alq				I	L	Algonquin	
-alr				I	L	Alutor	
-als				I	L	Tosk Albanian	
-alt	alt	alt		I	L	Southern Altai	
-alu				I	L	'Are'are	
-alw				I	L	Alaba-K’abeena	
-alx				I	L	Amol	
-aly				I	L	Alyawarr	
-alz				I	L	Alur	
-ama				I	E	Amanayé	
-amb				I	L	Ambo	
-amc				I	L	Amahuaca	
-ame				I	L	Yanesha'	
-amf				I	L	Hamer-Banna	
-amg				I	L	Amurdak	
-amh	amh	amh	am	I	L	Amharic	
-ami				I	L	Amis	
-amj				I	L	Amdang	
-amk				I	L	Ambai	
-aml				I	L	War-Jaintia	
-amm				I	L	Ama (Papua New Guinea)	
-amn				I	L	Amanab	
-amo				I	L	Amo	
-amp				I	L	Alamblak	
-amq				I	L	Amahai	
-amr				I	L	Amarakaeri	
-ams				I	L	Southern Amami-Oshima	
-amt				I	L	Amto	
-amu				I	L	Guerrero Amuzgo	
-amv				I	L	Ambelau	
-amw				I	L	Western Neo-Aramaic	
-amx				I	L	Anmatyerre	
-amy				I	L	Ami	
-amz				I	E	Atampaya	
-ana				I	E	Andaqui	
-anb				I	E	Andoa	
-anc				I	L	Ngas	
-and				I	L	Ansus	
-ane				I	L	Xârâcùù	
-anf				I	L	Animere	
-ang	ang	ang		I	H	Old English (ca. 450-1100)	
-anh				I	L	Nend	
-ani				I	L	Andi	
-anj				I	L	Anor	
-ank				I	L	Goemai	
-anl				I	L	Anu-Hkongso Chin	
-anm				I	L	Anal	
-ann				I	L	Obolo	
-ano				I	L	Andoque	
-anp	anp	anp		I	L	Angika	
-anq				I	L	Jarawa (India)	
-anr				I	L	Andh	
-ans				I	E	Anserma	
-ant				I	L	Antakarinya	
-anu				I	L	Anuak	
-anv				I	L	Denya	
-anw				I	L	Anaang	
-anx				I	L	Andra-Hus	
-any				I	L	Anyin	
-anz				I	L	Anem	
-aoa				I	L	Angolar	
-aob				I	L	Abom	
-aoc				I	L	Pemon	
-aod				I	L	Andarum	
-aoe				I	L	Angal Enen	
-aof				I	L	Bragat	
-aog				I	L	Angoram	
-aoi				I	L	Anindilyakwa	
-aoj				I	L	Mufian	
-aok				I	L	Arhö	
-aol				I	L	Alor	
-aom				I	L	Ömie	
-aon				I	L	Bumbita Arapesh	
-aor				I	E	Aore	
-aos				I	L	Taikat	
-aot				I	L	Atong (India)	
-aou				I	L	A'ou	
-aox				I	L	Atorada	
-aoz				I	L	Uab Meto	
-apb				I	L	Sa'a	
-apc				I	L	North Levantine Arabic	
-apd				I	L	Sudanese Arabic	
-ape				I	L	Bukiyip	
-apf				I	L	Pahanan Agta	
-apg				I	L	Ampanang	
-aph				I	L	Athpariya	
-api				I	L	Apiaká	
-apj				I	L	Jicarilla Apache	
-apk				I	L	Kiowa Apache	
-apl				I	L	Lipan Apache	
-apm				I	L	Mescalero-Chiricahua Apache	
-apn				I	L	Apinayé	
-apo				I	L	Ambul	
-app				I	L	Apma	
-apq				I	L	A-Pucikwar	
-apr				I	L	Arop-Lokep	
-aps				I	L	Arop-Sissano	
-apt				I	L	Apatani	
-apu				I	L	Apurinã	
-apv				I	E	Alapmunte	
-apw				I	L	Western Apache	
-apx				I	L	Aputai	
-apy				I	L	Apalaí	
-apz				I	L	Safeyoka	
-aqc				I	L	Archi	
-aqd				I	L	Ampari Dogon	
-aqg				I	L	Arigidi	
-aqm				I	L	Atohwaim	
-aqn				I	L	Northern Alta	
-aqp				I	E	Atakapa	
-aqr				I	L	Arhâ	
-aqt				I	L	Angaité	
-aqz				I	L	Akuntsu	
-ara	ara	ara	ar	M	L	Arabic	
-arb				I	L	Standard Arabic	
-arc	arc	arc		I	A	Official Aramaic (700-300 BCE)	
-ard				I	E	Arabana	
-are				I	L	Western Arrarnta	
-arg	arg	arg	an	I	L	Aragonese	
-arh				I	L	Arhuaco	
-ari				I	L	Arikara	
-arj				I	E	Arapaso	
-ark				I	L	Arikapú	
-arl				I	L	Arabela	
-arn	arn	arn		I	L	Mapudungun	
-aro				I	L	Araona	
-arp	arp	arp		I	L	Arapaho	
-arq				I	L	Algerian Arabic	
-arr				I	L	Karo (Brazil)	
-ars				I	L	Najdi Arabic	
-aru				I	E	Aruá (Amazonas State)	
-arv				I	L	Arbore	
-arw	arw	arw		I	L	Arawak	
-arx				I	L	Aruá (Rodonia State)	
-ary				I	L	Moroccan Arabic	
-arz				I	L	Egyptian Arabic	
-asa				I	L	Asu (Tanzania)	
-asb				I	L	Assiniboine	
-asc				I	L	Casuarina Coast Asmat	
-ase				I	L	American Sign Language	
-asf				I	L	Auslan	
-asg				I	L	Cishingini	
-ash				I	E	Abishira	
-asi				I	L	Buruwai	
-asj				I	L	Sari	
-ask				I	L	Ashkun	
-asl				I	L	Asilulu	
-asm	asm	asm	as	I	L	Assamese	
-asn				I	L	Xingú Asuriní	
-aso				I	L	Dano	
-asp				I	L	Algerian Sign Language	
-asq				I	L	Austrian Sign Language	
-asr				I	L	Asuri	
-ass				I	L	Ipulo	
-ast	ast	ast		I	L	Asturian	
-asu				I	L	Tocantins Asurini	
-asv				I	L	Asoa	
-asw				I	L	Australian Aborigines Sign Language	
-asx				I	L	Muratayak	
-asy				I	L	Yaosakor Asmat	
-asz				I	L	As	
-ata				I	L	Pele-Ata	
-atb				I	L	Zaiwa	
-atc				I	E	Atsahuaca	
-atd				I	L	Ata Manobo	
-ate				I	L	Atemble	
-atg				I	L	Ivbie North-Okpela-Arhe	
-ati				I	L	Attié	
-atj				I	L	Atikamekw	
-atk				I	L	Ati	
-atl				I	L	Mt. Iraya Agta	
-atm				I	L	Ata	
-atn				I	L	Ashtiani	
-ato				I	L	Atong (Cameroon)	
-atp				I	L	Pudtol Atta	
-atq				I	L	Aralle-Tabulahan	
-atr				I	L	Waimiri-Atroari	
-ats				I	L	Gros Ventre	
-att				I	L	Pamplona Atta	
-atu				I	L	Reel	
-atv				I	L	Northern Altai	
-atw				I	L	Atsugewi	
-atx				I	L	Arutani	
-aty				I	L	Aneityum	
-atz				I	L	Arta	
-aua				I	L	Asumboa	
-aub				I	L	Alugu	
-auc				I	L	Waorani	
-aud				I	L	Anuta	
-aug				I	L	Aguna	
-auh				I	L	Aushi	
-aui				I	L	Anuki	
-auj				I	L	Awjilah	
-auk				I	L	Heyo	
-aul				I	L	Aulua	
-aum				I	L	Asu (Nigeria)	
-aun				I	L	Molmo One	
-auo				I	E	Auyokawa	
-aup				I	L	Makayam	
-auq				I	L	Anus	
-aur				I	L	Aruek	
-aut				I	L	Austral	
-auu				I	L	Auye	
-auw				I	L	Awyi	
-aux				I	E	Aurá	
-auy				I	L	Awiyaana	
-auz				I	L	Uzbeki Arabic	
-ava	ava	ava	av	I	L	Avaric	
-avb				I	L	Avau	
-avd				I	L	Alviri-Vidari	
-ave	ave	ave	ae	I	A	Avestan	
-avi				I	L	Avikam	
-avk				I	C	Kotava	
-avl				I	L	Eastern Egyptian Bedawi Arabic	
-avm				I	E	Angkamuthi	
-avn				I	L	Avatime	
-avo				I	E	Agavotaguerra	
-avs				I	E	Aushiri	
-avt				I	L	Au	
-avu				I	L	Avokaya	
-avv				I	L	Avá-Canoeiro	
-awa	awa	awa		I	L	Awadhi	
-awb				I	L	Awa (Papua New Guinea)	
-awc				I	L	Cicipu	
-awe				I	L	Awetí	
-awg				I	E	Anguthimri	
-awh				I	L	Awbono	
-awi				I	L	Aekyom	
-awk				I	E	Awabakal	
-awm				I	L	Arawum	
-awn				I	L	Awngi	
-awo				I	L	Awak	
-awr				I	L	Awera	
-aws				I	L	South Awyu	
-awt				I	L	Araweté	
-awu				I	L	Central Awyu	
-awv				I	L	Jair Awyu	
-aww				I	L	Awun	
-awx				I	L	Awara	
-awy				I	L	Edera Awyu	
-axb				I	E	Abipon	
-axe				I	E	Ayerrerenge	
-axg				I	E	Mato Grosso Arára	
-axk				I	L	Yaka (Central African Republic)	
-axl				I	E	Lower Southern Aranda	
-axm				I	H	Middle Armenian	
-axx				I	L	Xârâgurè	
-aya				I	L	Awar	
-ayb				I	L	Ayizo Gbe	
-ayc				I	L	Southern Aymara	
-ayd				I	E	Ayabadhu	
-aye				I	L	Ayere	
-ayg				I	L	Ginyanga	
-ayh				I	L	Hadrami Arabic	
-ayi				I	L	Leyigha	
-ayk				I	L	Akuku	
-ayl				I	L	Libyan Arabic	
-aym	aym	aym	ay	M	L	Aymara	
-ayn				I	L	Sanaani Arabic	
-ayo				I	L	Ayoreo	
-ayp				I	L	North Mesopotamian Arabic	
-ayq				I	L	Ayi (Papua New Guinea)	
-ayr				I	L	Central Aymara	
-ays				I	L	Sorsogon Ayta	
-ayt				I	L	Magbukun Ayta	
-ayu				I	L	Ayu	
-ayz				I	L	Mai Brat	
-aza				I	L	Azha	
-azb				I	L	South Azerbaijani	
-azd				I	L	Eastern Durango Nahuatl	
-aze	aze	aze	az	M	L	Azerbaijani	
-azg				I	L	San Pedro Amuzgos Amuzgo	
-azj				I	L	North Azerbaijani	
-azm				I	L	Ipalapa Amuzgo	
-azn				I	L	Western Durango Nahuatl	
-azo				I	L	Awing	
-azt				I	L	Faire Atta	
-azz				I	L	Highland Puebla Nahuatl	
-baa				I	L	Babatana	
-bab				I	L	Bainouk-Gunyuño	
-bac				I	L	Badui	
-bae				I	E	Baré	
-baf				I	L	Nubaca	
-bag				I	L	Tuki	
-bah				I	L	Bahamas Creole English	
-baj				I	L	Barakai	
-bak	bak	bak	ba	I	L	Bashkir	
-bal	bal	bal		M	L	Baluchi	
-bam	bam	bam	bm	I	L	Bambara	
-ban	ban	ban		I	L	Balinese	
-bao				I	L	Waimaha	
-bap				I	L	Bantawa	
-bar				I	L	Bavarian	
-bas	bas	bas		I	L	Basa (Cameroon)	
-bau				I	L	Bada (Nigeria)	
-bav				I	L	Vengo	
-baw				I	L	Bambili-Bambui	
-bax				I	L	Bamun	
-bay				I	L	Batuley	
-bba				I	L	Baatonum	
-bbb				I	L	Barai	
-bbc				I	L	Batak Toba	
-bbd				I	L	Bau	
-bbe				I	L	Bangba	
-bbf				I	L	Baibai	
-bbg				I	L	Barama	
-bbh				I	L	Bugan	
-bbi				I	L	Barombi	
-bbj				I	L	Ghomálá'	
-bbk				I	L	Babanki	
-bbl				I	L	Bats	
-bbm				I	L	Babango	
-bbn				I	L	Uneapa	
-bbo				I	L	Northern Bobo Madaré	
-bbp				I	L	West Central Banda	
-bbq				I	L	Bamali	
-bbr				I	L	Girawa	
-bbs				I	L	Bakpinka	
-bbt				I	L	Mburku	
-bbu				I	L	Kulung (Nigeria)	
-bbv				I	L	Karnai	
-bbw				I	L	Baba	
-bbx				I	L	Bubia	
-bby				I	L	Befang	
-bca				I	L	Central Bai	
-bcb				I	L	Bainouk-Samik	
-bcc				I	L	Southern Balochi	
-bcd				I	L	North Babar	
-bce				I	L	Bamenyam	
-bcf				I	L	Bamu	
-bcg				I	L	Baga Pokur	
-bch				I	L	Bariai	
-bci				I	L	Baoulé	
-bcj				I	L	Bardi	
-bck				I	L	Bunuba	
-bcl				I	L	Central Bikol	
-bcm				I	L	Bannoni	
-bcn				I	L	Bali (Nigeria)	
-bco				I	L	Kaluli	
-bcp				I	L	Bali (Democratic Republic of Congo)	
-bcq				I	L	Bench	
-bcr				I	L	Babine	
-bcs				I	L	Kohumono	
-bct				I	L	Bendi	
-bcu				I	L	Awad Bing	
-bcv				I	L	Shoo-Minda-Nye	
-bcw				I	L	Bana	
-bcy				I	L	Bacama	
-bcz				I	L	Bainouk-Gunyaamolo	
-bda				I	L	Bayot	
-bdb				I	L	Basap	
-bdc				I	L	Emberá-Baudó	
-bdd				I	L	Bunama	
-bde				I	L	Bade	
-bdf				I	L	Biage	
-bdg				I	L	Bonggi	
-bdh				I	L	Baka (South Sudan)	
-bdi				I	L	Burun	
-bdj				I	L	Bai (South Sudan)	
-bdk				I	L	Budukh	
-bdl				I	L	Indonesian Bajau	
-bdm				I	L	Buduma	
-bdn				I	L	Baldemu	
-bdo				I	L	Morom	
-bdp				I	L	Bende	
-bdq				I	L	Bahnar	
-bdr				I	L	West Coast Bajau	
-bds				I	L	Burunge	
-bdt				I	L	Bokoto	
-bdu				I	L	Oroko	
-bdv				I	L	Bodo Parja	
-bdw				I	L	Baham	
-bdx				I	L	Budong-Budong	
-bdy				I	L	Bandjalang	
-bdz				I	L	Badeshi	
-bea				I	L	Beaver	
-beb				I	L	Bebele	
-bec				I	L	Iceve-Maci	
-bed				I	L	Bedoanas	
-bee				I	L	Byangsi	
-bef				I	L	Benabena	
-beg				I	L	Belait	
-beh				I	L	Biali	
-bei				I	L	Bekati'	
-bej	bej	bej		I	L	Beja	
-bek				I	L	Bebeli	
-bel	bel	bel	be	I	L	Belarusian	
-bem	bem	bem		I	L	Bemba (Zambia)	
-ben	ben	ben	bn	I	L	Bengali	
-beo				I	L	Beami	
-bep				I	L	Besoa	
-beq				I	L	Beembe	
-bes				I	L	Besme	
-bet				I	L	Guiberoua Béte	
-beu				I	L	Blagar	
-bev				I	L	Daloa Bété	
-bew				I	L	Betawi	
-bex				I	L	Jur Modo	
-bey				I	L	Beli (Papua New Guinea)	
-bez				I	L	Bena (Tanzania)	
-bfa				I	L	Bari	
-bfb				I	L	Pauri Bareli	
-bfc				I	L	Panyi Bai	
-bfd				I	L	Bafut	
-bfe				I	L	Betaf	
-bff				I	L	Bofi	
-bfg				I	L	Busang Kayan	
-bfh				I	L	Blafe	
-bfi				I	L	British Sign Language	
-bfj				I	L	Bafanji	
-bfk				I	L	Ban Khor Sign Language	
-bfl				I	L	Banda-Ndélé	
-bfm				I	L	Mmen	
-bfn				I	L	Bunak	
-bfo				I	L	Malba Birifor	
-bfp				I	L	Beba	
-bfq				I	L	Badaga	
-bfr				I	L	Bazigar	
-bfs				I	L	Southern Bai	
-bft				I	L	Balti	
-bfu				I	L	Gahri	
-bfw				I	L	Bondo	
-bfx				I	L	Bantayanon	
-bfy				I	L	Bagheli	
-bfz				I	L	Mahasu Pahari	
-bga				I	L	Gwamhi-Wuri	
-bgb				I	L	Bobongko	
-bgc				I	L	Haryanvi	
-bgd				I	L	Rathwi Bareli	
-bge				I	L	Bauria	
-bgf				I	L	Bangandu	
-bgg				I	L	Bugun	
-bgi				I	L	Giangan	
-bgj				I	L	Bangolan	
-bgk				I	L	Bit	
-bgl				I	L	Bo (Laos)	
-bgn				I	L	Western Balochi	
-bgo				I	L	Baga Koga	
-bgp				I	L	Eastern Balochi	
-bgq				I	L	Bagri	
-bgr				I	L	Bawm Chin	
-bgs				I	L	Tagabawa	
-bgt				I	L	Bughotu	
-bgu				I	L	Mbongno	
-bgv				I	L	Warkay-Bipim	
-bgw				I	L	Bhatri	
-bgx				I	L	Balkan Gagauz Turkish	
-bgy				I	L	Benggoi	
-bgz				I	L	Banggai	
-bha				I	L	Bharia	
-bhb				I	L	Bhili	
-bhc				I	L	Biga	
-bhd				I	L	Bhadrawahi	
-bhe				I	L	Bhaya	
-bhf				I	L	Odiai	
-bhg				I	L	Binandere	
-bhh				I	L	Bukharic	
-bhi				I	L	Bhilali	
-bhj				I	L	Bahing	
-bhl				I	L	Bimin	
-bhm				I	L	Bathari	
-bhn				I	L	Bohtan Neo-Aramaic	
-bho	bho	bho		I	L	Bhojpuri	
-bhp				I	L	Bima	
-bhq				I	L	Tukang Besi South	
-bhr				I	L	Bara Malagasy	
-bhs				I	L	Buwal	
-bht				I	L	Bhattiyali	
-bhu				I	L	Bhunjia	
-bhv				I	L	Bahau	
-bhw				I	L	Biak	
-bhx				I	L	Bhalay	
-bhy				I	L	Bhele	
-bhz				I	L	Bada (Indonesia)	
-bia				I	L	Badimaya	
-bib				I	L	Bissa	
-bic				I	L	Bikaru	
-bid				I	L	Bidiyo	
-bie				I	L	Bepour	
-bif				I	L	Biafada	
-big				I	L	Biangai	
-bij				I	L	Vaghat-Ya-Bijim-Legeri	
-bik	bik	bik		M	L	Bikol	
-bil				I	L	Bile	
-bim				I	L	Bimoba	
-bin	bin	bin		I	L	Bini	
-bio				I	L	Nai	
-bip				I	L	Bila	
-biq				I	L	Bipi	
-bir				I	L	Bisorio	
-bis	bis	bis	bi	I	L	Bislama	
-bit				I	L	Berinomo	
-biu				I	L	Biete	
-biv				I	L	Southern Birifor	
-biw				I	L	Kol (Cameroon)	
-bix				I	L	Bijori	
-biy				I	L	Birhor	
-biz				I	L	Baloi	
-bja				I	L	Budza	
-bjb				I	E	Banggarla	
-bjc				I	L	Bariji	
-bje				I	L	Biao-Jiao Mien	
-bjf				I	L	Barzani Jewish Neo-Aramaic	
-bjg				I	L	Bidyogo	
-bjh				I	L	Bahinemo	
-bji				I	L	Burji	
-bjj				I	L	Kanauji	
-bjk				I	L	Barok	
-bjl				I	L	Bulu (Papua New Guinea)	
-bjm				I	L	Bajelani	
-bjn				I	L	Banjar	
-bjo				I	L	Mid-Southern Banda	
-bjp				I	L	Fanamaket	
-bjr				I	L	Binumarien	
-bjs				I	L	Bajan	
-bjt				I	L	Balanta-Ganja	
-bju				I	L	Busuu	
-bjv				I	L	Bedjond	
-bjw				I	L	Bakwé	
-bjx				I	L	Banao Itneg	
-bjy				I	E	Bayali	
-bjz				I	L	Baruga	
-bka				I	L	Kyak	
-bkc				I	L	Baka (Cameroon)	
-bkd				I	L	Binukid	
-bkf				I	L	Beeke	
-bkg				I	L	Buraka	
-bkh				I	L	Bakoko	
-bki				I	L	Baki	
-bkj				I	L	Pande	
-bkk				I	L	Brokskat	
-bkl				I	L	Berik	
-bkm				I	L	Kom (Cameroon)	
-bkn				I	L	Bukitan	
-bko				I	L	Kwa'	
-bkp				I	L	Boko (Democratic Republic of Congo)	
-bkq				I	L	Bakairí	
-bkr				I	L	Bakumpai	
-bks				I	L	Northern Sorsoganon	
-bkt				I	L	Boloki	
-bku				I	L	Buhid	
-bkv				I	L	Bekwarra	
-bkw				I	L	Bekwel	
-bkx				I	L	Baikeno	
-bky				I	L	Bokyi	
-bkz				I	L	Bungku	
-bla	bla	bla		I	L	Siksika	
-blb				I	L	Bilua	
-blc				I	L	Bella Coola	
-bld				I	L	Bolango	
-ble				I	L	Balanta-Kentohe	
-blf				I	L	Buol	
-blg				I	L	Balau	
-blh				I	L	Kuwaa	
-bli				I	L	Bolia	
-blj				I	L	Bolongan	
-blk				I	L	Pa'o Karen	
-bll				I	E	Biloxi	
-blm				I	L	Beli (South Sudan)	
-bln				I	L	Southern Catanduanes Bikol	
-blo				I	L	Anii	
-blp				I	L	Blablanga	
-blq				I	L	Baluan-Pam	
-blr				I	L	Blang	
-bls				I	L	Balaesang	
-blt				I	L	Tai Dam	
-blv				I	L	Kibala	
-blw				I	L	Balangao	
-blx				I	L	Mag-Indi Ayta	
-bly				I	L	Notre	
-blz				I	L	Balantak	
-bma				I	L	Lame	
-bmb				I	L	Bembe	
-bmc				I	L	Biem	
-bmd				I	L	Baga Manduri	
-bme				I	L	Limassa	
-bmf				I	L	Bom-Kim	
-bmg				I	L	Bamwe	
-bmh				I	L	Kein	
-bmi				I	L	Bagirmi	
-bmj				I	L	Bote-Majhi	
-bmk				I	L	Ghayavi	
-bml				I	L	Bomboli	
-bmm				I	L	Northern Betsimisaraka Malagasy	
-bmn				I	E	Bina (Papua New Guinea)	
-bmo				I	L	Bambalang	
-bmp				I	L	Bulgebi	
-bmq				I	L	Bomu	
-bmr				I	L	Muinane	
-bms				I	L	Bilma Kanuri	
-bmt				I	L	Biao Mon	
-bmu				I	L	Somba-Siawari	
-bmv				I	L	Bum	
-bmw				I	L	Bomwali	
-bmx				I	L	Baimak	
-bmz				I	L	Baramu	
-bna				I	L	Bonerate	
-bnb				I	L	Bookan	
-bnc				M	L	Bontok	
-bnd				I	L	Banda (Indonesia)	
-bne				I	L	Bintauna	
-bnf				I	L	Masiwang	
-bng				I	L	Benga	
-bni				I	L	Bangi	
-bnj				I	L	Eastern Tawbuid	
-bnk				I	L	Bierebo	
-bnl				I	L	Boon	
-bnm				I	L	Batanga	
-bnn				I	L	Bunun	
-bno				I	L	Bantoanon	
-bnp				I	L	Bola	
-bnq				I	L	Bantik	
-bnr				I	L	Butmas-Tur	
-bns				I	L	Bundeli	
-bnu				I	L	Bentong	
-bnv				I	L	Bonerif	
-bnw				I	L	Bisis	
-bnx				I	L	Bangubangu	
-bny				I	L	Bintulu	
-bnz				I	L	Beezen	
-boa				I	L	Bora	
-bob				I	L	Aweer	
-bod	tib	bod	bo	I	L	Tibetan	
-boe				I	L	Mundabli	
-bof				I	L	Bolon	
-bog				I	L	Bamako Sign Language	
-boh				I	L	Boma	
-boi				I	E	Barbareño	
-boj				I	L	Anjam	
-bok				I	L	Bonjo	
-bol				I	L	Bole	
-bom				I	L	Berom	
-bon				I	L	Bine	
-boo				I	L	Tiemacèwè Bozo	
-bop				I	L	Bonkiman	
-boq				I	L	Bogaya	
-bor				I	L	Borôro	
-bos	bos	bos	bs	I	L	Bosnian	
-bot				I	L	Bongo	
-bou				I	L	Bondei	
-bov				I	L	Tuwuli	
-bow				I	E	Rema	
-box				I	L	Buamu	
-boy				I	L	Bodo (Central African Republic)	
-boz				I	L	Tiéyaxo Bozo	
-bpa				I	L	Daakaka	
-bpd				I	L	Banda-Banda	
-bpg				I	L	Bonggo	
-bph				I	L	Botlikh	
-bpi				I	L	Bagupi	
-bpj				I	L	Binji	
-bpk				I	L	Orowe	
-bpl				I	L	Broome Pearling Lugger Pidgin	
-bpm				I	L	Biyom	
-bpn				I	L	Dzao Min	
-bpo				I	L	Anasi	
-bpp				I	L	Kaure	
-bpq				I	L	Banda Malay	
-bpr				I	L	Koronadal Blaan	
-bps				I	L	Sarangani Blaan	
-bpt				I	E	Barrow Point	
-bpu				I	L	Bongu	
-bpv				I	L	Bian Marind	
-bpw				I	L	Bo (Papua New Guinea)	
-bpx				I	L	Palya Bareli	
-bpy				I	L	Bishnupriya	
-bpz				I	L	Bilba	
-bqa				I	L	Tchumbuli	
-bqb				I	L	Bagusa	
-bqc				I	L	Boko (Benin)	
-bqd				I	L	Bung	
-bqf				I	E	Baga Kaloum	
-bqg				I	L	Bago-Kusuntu	
-bqh				I	L	Baima	
-bqi				I	L	Bakhtiari	
-bqj				I	L	Bandial	
-bqk				I	L	Banda-Mbrès	
-bql				I	L	Bilakura	
-bqm				I	L	Wumboko	
-bqn				I	L	Bulgarian Sign Language	
-bqo				I	L	Balo	
-bqp				I	L	Busa	
-bqq				I	L	Biritai	
-bqr				I	L	Burusu	
-bqs				I	L	Bosngun	
-bqt				I	L	Bamukumbit	
-bqu				I	L	Boguru	
-bqv				I	L	Koro Wachi	
-bqw				I	L	Buru (Nigeria)	
-bqx				I	L	Baangi	
-bqy				I	L	Bengkala Sign Language	
-bqz				I	L	Bakaka	
-bra	bra	bra		I	L	Braj	
-brb				I	L	Lave	
-brc				I	E	Berbice Creole Dutch	
-brd				I	L	Baraamu	
-bre	bre	bre	br	I	L	Breton	
-brf				I	L	Bira	
-brg				I	L	Baure	
-brh				I	L	Brahui	
-bri				I	L	Mokpwe	
-brj				I	L	Bieria	
-brk				I	E	Birked	
-brl				I	L	Birwa	
-brm				I	L	Barambu	
-brn				I	L	Boruca	
-bro				I	L	Brokkat	
-brp				I	L	Barapasi	
-brq				I	L	Breri	
-brr				I	L	Birao	
-brs				I	L	Baras	
-brt				I	L	Bitare	
-bru				I	L	Eastern Bru	
-brv				I	L	Western Bru	
-brw				I	L	Bellari	
-brx				I	L	Bodo (India)	
-bry				I	L	Burui	
-brz				I	L	Bilbil	
-bsa				I	L	Abinomn	
-bsb				I	L	Brunei Bisaya	
-bsc				I	L	Bassari	
-bse				I	L	Wushi	
-bsf				I	L	Bauchi	
-bsg				I	L	Bashkardi	
-bsh				I	L	Kati	
-bsi				I	L	Bassossi	
-bsj				I	L	Bangwinji	
-bsk				I	L	Burushaski	
-bsl				I	E	Basa-Gumna	
-bsm				I	L	Busami	
-bsn				I	L	Barasana-Eduria	
-bso				I	L	Buso	
-bsp				I	L	Baga Sitemu	
-bsq				I	L	Bassa	
-bsr				I	L	Bassa-Kontagora	
-bss				I	L	Akoose	
-bst				I	L	Basketo	
-bsu				I	L	Bahonsuai	
-bsv				I	E	Baga Sobané	
-bsw				I	L	Baiso	
-bsx				I	L	Yangkam	
-bsy				I	L	Sabah Bisaya	
-bta				I	L	Bata	
-btc				I	L	Bati (Cameroon)	
-btd				I	L	Batak Dairi	
-bte				I	E	Gamo-Ningi	
-btf				I	L	Birgit	
-btg				I	L	Gagnoa Bété	
-bth				I	L	Biatah Bidayuh	
-bti				I	L	Burate	
-btj				I	L	Bacanese Malay	
-btm				I	L	Batak Mandailing	
-btn				I	L	Ratagnon	
-bto				I	L	Rinconada Bikol	
-btp				I	L	Budibud	
-btq				I	L	Batek	
-btr				I	L	Baetora	
-bts				I	L	Batak Simalungun	
-btt				I	L	Bete-Bendi	
-btu				I	L	Batu	
-btv				I	L	Bateri	
-btw				I	L	Butuanon	
-btx				I	L	Batak Karo	
-bty				I	L	Bobot	
-btz				I	L	Batak Alas-Kluet	
-bua	bua	bua		M	L	Buriat	
-bub				I	L	Bua	
-buc				I	L	Bushi	
-bud				I	L	Ntcham	
-bue				I	E	Beothuk	
-buf				I	L	Bushoong	
-bug	bug	bug		I	L	Buginese	
-buh				I	L	Younuo Bunu	
-bui				I	L	Bongili	
-buj				I	L	Basa-Gurmana	
-buk				I	L	Bugawac	
-bul	bul	bul	bg	I	L	Bulgarian	
-bum				I	L	Bulu (Cameroon)	
-bun				I	L	Sherbro	
-buo				I	L	Terei	
-bup				I	L	Busoa	
-buq				I	L	Brem	
-bus				I	L	Bokobaru	
-but				I	L	Bungain	
-buu				I	L	Budu	
-buv				I	L	Bun	
-buw				I	L	Bubi	
-bux				I	L	Boghom	
-buy				I	L	Bullom So	
-buz				I	L	Bukwen	
-bva				I	L	Barein	
-bvb				I	L	Bube	
-bvc				I	L	Baelelea	
-bvd				I	L	Baeggu	
-bve				I	L	Berau Malay	
-bvf				I	L	Boor	
-bvg				I	L	Bonkeng	
-bvh				I	L	Bure	
-bvi				I	L	Belanda Viri	
-bvj				I	L	Baan	
-bvk				I	L	Bukat	
-bvl				I	L	Bolivian Sign Language	
-bvm				I	L	Bamunka	
-bvn				I	L	Buna	
-bvo				I	L	Bolgo	
-bvp				I	L	Bumang	
-bvq				I	L	Birri	
-bvr				I	L	Burarra	
-bvt				I	L	Bati (Indonesia)	
-bvu				I	L	Bukit Malay	
-bvv				I	E	Baniva	
-bvw				I	L	Boga	
-bvx				I	L	Dibole	
-bvy				I	L	Baybayanon	
-bvz				I	L	Bauzi	
-bwa				I	L	Bwatoo	
-bwb				I	L	Namosi-Naitasiri-Serua	
-bwc				I	L	Bwile	
-bwd				I	L	Bwaidoka	
-bwe				I	L	Bwe Karen	
-bwf				I	L	Boselewa	
-bwg				I	L	Barwe	
-bwh				I	L	Bishuo	
-bwi				I	L	Baniwa	
-bwj				I	L	Láá Láá Bwamu	
-bwk				I	L	Bauwaki	
-bwl				I	L	Bwela	
-bwm				I	L	Biwat	
-bwn				I	L	Wunai Bunu	
-bwo				I	L	Boro (Ethiopia)	
-bwp				I	L	Mandobo Bawah	
-bwq				I	L	Southern Bobo Madaré	
-bwr				I	L	Bura-Pabir	
-bws				I	L	Bomboma	
-bwt				I	L	Bafaw-Balong	
-bwu				I	L	Buli (Ghana)	
-bww				I	L	Bwa	
-bwx				I	L	Bu-Nao Bunu	
-bwy				I	L	Cwi Bwamu	
-bwz				I	L	Bwisi	
-bxa				I	L	Tairaha	
-bxb				I	L	Belanda Bor	
-bxc				I	L	Molengue	
-bxd				I	L	Pela	
-bxe				I	L	Birale	
-bxf				I	L	Bilur	
-bxg				I	L	Bangala	
-bxh				I	L	Buhutu	
-bxi				I	E	Pirlatapa	
-bxj				I	L	Bayungu	
-bxk				I	L	Bukusu	
-bxl				I	L	Jalkunan	
-bxm				I	L	Mongolia Buriat	
-bxn				I	L	Burduna	
-bxo				I	L	Barikanchi	
-bxp				I	L	Bebil	
-bxq				I	L	Beele	
-bxr				I	L	Russia Buriat	
-bxs				I	L	Busam	
-bxu				I	L	China Buriat	
-bxv				I	L	Berakou	
-bxw				I	L	Bankagooma	
-bxz				I	L	Binahari	
-bya				I	L	Batak	
-byb				I	L	Bikya	
-byc				I	L	Ubaghara	
-byd				I	L	Benyadu'	
-bye				I	L	Pouye	
-byf				I	L	Bete	
-byg				I	E	Baygo	
-byh				I	L	Bhujel	
-byi				I	L	Buyu	
-byj				I	L	Bina (Nigeria)	
-byk				I	L	Biao	
-byl				I	L	Bayono	
-bym				I	L	Bidjara	
-byn	byn	byn		I	L	Bilin	
-byo				I	L	Biyo	
-byp				I	L	Bumaji	
-byq				I	E	Basay	
-byr				I	L	Baruya	
-bys				I	L	Burak	
-byt				I	E	Berti	
-byv				I	L	Medumba	
-byw				I	L	Belhariya	
-byx				I	L	Qaqet	
-byz				I	L	Banaro	
-bza				I	L	Bandi	
-bzb				I	L	Andio	
-bzc				I	L	Southern Betsimisaraka Malagasy	
-bzd				I	L	Bribri	
-bze				I	L	Jenaama Bozo	
-bzf				I	L	Boikin	
-bzg				I	L	Babuza	
-bzh				I	L	Mapos Buang	
-bzi				I	L	Bisu	
-bzj				I	L	Belize Kriol English	
-bzk				I	L	Nicaragua Creole English	
-bzl				I	L	Boano (Sulawesi)	
-bzm				I	L	Bolondo	
-bzn				I	L	Boano (Maluku)	
-bzo				I	L	Bozaba	
-bzp				I	L	Kemberano	
-bzq				I	L	Buli (Indonesia)	
-bzr				I	E	Biri	
-bzs				I	L	Brazilian Sign Language	
-bzt				I	C	Brithenig	
-bzu				I	L	Burmeso	
-bzv				I	L	Naami	
-bzw				I	L	Basa (Nigeria)	
-bzx				I	L	Kɛlɛngaxo Bozo	
-bzy				I	L	Obanliku	
-bzz				I	L	Evant	
-caa				I	L	Chortí	
-cab				I	L	Garifuna	
-cac				I	L	Chuj	
-cad	cad	cad		I	L	Caddo	
-cae				I	L	Lehar	
-caf				I	L	Southern Carrier	
-cag				I	L	Nivaclé	
-cah				I	L	Cahuarano	
-caj				I	E	Chané	
-cak				I	L	Kaqchikel	
-cal				I	L	Carolinian	
-cam				I	L	Cemuhî	
-can				I	L	Chambri	
-cao				I	L	Chácobo	
-cap				I	L	Chipaya	
-caq				I	L	Car Nicobarese	
-car	car	car		I	L	Galibi Carib	
-cas				I	L	Tsimané	
-cat	cat	cat	ca	I	L	Catalan	
-cav				I	L	Cavineña	
-caw				I	L	Callawalla	
-cax				I	L	Chiquitano	
-cay				I	L	Cayuga	
-caz				I	E	Canichana	
-cbb				I	L	Cabiyarí	
-cbc				I	L	Carapana	
-cbd				I	L	Carijona	
-cbg				I	L	Chimila	
-cbi				I	L	Chachi	
-cbj				I	L	Ede Cabe	
-cbk				I	L	Chavacano	
-cbl				I	L	Bualkhaw Chin	
-cbn				I	L	Nyahkur	
-cbo				I	L	Izora	
-cbq				I	L	Tsucuba	
-cbr				I	L	Cashibo-Cacataibo	
-cbs				I	L	Cashinahua	
-cbt				I	L	Chayahuita	
-cbu				I	L	Candoshi-Shapra	
-cbv				I	L	Cacua	
-cbw				I	L	Kinabalian	
-cby				I	L	Carabayo	
-ccc				I	L	Chamicuro	
-ccd				I	L	Cafundo Creole	
-cce				I	L	Chopi	
-ccg				I	L	Samba Daka	
-cch				I	L	Atsam	
-ccj				I	L	Kasanga	
-ccl				I	L	Cutchi-Swahili	
-ccm				I	L	Malaccan Creole Malay	
-cco				I	L	Comaltepec Chinantec	
-ccp				I	L	Chakma	
-ccr				I	E	Cacaopera	
-cda				I	L	Choni	
-cde				I	L	Chenchu	
-cdf				I	L	Chiru	
-cdh				I	L	Chambeali	
-cdi				I	L	Chodri	
-cdj				I	L	Churahi	
-cdm				I	L	Chepang	
-cdn				I	L	Chaudangsi	
-cdo				I	L	Min Dong Chinese	
-cdr				I	L	Cinda-Regi-Tiyal	
-cds				I	L	Chadian Sign Language	
-cdy				I	L	Chadong	
-cdz				I	L	Koda	
-cea				I	E	Lower Chehalis	
-ceb	ceb	ceb		I	L	Cebuano	
-ceg				I	L	Chamacoco	
-cek				I	L	Eastern Khumi Chin	
-cen				I	L	Cen	
-ces	cze	ces	cs	I	L	Czech	
-cet				I	L	Centúúm	
-cey				I	L	Ekai Chin	
-cfa				I	L	Dijim-Bwilim	
-cfd				I	L	Cara	
-cfg				I	L	Como Karim	
-cfm				I	L	Falam Chin	
-cga				I	L	Changriwa	
-cgc				I	L	Kagayanen	
-cgg				I	L	Chiga	
-cgk				I	L	Chocangacakha	
-cha	cha	cha	ch	I	L	Chamorro	
-chb	chb	chb		I	E	Chibcha	
-chc				I	E	Catawba	
-chd				I	L	Highland Oaxaca Chontal	
-che	che	che	ce	I	L	Chechen	
-chf				I	L	Tabasco Chontal	
-chg	chg	chg		I	E	Chagatai	
-chh				I	E	Chinook	
-chj				I	L	Ojitlán Chinantec	
-chk	chk	chk		I	L	Chuukese	
-chl				I	L	Cahuilla	
-chm	chm	chm		M	L	Mari (Russia)	
-chn	chn	chn		I	L	Chinook jargon	
-cho	cho	cho		I	L	Choctaw	
-chp	chp	chp		I	L	Chipewyan	
-chq				I	L	Quiotepec Chinantec	
-chr	chr	chr		I	L	Cherokee	
-cht				I	E	Cholón	
-chu	chu	chu	cu	I	A	Church Slavic	
-chv	chv	chv	cv	I	L	Chuvash	
-chw				I	L	Chuwabu	
-chx				I	L	Chantyal	
-chy	chy	chy		I	L	Cheyenne	
-chz				I	L	Ozumacín Chinantec	
-cia				I	L	Cia-Cia	
-cib				I	L	Ci Gbe	
-cic				I	L	Chickasaw	
-cid				I	E	Chimariko	
-cie				I	L	Cineni	
-cih				I	L	Chinali	
-cik				I	L	Chitkuli Kinnauri	
-cim				I	L	Cimbrian	
-cin				I	L	Cinta Larga	
-cip				I	L	Chiapanec	
-cir				I	L	Tiri	
-ciw				I	L	Chippewa	
-ciy				I	L	Chaima	
-cja				I	L	Western Cham	
-cje				I	L	Chru	
-cjh				I	E	Upper Chehalis	
-cji				I	L	Chamalal	
-cjk				I	L	Chokwe	
-cjm				I	L	Eastern Cham	
-cjn				I	L	Chenapian	
-cjo				I	L	Ashéninka Pajonal	
-cjp				I	L	Cabécar	
-cjs				I	L	Shor	
-cjv				I	L	Chuave	
-cjy				I	L	Jinyu Chinese	
-ckb				I	L	Central Kurdish	
-ckh				I	L	Chak	
-ckl				I	L	Cibak	
-ckm				I	L	Chakavian	
-ckn				I	L	Kaang Chin	
-cko				I	L	Anufo	
-ckq				I	L	Kajakse	
-ckr				I	L	Kairak	
-cks				I	L	Tayo	
-ckt				I	L	Chukot	
-cku				I	L	Koasati	
-ckv				I	L	Kavalan	
-ckx				I	L	Caka	
-cky				I	L	Cakfem-Mushere	
-ckz				I	L	Cakchiquel-Quiché Mixed Language	
-cla				I	L	Ron	
-clc				I	L	Chilcotin	
-cld				I	L	Chaldean Neo-Aramaic	
-cle				I	L	Lealao Chinantec	
-clh				I	L	Chilisso	
-cli				I	L	Chakali	
-clj				I	L	Laitu Chin	
-clk				I	L	Idu-Mishmi	
-cll				I	L	Chala	
-clm				I	L	Clallam	
-clo				I	L	Lowland Oaxaca Chontal	
-clt				I	L	Lautu Chin	
-clu				I	L	Caluyanun	
-clw				I	L	Chulym	
-cly				I	L	Eastern Highland Chatino	
-cma				I	L	Maa	
-cme				I	L	Cerma	
-cmg				I	H	Classical Mongolian	
-cmi				I	L	Emberá-Chamí	
-cml				I	L	Campalagian	
-cmm				I	E	Michigamea	
-cmn				I	L	Mandarin Chinese	
-cmo				I	L	Central Mnong	
-cmr				I	L	Mro-Khimi Chin	
-cms				I	A	Messapic	
-cmt				I	L	Camtho	
-cna				I	L	Changthang	
-cnb				I	L	Chinbon Chin	
-cnc				I	L	Côông	
-cng				I	L	Northern Qiang	
-cnh				I	L	Hakha Chin	
-cni				I	L	Asháninka	
-cnk				I	L	Khumi Chin	
-cnl				I	L	Lalana Chinantec	
-cno				I	L	Con	
-cnp				I	L	Northern Ping Chinese	
-cnr	cnr	cnr		I	L	Montenegrin	
-cns				I	L	Central Asmat	
-cnt				I	L	Tepetotutla Chinantec	
-cnu				I	L	Chenoua	
-cnw				I	L	Ngawn Chin	
-cnx				I	H	Middle Cornish	
-coa				I	L	Cocos Islands Malay	
-cob				I	E	Chicomuceltec	
-coc				I	L	Cocopa	
-cod				I	L	Cocama-Cocamilla	
-coe				I	L	Koreguaje	
-cof				I	L	Colorado	
-cog				I	L	Chong	
-coh				I	L	Chonyi-Dzihana-Kauma	
-coj				I	E	Cochimi	
-cok				I	L	Santa Teresa Cora	
-col				I	L	Columbia-Wenatchi	
-com				I	L	Comanche	
-con				I	L	Cofán	
-coo				I	L	Comox	
-cop	cop	cop		I	E	Coptic	
-coq				I	E	Coquille	
-cor	cor	cor	kw	I	L	Cornish	
-cos	cos	cos	co	I	L	Corsican	
-cot				I	L	Caquinte	
-cou				I	L	Wamey	
-cov				I	L	Cao Miao	
-cow				I	E	Cowlitz	
-cox				I	L	Nanti	
-coz				I	L	Chochotec	
-cpa				I	L	Palantla Chinantec	
-cpb				I	L	Ucayali-Yurúa Ashéninka	
-cpc				I	L	Ajyíninka Apurucayali	
-cpg				I	E	Cappadocian Greek	
-cpi				I	L	Chinese Pidgin English	
-cpn				I	L	Cherepon	
-cpo				I	L	Kpeego	
-cps				I	L	Capiznon	
-cpu				I	L	Pichis Ashéninka	
-cpx				I	L	Pu-Xian Chinese	
-cpy				I	L	South Ucayali Ashéninka	
-cqd				I	L	Chuanqiandian Cluster Miao	
-cra				I	L	Chara	
-crb				I	E	Island Carib	
-crc				I	L	Lonwolwol	
-crd				I	L	Coeur d'Alene	
-cre	cre	cre	cr	M	L	Cree	
-crf				I	E	Caramanta	
-crg				I	L	Michif	
-crh	crh	crh		I	L	Crimean Tatar	
-cri				I	L	Sãotomense	
-crj				I	L	Southern East Cree	
-crk				I	L	Plains Cree	
-crl				I	L	Northern East Cree	
-crm				I	L	Moose Cree	
-crn				I	L	El Nayar Cora	
-cro				I	L	Crow	
-crq				I	L	Iyo'wujwa Chorote	
-crr				I	E	Carolina Algonquian	
-crs				I	L	Seselwa Creole French	
-crt				I	L	Iyojwa'ja Chorote	
-crv				I	L	Chaura	
-crw				I	L	Chrau	
-crx				I	L	Carrier	
-cry				I	L	Cori	
-crz				I	E	Cruzeño	
-csa				I	L	Chiltepec Chinantec	
-csb	csb	csb		I	L	Kashubian	
-csc				I	L	Catalan Sign Language	
-csd				I	L	Chiangmai Sign Language	
-cse				I	L	Czech Sign Language	
-csf				I	L	Cuba Sign Language	
-csg				I	L	Chilean Sign Language	
-csh				I	L	Asho Chin	
-csi				I	E	Coast Miwok	
-csj				I	L	Songlai Chin	
-csk				I	L	Jola-Kasa	
-csl				I	L	Chinese Sign Language	
-csm				I	L	Central Sierra Miwok	
-csn				I	L	Colombian Sign Language	
-cso				I	L	Sochiapam Chinantec	
-csp				I	L	Southern Ping Chinese	
-csq				I	L	Croatia Sign Language	
-csr				I	L	Costa Rican Sign Language	
-css				I	E	Southern Ohlone	
-cst				I	L	Northern Ohlone	
-csv				I	L	Sumtu Chin	
-csw				I	L	Swampy Cree	
-csy				I	L	Siyin Chin	
-csz				I	L	Coos	
-cta				I	L	Tataltepec Chatino	
-ctc				I	E	Chetco	
-ctd				I	L	Tedim Chin	
-cte				I	L	Tepinapa Chinantec	
-ctg				I	L	Chittagonian	
-cth				I	L	Thaiphum Chin	
-ctl				I	L	Tlacoatzintepec Chinantec	
-ctm				I	E	Chitimacha	
-ctn				I	L	Chhintange	
-cto				I	L	Emberá-Catío	
-ctp				I	L	Western Highland Chatino	
-cts				I	L	Northern Catanduanes Bikol	
-ctt				I	L	Wayanad Chetti	
-ctu				I	L	Chol	
-ctz				I	L	Zacatepec Chatino	
-cua				I	L	Cua	
-cub				I	L	Cubeo	
-cuc				I	L	Usila Chinantec	
-cug				I	L	Chungmboko	
-cuh				I	L	Chuka	
-cui				I	L	Cuiba	
-cuj				I	L	Mashco Piro	
-cuk				I	L	San Blas Kuna	
-cul				I	L	Culina	
-cuo				I	E	Cumanagoto	
-cup				I	E	Cupeño	
-cuq				I	L	Cun	
-cur				I	L	Chhulung	
-cut				I	L	Teutila Cuicatec	
-cuu				I	L	Tai Ya	
-cuv				I	L	Cuvok	
-cuw				I	L	Chukwa	
-cux				I	L	Tepeuxila Cuicatec	
-cuy				I	L	Cuitlatec	
-cvg				I	L	Chug	
-cvn				I	L	Valle Nacional Chinantec	
-cwa				I	L	Kabwa	
-cwb				I	L	Maindo	
-cwd				I	L	Woods Cree	
-cwe				I	L	Kwere	
-cwg				I	L	Chewong	
-cwt				I	L	Kuwaataay	
-cya				I	L	Nopala Chatino	
-cyb				I	E	Cayubaba	
-cym	wel	cym	cy	I	L	Welsh	
-cyo				I	L	Cuyonon	
-czh				I	L	Huizhou Chinese	
-czk				I	E	Knaanic	
-czn				I	L	Zenzontepec Chatino	
-czo				I	L	Min Zhong Chinese	
-czt				I	L	Zotung Chin	
-daa				I	L	Dangaléat	
-dac				I	L	Dambi	
-dad				I	L	Marik	
-dae				I	L	Duupa	
-dag				I	L	Dagbani	
-dah				I	L	Gwahatike	
-dai				I	L	Day	
-daj				I	L	Dar Fur Daju	
-dak	dak	dak		I	L	Dakota	
-dal				I	L	Dahalo	
-dam				I	L	Damakawa	
-dan	dan	dan	da	I	L	Danish	
-dao				I	L	Daai Chin	
-daq				I	L	Dandami Maria	
-dar	dar	dar		I	L	Dargwa	
-das				I	L	Daho-Doo	
-dau				I	L	Dar Sila Daju	
-dav				I	L	Taita	
-daw				I	L	Davawenyo	
-dax				I	L	Dayi	
-daz				I	L	Dao	
-dba				I	L	Bangime	
-dbb				I	L	Deno	
-dbd				I	L	Dadiya	
-dbe				I	L	Dabe	
-dbf				I	L	Edopi	
-dbg				I	L	Dogul Dom Dogon	
-dbi				I	L	Doka	
-dbj				I	L	Ida'an	
-dbl				I	L	Dyirbal	
-dbm				I	L	Duguri	
-dbn				I	L	Duriankere	
-dbo				I	L	Dulbu	
-dbp				I	L	Duwai	
-dbq				I	L	Daba	
-dbr				I	L	Dabarre	
-dbt				I	L	Ben Tey Dogon	
-dbu				I	L	Bondum Dom Dogon	
-dbv				I	L	Dungu	
-dbw				I	L	Bankan Tey Dogon	
-dby				I	L	Dibiyaso	
-dcc				I	L	Deccan	
-dcr				I	E	Negerhollands	
-dda				I	E	Dadi Dadi	
-ddd				I	L	Dongotono	
-dde				I	L	Doondo	
-ddg				I	L	Fataluku	
-ddi				I	L	West Goodenough	
-ddj				I	L	Jaru	
-ddn				I	L	Dendi (Benin)	
-ddo				I	L	Dido	
-ddr				I	E	Dhudhuroa	
-dds				I	L	Donno So Dogon	
-ddw				I	L	Dawera-Daweloor	
-dec				I	L	Dagik	
-ded				I	L	Dedua	
-dee				I	L	Dewoin	
-def				I	L	Dezfuli	
-deg				I	L	Degema	
-deh				I	L	Dehwari	
-dei				I	L	Demisa	
-dek				I	L	Dek	
-del	del	del		M	L	Delaware	
-dem				I	L	Dem	
-den	den	den		M	L	Slave (Athapascan)	
-dep				I	E	Pidgin Delaware	
-deq				I	L	Dendi (Central African Republic)	
-der				I	L	Deori	
-des				I	L	Desano	
-deu	ger	deu	de	I	L	German	
-dev				I	L	Domung	
-dez				I	L	Dengese	
-dga				I	L	Southern Dagaare	
-dgb				I	L	Bunoge Dogon	
-dgc				I	L	Casiguran Dumagat Agta	
-dgd				I	L	Dagaari Dioula	
-dge				I	L	Degenan	
-dgg				I	L	Doga	
-dgh				I	L	Dghwede	
-dgi				I	L	Northern Dagara	
-dgk				I	L	Dagba	
-dgl				I	L	Andaandi	
-dgn				I	E	Dagoman	
-dgo				I	L	Dogri (individual language)	
-dgr	dgr	dgr		I	L	Dogrib	
-dgs				I	L	Dogoso	
-dgt				I	E	Ndra'ngith	
-dgw				I	E	Daungwurrung	
-dgx				I	L	Doghoro	
-dgz				I	L	Daga	
-dhd				I	L	Dhundari	
-dhg				I	L	Dhangu-Djangu	
-dhi				I	L	Dhimal	
-dhl				I	L	Dhalandji	
-dhm				I	L	Zemba	
-dhn				I	L	Dhanki	
-dho				I	L	Dhodia	
-dhr				I	L	Dhargari	
-dhs				I	L	Dhaiso	
-dhu				I	E	Dhurga	
-dhv				I	L	Dehu	
-dhw				I	L	Dhanwar (Nepal)	
-dhx				I	L	Dhungaloo	
-dia				I	L	Dia	
-dib				I	L	South Central Dinka	
-dic				I	L	Lakota Dida	
-did				I	L	Didinga	
-dif				I	E	Dieri	
-dig				I	L	Digo	
-dih				I	L	Kumiai	
-dii				I	L	Dimbong	
-dij				I	L	Dai	
-dik				I	L	Southwestern Dinka	
-dil				I	L	Dilling	
-dim				I	L	Dime	
-din	din	din		M	L	Dinka	
-dio				I	L	Dibo	
-dip				I	L	Northeastern Dinka	
-diq				I	L	Dimli (individual language)	
-dir				I	L	Dirim	
-dis				I	L	Dimasa	
-diu				I	L	Diriku	
-div	div	div	dv	I	L	Dhivehi	
-diw				I	L	Northwestern Dinka	
-dix				I	L	Dixon Reef	
-diy				I	L	Diuwe	
-diz				I	L	Ding	
-dja				I	E	Djadjawurrung	
-djb				I	L	Djinba	
-djc				I	L	Dar Daju Daju	
-djd				I	L	Djamindjung	
-dje				I	L	Zarma	
-djf				I	E	Djangun	
-dji				I	L	Djinang	
-djj				I	L	Djeebbana	
-djk				I	L	Eastern Maroon Creole	
-djm				I	L	Jamsay Dogon	
-djn				I	L	Jawoyn	
-djo				I	L	Jangkang	
-djr				I	L	Djambarrpuyngu	
-dju				I	L	Kapriman	
-djw				I	E	Djawi	
-dka				I	L	Dakpakha	
-dkk				I	L	Dakka	
-dkr				I	L	Kuijau	
-dks				I	L	Southeastern Dinka	
-dkx				I	L	Mazagway	
-dlg				I	L	Dolgan	
-dlk				I	L	Dahalik	
-dlm				I	E	Dalmatian	
-dln				I	L	Darlong	
-dma				I	L	Duma	
-dmb				I	L	Mombo Dogon	
-dmc				I	L	Gavak	
-dmd				I	E	Madhi Madhi	
-dme				I	L	Dugwor	
-dmf				I	E	Medefaidrin	
-dmg				I	L	Upper Kinabatangan	
-dmk				I	L	Domaaki	
-dml				I	L	Dameli	
-dmm				I	L	Dama	
-dmo				I	L	Kemedzung	
-dmr				I	L	East Damar	
-dms				I	L	Dampelas	
-dmu				I	L	Dubu	
-dmv				I	L	Dumpas	
-dmw				I	L	Mudburra	
-dmx				I	L	Dema	
-dmy				I	L	Demta	
-dna				I	L	Upper Grand Valley Dani	
-dnd				I	L	Daonda	
-dne				I	L	Ndendeule	
-dng				I	L	Dungan	
-dni				I	L	Lower Grand Valley Dani	
-dnj				I	L	Dan	
-dnk				I	L	Dengka	
-dnn				I	L	Dzùùngoo	
-dno				I	L	Ndrulo	
-dnr				I	L	Danaru	
-dnt				I	L	Mid Grand Valley Dani	
-dnu				I	L	Danau	
-dnv				I	L	Danu	
-dnw				I	L	Western Dani	
-dny				I	L	Dení	
-doa				I	L	Dom	
-dob				I	L	Dobu	
-doc				I	L	Northern Dong	
-doe				I	L	Doe	
-dof				I	L	Domu	
-doh				I	L	Dong	
-doi	doi	doi		M	L	Dogri (macrolanguage)	
-dok				I	L	Dondo	
-dol				I	L	Doso	
-don				I	L	Toura (Papua New Guinea)	
-doo				I	L	Dongo	
-dop				I	L	Lukpa	
-doq				I	L	Dominican Sign Language	
-dor				I	L	Dori'o	
-dos				I	L	Dogosé	
-dot				I	L	Dass	
-dov				I	L	Dombe	
-dow				I	L	Doyayo	
-dox				I	L	Bussa	
-doy				I	L	Dompo	
-doz				I	L	Dorze	
-dpp				I	L	Papar	
-drb				I	L	Dair	
-drc				I	L	Minderico	
-drd				I	L	Darmiya	
-dre				I	L	Dolpo	
-drg				I	L	Rungus	
-dri				I	L	C'Lela	
-drl				I	L	Paakantyi	
-drn				I	L	West Damar	
-dro				I	L	Daro-Matu Melanau	
-drq				I	E	Dura	
-drs				I	L	Gedeo	
-drt				I	L	Drents	
-dru				I	L	Rukai	
-dry				I	L	Darai	
-dsb	dsb	dsb		I	L	Lower Sorbian	
-dse				I	L	Dutch Sign Language	
-dsh				I	L	Daasanach	
-dsi				I	L	Disa	
-dsl				I	L	Danish Sign Language	
-dsn				I	E	Dusner	
-dso				I	L	Desiya	
-dsq				I	L	Tadaksahak	
-dta				I	L	Daur	
-dtb				I	L	Labuk-Kinabatangan Kadazan	
-dtd				I	L	Ditidaht	
-dth				I	E	Adithinngithigh	
-dti				I	L	Ana Tinga Dogon	
-dtk				I	L	Tene Kan Dogon	
-dtm				I	L	Tomo Kan Dogon	
-dtn				I	L	Daatsʼíin	
-dto				I	L	Tommo So Dogon	
-dtp				I	L	Kadazan Dusun	
-dtr				I	L	Lotud	
-dts				I	L	Toro So Dogon	
-dtt				I	L	Toro Tegu Dogon	
-dtu				I	L	Tebul Ure Dogon	
-dty				I	L	Dotyali	
-dua	dua	dua		I	L	Duala	
-dub				I	L	Dubli	
-duc				I	L	Duna	
-due				I	L	Umiray Dumaget Agta	
-duf				I	L	Dumbea	
-dug				I	L	Duruma	
-duh				I	L	Dungra Bhil	
-dui				I	L	Dumun	
-duk				I	L	Uyajitaya	
-dul				I	L	Alabat Island Agta	
-dum	dum	dum		I	H	Middle Dutch (ca. 1050-1350)	
-dun				I	L	Dusun Deyah	
-duo				I	L	Dupaninan Agta	
-dup				I	L	Duano	
-duq				I	L	Dusun Malang	
-dur				I	L	Dii	
-dus				I	L	Dumi	
-duu				I	L	Drung	
-duv				I	L	Duvle	
-duw				I	L	Dusun Witu	
-dux				I	L	Duungooma	
-duy				I	E	Dicamay Agta	
-duz				I	E	Duli-Gey	
-dva				I	L	Duau	
-dwa				I	L	Diri	
-dwk				I	L	Dawik Kui	
-dwr				I	L	Dawro	
-dws				I	C	Dutton World Speedwords	
-dwu				I	L	Dhuwal	
-dww				I	L	Dawawa	
-dwy				I	L	Dhuwaya	
-dwz				I	L	Dewas Rai	
-dya				I	L	Dyan	
-dyb				I	E	Dyaberdyaber	
-dyd				I	E	Dyugun	
-dyg				I	E	Villa Viciosa Agta	
-dyi				I	L	Djimini Senoufo	
-dym				I	L	Yanda Dom Dogon	
-dyn				I	L	Dyangadi	
-dyo				I	L	Jola-Fonyi	
-dyu	dyu	dyu		I	L	Dyula	
-dyy				I	L	Djabugay	
-dza				I	L	Tunzu	
-dze				I	E	Djiwarli	
-dzg				I	L	Dazaga	
-dzl				I	L	Dzalakha	
-dzn				I	L	Dzando	
-dzo	dzo	dzo	dz	I	L	Dzongkha	
-eaa				I	E	Karenggapa	
-ebc				I	L	Beginci	
-ebg				I	L	Ebughu	
-ebk				I	L	Eastern Bontok	
-ebo				I	L	Teke-Ebo	
-ebr				I	L	Ebrié	
-ebu				I	L	Embu	
-ecr				I	A	Eteocretan	
-ecs				I	L	Ecuadorian Sign Language	
-ecy				I	A	Eteocypriot	
-eee				I	L	E	
-efa				I	L	Efai	
-efe				I	L	Efe	
-efi	efi	efi		I	L	Efik	
-ega				I	L	Ega	
-egl				I	L	Emilian	
-ego				I	L	Eggon	
-egy	egy	egy		I	A	Egyptian (Ancient)	
-ehu				I	L	Ehueun	
-eip				I	L	Eipomek	
-eit				I	L	Eitiep	
-eiv				I	L	Askopan	
-eja				I	L	Ejamat	
-eka	eka	eka		I	L	Ekajuk	
-eke				I	L	Ekit	
-ekg				I	L	Ekari	
-eki				I	L	Eki	
-ekk				I	L	Standard Estonian	
-ekl				I	L	Kol (Bangladesh)	
-ekm				I	L	Elip	
-eko				I	L	Koti	
-ekp				I	L	Ekpeye	
-ekr				I	L	Yace	
-eky				I	L	Eastern Kayah	
-ele				I	L	Elepi	
-elh				I	L	El Hugeirat	
-eli				I	E	Nding	
-elk				I	L	Elkei	
-ell	gre	ell	el	I	L	Modern Greek (1453-)	
-elm				I	L	Eleme	
-elo				I	L	El Molo	
-elu				I	L	Elu	
-elx	elx	elx		I	A	Elamite	
-ema				I	L	Emai-Iuleha-Ora	
-emb				I	L	Embaloh	
-eme				I	L	Emerillon	
-emg				I	L	Eastern Meohang	
-emi				I	L	Mussau-Emira	
-emk				I	L	Eastern Maninkakan	
-emm				I	E	Mamulique	
-emn				I	L	Eman	
-emp				I	L	Northern Emberá	
-ems				I	L	Pacific Gulf Yupik	
-emu				I	L	Eastern Muria	
-emw				I	L	Emplawas	
-emx				I	L	Erromintxela	
-emy				I	A	Epigraphic Mayan	
-ena				I	L	Apali	
-enb				I	L	Markweeta	
-enc				I	L	En	
-end				I	L	Ende	
-enf				I	L	Forest Enets	
-eng	eng	eng	en	I	L	English	
-enh				I	L	Tundra Enets	
-enl				I	L	Enlhet	
-enm	enm	enm		I	H	Middle English (1100-1500)	
-enn				I	L	Engenni	
-eno				I	L	Enggano	
-enq				I	L	Enga	
-enr				I	L	Emumu	
-enu				I	L	Enu	
-env				I	L	Enwan (Edu State)	
-enw				I	L	Enwan (Akwa Ibom State)	
-enx				I	L	Enxet	
-eot				I	L	Beti (Côte d'Ivoire)	
-epi				I	L	Epie	
-epo	epo	epo	eo	I	C	Esperanto	
-era				I	L	Eravallan	
-erg				I	L	Sie	
-erh				I	L	Eruwa	
-eri				I	L	Ogea	
-erk				I	L	South Efate	
-ero				I	L	Horpa	
-err				I	E	Erre	
-ers				I	L	Ersu	
-ert				I	L	Eritai	
-erw				I	L	Erokwanas	
-ese				I	L	Ese Ejja	
-esg				I	L	Aheri Gondi	
-esh				I	L	Eshtehardi	
-esi				I	L	North Alaskan Inupiatun	
-esk				I	L	Northwest Alaska Inupiatun	
-esl				I	L	Egypt Sign Language	
-esm				I	E	Esuma	
-esn				I	L	Salvadoran Sign Language	
-eso				I	L	Estonian Sign Language	
-esq				I	E	Esselen	
-ess				I	L	Central Siberian Yupik	
-est	est	est	et	M	L	Estonian	
-esu				I	L	Central Yupik	
-esy				I	L	Eskayan	
-etb				I	L	Etebi	
-etc				I	E	Etchemin	
-eth				I	L	Ethiopian Sign Language	
-etn				I	L	Eton (Vanuatu)	
-eto				I	L	Eton (Cameroon)	
-etr				I	L	Edolo	
-ets				I	L	Yekhee	
-ett				I	A	Etruscan	
-etu				I	L	Ejagham	
-etx				I	L	Eten	
-etz				I	L	Semimi	
-eus	baq	eus	eu	I	L	Basque	
-eve				I	L	Even	
-evh				I	L	Uvbie	
-evn				I	L	Evenki	
-ewe	ewe	ewe	ee	I	L	Ewe	
-ewo	ewo	ewo		I	L	Ewondo	
-ext				I	L	Extremaduran	
-eya				I	E	Eyak	
-eyo				I	L	Keiyo	
-eza				I	L	Ezaa	
-eze				I	L	Uzekwe	
-faa				I	L	Fasu	
-fab				I	L	Fa d'Ambu	
-fad				I	L	Wagi	
-faf				I	L	Fagani	
-fag				I	L	Finongan	
-fah				I	L	Baissa Fali	
-fai				I	L	Faiwol	
-faj				I	L	Faita	
-fak				I	L	Fang (Cameroon)	
-fal				I	L	South Fali	
-fam				I	L	Fam	
-fan	fan	fan		I	L	Fang (Equatorial Guinea)	
-fao	fao	fao	fo	I	L	Faroese	
-fap				I	L	Paloor	
-far				I	L	Fataleka	
-fas	per	fas	fa	M	L	Persian	
-fat	fat	fat		I	L	Fanti	
-fau				I	L	Fayu	
-fax				I	L	Fala	
-fay				I	L	Southwestern Fars	
-faz				I	L	Northwestern Fars	
-fbl				I	L	West Albay Bikol	
-fcs				I	L	Quebec Sign Language	
-fer				I	L	Feroge	
-ffi				I	L	Foia Foia	
-ffm				I	L	Maasina Fulfulde	
-fgr				I	L	Fongoro	
-fia				I	L	Nobiin	
-fie				I	L	Fyer	
-fij	fij	fij	fj	I	L	Fijian	
-fil	fil	fil		I	L	Filipino	
-fin	fin	fin	fi	I	L	Finnish	
-fip				I	L	Fipa	
-fir				I	L	Firan	
-fit				I	L	Tornedalen Finnish	
-fiw				I	L	Fiwaga	
-fkk				I	L	Kirya-Konzəl	
-fkv				I	L	Kven Finnish	
-fla				I	L	Kalispel-Pend d'Oreille	
-flh				I	L	Foau	
-fli				I	L	Fali	
-fll				I	L	North Fali	
-fln				I	E	Flinders Island	
-flr				I	L	Fuliiru	
-fly				I	L	Flaaitaal	
-fmp				I	L	Fe'fe'	
-fmu				I	L	Far Western Muria	
-fnb				I	L	Fanbak	
-fng				I	L	Fanagalo	
-fni				I	L	Fania	
-fod				I	L	Foodo	
-foi				I	L	Foi	
-fom				I	L	Foma	
-fon	fon	fon		I	L	Fon	
-for				I	L	Fore	
-fos				I	E	Siraya	
-fpe				I	L	Fernando Po Creole English	
-fqs				I	L	Fas	
-fra	fre	fra	fr	I	L	French	
-frc				I	L	Cajun French	
-frd				I	L	Fordata	
-frk				I	H	Frankish	
-frm	frm	frm		I	H	Middle French (ca. 1400-1600)	
-fro	fro	fro		I	H	Old French (842-ca. 1400)	
-frp				I	L	Arpitan	
-frq				I	L	Forak	
-frr	frr	frr		I	L	Northern Frisian	
-frs	frs	frs		I	L	Eastern Frisian	
-frt				I	L	Fortsenal	
-fry	fry	fry	fy	I	L	Western Frisian	
-fse				I	L	Finnish Sign Language	
-fsl				I	L	French Sign Language	
-fss				I	L	Finland-Swedish Sign Language	
-fub				I	L	Adamawa Fulfulde	
-fuc				I	L	Pulaar	
-fud				I	L	East Futuna	
-fue				I	L	Borgu Fulfulde	
-fuf				I	L	Pular	
-fuh				I	L	Western Niger Fulfulde	
-fui				I	L	Bagirmi Fulfulde	
-fuj				I	L	Ko	
-ful	ful	ful	ff	M	L	Fulah	
-fum				I	L	Fum	
-fun				I	L	Fulniô	
-fuq				I	L	Central-Eastern Niger Fulfulde	
-fur	fur	fur		I	L	Friulian	
-fut				I	L	Futuna-Aniwa	
-fuu				I	L	Furu	
-fuv				I	L	Nigerian Fulfulde	
-fuy				I	L	Fuyug	
-fvr				I	L	Fur	
-fwa				I	L	Fwâi	
-fwe				I	L	Fwe	
-gaa	gaa	gaa		I	L	Ga	
-gab				I	L	Gabri	
-gac				I	L	Mixed Great Andamanese	
-gad				I	L	Gaddang	
-gae				I	L	Guarequena	
-gaf				I	L	Gende	
-gag				I	L	Gagauz	
-gah				I	L	Alekano	
-gai				I	L	Borei	
-gaj				I	L	Gadsup	
-gak				I	L	Gamkonora	
-gal				I	L	Galolen	
-gam				I	L	Kandawo	
-gan				I	L	Gan Chinese	
-gao				I	L	Gants	
-gap				I	L	Gal	
-gaq				I	L	Gata'	
-gar				I	L	Galeya	
-gas				I	L	Adiwasi Garasia	
-gat				I	L	Kenati	
-gau				I	L	Mudhili Gadaba	
-gaw				I	L	Nobonob	
-gax				I	L	Borana-Arsi-Guji Oromo	
-gay	gay	gay		I	L	Gayo	
-gaz				I	L	West Central Oromo	
-gba	gba	gba		M	L	Gbaya (Central African Republic)	
-gbb				I	L	Kaytetye	
-gbd				I	L	Karajarri	
-gbe				I	L	Niksek	
-gbf				I	L	Gaikundi	
-gbg				I	L	Gbanziri	
-gbh				I	L	Defi Gbe	
-gbi				I	L	Galela	
-gbj				I	L	Bodo Gadaba	
-gbk				I	L	Gaddi	
-gbl				I	L	Gamit	
-gbm				I	L	Garhwali	
-gbn				I	L	Mo'da	
-gbo				I	L	Northern Grebo	
-gbp				I	L	Gbaya-Bossangoa	
-gbq				I	L	Gbaya-Bozoum	
-gbr				I	L	Gbagyi	
-gbs				I	L	Gbesi Gbe	
-gbu				I	L	Gagadu	
-gbv				I	L	Gbanu	
-gbw				I	L	Gabi-Gabi	
-gbx				I	L	Eastern Xwla Gbe	
-gby				I	L	Gbari	
-gbz				I	L	Zoroastrian Dari	
-gcc				I	L	Mali	
-gcd				I	E	Ganggalida	
-gce				I	E	Galice	
-gcf				I	L	Guadeloupean Creole French	
-gcl				I	L	Grenadian Creole English	
-gcn				I	L	Gaina	
-gcr				I	L	Guianese Creole French	
-gct				I	L	Colonia Tovar German	
-gda				I	L	Gade Lohar	
-gdb				I	L	Pottangi Ollar Gadaba	
-gdc				I	E	Gugu Badhun	
-gdd				I	L	Gedaged	
-gde				I	L	Gude	
-gdf				I	L	Guduf-Gava	
-gdg				I	L	Ga'dang	
-gdh				I	L	Gadjerawang	
-gdi				I	L	Gundi	
-gdj				I	L	Gurdjar	
-gdk				I	L	Gadang	
-gdl				I	L	Dirasha	
-gdm				I	L	Laal	
-gdn				I	L	Umanakaina	
-gdo				I	L	Ghodoberi	
-gdq				I	L	Mehri	
-gdr				I	L	Wipi	
-gds				I	L	Ghandruk Sign Language	
-gdt				I	E	Kungardutyi	
-gdu				I	L	Gudu	
-gdx				I	L	Godwari	
-gea				I	L	Geruma	
-geb				I	L	Kire	
-gec				I	L	Gboloo Grebo	
-ged				I	L	Gade	
-gef				I	L	Gerai	
-geg				I	L	Gengle	
-geh				I	L	Hutterite German	
-gei				I	L	Gebe	
-gej				I	L	Gen	
-gek				I	L	Ywom	
-gel				I	L	ut-Ma'in	
-geq				I	L	Geme	
-ges				I	L	Geser-Gorom	
-gev				I	L	Eviya	
-gew				I	L	Gera	
-gex				I	L	Garre	
-gey				I	L	Enya	
-gez	gez	gez		I	A	Geez	
-gfk				I	L	Patpatar	
-gft				I	E	Gafat	
-gga				I	L	Gao	
-ggb				I	L	Gbii	
-ggd				I	E	Gugadj	
-gge				I	L	Gurr-goni	
-ggg				I	L	Gurgula	
-ggk				I	E	Kungarakany	
-ggl				I	L	Ganglau	
-ggt				I	L	Gitua	
-ggu				I	L	Gagu	
-ggw				I	L	Gogodala	
-gha				I	L	Ghadamès	
-ghc				I	H	Hiberno-Scottish Gaelic	
-ghe				I	L	Southern Ghale	
-ghh				I	L	Northern Ghale	
-ghk				I	L	Geko Karen	
-ghl				I	L	Ghulfan	
-ghn				I	L	Ghanongga	
-gho				I	E	Ghomara	
-ghr				I	L	Ghera	
-ghs				I	L	Guhu-Samane	
-ght				I	L	Kuke	
-gia				I	L	Kija	
-gib				I	L	Gibanawa	
-gic				I	L	Gail	
-gid				I	L	Gidar	
-gie				I	L	Gaɓogbo	
-gig				I	L	Goaria	
-gih				I	L	Githabul	
-gil	gil	gil		I	L	Gilbertese	
-gim				I	L	Gimi (Eastern Highlands)	
-gin				I	L	Hinukh	
-gip				I	L	Gimi (West New Britain)	
-giq				I	L	Green Gelao	
-gir				I	L	Red Gelao	
-gis				I	L	North Giziga	
-git				I	L	Gitxsan	
-giu				I	L	Mulao	
-giw				I	L	White Gelao	
-gix				I	L	Gilima	
-giy				I	L	Giyug	
-giz				I	L	South Giziga	
-gji				I	L	Geji	
-gjk				I	L	Kachi Koli	
-gjm				I	E	Gunditjmara	
-gjn				I	L	Gonja	
-gjr				I	L	Gurindji Kriol	
-gju				I	L	Gujari	
-gka				I	L	Guya	
-gkd				I	L	Magɨ (Madang Province)	
-gke				I	L	Ndai	
-gkn				I	L	Gokana	
-gko				I	E	Kok-Nar	
-gkp				I	L	Guinea Kpelle	
-gku				I	E	ǂUngkue	
-gla	gla	gla	gd	I	L	Scottish Gaelic	
-glc				I	L	Bon Gula	
-gld				I	L	Nanai	
-gle	gle	gle	ga	I	L	Irish	
-glg	glg	glg	gl	I	L	Galician	
-glh				I	L	Northwest Pashai	
-glj				I	L	Gula Iro	
-glk				I	L	Gilaki	
-gll				I	E	Garlali	
-glo				I	L	Galambu	
-glr				I	L	Glaro-Twabo	
-glu				I	L	Gula (Chad)	
-glv	glv	glv	gv	I	L	Manx	
-glw				I	L	Glavda	
-gly				I	E	Gule	
-gma				I	E	Gambera	
-gmb				I	L	Gula'alaa	
-gmd				I	L	Mághdì	
-gmg				I	L	Magɨyi	
-gmh	gmh	gmh		I	H	Middle High German (ca. 1050-1500)	
-gml				I	H	Middle Low German	
-gmm				I	L	Gbaya-Mbodomo	
-gmn				I	L	Gimnime	
-gmr				I	L	Mirning	
-gmu				I	L	Gumalu	
-gmv				I	L	Gamo	
-gmx				I	L	Magoma	
-gmy				I	A	Mycenaean Greek	
-gmz				I	L	Mgbolizhia	
-gna				I	L	Kaansa	
-gnb				I	L	Gangte	
-gnc				I	E	Guanche	
-gnd				I	L	Zulgo-Gemzek	
-gne				I	L	Ganang	
-gng				I	L	Ngangam	
-gnh				I	L	Lere	
-gni				I	L	Gooniyandi	
-gnj				I	L	Ngen	
-gnk				I	L	ǁGana	
-gnl				I	E	Gangulu	
-gnm				I	L	Ginuman	
-gnn				I	L	Gumatj	
-gno				I	L	Northern Gondi	
-gnq				I	L	Gana	
-gnr				I	E	Gureng Gureng	
-gnt				I	L	Guntai	
-gnu				I	L	Gnau	
-gnw				I	L	Western Bolivian Guaraní	
-gnz				I	L	Ganzi	
-goa				I	L	Guro	
-gob				I	L	Playero	
-goc				I	L	Gorakor	
-god				I	L	Godié	
-goe				I	L	Gongduk	
-gof				I	L	Gofa	
-gog				I	L	Gogo	
-goh	goh	goh		I	H	Old High German (ca. 750-1050)	
-goi				I	L	Gobasi	
-goj				I	L	Gowlan	
-gok				I	L	Gowli	
-gol				I	L	Gola	
-gom				I	L	Goan Konkani	
-gon	gon	gon		M	L	Gondi	
-goo				I	L	Gone Dau	
-gop				I	L	Yeretuar	
-goq				I	L	Gorap	
-gor	gor	gor		I	L	Gorontalo	
-gos				I	L	Gronings	
-got	got	got		I	A	Gothic	
-gou				I	L	Gavar	
-gow				I	L	Gorowa	
-gox				I	L	Gobu	
-goy				I	L	Goundo	
-goz				I	L	Gozarkhani	
-gpa				I	L	Gupa-Abawa	
-gpe				I	L	Ghanaian Pidgin English	
-gpn				I	L	Taiap	
-gqa				I	L	Ga'anda	
-gqi				I	L	Guiqiong	
-gqn				I	E	Guana (Brazil)	
-gqr				I	L	Gor	
-gqu				I	L	Qau	
-gra				I	L	Rajput Garasia	
-grb	grb	grb		M	L	Grebo	
-grc	grc	grc		I	H	Ancient Greek (to 1453)	
-grd				I	L	Guruntum-Mbaaru	
-grg				I	L	Madi	
-grh				I	L	Gbiri-Niragu	
-gri				I	L	Ghari	
-grj				I	L	Southern Grebo	
-grm				I	L	Kota Marudu Talantang	
-grn	grn	grn	gn	M	L	Guarani	
-gro				I	L	Groma	
-grq				I	L	Gorovu	
-grr				I	L	Taznatit	
-grs				I	L	Gresi	
-grt				I	L	Garo	
-gru				I	L	Kistane	
-grv				I	L	Central Grebo	
-grw				I	L	Gweda	
-grx				I	L	Guriaso	
-gry				I	L	Barclayville Grebo	
-grz				I	L	Guramalum	
-gse				I	L	Ghanaian Sign Language	
-gsg				I	L	German Sign Language	
-gsl				I	L	Gusilay	
-gsm				I	L	Guatemalan Sign Language	
-gsn				I	L	Nema	
-gso				I	L	Southwest Gbaya	
-gsp				I	L	Wasembo	
-gss				I	L	Greek Sign Language	
-gsw	gsw	gsw		I	L	Swiss German	
-gta				I	L	Guató	
-gtu				I	E	Aghu-Tharnggala	
-gua				I	L	Shiki	
-gub				I	L	Guajajára	
-guc				I	L	Wayuu	
-gud				I	L	Yocoboué Dida	
-gue				I	L	Gurindji	
-guf				I	L	Gupapuyngu	
-gug				I	L	Paraguayan Guaraní	
-guh				I	L	Guahibo	
-gui				I	L	Eastern Bolivian Guaraní	
-guj	guj	guj	gu	I	L	Gujarati	
-guk				I	L	Gumuz	
-gul				I	L	Sea Island Creole English	
-gum				I	L	Guambiano	
-gun				I	L	Mbyá Guaraní	
-guo				I	L	Guayabero	
-gup				I	L	Gunwinggu	
-guq				I	L	Aché	
-gur				I	L	Farefare	
-gus				I	L	Guinean Sign Language	
-gut				I	L	Maléku Jaíka	
-guu				I	L	Yanomamö	
-guw				I	L	Gun	
-gux				I	L	Gourmanchéma	
-guz				I	L	Gusii	
-gva				I	L	Guana (Paraguay)	
-gvc				I	L	Guanano	
-gve				I	L	Duwet	
-gvf				I	L	Golin	
-gvj				I	L	Guajá	
-gvl				I	L	Gulay	
-gvm				I	L	Gurmana	
-gvn				I	L	Kuku-Yalanji	
-gvo				I	L	Gavião Do Jiparaná	
-gvp				I	L	Pará Gavião	
-gvr				I	L	Gurung	
-gvs				I	L	Gumawana	
-gvy				I	E	Guyani	
-gwa				I	L	Mbato	
-gwb				I	L	Gwa	
-gwc				I	L	Gawri	
-gwd				I	L	Gawwada	
-gwe				I	L	Gweno	
-gwf				I	L	Gowro	
-gwg				I	L	Moo	
-gwi	gwi	gwi		I	L	Gwichʼin	
-gwj				I	L	ǀGwi	
-gwm				I	E	Awngthim	
-gwn				I	L	Gwandara	
-gwr				I	L	Gwere	
-gwt				I	L	Gawar-Bati	
-gwu				I	E	Guwamu	
-gww				I	L	Kwini	
-gwx				I	L	Gua	
-gxx				I	L	Wè Southern	
-gya				I	L	Northwest Gbaya	
-gyb				I	L	Garus	
-gyd				I	L	Kayardild	
-gye				I	L	Gyem	
-gyf				I	E	Gungabula	
-gyg				I	L	Gbayi	
-gyi				I	L	Gyele	
-gyl				I	L	Gayil	
-gym				I	L	Ngäbere	
-gyn				I	L	Guyanese Creole English	
-gyo				I	L	Gyalsumdo	
-gyr				I	L	Guarayu	
-gyy				I	E	Gunya	
-gza				I	L	Ganza	
-gzi				I	L	Gazi	
-gzn				I	L	Gane	
-haa				I	L	Han	
-hab				I	L	Hanoi Sign Language	
-hac				I	L	Gurani	
-had				I	L	Hatam	
-hae				I	L	Eastern Oromo	
-haf				I	L	Haiphong Sign Language	
-hag				I	L	Hanga	
-hah				I	L	Hahon	
-hai	hai	hai		M	L	Haida	
-haj				I	L	Hajong	
-hak				I	L	Hakka Chinese	
-hal				I	L	Halang	
-ham				I	L	Hewa	
-han				I	L	Hangaza	
-hao				I	L	Hakö	
-hap				I	L	Hupla	
-haq				I	L	Ha	
-har				I	L	Harari	
-has				I	L	Haisla	
-hat	hat	hat	ht	I	L	Haitian	
-hau	hau	hau	ha	I	L	Hausa	
-hav				I	L	Havu	
-haw	haw	haw		I	L	Hawaiian	
-hax				I	L	Southern Haida	
-hay				I	L	Haya	
-haz				I	L	Hazaragi	
-hba				I	L	Hamba	
-hbb				I	L	Huba	
-hbn				I	L	Heiban	
-hbo				I	H	Ancient Hebrew	
-hbs			sh	M	L	Serbo-Croatian	Code element for 639-1 has been deprecated
-hbu				I	L	Habu	
-hca				I	L	Andaman Creole Hindi	
-hch				I	L	Huichol	
-hdn				I	L	Northern Haida	
-hds				I	L	Honduras Sign Language	
-hdy				I	L	Hadiyya	
-hea				I	L	Northern Qiandong Miao	
-heb	heb	heb	he	I	L	Hebrew	
-hed				I	L	Herdé	
-heg				I	L	Helong	
-heh				I	L	Hehe	
-hei				I	L	Heiltsuk	
-hem				I	L	Hemba	
-her	her	her	hz	I	L	Herero	
-hgm				I	L	Haiǁom	
-hgw				I	L	Haigwai	
-hhi				I	L	Hoia Hoia	
-hhr				I	L	Kerak	
-hhy				I	L	Hoyahoya	
-hia				I	L	Lamang	
-hib				I	E	Hibito	
-hid				I	L	Hidatsa	
-hif				I	L	Fiji Hindi	
-hig				I	L	Kamwe	
-hih				I	L	Pamosu	
-hii				I	L	Hinduri	
-hij				I	L	Hijuk	
-hik				I	L	Seit-Kaitetu	
-hil	hil	hil		I	L	Hiligaynon	
-hin	hin	hin	hi	I	L	Hindi	
-hio				I	L	Tsoa	
-hir				I	L	Himarimã	
-hit	hit	hit		I	A	Hittite	
-hiw				I	L	Hiw	
-hix				I	L	Hixkaryána	
-hji				I	L	Haji	
-hka				I	L	Kahe	
-hke				I	L	Hunde	
-hkk				I	L	Hunjara-Kaina Ke	
-hkn				I	L	Mel-Khaonh	
-hks				I	L	Hong Kong Sign Language	
-hla				I	L	Halia	
-hlb				I	L	Halbi	
-hld				I	L	Halang Doan	
-hle				I	L	Hlersu	
-hlt				I	L	Matu Chin	
-hlu				I	A	Hieroglyphic Luwian	
-hma				I	L	Southern Mashan Hmong	
-hmb				I	L	Humburi Senni Songhay	
-hmc				I	L	Central Huishui Hmong	
-hmd				I	L	Large Flowery Miao	
-hme				I	L	Eastern Huishui Hmong	
-hmf				I	L	Hmong Don	
-hmg				I	L	Southwestern Guiyang Hmong	
-hmh				I	L	Southwestern Huishui Hmong	
-hmi				I	L	Northern Huishui Hmong	
-hmj				I	L	Ge	
-hmk				I	A	Maek	
-hml				I	L	Luopohe Hmong	
-hmm				I	L	Central Mashan Hmong	
-hmn	hmn	hmn		M	L	Hmong	
-hmo	hmo	hmo	ho	I	L	Hiri Motu	
-hmp				I	L	Northern Mashan Hmong	
-hmq				I	L	Eastern Qiandong Miao	
-hmr				I	L	Hmar	
-hms				I	L	Southern Qiandong Miao	
-hmt				I	L	Hamtai	
-hmu				I	L	Hamap	
-hmv				I	L	Hmong Dô	
-hmw				I	L	Western Mashan Hmong	
-hmy				I	L	Southern Guiyang Hmong	
-hmz				I	L	Hmong Shua	
-hna				I	L	Mina (Cameroon)	
-hnd				I	L	Southern Hindko	
-hne				I	L	Chhattisgarhi	
-hng				I	L	Hungu
-hnh				I	L	ǁAni	
-hni				I	L	Hani	
-hnj				I	L	Hmong Njua	
-hnn				I	L	Hanunoo	
-hno				I	L	Northern Hindko	
-hns				I	L	Caribbean Hindustani	
-hnu				I	L	Hung	
-hoa				I	L	Hoava	
-hob				I	L	Mari (Madang Province)	
-hoc				I	L	Ho	
-hod				I	E	Holma	
-hoe				I	L	Horom	
-hoh				I	L	Hobyót	
-hoi				I	L	Holikachuk	
-hoj				I	L	Hadothi	
-hol				I	L	Holu	
-hom				I	E	Homa	
-hoo				I	L	Holoholo	
-hop				I	L	Hopi	
-hor				I	E	Horo	
-hos				I	L	Ho Chi Minh City Sign Language	
-hot				I	L	Hote	
-hov				I	L	Hovongan	
-how				I	L	Honi	
-hoy				I	L	Holiya	
-hoz				I	L	Hozo	
-hpo				I	E	Hpon	
-hps				I	L	Hawai'i Sign Language (HSL)	
-hra				I	L	Hrangkhol	
-hrc				I	L	Niwer Mil	
-hre				I	L	Hre	
-hrk				I	L	Haruku	
-hrm				I	L	Horned Miao	
-hro				I	L	Haroi	
-hrp				I	E	Nhirrpi	
-hrt				I	L	Hértevin	
-hru				I	L	Hruso	
-hrv	hrv	hrv	hr	I	L	Croatian	
-hrw				I	L	Warwar Feni	
-hrx				I	L	Hunsrik	
-hrz				I	L	Harzani	
-hsb	hsb	hsb		I	L	Upper Sorbian	
-hsh				I	L	Hungarian Sign Language	
-hsl				I	L	Hausa Sign Language	
-hsn				I	L	Xiang Chinese	
-hss				I	L	Harsusi	
-hti				I	E	Hoti	
-hto				I	L	Minica Huitoto	
-hts				I	L	Hadza	
-htu				I	L	Hitu	
-htx				I	A	Middle Hittite	
-hub				I	L	Huambisa	
-huc				I	L	ǂHua	
-hud				I	L	Huaulu	
-hue				I	L	San Francisco Del Mar Huave	
-huf				I	L	Humene	
-hug				I	L	Huachipaeri	
-huh				I	L	Huilliche	
-hui				I	L	Huli	
-huj				I	L	Northern Guiyang Hmong	
-huk				I	E	Hulung	
-hul				I	L	Hula	
-hum				I	L	Hungana	
-hun	hun	hun	hu	I	L	Hungarian	
-huo				I	L	Hu	
-hup	hup	hup		I	L	Hupa	
-huq				I	L	Tsat	
-hur				I	L	Halkomelem	
-hus				I	L	Huastec	
-hut				I	L	Humla	
-huu				I	L	Murui Huitoto	
-huv				I	L	San Mateo Del Mar Huave	
-huw				I	E	Hukumina	
-hux				I	L	Nüpode Huitoto	
-huy				I	L	Hulaulá	
-huz				I	L	Hunzib	
-hvc				I	L	Haitian Vodoun Culture Language	
-hve				I	L	San Dionisio Del Mar Huave	
-hvk				I	L	Haveke	
-hvn				I	L	Sabu	
-hvv				I	L	Santa María Del Mar Huave	
-hwa				I	L	Wané	
-hwc				I	L	Hawai'i Creole English	
-hwo				I	L	Hwana	
-hya				I	L	Hya	
-hye	arm	hye	hy	I	L	Armenian	
-hyw				I	L	Western Armenian	
-iai				I	L	Iaai	
-ian				I	L	Iatmul	
-iar				I	L	Purari	
-iba	iba	iba		I	L	Iban	
-ibb				I	L	Ibibio	
-ibd				I	L	Iwaidja	
-ibe				I	L	Akpes	
-ibg				I	L	Ibanag	
-ibh				I	L	Bih	
-ibl				I	L	Ibaloi	
-ibm				I	L	Agoi	
-ibn				I	L	Ibino	
-ibo	ibo	ibo	ig	I	L	Igbo	
-ibr				I	L	Ibuoro	
-ibu				I	L	Ibu	
-iby				I	L	Ibani	
-ica				I	L	Ede Ica	
-ich				I	L	Etkywan	
-icl				I	L	Icelandic Sign Language	
-icr				I	L	Islander Creole English	
-ida				I	L	Idakho-Isukha-Tiriki	
-idb				I	L	Indo-Portuguese	
-idc				I	L	Idon	
-idd				I	L	Ede Idaca	
-ide				I	L	Idere	
-idi				I	L	Idi	
-ido	ido	ido	io	I	C	Ido	
-idr				I	L	Indri	
-ids				I	L	Idesa	
-idt				I	L	Idaté	
-idu				I	L	Idoma	
-ifa				I	L	Amganad Ifugao	
-ifb				I	L	Batad Ifugao	
-ife				I	L	Ifè	
-iff				I	E	Ifo	
-ifk				I	L	Tuwali Ifugao	
-ifm				I	L	Teke-Fuumu	
-ifu				I	L	Mayoyao Ifugao	
-ify				I	L	Keley-I Kallahan	
-igb				I	L	Ebira	
-ige				I	L	Igede	
-igg				I	L	Igana	
-igl				I	L	Igala	
-igm				I	L	Kanggape	
-ign				I	L	Ignaciano	
-igo				I	L	Isebe	
-igs				I	C	Interglossa	
-igw				I	L	Igwe	
-ihb				I	L	Iha Based Pidgin	
-ihi				I	L	Ihievbe	
-ihp				I	L	Iha	
-ihw				I	E	Bidhawal	
-iii	iii	iii	ii	I	L	Sichuan Yi	
-iin				I	E	Thiin	
-ijc				I	L	Izon	
-ije				I	L	Biseni	
-ijj				I	L	Ede Ije	
-ijn				I	L	Kalabari	
-ijs				I	L	Southeast Ijo	
-ike				I	L	Eastern Canadian Inuktitut	
-iki				I	L	Iko	
-ikk				I	L	Ika	
-ikl				I	L	Ikulu	
-iko				I	L	Olulumo-Ikom	
-ikp				I	L	Ikpeshi	
-ikr				I	E	Ikaranggal	
-iks				I	L	Inuit Sign Language	
-ikt				I	L	Inuinnaqtun	
-iku	iku	iku	iu	M	L	Inuktitut	
-ikv				I	L	Iku-Gora-Ankwa	
-ikw				I	L	Ikwere	
-ikx				I	L	Ik	
-ikz				I	L	Ikizu	
-ila				I	L	Ile Ape	
-ilb				I	L	Ila	
-ile	ile	ile	ie	I	C	Interlingue	
-ilg				I	E	Garig-Ilgar	
-ili				I	L	Ili Turki	
-ilk				I	L	Ilongot	
-ilm				I	L	Iranun (Malaysia)	
-ilo	ilo	ilo		I	L	Iloko	
-ilp				I	L	Iranun (Philippines)	
-ils				I	L	International Sign	
-ilu				I	L	Ili'uun	
-ilv				I	L	Ilue	
-ima				I	L	Mala Malasar	
-imi				I	L	Anamgura	
-iml				I	E	Miluk	
-imn				I	L	Imonda	
-imo				I	L	Imbongu	
-imr				I	L	Imroing	
-ims				I	A	Marsian	
-imy				I	A	Milyan	
-ina	ina	ina	ia	I	C	Interlingua (International Auxiliary Language Association)	
-inb				I	L	Inga	
-ind	ind	ind	id	I	L	Indonesian	
-ing				I	L	Degexit'an	
-inh	inh	inh		I	L	Ingush	
-inj				I	L	Jungle Inga	
-inl				I	L	Indonesian Sign Language	
-inm				I	A	Minaean	
-inn				I	L	Isinai	
-ino				I	L	Inoke-Yate	
-inp				I	L	Iñapari	
-ins				I	L	Indian Sign Language	
-int				I	L	Intha	
-inz				I	E	Ineseño	
-ior				I	L	Inor	
-iou				I	L	Tuma-Irumu	
-iow				I	E	Iowa-Oto	
-ipi				I	L	Ipili	
-ipk	ipk	ipk	ik	M	L	Inupiaq	
-ipo				I	L	Ipiko	
-iqu				I	L	Iquito	
-iqw				I	L	Ikwo	
-ire				I	L	Iresim	
-irh				I	L	Irarutu	
-iri				I	L	Rigwe	
-irk				I	L	Iraqw	
-irn				I	L	Irántxe	
-irr				I	L	Ir	
-iru				I	L	Irula	
-irx				I	L	Kamberau	
-iry				I	L	Iraya	
-isa				I	L	Isabi	
-isc				I	L	Isconahua	
-isd				I	L	Isnag	
-ise				I	L	Italian Sign Language	
-isg				I	L	Irish Sign Language	
-ish				I	L	Esan	
-isi				I	L	Nkem-Nkum	
-isk				I	L	Ishkashimi	
-isl	ice	isl	is	I	L	Icelandic	
-ism				I	L	Masimasi	
-isn				I	L	Isanzu	
-iso				I	L	Isoko	
-isr				I	L	Israeli Sign Language	
-ist				I	L	Istriot	
-isu				I	L	Isu (Menchum Division)	
-ita	ita	ita	it	I	L	Italian	
-itb				I	L	Binongan Itneg	
-itd				I	L	Southern Tidung	
-ite				I	E	Itene	
-iti				I	L	Inlaod Itneg	
-itk				I	L	Judeo-Italian	
-itl				I	L	Itelmen	
-itm				I	L	Itu Mbon Uzo	
-ito				I	L	Itonama	
-itr				I	L	Iteri	
-its				I	L	Isekiri	
-itt				I	L	Maeng Itneg	
-itv				I	L	Itawit	
-itw				I	L	Ito	
-itx				I	L	Itik	
-ity				I	L	Moyadan Itneg	
-itz				I	L	Itzá	
-ium				I	L	Iu Mien	
-ivb				I	L	Ibatan	
-ivv				I	L	Ivatan	
-iwk				I	L	I-Wak	
-iwm				I	L	Iwam	
-iwo				I	L	Iwur	
-iws				I	L	Sepik Iwam	
-ixc				I	L	Ixcatec	
-ixl				I	L	Ixil	
-iya				I	L	Iyayu	
-iyo				I	L	Mesaka	
-iyx				I	L	Yaka (Congo)	
-izh				I	L	Ingrian	
-izr				I	L	Izere	
-izz				I	L	Izii	
-jaa				I	L	Jamamadí	
-jab				I	L	Hyam	
-jac				I	L	Popti'	
-jad				I	L	Jahanka	
-jae				I	L	Yabem	
-jaf				I	L	Jara	
-jah				I	L	Jah Hut	
-jaj				I	L	Zazao	
-jak				I	L	Jakun	
-jal				I	L	Yalahatan	
-jam				I	L	Jamaican Creole English	
-jan				I	E	Jandai	
-jao				I	L	Yanyuwa	
-jaq				I	L	Yaqay	
-jas				I	L	New Caledonian Javanese	
-jat				I	L	Jakati	
-jau				I	L	Yaur	
-jav	jav	jav	jv	I	L	Javanese	
-jax				I	L	Jambi Malay	
-jay				I	L	Yan-nhangu	
-jaz				I	L	Jawe	
-jbe				I	L	Judeo-Berber	
-jbi				I	E	Badjiri	
-jbj				I	L	Arandai	
-jbk				I	L	Barikewa	
-jbn				I	L	Nafusi	
-jbo	jbo	jbo		I	C	Lojban	
-jbr				I	L	Jofotek-Bromnya	
-jbt				I	L	Jabutí	
-jbu				I	L	Jukun Takum	
-jbw				I	E	Yawijibaya	
-jcs				I	L	Jamaican Country Sign Language	
-jct				I	L	Krymchak	
-jda				I	L	Jad	
-jdg				I	L	Jadgali	
-jdt				I	L	Judeo-Tat	
-jeb				I	L	Jebero	
-jee				I	L	Jerung	
-jeh				I	L	Jeh	
-jei				I	L	Yei	
-jek				I	L	Jeri Kuo	
-jel				I	L	Yelmek	
-jen				I	L	Dza	
-jer				I	L	Jere	
-jet				I	L	Manem	
-jeu				I	L	Jonkor Bourmataguil	
-jgb				I	E	Ngbee	
-jge				I	L	Judeo-Georgian	
-jgk				I	L	Gwak	
-jgo				I	L	Ngomba	
-jhi				I	L	Jehai	
-jhs				I	L	Jhankot Sign Language	
-jia				I	L	Jina	
-jib				I	L	Jibu	
-jic				I	L	Tol	
-jid				I	L	Bu	
-jie				I	L	Jilbe	
-jig				I	L	Jingulu	
-jih				I	L	sTodsde	
-jii				I	L	Jiiddu	
-jil				I	L	Jilim	
-jim				I	L	Jimi (Cameroon)	
-jio				I	L	Jiamao	
-jiq				I	L	Guanyinqiao	
-jit				I	L	Jita	
-jiu				I	L	Youle Jinuo	
-jiv				I	L	Shuar	
-jiy				I	L	Buyuan Jinuo	
-jje				I	L	Jejueo	
-jjr				I	L	Bankal	
-jka				I	L	Kaera	
-jkm				I	L	Mobwa Karen	
-jko				I	L	Kubo	
-jkp				I	L	Paku Karen	
-jkr				I	L	Koro (India)	
-jku				I	L	Labir	
-jle				I	L	Ngile	
-jls				I	L	Jamaican Sign Language	
-jma				I	L	Dima	
-jmb				I	L	Zumbun	
-jmc				I	L	Machame	
-jmd				I	L	Yamdena	
-jmi				I	L	Jimi (Nigeria)	
-jml				I	L	Jumli	
-jmn				I	L	Makuri Naga	
-jmr				I	L	Kamara	
-jms				I	L	Mashi (Nigeria)	
-jmw				I	L	Mouwase	
-jmx				I	L	Western Juxtlahuaca Mixtec	
-jna				I	L	Jangshung	
-jnd				I	L	Jandavra	
-jng				I	E	Yangman	
-jni				I	L	Janji	
-jnj				I	L	Yemsa	
-jnl				I	L	Rawat	
-jns				I	L	Jaunsari	
-job				I	L	Joba	
-jod				I	L	Wojenaka	
-jog				I	L	Jogi	
-jor				I	E	Jorá	
-jos				I	L	Jordanian Sign Language	
-jow				I	L	Jowulu	
-jpa				I	H	Jewish Palestinian Aramaic	
-jpn	jpn	jpn	ja	I	L	Japanese	
-jpr	jpr	jpr		I	L	Judeo-Persian	
-jqr				I	L	Jaqaru	
-jra				I	L	Jarai	
-jrb	jrb	jrb		M	L	Judeo-Arabic	
-jrr				I	L	Jiru	
-jrt				I	L	Jorto	
-jru				I	L	Japrería	
-jsl				I	L	Japanese Sign Language	
-jua				I	L	Júma	
-jub				I	L	Wannu	
-juc				I	E	Jurchen	
-jud				I	L	Worodougou	
-juh				I	L	Hõne	
-jui				I	E	Ngadjuri	
-juk				I	L	Wapan	
-jul				I	L	Jirel	
-jum				I	L	Jumjum	
-jun				I	L	Juang	
-juo				I	L	Jiba	
-jup				I	L	Hupdë	
-jur				I	L	Jurúna	
-jus				I	L	Jumla Sign Language	
-jut				I	H	Jutish	
-juu				I	L	Ju	
-juw				I	L	Wãpha	
-juy				I	L	Juray	
-jvd				I	L	Javindo	
-jvn				I	L	Caribbean Javanese	
-jwi				I	L	Jwira-Pepesa	
-jya				I	L	Jiarong	
-jye				I	L	Judeo-Yemeni Arabic	
-jyy				I	L	Jaya	
-kaa	kaa	kaa		I	L	Kara-Kalpak	
-kab	kab	kab		I	L	Kabyle	
-kac	kac	kac		I	L	Kachin	
-kad				I	L	Adara	
-kae				I	E	Ketangalan	
-kaf				I	L	Katso	
-kag				I	L	Kajaman	
-kah				I	L	Kara (Central African Republic)	
-kai				I	L	Karekare	
-kaj				I	L	Jju	
-kak				I	L	Kalanguya	
-kal	kal	kal	kl	I	L	Kalaallisut	
-kam	kam	kam		I	L	Kamba (Kenya)	
-kan	kan	kan	kn	I	L	Kannada	
-kao				I	L	Xaasongaxango	
-kap				I	L	Bezhta	
-kaq				I	L	Capanahua	
-kas	kas	kas	ks	I	L	Kashmiri	
-kat	geo	kat	ka	I	L	Georgian	
-kau	kau	kau	kr	M	L	Kanuri	
-kav				I	L	Katukína	
-kaw	kaw	kaw		I	A	Kawi	
-kax				I	L	Kao	
-kay				I	L	Kamayurá	
-kaz	kaz	kaz	kk	I	L	Kazakh	
-kba				I	E	Kalarko	
-kbb				I	E	Kaxuiâna	
-kbc				I	L	Kadiwéu	
-kbd	kbd	kbd		I	L	Kabardian	
-kbe				I	L	Kanju	
-kbg				I	L	Khamba	
-kbh				I	L	Camsá	
-kbi				I	L	Kaptiau	
-kbj				I	L	Kari	
-kbk				I	L	Grass Koiari	
-kbl				I	L	Kanembu	
-kbm				I	L	Iwal	
-kbn				I	L	Kare (Central African Republic)	
-kbo				I	L	Keliko	
-kbp				I	L	Kabiyè	
-kbq				I	L	Kamano	
-kbr				I	L	Kafa	
-kbs				I	L	Kande	
-kbt				I	L	Abadi	
-kbu				I	L	Kabutra	
-kbv				I	L	Dera (Indonesia)	
-kbw				I	L	Kaiep	
-kbx				I	L	Ap Ma	
-kby				I	L	Manga Kanuri	
-kbz				I	L	Duhwa	
-kca				I	L	Khanty	
-kcb				I	L	Kawacha	
-kcc				I	L	Lubila	
-kcd				I	L	Ngkâlmpw Kanum	
-kce				I	L	Kaivi	
-kcf				I	L	Ukaan	
-kcg				I	L	Tyap	
-kch				I	L	Vono	
-kci				I	L	Kamantan	
-kcj				I	L	Kobiana	
-kck				I	L	Kalanga	
-kcl				I	L	Kela (Papua New Guinea)	
-kcm				I	L	Gula (Central African Republic)	
-kcn				I	L	Nubi	
-kco				I	L	Kinalakna	
-kcp				I	L	Kanga	
-kcq				I	L	Kamo	
-kcr				I	L	Katla	
-kcs				I	L	Koenoem	
-kct				I	L	Kaian	
-kcu				I	L	Kami (Tanzania)	
-kcv				I	L	Kete	
-kcw				I	L	Kabwari	
-kcx				I	L	Kachama-Ganjule	
-kcy				I	L	Korandje	
-kcz				I	L	Konongo	
-kda				I	E	Worimi	
-kdc				I	L	Kutu	
-kdd				I	L	Yankunytjatjara	
-kde				I	L	Makonde	
-kdf				I	L	Mamusi	
-kdg				I	L	Seba	
-kdh				I	L	Tem	
-kdi				I	L	Kumam	
-kdj				I	L	Karamojong	
-kdk				I	L	Numèè	
-kdl				I	L	Tsikimba	
-kdm				I	L	Kagoma	
-kdn				I	L	Kunda	
-kdp				I	L	Kaningdon-Nindem	
-kdq				I	L	Koch	
-kdr				I	L	Karaim	
-kdt				I	L	Kuy	
-kdu				I	L	Kadaru	
-kdw				I	L	Koneraw	
-kdx				I	L	Kam	
-kdy				I	L	Keder	
-kdz				I	L	Kwaja	
-kea				I	L	Kabuverdianu	
-keb				I	L	Kélé	
-kec				I	L	Keiga	
-ked				I	L	Kerewe	
-kee				I	L	Eastern Keres	
-kef				I	L	Kpessi	
-keg				I	L	Tese	
-keh				I	L	Keak	
-kei				I	L	Kei	
-kej				I	L	Kadar	
-kek				I	L	Kekchí	
-kel				I	L	Kela (Democratic Republic of Congo)	
-kem				I	L	Kemak	
-ken				I	L	Kenyang	
-keo				I	L	Kakwa	
-kep				I	L	Kaikadi	
-keq				I	L	Kamar	
-ker				I	L	Kera	
-kes				I	L	Kugbo	
-ket				I	L	Ket	
-keu				I	L	Akebu	
-kev				I	L	Kanikkaran	
-kew				I	L	West Kewa	
-kex				I	L	Kukna	
-key				I	L	Kupia	
-kez				I	L	Kukele	
-kfa				I	L	Kodava	
-kfb				I	L	Northwestern Kolami	
-kfc				I	L	Konda-Dora	
-kfd				I	L	Korra Koraga	
-kfe				I	L	Kota (India)	
-kff				I	L	Koya	
-kfg				I	L	Kudiya	
-kfh				I	L	Kurichiya	
-kfi				I	L	Kannada Kurumba	
-kfj				I	L	Kemiehua	
-kfk				I	L	Kinnauri	
-kfl				I	L	Kung	
-kfm				I	L	Khunsari	
-kfn				I	L	Kuk	
-kfo				I	L	Koro (Côte d'Ivoire)	
-kfp				I	L	Korwa	
-kfq				I	L	Korku	
-kfr				I	L	Kachhi	
-kfs				I	L	Bilaspuri	
-kft				I	L	Kanjari	
-kfu				I	L	Katkari	
-kfv				I	L	Kurmukar	
-kfw				I	L	Kharam Naga	
-kfx				I	L	Kullu Pahari	
-kfy				I	L	Kumaoni	
-kfz				I	L	Koromfé	
-kga				I	L	Koyaga	
-kgb				I	L	Kawe	
-kge				I	L	Komering	
-kgf				I	L	Kube	
-kgg				I	L	Kusunda	
-kgi				I	L	Selangor Sign Language	
-kgj				I	L	Gamale Kham	
-kgk				I	L	Kaiwá	
-kgl				I	E	Kunggari	
-kgm				I	E	Karipúna	
-kgn				I	L	Karingani	
-kgo				I	L	Krongo	
-kgp				I	L	Kaingang	
-kgq				I	L	Kamoro	
-kgr				I	L	Abun	
-kgs				I	L	Kumbainggar	
-kgt				I	L	Somyev	
-kgu				I	L	Kobol	
-kgv				I	L	Karas	
-kgw				I	L	Karon Dori	
-kgx				I	L	Kamaru	
-kgy				I	L	Kyerung	
-kha	kha	kha		I	L	Khasi	
-khb				I	L	Lü	
-khc				I	L	Tukang Besi North	
-khd				I	L	Bädi Kanum	
-khe				I	L	Korowai	
-khf				I	L	Khuen	
-khg				I	L	Khams Tibetan	
-khh				I	L	Kehu	
-khj				I	L	Kuturmi	
-khk				I	L	Halh Mongolian	
-khl				I	L	Lusi	
-khm	khm	khm	km	I	L	Khmer	
-khn				I	L	Khandesi	
-kho	kho	kho		I	A	Khotanese	
-khp				I	L	Kapori	
-khq				I	L	Koyra Chiini Songhay	
-khr				I	L	Kharia	
-khs				I	L	Kasua	
-kht				I	L	Khamti	
-khu				I	L	Nkhumbi	
-khv				I	L	Khvarshi	
-khw				I	L	Khowar	
-khx				I	L	Kanu	
-khy				I	L	Kele (Democratic Republic of Congo)	
-khz				I	L	Keapara	
-kia				I	L	Kim	
-kib				I	L	Koalib	
-kic				I	L	Kickapoo	
-kid				I	L	Koshin	
-kie				I	L	Kibet	
-kif				I	L	Eastern Parbate Kham	
-kig				I	L	Kimaama	
-kih				I	L	Kilmeri	
-kii				I	E	Kitsai	
-kij				I	L	Kilivila	
-kik	kik	kik	ki	I	L	Kikuyu	
-kil				I	L	Kariya	
-kim				I	L	Karagas	
-kin	kin	kin	rw	I	L	Kinyarwanda	
-kio				I	L	Kiowa	
-kip				I	L	Sheshi Kham	
-kiq				I	L	Kosadle	
-kir	kir	kir	ky	I	L	Kirghiz	
-kis				I	L	Kis	
-kit				I	L	Agob	
-kiu				I	L	Kirmanjki (individual language)	
-kiv				I	L	Kimbu	
-kiw				I	L	Northeast Kiwai	
-kix				I	L	Khiamniungan Naga	
-kiy				I	L	Kirikiri	
-kiz				I	L	Kisi	
-kja				I	L	Mlap	
-kjb				I	L	Q'anjob'al	
-kjc				I	L	Coastal Konjo	
-kjd				I	L	Southern Kiwai	
-kje				I	L	Kisar	
-kjg				I	L	Khmu	
-kjh				I	L	Khakas	
-kji				I	L	Zabana	
-kjj				I	L	Khinalugh	
-kjk				I	L	Highland Konjo	
-kjl				I	L	Western Parbate Kham	
-kjm				I	L	Kháng	
-kjn				I	L	Kunjen	
-kjo				I	L	Harijan Kinnauri	
-kjp				I	L	Pwo Eastern Karen	
-kjq				I	L	Western Keres	
-kjr				I	L	Kurudu	
-kjs				I	L	East Kewa	
-kjt				I	L	Phrae Pwo Karen	
-kju				I	L	Kashaya	
-kjv				I	H	Kaikavian Literary Language	
-kjx				I	L	Ramopa	
-kjy				I	L	Erave	
-kjz				I	L	Bumthangkha	
-kka				I	L	Kakanda	
-kkb				I	L	Kwerisa	
-kkc				I	L	Odoodee	
-kkd				I	L	Kinuku	
-kke				I	L	Kakabe	
-kkf				I	L	Kalaktang Monpa	
-kkg				I	L	Mabaka Valley Kalinga	
-kkh				I	L	Khün	
-kki				I	L	Kagulu	
-kkj				I	L	Kako	
-kkk				I	L	Kokota	
-kkl				I	L	Kosarek Yale	
-kkm				I	L	Kiong	
-kkn				I	L	Kon Keu	
-kko				I	L	Karko	
-kkp				I	L	Gugubera	
-kkq				I	L	Kaeku	
-kkr				I	L	Kir-Balar	
-kks				I	L	Giiwo	
-kkt				I	L	Koi	
-kku				I	L	Tumi	
-kkv				I	L	Kangean	
-kkw				I	L	Teke-Kukuya	
-kkx				I	L	Kohin	
-kky				I	L	Guugu Yimidhirr	
-kkz				I	L	Kaska	
-kla				I	E	Klamath-Modoc	
-klb				I	L	Kiliwa	
-klc				I	L	Kolbila	
-kld				I	L	Gamilaraay	
-kle				I	L	Kulung (Nepal)	
-klf				I	L	Kendeje	
-klg				I	L	Tagakaulo	
-klh				I	L	Weliki	
-kli				I	L	Kalumpang	
-klj				I	L	Khalaj	
-klk				I	L	Kono (Nigeria)	
-kll				I	L	Kagan Kalagan	
-klm				I	L	Migum	
-kln				M	L	Kalenjin	
-klo				I	L	Kapya	
-klp				I	L	Kamasa	
-klq				I	L	Rumu	
-klr				I	L	Khaling	
-kls				I	L	Kalasha	
-klt				I	L	Nukna	
-klu				I	L	Klao	
-klv				I	L	Maskelynes	
-klw				I	L	Tado	
-klx				I	L	Koluwawa	
-kly				I	L	Kalao	
-klz				I	L	Kabola	
-kma				I	L	Konni	
-kmb	kmb	kmb		I	L	Kimbundu	
-kmc				I	L	Southern Dong	
-kmd				I	L	Majukayang Kalinga	
-kme				I	L	Bakole	
-kmf				I	L	Kare (Papua New Guinea)	
-kmg				I	L	Kâte	
-kmh				I	L	Kalam	
-kmi				I	L	Kami (Nigeria)	
-kmj				I	L	Kumarbhag Paharia	
-kmk				I	L	Limos Kalinga	
-kml				I	L	Tanudan Kalinga	
-kmm				I	L	Kom (India)	
-kmn				I	L	Awtuw	
-kmo				I	L	Kwoma	
-kmp				I	L	Gimme	
-kmq				I	L	Kwama	
-kmr				I	L	Northern Kurdish	
-kms				I	L	Kamasau	
-kmt				I	L	Kemtuik	
-kmu				I	L	Kanite	
-kmv				I	L	Karipúna Creole French	
-kmw				I	L	Komo (Democratic Republic of Congo)	
-kmx				I	L	Waboda	
-kmy				I	L	Koma	
-kmz				I	L	Khorasani Turkish	
-kna				I	L	Dera (Nigeria)	
-knb				I	L	Lubuagan Kalinga	
-knc				I	L	Central Kanuri	
-knd				I	L	Konda	
-kne				I	L	Kankanaey	
-knf				I	L	Mankanya	
-kng				I	L	Koongo	
-kni				I	L	Kanufi	
-knj				I	L	Western Kanjobal	
-knk				I	L	Kuranko	
-knl				I	L	Keninjal	
-knm				I	L	Kanamarí	
-knn				I	L	Konkani (individual language)	
-kno				I	L	Kono (Sierra Leone)	
-knp				I	L	Kwanja	
-knq				I	L	Kintaq	
-knr				I	L	Kaningra	
-kns				I	L	Kensiu	
-knt				I	L	Panoan Katukína	
-knu				I	L	Kono (Guinea)	
-knv				I	L	Tabo	
-knw				I	L	Kung-Ekoka	
-knx				I	L	Kendayan	
-kny				I	L	Kanyok	
-knz				I	L	Kalamsé	
-koa				I	L	Konomala	
-koc				I	E	Kpati	
-kod				I	L	Kodi	
-koe				I	L	Kacipo-Balesi	
-kof				I	E	Kubi	
-kog				I	L	Cogui	
-koh				I	L	Koyo	
-koi				I	L	Komi-Permyak	
-kok	kok	kok		M	L	Konkani (macrolanguage)	
-kol				I	L	Kol (Papua New Guinea)	
-kom	kom	kom	kv	M	L	Komi	
-kon	kon	kon	kg	M	L	Kongo	
-koo				I	L	Konzo	
-kop				I	L	Waube	
-koq				I	L	Kota (Gabon)	
-kor	kor	kor	ko	I	L	Korean	
-kos	kos	kos		I	L	Kosraean	
-kot				I	L	Lagwan	
-kou				I	L	Koke	
-kov				I	L	Kudu-Camo	
-kow				I	L	Kugama	
-koy				I	L	Koyukon	
-koz				I	L	Korak	
-kpa				I	L	Kutto	
-kpb				I	L	Mullu Kurumba	
-kpc				I	L	Curripaco	
-kpd				I	L	Koba	
-kpe	kpe	kpe		M	L	Kpelle	
-kpf				I	L	Komba	
-kpg				I	L	Kapingamarangi	
-kph				I	L	Kplang	
-kpi				I	L	Kofei	
-kpj				I	L	Karajá	
-kpk				I	L	Kpan	
-kpl				I	L	Kpala	
-kpm				I	L	Koho	
-kpn				I	E	Kepkiriwát	
-kpo				I	L	Ikposo	
-kpq				I	L	Korupun-Sela	
-kpr				I	L	Korafe-Yegha	
-kps				I	L	Tehit	
-kpt				I	L	Karata	
-kpu				I	L	Kafoa	
-kpv				I	L	Komi-Zyrian	
-kpw				I	L	Kobon	
-kpx				I	L	Mountain Koiali	
-kpy				I	L	Koryak	
-kpz				I	L	Kupsabiny	
-kqa				I	L	Mum	
-kqb				I	L	Kovai	
-kqc				I	L	Doromu-Koki	
-kqd				I	L	Koy Sanjaq Surat	
-kqe				I	L	Kalagan	
-kqf				I	L	Kakabai	
-kqg				I	L	Khe	
-kqh				I	L	Kisankasa	
-kqi				I	L	Koitabu	
-kqj				I	L	Koromira	
-kqk				I	L	Kotafon Gbe	
-kql				I	L	Kyenele	
-kqm				I	L	Khisa	
-kqn				I	L	Kaonde	
-kqo				I	L	Eastern Krahn	
-kqp				I	L	Kimré	
-kqq				I	L	Krenak	
-kqr				I	L	Kimaragang	
-kqs				I	L	Northern Kissi	
-kqt				I	L	Klias River Kadazan	
-kqu				I	E	Seroa	
-kqv				I	L	Okolod	
-kqw				I	L	Kandas	
-kqx				I	L	Mser	
-kqy				I	L	Koorete	
-kqz				I	E	Korana	
-kra				I	L	Kumhali	
-krb				I	E	Karkin	
-krc	krc	krc		I	L	Karachay-Balkar	
-krd				I	L	Kairui-Midiki	
-kre				I	L	Panará	
-krf				I	L	Koro (Vanuatu)	
-krh				I	L	Kurama	
-kri				I	L	Krio	
-krj				I	L	Kinaray-A	
-krk				I	E	Kerek	
-krl	krl	krl		I	L	Karelian	
-krn				I	L	Sapo	
-krp				I	L	Korop	
-krr				I	L	Krung	
-krs				I	L	Gbaya (Sudan)	
-krt				I	L	Tumari Kanuri	
-kru	kru	kru		I	L	Kurukh	
-krv				I	L	Kavet	
-krw				I	L	Western Krahn	
-krx				I	L	Karon	
-kry				I	L	Kryts	
-krz				I	L	Sota Kanum	
-ksa				I	L	Shuwa-Zamani	
-ksb				I	L	Shambala	
-ksc				I	L	Southern Kalinga	
-ksd				I	L	Kuanua	
-kse				I	L	Kuni	
-ksf				I	L	Bafia	
-ksg				I	L	Kusaghe	
-ksh				I	L	Kölsch	
-ksi				I	L	Krisa	
-ksj				I	L	Uare	
-ksk				I	L	Kansa	
-ksl				I	L	Kumalu	
-ksm				I	L	Kumba	
-ksn				I	L	Kasiguranin	
-kso				I	L	Kofa	
-ksp				I	L	Kaba	
-ksq				I	L	Kwaami	
-ksr				I	L	Borong	
-kss				I	L	Southern Kisi	
-kst				I	L	Winyé	
-ksu				I	L	Khamyang	
-ksv				I	L	Kusu	
-ksw				I	L	S'gaw Karen	
-ksx				I	L	Kedang	
-ksy				I	L	Kharia Thar	
-ksz				I	L	Kodaku	
-kta				I	L	Katua	
-ktb				I	L	Kambaata	
-ktc				I	L	Kholok	
-ktd				I	L	Kokata	
-kte				I	L	Nubri	
-ktf				I	L	Kwami	
-ktg				I	E	Kalkutung	
-kth				I	L	Karanga	
-kti				I	L	North Muyu	
-ktj				I	L	Plapo Krumen	
-ktk				I	E	Kaniet	
-ktl				I	L	Koroshi	
-ktm				I	L	Kurti	
-ktn				I	L	Karitiâna	
-kto				I	L	Kuot	
-ktp				I	L	Kaduo	
-ktq				I	E	Katabaga	
-kts				I	L	South Muyu	
-ktt				I	L	Ketum	
-ktu				I	L	Kituba (Democratic Republic of Congo)	
-ktv				I	L	Eastern Katu	
-ktw				I	E	Kato	
-ktx				I	L	Kaxararí	
-kty				I	L	Kango (Bas-Uélé District)	
-ktz				I	L	Juǀʼhoan	
-kua	kua	kua	kj	I	L	Kuanyama	
-kub				I	L	Kutep	
-kuc				I	L	Kwinsu	
-kud				I	L	'Auhelawa	
-kue				I	L	Kuman (Papua New Guinea)	
-kuf				I	L	Western Katu	
-kug				I	L	Kupa	
-kuh				I	L	Kushi	
-kui				I	L	Kuikúro-Kalapálo	
-kuj				I	L	Kuria	
-kuk				I	L	Kepo'	
-kul				I	L	Kulere	
-kum	kum	kum		I	L	Kumyk	
-kun				I	L	Kunama	
-kuo				I	L	Kumukio	
-kup				I	L	Kunimaipa	
-kuq				I	L	Karipuna	
-kur	kur	kur	ku	M	L	Kurdish	
-kus				I	L	Kusaal	
-kut	kut	kut		I	L	Kutenai	
-kuu				I	L	Upper Kuskokwim	
-kuv				I	L	Kur	
-kuw				I	L	Kpagua	
-kux				I	L	Kukatja	
-kuy				I	L	Kuuku-Ya'u	
-kuz				I	E	Kunza	
-kva				I	L	Bagvalal	
-kvb				I	L	Kubu	
-kvc				I	L	Kove	
-kvd				I	L	Kui (Indonesia)	
-kve				I	L	Kalabakan	
-kvf				I	L	Kabalai	
-kvg				I	L	Kuni-Boazi	
-kvh				I	L	Komodo	
-kvi				I	L	Kwang	
-kvj				I	L	Psikye	
-kvk				I	L	Korean Sign Language	
-kvl				I	L	Kayaw	
-kvm				I	L	Kendem	
-kvn				I	L	Border Kuna	
-kvo				I	L	Dobel	
-kvp				I	L	Kompane	
-kvq				I	L	Geba Karen	
-kvr				I	L	Kerinci	
-kvt				I	L	Lahta Karen	
-kvu				I	L	Yinbaw Karen	
-kvv				I	L	Kola	
-kvw				I	L	Wersing	
-kvx				I	L	Parkari Koli	
-kvy				I	L	Yintale Karen	
-kvz				I	L	Tsakwambo	
-kwa				I	L	Dâw	
-kwb				I	L	Kwa	
-kwc				I	L	Likwala	
-kwd				I	L	Kwaio	
-kwe				I	L	Kwerba	
-kwf				I	L	Kwara'ae	
-kwg				I	L	Sara Kaba Deme	
-kwh				I	L	Kowiai	
-kwi				I	L	Awa-Cuaiquer	
-kwj				I	L	Kwanga	
-kwk				I	L	Kwakiutl	
-kwl				I	L	Kofyar	
-kwm				I	L	Kwambi	
-kwn				I	L	Kwangali	
-kwo				I	L	Kwomtari	
-kwp				I	L	Kodia	
-kwr				I	L	Kwer	
-kws				I	L	Kwese	
-kwt				I	L	Kwesten	
-kwu				I	L	Kwakum	
-kwv				I	L	Sara Kaba Náà	
-kww				I	L	Kwinti	
-kwx				I	L	Khirwar	
-kwy				I	L	San Salvador Kongo	
-kwz				I	E	Kwadi	
-kxa				I	L	Kairiru	
-kxb				I	L	Krobu	
-kxc				I	L	Konso	
-kxd				I	L	Brunei	
-kxf				I	L	Manumanaw Karen	
-kxh				I	L	Karo (Ethiopia)	
-kxi				I	L	Keningau Murut	
-kxj				I	L	Kulfa	
-kxk				I	L	Zayein Karen	
-kxm				I	L	Northern Khmer	
-kxn				I	L	Kanowit-Tanjong Melanau	
-kxo				I	E	Kanoé	
-kxp				I	L	Wadiyara Koli	
-kxq				I	L	Smärky Kanum	
-kxr				I	L	Koro (Papua New Guinea)	
-kxs				I	L	Kangjia	
-kxt				I	L	Koiwat	
-kxv				I	L	Kuvi	
-kxw				I	L	Konai	
-kxx				I	L	Likuba	
-kxy				I	L	Kayong	
-kxz				I	L	Kerewo	
-kya				I	L	Kwaya	
-kyb				I	L	Butbut Kalinga	
-kyc				I	L	Kyaka	
-kyd				I	L	Karey	
-kye				I	L	Krache	
-kyf				I	L	Kouya	
-kyg				I	L	Keyagana	
-kyh				I	L	Karok	
-kyi				I	L	Kiput	
-kyj				I	L	Karao	
-kyk				I	L	Kamayo	
-kyl				I	L	Kalapuya	
-kym				I	L	Kpatili	
-kyn				I	L	Northern Binukidnon	
-kyo				I	L	Kelon	
-kyp				I	L	Kang	
-kyq				I	L	Kenga	
-kyr				I	L	Kuruáya	
-kys				I	L	Baram Kayan	
-kyt				I	L	Kayagar	
-kyu				I	L	Western Kayah	
-kyv				I	L	Kayort	
-kyw				I	L	Kudmali	
-kyx				I	L	Rapoisi	
-kyy				I	L	Kambaira	
-kyz				I	L	Kayabí	
-kza				I	L	Western Karaboro	
-kzb				I	L	Kaibobo	
-kzc				I	L	Bondoukou Kulango	
-kzd				I	L	Kadai	
-kze				I	L	Kosena	
-kzf				I	L	Da'a Kaili	
-kzg				I	L	Kikai	
-kzi				I	L	Kelabit	
-kzk				I	E	Kazukuru	
-kzl				I	L	Kayeli	
-kzm				I	L	Kais	
-kzn				I	L	Kokola	
-kzo				I	L	Kaningi	
-kzp				I	L	Kaidipang	
-kzq				I	L	Kaike	
-kzr				I	L	Karang	
-kzs				I	L	Sugut Dusun	
-kzu				I	L	Kayupulau	
-kzv				I	L	Komyandaret	
-kzw				I	E	Karirí-Xocó	
-kzx				I	E	Kamarian	
-kzy				I	L	Kango (Tshopo District)	
-kzz				I	L	Kalabra	
-laa				I	L	Southern Subanen	
-lab				I	A	Linear A	
-lac				I	L	Lacandon	
-lad	lad	lad		I	L	Ladino	
-lae				I	L	Pattani	
-laf				I	L	Lafofa	
-lag				I	L	Langi	
-lah	lah	lah		M	L	Lahnda	
-lai				I	L	Lambya	
-laj				I	L	Lango (Uganda)	
-lak				I	L	Laka (Nigeria)	
-lal				I	L	Lalia	
-lam	lam	lam		I	L	Lamba	
-lan				I	L	Laru	
-lao	lao	lao	lo	I	L	Lao	
-lap				I	L	Laka (Chad)	
-laq				I	L	Qabiao	
-lar				I	L	Larteh	
-las				I	L	Lama (Togo)	
-lat	lat	lat	la	I	A	Latin	
-lau				I	L	Laba	
-lav	lav	lav	lv	M	L	Latvian	
-law				I	L	Lauje	
-lax				I	L	Tiwa	
-lay				I	L	Lama Bai	
-laz				I	E	Aribwatsa	
-lbb				I	L	Label	
-lbc				I	L	Lakkia	
-lbe				I	L	Lak	
-lbf				I	L	Tinani	
-lbg				I	L	Laopang	
-lbi				I	L	La'bi	
-lbj				I	L	Ladakhi	
-lbk				I	L	Central Bontok	
-lbl				I	L	Libon Bikol	
-lbm				I	L	Lodhi	
-lbn				I	L	Rmeet	
-lbo				I	L	Laven	
-lbq				I	L	Wampar	
-lbr				I	L	Lohorung	
-lbs				I	L	Libyan Sign Language	
-lbt				I	L	Lachi	
-lbu				I	L	Labu	
-lbv				I	L	Lavatbura-Lamusong	
-lbw				I	L	Tolaki	
-lbx				I	L	Lawangan	
-lby				I	E	Lamalama	
-lbz				I	L	Lardil	
-lcc				I	L	Legenyem	
-lcd				I	L	Lola	
-lce				I	L	Loncong	
-lcf				I	L	Lubu	
-lch				I	L	Luchazi	
-lcl				I	L	Lisela	
-lcm				I	L	Tungag	
-lcp				I	L	Western Lawa	
-lcq				I	L	Luhu	
-lcs				I	L	Lisabata-Nuniali	
-lda				I	L	Kla-Dan	
-ldb				I	L	Dũya	
-ldd				I	L	Luri	
-ldg				I	L	Lenyima	
-ldh				I	L	Lamja-Dengsa-Tola	
-ldi				I	L	Laari	
-ldj				I	L	Lemoro	
-ldk				I	L	Leelau	
-ldl				I	L	Kaan	
-ldm				I	L	Landoma	
-ldn				I	C	Láadan	
-ldo				I	L	Loo	
-ldp				I	L	Tso	
-ldq				I	L	Lufu	
-lea				I	L	Lega-Shabunda	
-leb				I	L	Lala-Bisa	
-lec				I	L	Leco	
-led				I	L	Lendu	
-lee				I	L	Lyélé	
-lef				I	L	Lelemi	
-leh				I	L	Lenje	
-lei				I	L	Lemio	
-lej				I	L	Lengola	
-lek				I	L	Leipon	
-lel				I	L	Lele (Democratic Republic of Congo)	
-lem				I	L	Nomaande	
-len				I	E	Lenca	
-leo				I	L	Leti (Cameroon)	
-lep				I	L	Lepcha	
-leq				I	L	Lembena	
-ler				I	L	Lenkau	
-les				I	L	Lese	
-let				I	L	Lesing-Gelimi	
-leu				I	L	Kara (Papua New Guinea)	
-lev				I	L	Lamma	
-lew				I	L	Ledo Kaili	
-lex				I	L	Luang	
-ley				I	L	Lemolang	
-lez	lez	lez		I	L	Lezghian	
-lfa				I	L	Lefa	
-lfn				I	C	Lingua Franca Nova	
-lga				I	L	Lungga	
-lgb				I	L	Laghu	
-lgg				I	L	Lugbara	
-lgh				I	L	Laghuu	
-lgi				I	L	Lengilu	
-lgk				I	L	Lingarak	
-lgl				I	L	Wala	
-lgm				I	L	Lega-Mwenga	
-lgn				I	L	T'apo	
-lgq				I	L	Logba	
-lgr				I	L	Lengo	
-lgt				I	L	Pahi	
-lgu				I	L	Longgu	
-lgz				I	L	Ligenza	
-lha				I	L	Laha (Viet Nam)	
-lhh				I	L	Laha (Indonesia)	
-lhi				I	L	Lahu Shi	
-lhl				I	L	Lahul Lohar	
-lhm				I	L	Lhomi	
-lhn				I	L	Lahanan	
-lhp				I	L	Lhokpu	
-lhs				I	E	Mlahsö	
-lht				I	L	Lo-Toga	
-lhu				I	L	Lahu	
-lia				I	L	West-Central Limba	
-lib				I	L	Likum	
-lic				I	L	Hlai	
-lid				I	L	Nyindrou	
-lie				I	L	Likila	
-lif				I	L	Limbu	
-lig				I	L	Ligbi	
-lih				I	L	Lihir	
-lij				I	L	Ligurian	
-lik				I	L	Lika	
-lil				I	L	Lillooet	
-lim	lim	lim	li	I	L	Limburgan	
-lin	lin	lin	ln	I	L	Lingala	
-lio				I	L	Liki	
-lip				I	L	Sekpele	
-liq				I	L	Libido	
-lir				I	L	Liberian English	
-lis				I	L	Lisu	
-lit	lit	lit	lt	I	L	Lithuanian	
-liu				I	L	Logorik	
-liv				I	L	Liv	
-liw				I	L	Col	
-lix				I	L	Liabuku	
-liy				I	L	Banda-Bambari	
-liz				I	L	Libinza	
-lja				I	E	Golpa	
-lje				I	L	Rampi	
-lji				I	L	Laiyolo	
-ljl				I	L	Li'o	
-ljp				I	L	Lampung Api	
-ljw				I	L	Yirandali	
-ljx				I	E	Yuru	
-lka				I	L	Lakalei	
-lkb				I	L	Kabras	
-lkc				I	L	Kucong	
-lkd				I	L	Lakondê	
-lke				I	L	Kenyi	
-lkh				I	L	Lakha	
-lki				I	L	Laki	
-lkj				I	L	Remun	
-lkl				I	L	Laeko-Libuat	
-lkm				I	E	Kalaamaya	
-lkn				I	L	Lakon	
-lko				I	L	Khayo	
-lkr				I	L	Päri	
-lks				I	L	Kisa	
-lkt				I	L	Lakota	
-lku				I	E	Kungkari	
-lky				I	L	Lokoya	
-lla				I	L	Lala-Roba	
-llb				I	L	Lolo	
-llc				I	L	Lele (Guinea)	
-lld				I	L	Ladin	
-lle				I	L	Lele (Papua New Guinea)	
-llf				I	E	Hermit	
-llg				I	L	Lole	
-llh				I	L	Lamu	
-lli				I	L	Teke-Laali	
-llj				I	E	Ladji Ladji	
-llk				I	E	Lelak	
-lll				I	L	Lilau	
-llm				I	L	Lasalimu	
-lln				I	L	Lele (Chad)	
-llp				I	L	North Efate	
-llq				I	L	Lolak	
-lls				I	L	Lithuanian Sign Language	
-llu				I	L	Lau	
-llx				I	L	Lauan	
-lma				I	L	East Limba	
-lmb				I	L	Merei	
-lmc				I	E	Limilngan	
-lmd				I	L	Lumun	
-lme				I	L	Pévé	
-lmf				I	L	South Lembata	
-lmg				I	L	Lamogai	
-lmh				I	L	Lambichhong	
-lmi				I	L	Lombi	
-lmj				I	L	West Lembata	
-lmk				I	L	Lamkang	
-lml				I	L	Hano	
-lmn				I	L	Lambadi	
-lmo				I	L	Lombard	
-lmp				I	L	Limbum	
-lmq				I	L	Lamatuka	
-lmr				I	L	Lamalera	
-lmu				I	L	Lamenu	
-lmv				I	L	Lomaiviti	
-lmw				I	L	Lake Miwok	
-lmx				I	L	Laimbue	
-lmy				I	L	Lamboya	
-lna				I	L	Langbashe	
-lnb				I	L	Mbalanhu	
-lnd				I	L	Lundayeh	
-lng				I	A	Langobardic	
-lnh				I	L	Lanoh	
-lni				I	L	Daantanai'	
-lnj				I	E	Leningitij	
-lnl				I	L	South Central Banda	
-lnm				I	L	Langam	
-lnn				I	L	Lorediakarkar	
-lno				I	L	Lango (South Sudan)	
-lns				I	L	Lamnso'	
-lnu				I	L	Longuda	
-lnw				I	E	Lanima	
-lnz				I	L	Lonzo	
-loa				I	L	Loloda	
-lob				I	L	Lobi	
-loc				I	L	Inonhan	
-loe				I	L	Saluan	
-lof				I	L	Logol	
-log				I	L	Logo	
-loh				I	L	Narim	
-loi				I	L	Loma (Côte d'Ivoire)	
-loj				I	L	Lou	
-lok				I	L	Loko	
-lol	lol	lol		I	L	Mongo	
-lom				I	L	Loma (Liberia)	
-lon				I	L	Malawi Lomwe	
-loo				I	L	Lombo	
-lop				I	L	Lopa	
-loq				I	L	Lobala	
-lor				I	L	Téén	
-los				I	L	Loniu	
-lot				I	L	Otuho	
-lou				I	L	Louisiana Creole	
-lov				I	L	Lopi	
-low				I	L	Tampias Lobu	
-lox				I	L	Loun	
-loy				I	L	Loke	
-loz	loz	loz		I	L	Lozi	
-lpa				I	L	Lelepa	
-lpe				I	L	Lepki	
-lpn				I	L	Long Phuri Naga	
-lpo				I	L	Lipo	
-lpx				I	L	Lopit	
-lra				I	L	Rara Bakati'	
-lrc				I	L	Northern Luri	
-lre				I	E	Laurentian	
-lrg				I	E	Laragia	
-lri				I	L	Marachi	
-lrk				I	L	Loarki	
-lrl				I	L	Lari	
-lrm				I	L	Marama	
-lrn				I	L	Lorang	
-lro				I	L	Laro	
-lrr				I	L	Southern Yamphu	
-lrt				I	L	Larantuka Malay	
-lrv				I	L	Larevat	
-lrz				I	L	Lemerig	
-lsa				I	L	Lasgerdi	
-lsd				I	L	Lishana Deni	
-lse				I	L	Lusengo	
-lsh				I	L	Lish	
-lsi				I	L	Lashi	
-lsl				I	L	Latvian Sign Language	
-lsm				I	L	Saamia	
-lsn				I	L	Tibetan Sign Language	
-lso				I	L	Laos Sign Language	
-lsp				I	L	Panamanian Sign Language	
-lsr				I	L	Aruop	
-lss				I	L	Lasi	
-lst				I	L	Trinidad and Tobago Sign Language	
-lsv				I	L	Sivia Sign Language	
-lsy				I	L	Mauritian Sign Language	
-ltc				I	H	Late Middle Chinese	
-ltg				I	L	Latgalian	
-lth				I	L	Thur	
-lti				I	L	Leti (Indonesia)	
-ltn				I	L	Latundê	
-lto				I	L	Tsotso	
-lts				I	L	Tachoni	
-ltu				I	L	Latu	
-ltz	ltz	ltz	lb	I	L	Luxembourgish	
-lua	lua	lua		I	L	Luba-Lulua	
-lub	lub	lub	lu	I	L	Luba-Katanga	
-luc				I	L	Aringa	
-lud				I	L	Ludian	
-lue				I	L	Luvale	
-luf				I	L	Laua	
-lug	lug	lug	lg	I	L	Ganda	
-lui	lui	lui		I	E	Luiseno	
-luj				I	L	Luna	
-luk				I	L	Lunanakha	
-lul				I	L	Olu'bo	
-lum				I	L	Luimbi	
-lun	lun	lun		I	L	Lunda	
-luo	luo	luo		I	L	Luo (Kenya and Tanzania)	
-lup				I	L	Lumbu	
-luq				I	L	Lucumi	
-lur				I	L	Laura	
-lus	lus	lus		I	L	Lushai	
-lut				I	L	Lushootseed	
-luu				I	L	Lumba-Yakkha	
-luv				I	L	Luwati	
-luw				I	L	Luo (Cameroon)	
-luy				M	L	Luyia	
-luz				I	L	Southern Luri	
-lva				I	L	Maku'a	
-lvi				I	L	Lavi	
-lvk				I	L	Lavukaleve	
-lvs				I	L	Standard Latvian	
-lvu				I	L	Levuka	
-lwa				I	L	Lwalu	
-lwe				I	L	Lewo Eleng	
-lwg				I	L	Wanga	
-lwh				I	L	White Lachi	
-lwl				I	L	Eastern Lawa	
-lwm				I	L	Laomian	
-lwo				I	L	Luwo	
-lws				I	L	Malawian Sign Language	
-lwt				I	L	Lewotobi	
-lwu				I	L	Lawu	
-lww				I	L	Lewo	
-lya				I	L	Layakha	
-lyg				I	L	Lyngngam	
-lyn				I	L	Luyana	
-lzh				I	H	Literary Chinese	
-lzl				I	L	Litzlitz	
-lzn				I	L	Leinong Naga	
-lzz				I	L	Laz	
-maa				I	L	San Jerónimo Tecóatl Mazatec	
-mab				I	L	Yutanduchi Mixtec	
-mad	mad	mad		I	L	Madurese	
-mae				I	L	Bo-Rukul	
-maf				I	L	Mafa	
-mag	mag	mag		I	L	Magahi	
-mah	mah	mah	mh	I	L	Marshallese	
-mai	mai	mai		I	L	Maithili	
-maj				I	L	Jalapa De Díaz Mazatec	
-mak	mak	mak		I	L	Makasar	
-mal	mal	mal	ml	I	L	Malayalam	
-mam				I	L	Mam	
-man	man	man		M	L	Mandingo	
-maq				I	L	Chiquihuitlán Mazatec	
-mar	mar	mar	mr	I	L	Marathi	
-mas	mas	mas		I	L	Masai	
-mat				I	L	San Francisco Matlatzinca	
-mau				I	L	Huautla Mazatec	
-mav				I	L	Sateré-Mawé	
-maw				I	L	Mampruli	
-max				I	L	North Moluccan Malay	
-maz				I	L	Central Mazahua	
-mba				I	L	Higaonon	
-mbb				I	L	Western Bukidnon Manobo	
-mbc				I	L	Macushi	
-mbd				I	L	Dibabawon Manobo	
-mbe				I	E	Molale	
-mbf				I	L	Baba Malay	
-mbh				I	L	Mangseng	
-mbi				I	L	Ilianen Manobo	
-mbj				I	L	Nadëb	
-mbk				I	L	Malol	
-mbl				I	L	Maxakalí	
-mbm				I	L	Ombamba	
-mbn				I	L	Macaguán	
-mbo				I	L	Mbo (Cameroon)	
-mbp				I	L	Malayo	
-mbq				I	L	Maisin	
-mbr				I	L	Nukak Makú	
-mbs				I	L	Sarangani Manobo	
-mbt				I	L	Matigsalug Manobo	
-mbu				I	L	Mbula-Bwazza	
-mbv				I	L	Mbulungish	
-mbw				I	L	Maring	
-mbx				I	L	Mari (East Sepik Province)	
-mby				I	L	Memoni	
-mbz				I	L	Amoltepec Mixtec	
-mca				I	L	Maca	
-mcb				I	L	Machiguenga	
-mcc				I	L	Bitur	
-mcd				I	L	Sharanahua	
-mce				I	L	Itundujia Mixtec	
-mcf				I	L	Matsés	
-mcg				I	L	Mapoyo	
-mch				I	L	Maquiritari	
-mci				I	L	Mese	
-mcj				I	L	Mvanip	
-mck				I	L	Mbunda	
-mcl				I	E	Macaguaje	
-mcm				I	L	Malaccan Creole Portuguese	
-mcn				I	L	Masana	
-mco				I	L	Coatlán Mixe	
-mcp				I	L	Makaa	
-mcq				I	L	Ese	
-mcr				I	L	Menya	
-mcs				I	L	Mambai	
-mct				I	L	Mengisa	
-mcu				I	L	Cameroon Mambila	
-mcv				I	L	Minanibai	
-mcw				I	L	Mawa (Chad)	
-mcx				I	L	Mpiemo	
-mcy				I	L	South Watut	
-mcz				I	L	Mawan	
-mda				I	L	Mada (Nigeria)	
-mdb				I	L	Morigi	
-mdc				I	L	Male (Papua New Guinea)	
-mdd				I	L	Mbum	
-mde				I	L	Maba (Chad)	
-mdf	mdf	mdf		I	L	Moksha	
-mdg				I	L	Massalat	
-mdh				I	L	Maguindanaon	
-mdi				I	L	Mamvu	
-mdj				I	L	Mangbetu	
-mdk				I	L	Mangbutu	
-mdl				I	L	Maltese Sign Language	
-mdm				I	L	Mayogo	
-mdn				I	L	Mbati	
-mdp				I	L	Mbala	
-mdq				I	L	Mbole	
-mdr	mdr	mdr		I	L	Mandar	
-mds				I	L	Maria (Papua New Guinea)	
-mdt				I	L	Mbere	
-mdu				I	L	Mboko	
-mdv				I	L	Santa Lucía Monteverde Mixtec	
-mdw				I	L	Mbosi	
-mdx				I	L	Dizin	
-mdy				I	L	Male (Ethiopia)	
-mdz				I	L	Suruí Do Pará	
-mea				I	L	Menka	
-meb				I	L	Ikobi	
-mec				I	L	Marra	
-med				I	L	Melpa	
-mee				I	L	Mengen	
-mef				I	L	Megam	
-meh				I	L	Southwestern Tlaxiaco Mixtec	
-mei				I	L	Midob	
-mej				I	L	Meyah	
-mek				I	L	Mekeo	
-mel				I	L	Central Melanau	
-mem				I	E	Mangala	
-men	men	men		I	L	Mende (Sierra Leone)	
-meo				I	L	Kedah Malay	
-mep				I	L	Miriwoong	
-meq				I	L	Merey	
-mer				I	L	Meru	
-mes				I	L	Masmaje	
-met				I	L	Mato	
-meu				I	L	Motu	
-mev				I	L	Mano	
-mew				I	L	Maaka	
-mey				I	L	Hassaniyya	
-mez				I	L	Menominee	
-mfa				I	L	Pattani Malay	
-mfb				I	L	Bangka	
-mfc				I	L	Mba	
-mfd				I	L	Mendankwe-Nkwen	
-mfe				I	L	Morisyen	
-mff				I	L	Naki	
-mfg				I	L	Mogofin	
-mfh				I	L	Matal	
-mfi				I	L	Wandala	
-mfj				I	L	Mefele	
-mfk				I	L	North Mofu	
-mfl				I	L	Putai	
-mfm				I	L	Marghi South	
-mfn				I	L	Cross River Mbembe	
-mfo				I	L	Mbe	
-mfp				I	L	Makassar Malay	
-mfq				I	L	Moba	
-mfr				I	L	Marrithiyel	
-mfs				I	L	Mexican Sign Language	
-mft				I	L	Mokerang	
-mfu				I	L	Mbwela	
-mfv				I	L	Mandjak	
-mfw				I	E	Mulaha	
-mfx				I	L	Melo	
-mfy				I	L	Mayo	
-mfz				I	L	Mabaan	
-mga	mga	mga		I	H	Middle Irish (900-1200)	
-mgb				I	L	Mararit	
-mgc				I	L	Morokodo	
-mgd				I	L	Moru	
-mge				I	L	Mango	
-mgf				I	L	Maklew	
-mgg				I	L	Mpumpong	
-mgh				I	L	Makhuwa-Meetto	
-mgi				I	L	Lijili	
-mgj				I	L	Abureni	
-mgk				I	L	Mawes	
-mgl				I	L	Maleu-Kilenge	
-mgm				I	L	Mambae	
-mgn				I	L	Mbangi	
-mgo				I	L	Meta'	
-mgp				I	L	Eastern Magar	
-mgq				I	L	Malila	
-mgr				I	L	Mambwe-Lungu	
-mgs				I	L	Manda (Tanzania)	
-mgt				I	L	Mongol	
-mgu				I	L	Mailu	
-mgv				I	L	Matengo	
-mgw				I	L	Matumbi	
-mgy				I	L	Mbunga	
-mgz				I	L	Mbugwe	
-mha				I	L	Manda (India)	
-mhb				I	L	Mahongwe	
-mhc				I	L	Mocho	
-mhd				I	L	Mbugu	
-mhe				I	L	Besisi	
-mhf				I	L	Mamaa	
-mhg				I	L	Margu	
-mhi				I	L	Ma'di	
-mhj				I	L	Mogholi	
-mhk				I	L	Mungaka	
-mhl				I	L	Mauwake	
-mhm				I	L	Makhuwa-Moniga	
-mhn				I	L	Mócheno	
-mho				I	L	Mashi (Zambia)	
-mhp				I	L	Balinese Malay	
-mhq				I	L	Mandan	
-mhr				I	L	Eastern Mari	
-mhs				I	L	Buru (Indonesia)	
-mht				I	L	Mandahuaca	
-mhu				I	L	Digaro-Mishmi	
-mhw				I	L	Mbukushu	
-mhx				I	L	Maru	
-mhy				I	L	Ma'anyan	
-mhz				I	L	Mor (Mor Islands)	
-mia				I	L	Miami	
-mib				I	L	Atatláhuca Mixtec	
-mic	mic	mic		I	L	Mi'kmaq	
-mid				I	L	Mandaic	
-mie				I	L	Ocotepec Mixtec	
-mif				I	L	Mofu-Gudur	
-mig				I	L	San Miguel El Grande Mixtec	
-mih				I	L	Chayuco Mixtec	
-mii				I	L	Chigmecatitlán Mixtec	
-mij				I	L	Abar	
-mik				I	L	Mikasuki	
-mil				I	L	Peñoles Mixtec	
-mim				I	L	Alacatlatzala Mixtec	
-min	min	min		I	L	Minangkabau	
-mio				I	L	Pinotepa Nacional Mixtec	
-mip				I	L	Apasco-Apoala Mixtec	
-miq				I	L	Mískito	
-mir				I	L	Isthmus Mixe	
-mis	mis	mis		S	S	Uncoded languages	
-mit				I	L	Southern Puebla Mixtec	
-miu				I	L	Cacaloxtepec Mixtec	
-miw				I	L	Akoye	
-mix				I	L	Mixtepec Mixtec	
-miy				I	L	Ayutla Mixtec	
-miz				I	L	Coatzospan Mixtec	
-mjb				I	L	Makalero	
-mjc				I	L	San Juan Colorado Mixtec	
-mjd				I	L	Northwest Maidu	
-mje				I	E	Muskum	
-mjg				I	L	Tu	
-mjh				I	L	Mwera (Nyasa)	
-mji				I	L	Kim Mun	
-mjj				I	L	Mawak	
-mjk				I	L	Matukar	
-mjl				I	L	Mandeali	
-mjm				I	L	Medebur	
-mjn				I	L	Ma (Papua New Guinea)	
-mjo				I	L	Malankuravan	
-mjp				I	L	Malapandaram	
-mjq				I	E	Malaryan	
-mjr				I	L	Malavedan	
-mjs				I	L	Miship	
-mjt				I	L	Sauria Paharia	
-mju				I	L	Manna-Dora	
-mjv				I	L	Mannan	
-mjw				I	L	Karbi	
-mjx				I	L	Mahali	
-mjy				I	E	Mahican	
-mjz				I	L	Majhi	
-mka				I	L	Mbre	
-mkb				I	L	Mal Paharia	
-mkc				I	L	Siliput	
-mkd	mac	mkd	mk	I	L	Macedonian	
-mke				I	L	Mawchi	
-mkf				I	L	Miya	
-mkg				I	L	Mak (China)	
-mki				I	L	Dhatki	
-mkj				I	L	Mokilese	
-mkk				I	L	Byep	
-mkl				I	L	Mokole	
-mkm				I	L	Moklen	
-mkn				I	L	Kupang Malay	
-mko				I	L	Mingang Doso	
-mkp				I	L	Moikodi	
-mkq				I	E	Bay Miwok	
-mkr				I	L	Malas	
-mks				I	L	Silacayoapan Mixtec	
-mkt				I	L	Vamale	
-mku				I	L	Konyanka Maninka	
-mkv				I	L	Mafea	
-mkw				I	L	Kituba (Congo)	
-mkx				I	L	Kinamiging Manobo	
-mky				I	L	East Makian	
-mkz				I	L	Makasae	
-mla				I	L	Malo	
-mlb				I	L	Mbule	
-mlc				I	L	Cao Lan	
-mle				I	L	Manambu	
-mlf				I	L	Mal	
-mlg	mlg	mlg	mg	M	L	Malagasy	
-mlh				I	L	Mape	
-mli				I	L	Malimpung	
-mlj				I	L	Miltu	
-mlk				I	L	Ilwana	
-mll				I	L	Malua Bay	
-mlm				I	L	Mulam	
-mln				I	L	Malango	
-mlo				I	L	Mlomp	
-mlp				I	L	Bargam	
-mlq				I	L	Western Maninkakan	
-mlr				I	L	Vame	
-mls				I	L	Masalit	
-mlt	mlt	mlt	mt	I	L	Maltese	
-mlu				I	L	To'abaita	
-mlv				I	L	Motlav	
-mlw				I	L	Moloko	
-mlx				I	L	Malfaxal	
-mlz				I	L	Malaynon	
-mma				I	L	Mama	
-mmb				I	L	Momina	
-mmc				I	L	Michoacán Mazahua	
-mmd				I	L	Maonan	
-mme				I	L	Mae	
-mmf				I	L	Mundat	
-mmg				I	L	North Ambrym	
-mmh				I	L	Mehináku	
-mmi				I	L	Musar	
-mmj				I	L	Majhwar	
-mmk				I	L	Mukha-Dora	
-mml				I	L	Man Met	
-mmm				I	L	Maii	
-mmn				I	L	Mamanwa	
-mmo				I	L	Mangga Buang	
-mmp				I	L	Siawi	
-mmq				I	L	Musak	
-mmr				I	L	Western Xiangxi Miao	
-mmt				I	L	Malalamai	
-mmu				I	L	Mmaala	
-mmv				I	E	Miriti	
-mmw				I	L	Emae	
-mmx				I	L	Madak	
-mmy				I	L	Migaama	
-mmz				I	L	Mabaale	
-mna				I	L	Mbula	
-mnb				I	L	Muna	
-mnc	mnc	mnc		I	L	Manchu	
-mnd				I	L	Mondé	
-mne				I	L	Naba	
-mnf				I	L	Mundani	
-mng				I	L	Eastern Mnong	
-mnh				I	L	Mono (Democratic Republic of Congo)	
-mni	mni	mni		I	L	Manipuri	
-mnj				I	L	Munji	
-mnk				I	L	Mandinka	
-mnl				I	L	Tiale	
-mnm				I	L	Mapena	
-mnn				I	L	Southern Mnong	
-mnp				I	L	Min Bei Chinese	
-mnq				I	L	Minriq	
-mnr				I	L	Mono (USA)	
-mns				I	L	Mansi	
-mnu				I	L	Mer	
-mnv				I	L	Rennell-Bellona	
-mnw				I	L	Mon	
-mnx				I	L	Manikion	
-mny				I	L	Manyawa	
-mnz				I	L	Moni	
-moa				I	L	Mwan	
-moc				I	L	Mocoví	
-mod				I	E	Mobilian	
-moe				I	L	Innu	
-mog				I	L	Mongondow	
-moh	moh	moh		I	L	Mohawk	
-moi				I	L	Mboi	
-moj				I	L	Monzombo	
-mok				I	L	Morori	
-mom				I	E	Mangue	
-mon	mon	mon	mn	M	L	Mongolian	
-moo				I	L	Monom	
-mop				I	L	Mopán Maya	
-moq				I	L	Mor (Bomberai Peninsula)	
-mor				I	L	Moro	
-mos	mos	mos		I	L	Mossi	
-mot				I	L	Barí	
-mou				I	L	Mogum	
-mov				I	L	Mohave	
-mow				I	L	Moi (Congo)	
-mox				I	L	Molima	
-moy				I	L	Shekkacho	
-moz				I	L	Mukulu	
-mpa				I	L	Mpoto	
-mpb				I	L	Malak Malak	
-mpc				I	L	Mangarrayi	
-mpd				I	L	Machinere	
-mpe				I	L	Majang	
-mpg				I	L	Marba	
-mph				I	L	Maung	
-mpi				I	L	Mpade	
-mpj				I	L	Martu Wangka	
-mpk				I	L	Mbara (Chad)	
-mpl				I	L	Middle Watut	
-mpm				I	L	Yosondúa Mixtec	
-mpn				I	L	Mindiri	
-mpo				I	L	Miu	
-mpp				I	L	Migabac	
-mpq				I	L	Matís	
-mpr				I	L	Vangunu	
-mps				I	L	Dadibi	
-mpt				I	L	Mian	
-mpu				I	L	Makuráp	
-mpv				I	L	Mungkip	
-mpw				I	L	Mapidian	
-mpx				I	L	Misima-Panaeati	
-mpy				I	L	Mapia	
-mpz				I	L	Mpi	
-mqa				I	L	Maba (Indonesia)	
-mqb				I	L	Mbuko	
-mqc				I	L	Mangole	
-mqe				I	L	Matepi	
-mqf				I	L	Momuna	
-mqg				I	L	Kota Bangun Kutai Malay	
-mqh				I	L	Tlazoyaltepec Mixtec	
-mqi				I	L	Mariri	
-mqj				I	L	Mamasa	
-mqk				I	L	Rajah Kabunsuwan Manobo	
-mql				I	L	Mbelime	
-mqm				I	L	South Marquesan	
-mqn				I	L	Moronene	
-mqo				I	L	Modole	
-mqp				I	L	Manipa	
-mqq				I	L	Minokok	
-mqr				I	L	Mander	
-mqs				I	L	West Makian	
-mqt				I	L	Mok	
-mqu				I	L	Mandari	
-mqv				I	L	Mosimo	
-mqw				I	L	Murupi	
-mqx				I	L	Mamuju	
-mqy				I	L	Manggarai	
-mqz				I	L	Pano	
-mra				I	L	Mlabri	
-mrb				I	L	Marino	
-mrc				I	L	Maricopa	
-mrd				I	L	Western Magar	
-mre				I	E	Martha's Vineyard Sign Language	
-mrf				I	L	Elseng	
-mrg				I	L	Mising	
-mrh				I	L	Mara Chin	
-mri	mao	mri	mi	I	L	Maori	
-mrj				I	L	Western Mari	
-mrk				I	L	Hmwaveke	
-mrl				I	L	Mortlockese	
-mrm				I	L	Merlav	
-mrn				I	L	Cheke Holo	
-mro				I	L	Mru	
-mrp				I	L	Morouas	
-mrq				I	L	North Marquesan	
-mrr				I	L	Maria (India)	
-mrs				I	L	Maragus	
-mrt				I	L	Marghi Central	
-mru				I	L	Mono (Cameroon)	
-mrv				I	L	Mangareva	
-mrw				I	L	Maranao	
-mrx				I	L	Maremgi	
-mry				I	L	Mandaya	
-mrz				I	L	Marind	
-msa	may	msa	ms	M	L	Malay (macrolanguage)	
-msb				I	L	Masbatenyo	
-msc				I	L	Sankaran Maninka	
-msd				I	L	Yucatec Maya Sign Language	
-mse				I	L	Musey	
-msf				I	L	Mekwei	
-msg				I	L	Moraid	
-msh				I	L	Masikoro Malagasy	
-msi				I	L	Sabah Malay	
-msj				I	L	Ma (Democratic Republic of Congo)	
-msk				I	L	Mansaka	
-msl				I	L	Molof	
-msm				I	L	Agusan Manobo	
-msn				I	L	Vurës	
-mso				I	L	Mombum	
-msp				I	E	Maritsauá	
-msq				I	L	Caac	
-msr				I	L	Mongolian Sign Language	
-mss				I	L	West Masela	
-msu				I	L	Musom	
-msv				I	L	Maslam	
-msw				I	L	Mansoanka	
-msx				I	L	Moresada	
-msy				I	L	Aruamu	
-msz				I	L	Momare	
-mta				I	L	Cotabato Manobo	
-mtb				I	L	Anyin Morofo	
-mtc				I	L	Munit	
-mtd				I	L	Mualang	
-mte				I	L	Mono (Solomon Islands)	
-mtf				I	L	Murik (Papua New Guinea)	
-mtg				I	L	Una	
-mth				I	L	Munggui	
-mti				I	L	Maiwa (Papua New Guinea)	
-mtj				I	L	Moskona	
-mtk				I	L	Mbe'	
-mtl				I	L	Montol	
-mtm				I	E	Mator	
-mtn				I	E	Matagalpa	
-mto				I	L	Totontepec Mixe	
-mtp				I	L	Wichí Lhamtés Nocten	
-mtq				I	L	Muong	
-mtr				I	L	Mewari	
-mts				I	L	Yora	
-mtt				I	L	Mota	
-mtu				I	L	Tututepec Mixtec	
-mtv				I	L	Asaro'o	
-mtw				I	L	Southern Binukidnon	
-mtx				I	L	Tidaá Mixtec	
-mty				I	L	Nabi	
-mua				I	L	Mundang	
-mub				I	L	Mubi	
-muc				I	L	Ajumbu	
-mud				I	L	Mednyj Aleut	
-mue				I	L	Media Lengua	
-mug				I	L	Musgu	
-muh				I	L	Mündü	
-mui				I	L	Musi	
-muj				I	L	Mabire	
-muk				I	L	Mugom	
-mul	mul	mul		S	S	Multiple languages	
-mum				I	L	Maiwala	
-muo				I	L	Nyong	
-mup				I	L	Malvi	
-muq				I	L	Eastern Xiangxi Miao	
-mur				I	L	Murle	
-mus	mus	mus		I	L	Creek	
-mut				I	L	Western Muria	
-muu				I	L	Yaaku	
-muv				I	L	Muthuvan	
-mux				I	L	Bo-Ung	
-muy				I	L	Muyang	
-muz				I	L	Mursi	
-mva				I	L	Manam	
-mvb				I	E	Mattole	
-mvd				I	L	Mamboru	
-mve				I	L	Marwari (Pakistan)	
-mvf				I	L	Peripheral Mongolian	
-mvg				I	L	Yucuañe Mixtec	
-mvh				I	L	Mulgi	
-mvi				I	L	Miyako	
-mvk				I	L	Mekmek	
-mvl				I	E	Mbara (Australia)	
-mvm				I	L	Muya	
-mvn				I	L	Minaveha	
-mvo				I	L	Marovo	
-mvp				I	L	Duri	
-mvq				I	L	Moere	
-mvr				I	L	Marau	
-mvs				I	L	Massep	
-mvt				I	L	Mpotovoro	
-mvu				I	L	Marfa	
-mvv				I	L	Tagal Murut	
-mvw				I	L	Machinga	
-mvx				I	L	Meoswar	
-mvy				I	L	Indus Kohistani	
-mvz				I	L	Mesqan	
-mwa				I	L	Mwatebu	
-mwb				I	L	Juwal	
-mwc				I	L	Are	
-mwe				I	L	Mwera (Chimwera)	
-mwf				I	L	Murrinh-Patha	
-mwg				I	L	Aiklep	
-mwh				I	L	Mouk-Aria	
-mwi				I	L	Labo	
-mwk				I	L	Kita Maninkakan	
-mwl	mwl	mwl		I	L	Mirandese	
-mwm				I	L	Sar	
-mwn				I	L	Nyamwanga	
-mwo				I	L	Central Maewo	
-mwp				I	L	Kala Lagaw Ya	
-mwq				I	L	Mün Chin	
-mwr	mwr	mwr		M	L	Marwari	
-mws				I	L	Mwimbi-Muthambi	
-mwt				I	L	Moken	
-mwu				I	E	Mittu	
-mwv				I	L	Mentawai	
-mww				I	L	Hmong Daw	
-mwz				I	L	Moingi	
-mxa				I	L	Northwest Oaxaca Mixtec	
-mxb				I	L	Tezoatlán Mixtec	
-mxc				I	L	Manyika	
-mxd				I	L	Modang	
-mxe				I	L	Mele-Fila	
-mxf				I	L	Malgbe	
-mxg				I	L	Mbangala	
-mxh				I	L	Mvuba	
-mxi				I	H	Mozarabic	
-mxj				I	L	Miju-Mishmi	
-mxk				I	L	Monumbo	
-mxl				I	L	Maxi Gbe	
-mxm				I	L	Meramera	
-mxn				I	L	Moi (Indonesia)	
-mxo				I	L	Mbowe	
-mxp				I	L	Tlahuitoltepec Mixe	
-mxq				I	L	Juquila Mixe	
-mxr				I	L	Murik (Malaysia)	
-mxs				I	L	Huitepec Mixtec	
-mxt				I	L	Jamiltepec Mixtec	
-mxu				I	L	Mada (Cameroon)	
-mxv				I	L	Metlatónoc Mixtec	
-mxw				I	L	Namo	
-mxx				I	L	Mahou	
-mxy				I	L	Southeastern Nochixtlán Mixtec	
-mxz				I	L	Central Masela	
-mya	bur	mya	my	I	L	Burmese	
-myb				I	L	Mbay	
-myc				I	L	Mayeka	
-mye				I	L	Myene	
-myf				I	L	Bambassi	
-myg				I	L	Manta	
-myh				I	L	Makah	
-myj				I	L	Mangayat	
-myk				I	L	Mamara Senoufo	
-myl				I	L	Moma	
-mym				I	L	Me'en	
-myo				I	L	Anfillo	
-myp				I	L	Pirahã	
-myr				I	L	Muniche	
-mys				I	E	Mesmes	
-myu				I	L	Mundurukú	
-myv	myv	myv		I	L	Erzya	
-myw				I	L	Muyuw	
-myx				I	L	Masaaba	
-myy				I	L	Macuna	
-myz				I	H	Classical Mandaic	
-mza				I	L	Santa María Zacatepec Mixtec	
-mzb				I	L	Tumzabt	
-mzc				I	L	Madagascar Sign Language	
-mzd				I	L	Malimba	
-mze				I	L	Morawa	
-mzg				I	L	Monastic Sign Language	
-mzh				I	L	Wichí Lhamtés Güisnay	
-mzi				I	L	Ixcatlán Mazatec	
-mzj				I	L	Manya	
-mzk				I	L	Nigeria Mambila	
-mzl				I	L	Mazatlán Mixe	
-mzm				I	L	Mumuye	
-mzn				I	L	Mazanderani	
-mzo				I	E	Matipuhy	
-mzp				I	L	Movima	
-mzq				I	L	Mori Atas	
-mzr				I	L	Marúbo	
-mzs				I	L	Macanese	
-mzt				I	L	Mintil	
-mzu				I	L	Inapang	
-mzv				I	L	Manza	
-mzw				I	L	Deg	
-mzx				I	L	Mawayana	
-mzy				I	L	Mozambican Sign Language	
-mzz				I	L	Maiadomu	
-naa				I	L	Namla	
-nab				I	L	Southern Nambikuára	
-nac				I	L	Narak	
-nae				I	E	Naka'ela	
-naf				I	L	Nabak	
-nag				I	L	Naga Pidgin	
-naj				I	L	Nalu	
-nak				I	L	Nakanai	
-nal				I	L	Nalik	
-nam				I	L	Ngan'gityemerri	
-nan				I	L	Min Nan Chinese	
-nao				I	L	Naaba	
-nap	nap	nap		I	L	Neapolitan	
-naq				I	L	Khoekhoe	
-nar				I	L	Iguta	
-nas				I	L	Naasioi	
-nat				I	L	Ca̱hungwa̱rya̱	
-nau	nau	nau	na	I	L	Nauru	
-nav	nav	nav	nv	I	L	Navajo	
-naw				I	L	Nawuri	
-nax				I	L	Nakwi	
-nay				I	E	Ngarrindjeri	
-naz				I	L	Coatepec Nahuatl	
-nba				I	L	Nyemba	
-nbb				I	L	Ndoe	
-nbc				I	L	Chang Naga	
-nbd				I	L	Ngbinda	
-nbe				I	L	Konyak Naga	
-nbg				I	L	Nagarchal	
-nbh				I	L	Ngamo	
-nbi				I	L	Mao Naga	
-nbj				I	L	Ngarinyman	
-nbk				I	L	Nake	
-nbl	nbl	nbl	nr	I	L	South Ndebele	
-nbm				I	L	Ngbaka Ma'bo	
-nbn				I	L	Kuri	
-nbo				I	L	Nkukoli	
-nbp				I	L	Nnam	
-nbq				I	L	Nggem	
-nbr				I	L	Numana	
-nbs				I	L	Namibian Sign Language	
-nbt				I	L	Na	
-nbu				I	L	Rongmei Naga	
-nbv				I	L	Ngamambo	
-nbw				I	L	Southern Ngbandi	
-nby				I	L	Ningera	
-nca				I	L	Iyo	
-ncb				I	L	Central Nicobarese	
-ncc				I	L	Ponam	
-ncd				I	L	Nachering	
-nce				I	L	Yale	
-ncf				I	L	Notsi	
-ncg				I	L	Nisga'a	
-nch				I	L	Central Huasteca Nahuatl	
-nci				I	H	Classical Nahuatl	
-ncj				I	L	Northern Puebla Nahuatl	
-nck				I	L	Na-kara	
-ncl				I	L	Michoacán Nahuatl	
-ncm				I	L	Nambo	
-ncn				I	L	Nauna	
-nco				I	L	Sibe	
-ncq				I	L	Northern Katang	
-ncr				I	L	Ncane	
-ncs				I	L	Nicaraguan Sign Language	
-nct				I	L	Chothe Naga	
-ncu				I	L	Chumburung	
-ncx				I	L	Central Puebla Nahuatl	
-ncz				I	E	Natchez	
-nda				I	L	Ndasa	
-ndb				I	L	Kenswei Nsei	
-ndc				I	L	Ndau	
-ndd				I	L	Nde-Nsele-Nta	
-nde	nde	nde	nd	I	L	North Ndebele	
-ndf				I	H	Nadruvian	
-ndg				I	L	Ndengereko	
-ndh				I	L	Ndali	
-ndi				I	L	Samba Leko	
-ndj				I	L	Ndamba	
-ndk				I	L	Ndaka	
-ndl				I	L	Ndolo	
-ndm				I	L	Ndam	
-ndn				I	L	Ngundi	
-ndo	ndo	ndo	ng	I	L	Ndonga	
-ndp				I	L	Ndo	
-ndq				I	L	Ndombe	
-ndr				I	L	Ndoola	
-nds	nds	nds		I	L	Low German	
-ndt				I	L	Ndunga	
-ndu				I	L	Dugun	
-ndv				I	L	Ndut	
-ndw				I	L	Ndobo	
-ndx				I	L	Nduga	
-ndy				I	L	Lutos	
-ndz				I	L	Ndogo	
-nea				I	L	Eastern Ngad'a	
-neb				I	L	Toura (Côte d'Ivoire)	
-nec				I	L	Nedebang	
-ned				I	L	Nde-Gbite	
-nee				I	L	Nêlêmwa-Nixumwak	
-nef				I	L	Nefamese	
-neg				I	L	Negidal	
-neh				I	L	Nyenkha	
-nei				I	A	Neo-Hittite	
-nej				I	L	Neko	
-nek				I	L	Neku	
-nem				I	L	Nemi	
-nen				I	L	Nengone	
-neo				I	L	Ná-Meo	
-nep	nep	nep	ne	M	L	Nepali (macrolanguage)	
-neq				I	L	North Central Mixe	
-ner				I	L	Yahadian	
-nes				I	L	Bhoti Kinnauri	
-net				I	L	Nete	
-neu				I	C	Neo	
-nev				I	L	Nyaheun	
-new	new	new		I	L	Newari	
-nex				I	L	Neme	
-ney				I	L	Neyo	
-nez				I	L	Nez Perce	
-nfa				I	L	Dhao	
-nfd				I	L	Ahwai	
-nfl				I	L	Ayiwo	
-nfr				I	L	Nafaanra	
-nfu				I	L	Mfumte	
-nga				I	L	Ngbaka	
-ngb				I	L	Northern Ngbandi	
-ngc				I	L	Ngombe (Democratic Republic of Congo)	
-ngd				I	L	Ngando (Central African Republic)	
-nge				I	L	Ngemba	
-ngg				I	L	Ngbaka Manza	
-ngh				I	L	Nǁng	
-ngi				I	L	Ngizim	
-ngj				I	L	Ngie	
-ngk				I	L	Dalabon	
-ngl				I	L	Lomwe	
-ngm				I	L	Ngatik Men's Creole	
-ngn				I	L	Ngwo	
-ngo				I	L	Ngoni	
-ngp				I	L	Ngulu	
-ngq				I	L	Ngurimi	
-ngr				I	L	Engdewu	
-ngs				I	L	Gvoko	
-ngt				I	L	Kriang	
-ngu				I	L	Guerrero Nahuatl	
-ngv				I	E	Nagumi	
-ngw				I	L	Ngwaba	
-ngx				I	L	Nggwahyi	
-ngy				I	L	Tibea	
-ngz				I	L	Ngungwel	
-nha				I	L	Nhanda	
-nhb				I	L	Beng	
-nhc				I	E	Tabasco Nahuatl	
-nhd				I	L	Chiripá	
-nhe				I	L	Eastern Huasteca Nahuatl	
-nhf				I	L	Nhuwala	
-nhg				I	L	Tetelcingo Nahuatl	
-nhh				I	L	Nahari	
-nhi				I	L	Zacatlán-Ahuacatlán-Tepetzintla Nahuatl	
-nhk				I	L	Isthmus-Cosoleacaque Nahuatl	
-nhm				I	L	Morelos Nahuatl	
-nhn				I	L	Central Nahuatl	
-nho				I	L	Takuu	
-nhp				I	L	Isthmus-Pajapan Nahuatl	
-nhq				I	L	Huaxcaleca Nahuatl	
-nhr				I	L	Naro	
-nht				I	L	Ometepec Nahuatl	
-nhu				I	L	Noone	
-nhv				I	L	Temascaltepec Nahuatl	
-nhw				I	L	Western Huasteca Nahuatl	
-nhx				I	L	Isthmus-Mecayapan Nahuatl	
-nhy				I	L	Northern Oaxaca Nahuatl	
-nhz				I	L	Santa María La Alta Nahuatl	
-nia	nia	nia		I	L	Nias	
-nib				I	L	Nakame	
-nid				I	E	Ngandi	
-nie				I	L	Niellim	
-nif				I	L	Nek	
-nig				I	E	Ngalakgan	
-nih				I	L	Nyiha (Tanzania)	
-nii				I	L	Nii	
-nij				I	L	Ngaju	
-nik				I	L	Southern Nicobarese	
-nil				I	L	Nila	
-nim				I	L	Nilamba	
-nin				I	L	Ninzo	
-nio				I	L	Nganasan	
-niq				I	L	Nandi	
-nir				I	L	Nimboran	
-nis				I	L	Nimi	
-nit				I	L	Southeastern Kolami	
-niu	niu	niu		I	L	Niuean	
-niv				I	L	Gilyak	
-niw				I	L	Nimo	
-nix				I	L	Hema	
-niy				I	L	Ngiti	
-niz				I	L	Ningil	
-nja				I	L	Nzanyi	
-njb				I	L	Nocte Naga	
-njd				I	L	Ndonde Hamba	
-njh				I	L	Lotha Naga	
-nji				I	L	Gudanji	
-njj				I	L	Njen	
-njl				I	L	Njalgulgule	
-njm				I	L	Angami Naga	
-njn				I	L	Liangmai Naga	
-njo				I	L	Ao Naga	
-njr				I	L	Njerep	
-njs				I	L	Nisa	
-njt				I	L	Ndyuka-Trio Pidgin	
-nju				I	L	Ngadjunmaya	
-njx				I	L	Kunyi	
-njy				I	L	Njyem	
-njz				I	L	Nyishi	
-nka				I	L	Nkoya	
-nkb				I	L	Khoibu Naga	
-nkc				I	L	Nkongho	
-nkd				I	L	Koireng	
-nke				I	L	Duke	
-nkf				I	L	Inpui Naga	
-nkg				I	L	Nekgini	
-nkh				I	L	Khezha Naga	
-nki				I	L	Thangal Naga	
-nkj				I	L	Nakai	
-nkk				I	L	Nokuku	
-nkm				I	L	Namat	
-nkn				I	L	Nkangala	
-nko				I	L	Nkonya	
-nkp				I	E	Niuatoputapu	
-nkq				I	L	Nkami	
-nkr				I	L	Nukuoro	
-nks				I	L	North Asmat	
-nkt				I	L	Nyika (Tanzania)	
-nku				I	L	Bouna Kulango	
-nkv				I	L	Nyika (Malawi and Zambia)	
-nkw				I	L	Nkutu	
-nkx				I	L	Nkoroo	
-nkz				I	L	Nkari	
-nla				I	L	Ngombale	
-nlc				I	L	Nalca	
-nld	dut	nld	nl	I	L	Dutch	
-nle				I	L	East Nyala	
-nlg				I	L	Gela	
-nli				I	L	Grangali	
-nlj				I	L	Nyali	
-nlk				I	L	Ninia Yali	
-nll				I	L	Nihali	
-nlm				I	L	Mankiyali	
-nlo				I	L	Ngul	
-nlq				I	L	Lao Naga	
-nlu				I	L	Nchumbulu	
-nlv				I	L	Orizaba Nahuatl	
-nlw				I	E	Walangama	
-nlx				I	L	Nahali	
-nly				I	L	Nyamal	
-nlz				I	L	Nalögo	
-nma				I	L	Maram Naga	
-nmb				I	L	Big Nambas	
-nmc				I	L	Ngam	
-nmd				I	L	Ndumu	
-nme				I	L	Mzieme Naga	
-nmf				I	L	Tangkhul Naga (India)	
-nmg				I	L	Kwasio	
-nmh				I	L	Monsang Naga	
-nmi				I	L	Nyam	
-nmj				I	L	Ngombe (Central African Republic)	
-nmk				I	L	Namakura	
-nml				I	L	Ndemli	
-nmm				I	L	Manangba	
-nmn				I	L	ǃXóõ	
-nmo				I	L	Moyon Naga	
-nmp				I	E	Nimanbur	
-nmq				I	L	Nambya	
-nmr				I	E	Nimbari	
-nms				I	L	Letemboi	
-nmt				I	L	Namonuito	
-nmu				I	L	Northeast Maidu	
-nmv				I	E	Ngamini	
-nmw				I	L	Nimoa	
-nmx				I	L	Nama (Papua New Guinea)	
-nmy				I	L	Namuyi	
-nmz				I	L	Nawdm	
-nna				I	L	Nyangumarta	
-nnb				I	L	Nande	
-nnc				I	L	Nancere	
-nnd				I	L	West Ambae	
-nne				I	L	Ngandyera	
-nnf				I	L	Ngaing	
-nng				I	L	Maring Naga	
-nnh				I	L	Ngiemboon	
-nni				I	L	North Nuaulu	
-nnj				I	L	Nyangatom	
-nnk				I	L	Nankina	
-nnl				I	L	Northern Rengma Naga	
-nnm				I	L	Namia	
-nnn				I	L	Ngete	
-nno	nno	nno	nn	I	L	Norwegian Nynorsk	
-nnp				I	L	Wancho Naga	
-nnq				I	L	Ngindo	
-nnr				I	E	Narungga	
-nnt				I	E	Nanticoke	
-nnu				I	L	Dwang	
-nnv				I	E	Nugunu (Australia)	
-nnw				I	L	Southern Nuni	
-nny				I	E	Nyangga	
-nnz				I	L	Nda'nda'	
-noa				I	L	Woun Meu	
-nob	nob	nob	nb	I	L	Norwegian Bokmål	
-noc				I	L	Nuk	
-nod				I	L	Northern Thai	
-noe				I	L	Nimadi	
-nof				I	L	Nomane	
-nog	nog	nog		I	L	Nogai	
-noh				I	L	Nomu	
-noi				I	L	Noiri	
-noj				I	L	Nonuya	
-nok				I	E	Nooksack	
-nol				I	E	Nomlaki	
-nom				I	E	Nocamán	
-non	non	non		I	H	Old Norse	
-nop				I	L	Numanggang	
-noq				I	L	Ngongo	
-nor	nor	nor	no	M	L	Norwegian	
-nos				I	L	Eastern Nisu	
-not				I	L	Nomatsiguenga	
-nou				I	L	Ewage-Notu	
-nov				I	C	Novial	
-now				I	L	Nyambo	
-noy				I	L	Noy	
-noz				I	L	Nayi	
-npa				I	L	Nar Phu	
-npb				I	L	Nupbikha	
-npg				I	L	Ponyo-Gongwang Naga	
-nph				I	L	Phom Naga	
-npi				I	L	Nepali (individual language)	
-npl				I	L	Southeastern Puebla Nahuatl	
-npn				I	L	Mondropolon	
-npo				I	L	Pochuri Naga	
-nps				I	L	Nipsan	
-npu				I	L	Puimei Naga	
-npx				I	L	Noipx	
-npy				I	L	Napu	
-nqg				I	L	Southern Nago	
-nqk				I	L	Kura Ede Nago	
-nql				I	L	Ngendelengo	
-nqm				I	L	Ndom	
-nqn				I	L	Nen	
-nqo	nqo	nqo		I	L	N'Ko	
-nqq				I	L	Kyan-Karyaw Naga	
-nqy				I	L	Akyaung Ari Naga	
-nra				I	L	Ngom	
-nrb				I	L	Nara	
-nrc				I	A	Noric	
-nre				I	L	Southern Rengma Naga	
-nrf				I	L	Jèrriais	
-nrg				I	L	Narango	
-nri				I	L	Chokri Naga	
-nrk				I	L	Ngarla	
-nrl				I	L	Ngarluma	
-nrm				I	L	Narom	
-nrn				I	E	Norn	
-nrp				I	A	North Picene	
-nrr				I	E	Norra	
-nrt				I	E	Northern Kalapuya	
-nru				I	L	Narua	
-nrx				I	E	Ngurmbur	
-nrz				I	L	Lala	
-nsa				I	L	Sangtam Naga	
-nsb				I	E	Lower Nossob	
-nsc				I	L	Nshi	
-nsd				I	L	Southern Nisu	
-nse				I	L	Nsenga	
-nsf				I	L	Northwestern Nisu	
-nsg				I	L	Ngasa	
-nsh				I	L	Ngoshie	
-nsi				I	L	Nigerian Sign Language	
-nsk				I	L	Naskapi	
-nsl				I	L	Norwegian Sign Language	
-nsm				I	L	Sumi Naga	
-nsn				I	L	Nehan	
-nso	nso	nso		I	L	Pedi	
-nsp				I	L	Nepalese Sign Language	
-nsq				I	L	Northern Sierra Miwok	
-nsr				I	L	Maritime Sign Language	
-nss				I	L	Nali	
-nst				I	L	Tase Naga	
-nsu				I	L	Sierra Negra Nahuatl	
-nsv				I	L	Southwestern Nisu	
-nsw				I	L	Navut	
-nsx				I	L	Nsongo	
-nsy				I	L	Nasal	
-nsz				I	L	Nisenan	
-ntd				I	L	Northern Tidung	
-nte				I	L	Nathembo	
-ntg				I	E	Ngantangarra	
-nti				I	L	Natioro	
-ntj				I	L	Ngaanyatjarra	
-ntk				I	L	Ikoma-Nata-Isenye	
-ntm				I	L	Nateni	
-nto				I	L	Ntomba	
-ntp				I	L	Northern Tepehuan	
-ntr				I	L	Delo	
-ntu				I	L	Natügu	
-ntw				I	E	Nottoway	
-ntx				I	L	Tangkhul Naga (Myanmar)	
-nty				I	L	Mantsi	
-ntz				I	L	Natanzi	
-nua				I	L	Yuanga	
-nuc				I	E	Nukuini	
-nud				I	L	Ngala	
-nue				I	L	Ngundu	
-nuf				I	L	Nusu	
-nug				I	E	Nungali	
-nuh				I	L	Ndunda	
-nui				I	L	Ngumbi	
-nuj				I	L	Nyole	
-nuk				I	L	Nuu-chah-nulth	
-nul				I	E	Nusa Laut	
-num				I	L	Niuafo'ou	
-nun				I	L	Anong	
-nuo				I	L	Nguôn	
-nup				I	L	Nupe-Nupe-Tako	
-nuq				I	L	Nukumanu	
-nur				I	L	Nukuria	
-nus				I	L	Nuer	
-nut				I	L	Nung (Viet Nam)	
-nuu				I	L	Ngbundu	
-nuv				I	L	Northern Nuni	
-nuw				I	L	Nguluwan	
-nux				I	L	Mehek	
-nuy				I	L	Nunggubuyu	
-nuz				I	L	Tlamacazapa Nahuatl	
-nvh				I	L	Nasarian	
-nvm				I	L	Namiae	
-nvo				I	L	Nyokon	
-nwa				I	E	Nawathinehena	
-nwb				I	L	Nyabwa	
-nwc	nwc	nwc		I	H	Classical Newari	
-nwe				I	L	Ngwe	
-nwg				I	E	Ngayawung	
-nwi				I	L	Southwest Tanna	
-nwm				I	L	Nyamusa-Molo	
-nwo				I	E	Nauo	
-nwr				I	L	Nawaru	
-nwx				I	H	Middle Newar	
-nwy				I	E	Nottoway-Meherrin	
-nxa				I	L	Nauete	
-nxd				I	L	Ngando (Democratic Republic of Congo)	
-nxe				I	L	Nage	
-nxg				I	L	Ngad'a	
-nxi				I	L	Nindi	
-nxk				I	L	Koki Naga	
-nxl				I	L	South Nuaulu	
-nxm				I	A	Numidian	
-nxn				I	E	Ngawun	
-nxo				I	L	Ndambomo	
-nxq				I	L	Naxi	
-nxr				I	L	Ninggerum	
-nxx				I	L	Nafri	
-nya	nya	nya	ny	I	L	Nyanja	
-nyb				I	L	Nyangbo	
-nyc				I	L	Nyanga-li	
-nyd				I	L	Nyore	
-nye				I	L	Nyengo	
-nyf				I	L	Giryama	
-nyg				I	L	Nyindu	
-nyh				I	L	Nyikina	
-nyi				I	L	Ama (Sudan)	
-nyj				I	L	Nyanga	
-nyk				I	L	Nyaneka	
-nyl				I	L	Nyeu	
-nym	nym	nym		I	L	Nyamwezi	
-nyn	nyn	nyn		I	L	Nyankole	
-nyo	nyo	nyo		I	L	Nyoro	
-nyp				I	E	Nyang'i	
-nyq				I	L	Nayini	
-nyr				I	L	Nyiha (Malawi)	
-nys				I	L	Nyungar	
-nyt				I	E	Nyawaygi	
-nyu				I	L	Nyungwe	
-nyv				I	E	Nyulnyul	
-nyw				I	L	Nyaw	
-nyx				I	E	Nganyaywana	
-nyy				I	L	Nyakyusa-Ngonde	
-nza				I	L	Tigon Mbembe	
-nzb				I	L	Njebi	
-nzd				I	L	Nzadi	
-nzi	nzi	nzi		I	L	Nzima	
-nzk				I	L	Nzakara	
-nzm				I	L	Zeme Naga	
-nzs				I	L	New Zealand Sign Language	
-nzu				I	L	Teke-Nzikou	
-nzy				I	L	Nzakambay	
-nzz				I	L	Nanga Dama Dogon	
-oaa				I	L	Orok	
-oac				I	L	Oroch	
-oar				I	A	Old Aramaic (up to 700 BCE)	
-oav				I	H	Old Avar	
-obi				I	E	Obispeño	
-obk				I	L	Southern Bontok	
-obl				I	L	Oblo	
-obm				I	A	Moabite	
-obo				I	L	Obo Manobo	
-obr				I	H	Old Burmese	
-obt				I	H	Old Breton	
-obu				I	L	Obulom	
-oca				I	L	Ocaina	
-och				I	A	Old Chinese	
-oci	oci	oci	oc	I	L	Occitan (post 1500)	
-oco				I	H	Old Cornish	
-ocu				I	L	Atzingo Matlatzinca	
-oda				I	L	Odut	
-odk				I	L	Od	
-odt				I	H	Old Dutch	
-odu				I	L	Odual	
-ofo				I	E	Ofo	
-ofs				I	H	Old Frisian	
-ofu				I	L	Efutop	
-ogb				I	L	Ogbia	
-ogc				I	L	Ogbah	
-oge				I	H	Old Georgian	
-ogg				I	L	Ogbogolo	
-ogo				I	L	Khana	
-ogu				I	L	Ogbronuagum	
-oht				I	A	Old Hittite	
-ohu				I	H	Old Hungarian	
-oia				I	L	Oirata	
-oin				I	L	Inebu One	
-ojb				I	L	Northwestern Ojibwa	
-ojc				I	L	Central Ojibwa	
-ojg				I	L	Eastern Ojibwa	
-oji	oji	oji	oj	M	L	Ojibwa	
-ojp				I	H	Old Japanese	
-ojs				I	L	Severn Ojibwa	
-ojv				I	L	Ontong Java	
-ojw				I	L	Western Ojibwa	
-oka				I	L	Okanagan	
-okb				I	L	Okobo	
-okd				I	L	Okodia	
-oke				I	L	Okpe (Southwestern Edo)	
-okg				I	E	Koko Babangk	
-okh				I	L	Koresh-e Rostam	
-oki				I	L	Okiek	
-okj				I	E	Oko-Juwoi	
-okk				I	L	Kwamtim One	
-okl				I	E	Old Kentish Sign Language	
-okm				I	H	Middle Korean (10th-16th cent.)	
-okn				I	L	Oki-No-Erabu	
-oko				I	H	Old Korean (3rd-9th cent.)	
-okr				I	L	Kirike	
-oks				I	L	Oko-Eni-Osayen	
-oku				I	L	Oku	
-okv				I	L	Orokaiva	
-okx				I	L	Okpe (Northwestern Edo)	
-ola				I	L	Walungge	
-old				I	L	Mochi	
-ole				I	L	Olekha	
-olk				I	E	Olkol	
-olm				I	L	Oloma	
-olo				I	L	Livvi	
-olr				I	L	Olrat	
-olt				I	H	Old Lithuanian	
-olu				I	L	Kuvale	
-oma				I	L	Omaha-Ponca	
-omb				I	L	East Ambae	
-omc				I	E	Mochica	
-omg				I	L	Omagua	
-omi				I	L	Omi	
-omk				I	E	Omok	
-oml				I	L	Ombo	
-omn				I	A	Minoan	
-omo				I	L	Utarmbung	
-omp				I	H	Old Manipuri	
-omr				I	H	Old Marathi	
-omt				I	L	Omotik	
-omu				I	E	Omurano	
-omw				I	L	South Tairora	
-omx				I	H	Old Mon	
-ona				I	L	Ona	
-onb				I	L	Lingao	
-one				I	L	Oneida	
-ong				I	L	Olo	
-oni				I	L	Onin	
-onj				I	L	Onjob	
-onk				I	L	Kabore One	
-onn				I	L	Onobasulu	
-ono				I	L	Onondaga	
-onp				I	L	Sartang	
-onr				I	L	Northern One	
-ons				I	L	Ono	
-ont				I	L	Ontenu	
-onu				I	L	Unua	
-onw				I	H	Old Nubian	
-onx				I	L	Onin Based Pidgin	
-ood				I	L	Tohono O'odham	
-oog				I	L	Ong	
-oon				I	L	Önge	
-oor				I	L	Oorlams	
-oos				I	A	Old Ossetic	
-opa				I	L	Okpamheri	
-opk				I	L	Kopkaka	
-opm				I	L	Oksapmin	
-opo				I	L	Opao	
-opt				I	E	Opata	
-opy				I	L	Ofayé	
-ora				I	L	Oroha	
-orc				I	L	Orma	
-ore				I	L	Orejón	
-org				I	L	Oring	
-orh				I	L	Oroqen	
-ori	ori	ori	or	M	L	Oriya (macrolanguage)	
-orm	orm	orm	om	M	L	Oromo	
-orn				I	L	Orang Kanaq	
-oro				I	L	Orokolo	
-orr				I	L	Oruma	
-ors				I	L	Orang Seletar	
-ort				I	L	Adivasi Oriya	
-oru				I	L	Ormuri	
-orv				I	H	Old Russian	
-orw				I	L	Oro Win	
-orx				I	L	Oro	
-ory				I	L	Odia	
-orz				I	L	Ormu	
-osa	osa	osa		I	L	Osage	
-osc				I	A	Oscan	
-osi				I	L	Osing	
-oso				I	L	Ososo	
-osp				I	H	Old Spanish	
-oss	oss	oss	os	I	L	Ossetian	
-ost				I	L	Osatu	
-osu				I	L	Southern One	
-osx				I	H	Old Saxon	
-ota	ota	ota		I	H	Ottoman Turkish (1500-1928)	
-otb				I	H	Old Tibetan	
-otd				I	L	Ot Danum	
-ote				I	L	Mezquital Otomi	
-oti				I	E	Oti	
-otk				I	H	Old Turkish	
-otl				I	L	Tilapa Otomi	
-otm				I	L	Eastern Highland Otomi	
-otn				I	L	Tenango Otomi	
-otq				I	L	Querétaro Otomi	
-otr				I	L	Otoro	
-ots				I	L	Estado de México Otomi	
-ott				I	L	Temoaya Otomi	
-otu				I	E	Otuke	
-otw				I	L	Ottawa	
-otx				I	L	Texcatepec Otomi	
-oty				I	A	Old Tamil	
-otz				I	L	Ixtenco Otomi	
-oua				I	L	Tagargrent	
-oub				I	L	Glio-Oubi	
-oue				I	L	Oune	
-oui				I	H	Old Uighur	
-oum				I	E	Ouma	
-ovd				I	L	Elfdalian	
-owi				I	L	Owiniga	
-owl				I	H	Old Welsh	
-oyb				I	L	Oy	
-oyd				I	L	Oyda	
-oym				I	L	Wayampi	
-oyy				I	L	Oya'oya	
-ozm				I	L	Koonzime	
-pab				I	L	Parecís	
-pac				I	L	Pacoh	
-pad				I	L	Paumarí	
-pae				I	L	Pagibete	
-paf				I	E	Paranawát	
-pag	pag	pag		I	L	Pangasinan	
-pah				I	L	Tenharim	
-pai				I	L	Pe	
-pak				I	L	Parakanã	
-pal	pal	pal		I	A	Pahlavi	
-pam	pam	pam		I	L	Pampanga	
-pan	pan	pan	pa	I	L	Panjabi	
-pao				I	L	Northern Paiute	
-pap	pap	pap		I	L	Papiamento	
-paq				I	L	Parya	
-par				I	L	Panamint	
-pas				I	L	Papasena	
-pat				I	L	Papitalai	
-pau	pau	pau		I	L	Palauan	
-pav				I	L	Pakaásnovos	
-paw				I	L	Pawnee	
-pax				I	E	Pankararé	
-pay				I	L	Pech	
-paz				I	E	Pankararú	
-pbb				I	L	Páez	
-pbc				I	L	Patamona	
-pbe				I	L	Mezontla Popoloca	
-pbf				I	L	Coyotepec Popoloca	
-pbg				I	E	Paraujano	
-pbh				I	L	E'ñapa Woromaipu	
-pbi				I	L	Parkwa	
-pbl				I	L	Mak (Nigeria)	
-pbm				I	L	Puebla Mazatec	
-pbn				I	L	Kpasam	
-pbo				I	L	Papel	
-pbp				I	L	Badyara	
-pbr				I	L	Pangwa	
-pbs				I	L	Central Pame	
-pbt				I	L	Southern Pashto	
-pbu				I	L	Northern Pashto	
-pbv				I	L	Pnar	
-pby				I	L	Pyu (Papua New Guinea)	
-pca				I	L	Santa Inés Ahuatempan Popoloca	
-pcb				I	L	Pear	
-pcc				I	L	Bouyei	
-pcd				I	L	Picard	
-pce				I	L	Ruching Palaung	
-pcf				I	L	Paliyan	
-pcg				I	L	Paniya	
-pch				I	L	Pardhan	
-pci				I	L	Duruwa	
-pcj				I	L	Parenga	
-pck				I	L	Paite Chin	
-pcl				I	L	Pardhi	
-pcm				I	L	Nigerian Pidgin	
-pcn				I	L	Piti	
-pcp				I	L	Pacahuara	
-pcw				I	L	Pyapun	
-pda				I	L	Anam	
-pdc				I	L	Pennsylvania German	
-pdi				I	L	Pa Di	
-pdn				I	L	Podena	
-pdo				I	L	Padoe	
-pdt				I	L	Plautdietsch	
-pdu				I	L	Kayan	
-pea				I	L	Peranakan Indonesian	
-peb				I	E	Eastern Pomo	
-ped				I	L	Mala (Papua New Guinea)	
-pee				I	L	Taje	
-pef				I	E	Northeastern Pomo	
-peg				I	L	Pengo	
-peh				I	L	Bonan	
-pei				I	L	Chichimeca-Jonaz	
-pej				I	E	Northern Pomo	
-pek				I	L	Penchal	
-pel				I	L	Pekal	
-pem				I	L	Phende	
-peo	peo	peo		I	H	Old Persian (ca. 600-400 B.C.)	
-pep				I	L	Kunja	
-peq				I	L	Southern Pomo	
-pes				I	L	Iranian Persian	
-pev				I	L	Pémono	
-pex				I	L	Petats	
-pey				I	L	Petjo	
-pez				I	L	Eastern Penan	
-pfa				I	L	Pááfang	
-pfe				I	L	Pere	
-pfl				I	L	Pfaelzisch	
-pga				I	L	Sudanese Creole Arabic	
-pgd				I	H	Gāndhārī	
-pgg				I	L	Pangwali	
-pgi				I	L	Pagi	
-pgk				I	L	Rerep	
-pgl				I	A	Primitive Irish	
-pgn				I	A	Paelignian	
-pgs				I	L	Pangseng	
-pgu				I	L	Pagu	
-pgz				I	L	Papua New Guinean Sign Language	
-pha				I	L	Pa-Hng	
-phd				I	L	Phudagi	
-phg				I	L	Phuong	
-phh				I	L	Phukha	
-phk				I	L	Phake	
-phl				I	L	Phalura	
-phm				I	L	Phimbi	
-phn	phn	phn		I	A	Phoenician	
-pho				I	L	Phunoi	
-phq				I	L	Phana'	
-phr				I	L	Pahari-Potwari	
-pht				I	L	Phu Thai	
-phu				I	L	Phuan	
-phv				I	L	Pahlavani	
-phw				I	L	Phangduwali	
-pia				I	L	Pima Bajo	
-pib				I	L	Yine	
-pic				I	L	Pinji	
-pid				I	L	Piaroa	
-pie				I	E	Piro	
-pif				I	L	Pingelapese	
-pig				I	L	Pisabo	
-pih				I	L	Pitcairn-Norfolk	
-pii				I	L	Pini	
-pij				I	E	Pijao	
-pil				I	L	Yom	
-pim				I	E	Powhatan	
-pin				I	L	Piame	
-pio				I	L	Piapoco	
-pip				I	L	Pero	
-pir				I	L	Piratapuyo	
-pis				I	L	Pijin	
-pit				I	E	Pitta Pitta	
-piu				I	L	Pintupi-Luritja	
-piv				I	L	Pileni	
-piw				I	L	Pimbwe	
-pix				I	L	Piu	
-piy				I	L	Piya-Kwonci	
-piz				I	L	Pije	
-pjt				I	L	Pitjantjatjara	
-pka				I	H	Ardhamāgadhī Prākrit	
-pkb				I	L	Pokomo	
-pkc				I	A	Paekche	
-pkg				I	L	Pak-Tong	
-pkh				I	L	Pankhu	
-pkn				I	L	Pakanha	
-pko				I	L	Pökoot	
-pkp				I	L	Pukapuka	
-pkr				I	L	Attapady Kurumba	
-pks				I	L	Pakistan Sign Language	
-pkt				I	L	Maleng	
-pku				I	L	Paku	
-pla				I	L	Miani	
-plb				I	L	Polonombauk	
-plc				I	L	Central Palawano	
-pld				I	L	Polari	
-ple				I	L	Palu'e	
-plg				I	L	Pilagá	
-plh				I	L	Paulohi	
-pli	pli	pli	pi	I	A	Pali	
-plj				I	L	Polci	
-plk				I	L	Kohistani Shina	
-pll				I	L	Shwe Palaung	
-pln				I	L	Palenquero	
-plo				I	L	Oluta Popoluca	
-plq				I	A	Palaic	
-plr				I	L	Palaka Senoufo	
-pls				I	L	San Marcos Tlacoyalco Popoloca	
-plt				I	L	Plateau Malagasy	
-plu				I	L	Palikúr	
-plv				I	L	Southwest Palawano	
-plw				I	L	Brooke's Point Palawano	
-ply				I	L	Bolyu	
-plz				I	L	Paluan	
-pma				I	L	Paama	
-pmb				I	L	Pambia	
-pmd				I	E	Pallanganmiddang	
-pme				I	L	Pwaamei	
-pmf				I	L	Pamona	
-pmh				I	H	Māhārāṣṭri Prākrit	
-pmi				I	L	Northern Pumi	
-pmj				I	L	Southern Pumi	
-pmk				I	E	Pamlico	
-pml				I	E	Lingua Franca	
-pmm				I	L	Pomo	
-pmn				I	L	Pam	
-pmo				I	L	Pom	
-pmq				I	L	Northern Pame	
-pmr				I	L	Paynamar	
-pms				I	L	Piemontese	
-pmt				I	L	Tuamotuan	
-pmw				I	L	Plains Miwok	
-pmx				I	L	Poumei Naga	
-pmy				I	L	Papuan Malay	
-pmz				I	E	Southern Pame	
-pna				I	L	Punan Bah-Biau	
-pnb				I	L	Western Panjabi	
-pnc				I	L	Pannei	
-pnd				I	L	Mpinda	
-pne				I	L	Western Penan	
-png				I	L	Pongu	
-pnh				I	L	Penrhyn	
-pni				I	L	Aoheng	
-pnj				I	E	Pinjarup	
-pnk				I	L	Paunaka	
-pnl				I	L	Paleni	
-pnm				I	L	Punan Batu 1	
-pnn				I	L	Pinai-Hagahai	
-pno				I	E	Panobo	
-pnp				I	L	Pancana	
-pnq				I	L	Pana (Burkina Faso)	
-pnr				I	L	Panim	
-pns				I	L	Ponosakan	
-pnt				I	L	Pontic	
-pnu				I	L	Jiongnai Bunu	
-pnv				I	L	Pinigura	
-pnw				I	L	Banyjima	
-pnx				I	L	Phong-Kniang	
-pny				I	L	Pinyin	
-pnz				I	L	Pana (Central African Republic)	
-poc				I	L	Poqomam	
-poe				I	L	San Juan Atzingo Popoloca	
-pof				I	L	Poke	
-pog				I	E	Potiguára	
-poh				I	L	Poqomchi'	
-poi				I	L	Highland Popoluca	
-pok				I	L	Pokangá	
-pol	pol	pol	pl	I	L	Polish	
-pom				I	L	Southeastern Pomo	
-pon	pon	pon		I	L	Pohnpeian	
-poo				I	E	Central Pomo	
-pop				I	L	Pwapwâ	
-poq				I	L	Texistepec Popoluca	
-por	por	por	pt	I	L	Portuguese	
-pos				I	L	Sayula Popoluca	
-pot				I	L	Potawatomi	
-pov				I	L	Upper Guinea Crioulo	
-pow				I	L	San Felipe Otlaltepec Popoloca	
-pox				I	E	Polabian	
-poy				I	L	Pogolo	
-ppe				I	L	Papi	
-ppi				I	L	Paipai	
-ppk				I	L	Uma	
-ppl				I	L	Pipil	
-ppm				I	L	Papuma	
-ppn				I	L	Papapana	
-ppo				I	L	Folopa	
-ppp				I	L	Pelende	
-ppq				I	L	Pei	
-pps				I	L	San Luís Temalacayuca Popoloca	
-ppt				I	L	Pare	
-ppu				I	E	Papora	
-pqa				I	L	Pa'a	
-pqm				I	L	Malecite-Passamaquoddy	
-prc				I	L	Parachi	
-prd				I	L	Parsi-Dari	
-pre				I	L	Principense	
-prf				I	L	Paranan	
-prg				I	L	Prussian	
-prh				I	L	Porohanon	
-pri				I	L	Paicî	
-prk				I	L	Parauk	
-prl				I	L	Peruvian Sign Language	
-prm				I	L	Kibiri	
-prn				I	L	Prasuni	
-pro	pro	pro		I	H	Old Provençal (to 1500)	
-prp				I	L	Parsi	
-prq				I	L	Ashéninka Perené	
-prr				I	E	Puri	
-prs				I	L	Dari	
-prt				I	L	Phai	
-pru				I	L	Puragi	
-prw				I	L	Parawen	
-prx				I	L	Purik	
-prz				I	L	Providencia Sign Language	
-psa				I	L	Asue Awyu	
-psc				I	L	Persian Sign Language	
-psd				I	L	Plains Indian Sign Language	
-pse				I	L	Central Malay	
-psg				I	L	Penang Sign Language	
-psh				I	L	Southwest Pashai	
-psi				I	L	Southeast Pashai	
-psl				I	L	Puerto Rican Sign Language	
-psm				I	E	Pauserna	
-psn				I	L	Panasuan	
-pso				I	L	Polish Sign Language	
-psp				I	L	Philippine Sign Language	
-psq				I	L	Pasi	
-psr				I	L	Portuguese Sign Language	
-pss				I	L	Kaulong	
-pst				I	L	Central Pashto	
-psu				I	H	Sauraseni Prākrit	
-psw				I	L	Port Sandwich	
-psy				I	E	Piscataway	
-pta				I	L	Pai Tavytera	
-pth				I	E	Pataxó Hã-Ha-Hãe	
-pti				I	L	Pindiini	
-ptn				I	L	Patani	
-pto				I	L	Zo'é	
-ptp				I	L	Patep	
-ptq				I	L	Pattapu	
-ptr				I	L	Piamatsina	
-ptt				I	L	Enrekang	
-ptu				I	L	Bambam	
-ptv				I	L	Port Vato	
-ptw				I	E	Pentlatch	
-pty				I	L	Pathiya	
-pua				I	L	Western Highland Purepecha	
-pub				I	L	Purum	
-puc				I	L	Punan Merap	
-pud				I	L	Punan Aput	
-pue				I	E	Puelche	
-puf				I	L	Punan Merah	
-pug				I	L	Phuie	
-pui				I	L	Puinave	
-puj				I	L	Punan Tubu	
-pum				I	L	Puma	
-puo				I	L	Puoc	
-pup				I	L	Pulabu	
-puq				I	E	Puquina	
-pur				I	L	Puruborá	
-pus	pus	pus	ps	M	L	Pushto	
-put				I	L	Putoh	
-puu				I	L	Punu	
-puw				I	L	Puluwatese	
-pux				I	L	Puare	
-puy				I	E	Purisimeño	
-pwa				I	L	Pawaia	
-pwb				I	L	Panawa	
-pwg				I	L	Gapapaiwa	
-pwi				I	E	Patwin	
-pwm				I	L	Molbog	
-pwn				I	L	Paiwan	
-pwo				I	L	Pwo Western Karen	
-pwr				I	L	Powari	
-pww				I	L	Pwo Northern Karen	
-pxm				I	L	Quetzaltepec Mixe	
-pye				I	L	Pye Krumen	
-pym				I	L	Fyam	
-pyn				I	L	Poyanáwa	
-pys				I	L	Paraguayan Sign Language	
-pyu				I	L	Puyuma	
-pyx				I	A	Pyu (Myanmar)	
-pyy				I	L	Pyen	
-pzn				I	L	Para Naga	
-qua				I	L	Quapaw	
-qub				I	L	Huallaga Huánuco Quechua	
-quc				I	L	K'iche'	
-qud				I	L	Calderón Highland Quichua	
-que	que	que	qu	M	L	Quechua	
-quf				I	L	Lambayeque Quechua	
-qug				I	L	Chimborazo Highland Quichua	
-quh				I	L	South Bolivian Quechua	
-qui				I	L	Quileute	
-quk				I	L	Chachapoyas Quechua	
-qul				I	L	North Bolivian Quechua	
-qum				I	L	Sipacapense	
-qun				I	E	Quinault	
-qup				I	L	Southern Pastaza Quechua	
-quq				I	L	Quinqui	
-qur				I	L	Yanahuanca Pasco Quechua	
-qus				I	L	Santiago del Estero Quichua	
-quv				I	L	Sacapulteco	
-quw				I	L	Tena Lowland Quichua	
-qux				I	L	Yauyos Quechua	
-quy				I	L	Ayacucho Quechua	
-quz				I	L	Cusco Quechua	
-qva				I	L	Ambo-Pasco Quechua	
-qvc				I	L	Cajamarca Quechua	
-qve				I	L	Eastern Apurímac Quechua	
-qvh				I	L	Huamalíes-Dos de Mayo Huánuco Quechua	
-qvi				I	L	Imbabura Highland Quichua	
-qvj				I	L	Loja Highland Quichua	
-qvl				I	L	Cajatambo North Lima Quechua	
-qvm				I	L	Margos-Yarowilca-Lauricocha Quechua	
-qvn				I	L	North Junín Quechua	
-qvo				I	L	Napo Lowland Quechua	
-qvp				I	L	Pacaraos Quechua	
-qvs				I	L	San Martín Quechua	
-qvw				I	L	Huaylla Wanca Quechua	
-qvy				I	L	Queyu	
-qvz				I	L	Northern Pastaza Quichua	
-qwa				I	L	Corongo Ancash Quechua	
-qwc				I	H	Classical Quechua	
-qwh				I	L	Huaylas Ancash Quechua	
-qwm				I	E	Kuman (Russia)	
-qws				I	L	Sihuas Ancash Quechua	
-qwt				I	E	Kwalhioqua-Tlatskanai	
-qxa				I	L	Chiquián Ancash Quechua	
-qxc				I	L	Chincha Quechua	
-qxh				I	L	Panao Huánuco Quechua	
-qxl				I	L	Salasaca Highland Quichua	
-qxn				I	L	Northern Conchucos Ancash Quechua	
-qxo				I	L	Southern Conchucos Ancash Quechua	
-qxp				I	L	Puno Quechua	
-qxq				I	L	Qashqa'i	
-qxr				I	L	Cañar Highland Quichua	
-qxs				I	L	Southern Qiang	
-qxt				I	L	Santa Ana de Tusi Pasco Quechua	
-qxu				I	L	Arequipa-La Unión Quechua	
-qxw				I	L	Jauja Wanca Quechua	
-qya				I	C	Quenya	
-qyp				I	E	Quiripi	
-raa				I	L	Dungmali	
-rab				I	L	Camling	
-rac				I	L	Rasawa	
-rad				I	L	Rade	
-raf				I	L	Western Meohang	
-rag				I	L	Logooli	
-rah				I	L	Rabha	
-rai				I	L	Ramoaaina	
-raj	raj	raj		M	L	Rajasthani	
-rak				I	L	Tulu-Bohuai	
-ral				I	L	Ralte	
-ram				I	L	Canela	
-ran				I	L	Riantana	
-rao				I	L	Rao	
-rap	rap	rap		I	L	Rapanui	
-raq				I	L	Saam	
-rar	rar	rar		I	L	Rarotongan	
-ras				I	L	Tegali	
-rat				I	L	Razajerdi	
-rau				I	L	Raute	
-rav				I	L	Sampang	
-raw				I	L	Rawang	
-rax				I	L	Rang	
-ray				I	L	Rapa	
-raz				I	L	Rahambuu	
-rbb				I	L	Rumai Palaung	
-rbk				I	L	Northern Bontok	
-rbl				I	L	Miraya Bikol	
-rbp				I	E	Barababaraba	
-rcf				I	L	Réunion Creole French	
-rdb				I	L	Rudbari	
-rea				I	L	Rerau	
-reb				I	L	Rembong	
-ree				I	L	Rejang Kayan	
-reg				I	L	Kara (Tanzania)	
-rei				I	L	Reli	
-rej				I	L	Rejang	
-rel				I	L	Rendille	
-rem				I	E	Remo	
-ren				I	L	Rengao	
-rer				I	E	Rer Bare	
-res				I	L	Reshe	
-ret				I	L	Retta	
-rey				I	L	Reyesano	
-rga				I	L	Roria	
-rge				I	L	Romano-Greek	
-rgk				I	E	Rangkas	
-rgn				I	L	Romagnol	
-rgr				I	L	Resígaro	
-rgs				I	L	Southern Roglai	
-rgu				I	L	Ringgou	
-rhg				I	L	Rohingya	
-rhp				I	L	Yahang	
-ria				I	L	Riang (India)	
-rif				I	L	Tarifit	
-ril				I	L	Riang Lang	
-rim				I	L	Nyaturu	
-rin				I	L	Nungu	
-rir				I	L	Ribun	
-rit				I	L	Ritharrngu	
-riu				I	L	Riung	
-rjg				I	L	Rajong	
-rji				I	L	Raji	
-rjs				I	L	Rajbanshi	
-rka				I	L	Kraol	
-rkb				I	L	Rikbaktsa	
-rkh				I	L	Rakahanga-Manihiki	
-rki				I	L	Rakhine	
-rkm				I	L	Marka	
-rkt				I	L	Rangpuri	
-rkw				I	E	Arakwal	
-rma				I	L	Rama	
-rmb				I	L	Rembarrnga	
-rmc				I	L	Carpathian Romani	
-rmd				I	E	Traveller Danish	
-rme				I	L	Angloromani	
-rmf				I	L	Kalo Finnish Romani	
-rmg				I	L	Traveller Norwegian	
-rmh				I	L	Murkim	
-rmi				I	L	Lomavren	
-rmk				I	L	Romkun	
-rml				I	L	Baltic Romani	
-rmm				I	L	Roma	
-rmn				I	L	Balkan Romani	
-rmo				I	L	Sinte Romani	
-rmp				I	L	Rempi	
-rmq				I	L	Caló	
-rms				I	L	Romanian Sign Language	
-rmt				I	L	Domari	
-rmu				I	L	Tavringer Romani	
-rmv				I	C	Romanova	
-rmw				I	L	Welsh Romani	
-rmx				I	L	Romam	
-rmy				I	L	Vlax Romani	
-rmz				I	L	Marma	
-rnd				I	L	Ruund	
-rng				I	L	Ronga	
-rnl				I	L	Ranglong	
-rnn				I	L	Roon	
-rnp				I	L	Rongpo	
-rnr				I	E	Nari Nari	
-rnw				I	L	Rungwa	
-rob				I	L	Tae'	
-roc				I	L	Cacgia Roglai	
-rod				I	L	Rogo	
-roe				I	L	Ronji	
-rof				I	L	Rombo	
-rog				I	L	Northern Roglai	
-roh	roh	roh	rm	I	L	Romansh	
-rol				I	L	Romblomanon	
-rom	rom	rom		M	L	Romany	
-ron	rum	ron	ro	I	L	Romanian	
-roo				I	L	Rotokas	
-rop				I	L	Kriol	
-ror				I	L	Rongga	
-rou				I	L	Runga	
-row				I	L	Dela-Oenale	
-rpn				I	L	Repanbitip	
-rpt				I	L	Rapting	
-rri				I	L	Ririo	
-rro				I	L	Waima	
-rrt				I	E	Arritinngithigh	
-rsb				I	L	Romano-Serbian	
-rsl				I	L	Russian Sign Language	
-rsm				I	L	Miriwoong Sign Language	
-rtc				I	L	Rungtu Chin	
-rth				I	L	Ratahan	
-rtm				I	L	Rotuman	
-rts				I	E	Yurats	
-rtw				I	L	Rathawi	
-rub				I	L	Gungu	
-ruc				I	L	Ruuli	
-rue				I	L	Rusyn	
-ruf				I	L	Luguru	
-rug				I	L	Roviana	
-ruh				I	L	Ruga	
-rui				I	L	Rufiji	
-ruk				I	L	Che	
-run	run	run	rn	I	L	Rundi	
-ruo				I	L	Istro Romanian	
-rup	rup	rup		I	L	Macedo-Romanian	
-ruq				I	L	Megleno Romanian	
-rus	rus	rus	ru	I	L	Russian	
-rut				I	L	Rutul	
-ruu				I	L	Lanas Lobu	
-ruy				I	L	Mala (Nigeria)	
-ruz				I	L	Ruma	
-rwa				I	L	Rawo	
-rwk				I	L	Rwa	
-rwm				I	L	Amba (Uganda)	
-rwo				I	L	Rawa	
-rwr				I	L	Marwari (India)	
-rxd				I	L	Ngardi	
-rxw				I	E	Karuwali	
-ryn				I	L	Northern Amami-Oshima	
-rys				I	L	Yaeyama	
-ryu				I	L	Central Okinawan	
-rzh				I	L	Rāziḥī	
-saa				I	L	Saba	
-sab				I	L	Buglere	
-sac				I	L	Meskwaki	
-sad	sad	sad		I	L	Sandawe	
-sae				I	L	Sabanê	
-saf				I	L	Safaliba	
-sag	sag	sag	sg	I	L	Sango	
-sah	sah	sah		I	L	Yakut	
-saj				I	L	Sahu	
-sak				I	L	Sake	
-sam	sam	sam		I	E	Samaritan Aramaic	
-san	san	san	sa	I	A	Sanskrit	
-sao				I	L	Sause	
-saq				I	L	Samburu	
-sar				I	E	Saraveca	
-sas	sas	sas		I	L	Sasak	
-sat	sat	sat		I	L	Santali	
-sau				I	L	Saleman	
-sav				I	L	Saafi-Saafi	
-saw				I	L	Sawi	
-sax				I	L	Sa	
-say				I	L	Saya	
-saz				I	L	Saurashtra	
-sba				I	L	Ngambay	
-sbb				I	L	Simbo	
-sbc				I	L	Kele (Papua New Guinea)	
-sbd				I	L	Southern Samo	
-sbe				I	L	Saliba	
-sbf				I	L	Chabu	
-sbg				I	L	Seget	
-sbh				I	L	Sori-Harengan	
-sbi				I	L	Seti	
-sbj				I	L	Surbakhal	
-sbk				I	L	Safwa	
-sbl				I	L	Botolan Sambal	
-sbm				I	L	Sagala	
-sbn				I	L	Sindhi Bhil	
-sbo				I	L	Sabüm	
-sbp				I	L	Sangu (Tanzania)	
-sbq				I	L	Sileibi	
-sbr				I	L	Sembakung Murut	
-sbs				I	L	Subiya	
-sbt				I	L	Kimki	
-sbu				I	L	Stod Bhoti	
-sbv				I	A	Sabine	
-sbw				I	L	Simba	
-sbx				I	L	Seberuang	
-sby				I	L	Soli	
-sbz				I	L	Sara Kaba	
-scb				I	L	Chut	
-sce				I	L	Dongxiang	
-scf				I	L	San Miguel Creole French	
-scg				I	L	Sanggau	
-sch				I	L	Sakachep	
-sci				I	L	Sri Lankan Creole Malay	
-sck				I	L	Sadri	
-scl				I	L	Shina	
-scn	scn	scn		I	L	Sicilian	
-sco	sco	sco		I	L	Scots	
-scp				I	L	Hyolmo	
-scq				I	L	Sa'och	
-scs				I	L	North Slavey	
-sct				I	L	Southern Katang	
-scu				I	L	Shumcho	
-scv				I	L	Sheni	
-scw				I	L	Sha	
-scx				I	A	Sicel	
-sda				I	L	Toraja-Sa'dan	
-sdb				I	L	Shabak	
-sdc				I	L	Sassarese Sardinian	
-sde				I	L	Surubu	
-sdf				I	L	Sarli	
-sdg				I	L	Savi	
-sdh				I	L	Southern Kurdish	
-sdj				I	L	Suundi	
-sdk				I	L	Sos Kundi	
-sdl				I	L	Saudi Arabian Sign Language	
-sdn				I	L	Gallurese Sardinian	
-sdo				I	L	Bukar-Sadung Bidayuh	
-sdp				I	L	Sherdukpen	
-sdq				I	L	Semandang	
-sdr				I	L	Oraon Sadri	
-sds				I	E	Sened	
-sdt				I	E	Shuadit	
-sdu				I	L	Sarudu	
-sdx				I	L	Sibu Melanau	
-sdz				I	L	Sallands	
-sea				I	L	Semai	
-seb				I	L	Shempire Senoufo	
-sec				I	L	Sechelt	
-sed				I	L	Sedang	
-see				I	L	Seneca	
-sef				I	L	Cebaara Senoufo	
-seg				I	L	Segeju	
-seh				I	L	Sena	
-sei				I	L	Seri	
-sej				I	L	Sene	
-sek				I	L	Sekani	
-sel	sel	sel		I	L	Selkup	
-sen				I	L	Nanerigé Sénoufo	
-seo				I	L	Suarmin	
-sep				I	L	Sìcìté Sénoufo	
-seq				I	L	Senara Sénoufo	
-ser				I	L	Serrano	
-ses				I	L	Koyraboro Senni Songhai	
-set				I	L	Sentani	
-seu				I	L	Serui-Laut	
-sev				I	L	Nyarafolo Senoufo	
-sew				I	L	Sewa Bay	
-sey				I	L	Secoya	
-sez				I	L	Senthang Chin	
-sfb				I	L	Langue des signes de Belgique Francophone	
-sfe				I	L	Eastern Subanen	
-sfm				I	L	Small Flowery Miao	
-sfs				I	L	South African Sign Language	
-sfw				I	L	Sehwi	
-sga	sga	sga		I	H	Old Irish (to 900)	
-sgb				I	L	Mag-antsi Ayta	
-sgc				I	L	Kipsigis	
-sgd				I	L	Surigaonon	
-sge				I	L	Segai	
-sgg				I	L	Swiss-German Sign Language	
-sgh				I	L	Shughni	
-sgi				I	L	Suga	
-sgj				I	L	Surgujia	
-sgk				I	L	Sangkong	
-sgm				I	E	Singa	
-sgp				I	L	Singpho	
-sgr				I	L	Sangisari	
-sgs				I	L	Samogitian	
-sgt				I	L	Brokpake	
-sgu				I	L	Salas	
-sgw				I	L	Sebat Bet Gurage	
-sgx				I	L	Sierra Leone Sign Language	
-sgy				I	L	Sanglechi	
-sgz				I	L	Sursurunga	
-sha				I	L	Shall-Zwall	
-shb				I	L	Ninam	
-shc				I	L	Sonde	
-shd				I	L	Kundal Shahi	
-she				I	L	Sheko	
-shg				I	L	Shua	
-shh				I	L	Shoshoni	
-shi				I	L	Tachelhit	
-shj				I	L	Shatt	
-shk				I	L	Shilluk	
-shl				I	L	Shendu	
-shm				I	L	Shahrudi	
-shn	shn	shn		I	L	Shan	
-sho				I	L	Shanga	
-shp				I	L	Shipibo-Conibo	
-shq				I	L	Sala	
-shr				I	L	Shi	
-shs				I	L	Shuswap	
-sht				I	E	Shasta	
-shu				I	L	Chadian Arabic	
-shv				I	L	Shehri	
-shw				I	L	Shwai	
-shx				I	L	She	
-shy				I	L	Tachawit	
-shz				I	L	Syenara Senoufo	
-sia				I	E	Akkala Sami	
-sib				I	L	Sebop	
-sid	sid	sid		I	L	Sidamo	
-sie				I	L	Simaa	
-sif				I	L	Siamou	
-sig				I	L	Paasaal	
-sih				I	L	Zire	
-sii				I	L	Shom Peng	
-sij				I	L	Numbami	
-sik				I	L	Sikiana	
-sil				I	L	Tumulung Sisaala	
-sim				I	L	Mende (Papua New Guinea)	
-sin	sin	sin	si	I	L	Sinhala	
-sip				I	L	Sikkimese	
-siq				I	L	Sonia	
-sir				I	L	Siri	
-sis				I	E	Siuslaw	
-siu				I	L	Sinagen	
-siv				I	L	Sumariup	
-siw				I	L	Siwai	
-six				I	L	Sumau	
-siy				I	L	Sivandi	
-siz				I	L	Siwi	
-sja				I	L	Epena	
-sjb				I	L	Sajau Basap	
-sjd				I	L	Kildin Sami	
-sje				I	L	Pite Sami	
-sjg				I	L	Assangori	
-sjk				I	E	Kemi Sami	
-sjl				I	L	Sajalong	
-sjm				I	L	Mapun	
-sjn				I	C	Sindarin	
-sjo				I	L	Xibe	
-sjp				I	L	Surjapuri	
-sjr				I	L	Siar-Lak	
-sjs				I	E	Senhaja De Srair	
-sjt				I	L	Ter Sami	
-sju				I	L	Ume Sami	
-sjw				I	L	Shawnee	
-ska				I	L	Skagit	
-skb				I	L	Saek	
-skc				I	L	Ma Manda	
-skd				I	L	Southern Sierra Miwok	
-ske				I	L	Seke (Vanuatu)	
-skf				I	L	Sakirabiá	
-skg				I	L	Sakalava Malagasy	
-skh				I	L	Sikule	
-ski				I	L	Sika	
-skj				I	L	Seke (Nepal)	
-skm				I	L	Kutong	
-skn				I	L	Kolibugan Subanon	
-sko				I	L	Seko Tengah	
-skp				I	L	Sekapan	
-skq				I	L	Sininkere	
-skr				I	L	Saraiki	
-sks				I	L	Maia	
-skt				I	L	Sakata	
-sku				I	L	Sakao	
-skv				I	L	Skou	
-skw				I	E	Skepi Creole Dutch	
-skx				I	L	Seko Padang	
-sky				I	L	Sikaiana	
-skz				I	L	Sekar	
-slc				I	L	Sáliba	
-sld				I	L	Sissala	
-sle				I	L	Sholaga	
-slf				I	L	Swiss-Italian Sign Language	
-slg				I	L	Selungai Murut	
-slh				I	L	Southern Puget Sound Salish	
-sli				I	L	Lower Silesian	
-slj				I	L	Salumá	
-slk	slo	slk	sk	I	L	Slovak	
-sll				I	L	Salt-Yui	
-slm				I	L	Pangutaran Sama	
-sln				I	E	Salinan	
-slp				I	L	Lamaholot	
-slq				I	E	Salchuq	
-slr				I	L	Salar	
-sls				I	L	Singapore Sign Language	
-slt				I	L	Sila	
-slu				I	L	Selaru	
-slv	slv	slv	sl	I	L	Slovenian	
-slw				I	L	Sialum	
-slx				I	L	Salampasu	
-sly				I	L	Selayar	
-slz				I	L	Ma'ya	
-sma	sma	sma		I	L	Southern Sami	
-smb				I	L	Simbari	
-smc				I	E	Som	
-smd				I	L	Sama	
-sme	sme	sme	se	I	L	Northern Sami	
-smf				I	L	Auwe	
-smg				I	L	Simbali	
-smh				I	L	Samei	
-smj	smj	smj		I	L	Lule Sami	
-smk				I	L	Bolinao	
-sml				I	L	Central Sama	
-smm				I	L	Musasa	
-smn	smn	smn		I	L	Inari Sami	
-smo	smo	smo	sm	I	L	Samoan	
-smp				I	E	Samaritan	
-smq				I	L	Samo	
-smr				I	L	Simeulue	
-sms	sms	sms		I	L	Skolt Sami	
-smt				I	L	Simte	
-smu				I	E	Somray	
-smv				I	L	Samvedi	
-smw				I	L	Sumbawa	
-smx				I	L	Samba	
-smy				I	L	Semnani	
-smz				I	L	Simeku	
-sna	sna	sna	sn	I	L	Shona	
-snb				I	L	Sebuyau	
-snc				I	L	Sinaugoro	
-snd	snd	snd	sd	I	L	Sindhi	
-sne				I	L	Bau Bidayuh	
-snf				I	L	Noon	
-sng				I	L	Sanga (Democratic Republic of Congo)	
-sni				I	E	Sensi	
-snj				I	L	Riverain Sango	
-snk	snk	snk		I	L	Soninke	
-snl				I	L	Sangil	
-snm				I	L	Southern Ma'di	
-snn				I	L	Siona	
-sno				I	L	Snohomish	
-snp				I	L	Siane	
-snq				I	L	Sangu (Gabon)	
-snr				I	L	Sihan	
-sns				I	L	South West Bay	
-snu				I	L	Senggi	
-snv				I	L	Sa'ban	
-snw				I	L	Selee	
-snx				I	L	Sam	
-sny				I	L	Saniyo-Hiyewe	
-snz				I	L	Kou	
-soa				I	L	Thai Song	
-sob				I	L	Sobei	
-soc				I	L	So (Democratic Republic of Congo)	
-sod				I	L	Songoora	
-soe				I	L	Songomeno	
-sog	sog	sog		I	A	Sogdian	
-soh				I	L	Aka	
-soi				I	L	Sonha	
-soj				I	L	Soi	
-sok				I	L	Sokoro	
-sol				I	L	Solos	
-som	som	som	so	I	L	Somali	
-soo				I	L	Songo	
-sop				I	L	Songe	
-soq				I	L	Kanasi	
-sor				I	L	Somrai	
-sos				I	L	Seeku	
-sot	sot	sot	st	I	L	Southern Sotho	
-sou				I	L	Southern Thai	
-sov				I	L	Sonsorol	
-sow				I	L	Sowanda	
-sox				I	L	Swo	
-soy				I	L	Miyobe	
-soz				I	L	Temi	
-spa	spa	spa	es	I	L	Spanish	
-spb				I	L	Sepa (Indonesia)	
-spc				I	L	Sapé	
-spd				I	L	Saep	
-spe				I	L	Sepa (Papua New Guinea)	
-spg				I	L	Sian	
-spi				I	L	Saponi	
-spk				I	L	Sengo	
-spl				I	L	Selepet	
-spm				I	L	Akukem	
-spn				I	L	Sanapaná	
-spo				I	L	Spokane	
-spp				I	L	Supyire Senoufo	
-spq				I	L	Loreto-Ucayali Spanish	
-spr				I	L	Saparua	
-sps				I	L	Saposa	
-spt				I	L	Spiti Bhoti	
-spu				I	L	Sapuan	
-spv				I	L	Sambalpuri	
-spx				I	A	South Picene	
-spy				I	L	Sabaot	
-sqa				I	L	Shama-Sambuga	
-sqh				I	L	Shau	
-sqi	alb	sqi	sq	M	L	Albanian	
-sqk				I	L	Albanian Sign Language	
-sqm				I	L	Suma	
-sqn				I	E	Susquehannock	
-sqo				I	L	Sorkhei	
-sqq				I	L	Sou	
-sqr				I	H	Siculo Arabic	
-sqs				I	L	Sri Lankan Sign Language	
-sqt				I	L	Soqotri	
-squ				I	L	Squamish	
-sra				I	L	Saruga	
-srb				I	L	Sora	
-src				I	L	Logudorese Sardinian	
-srd	srd	srd	sc	M	L	Sardinian	
-sre				I	L	Sara	
-srf				I	L	Nafi	
-srg				I	L	Sulod	
-srh				I	L	Sarikoli	
-sri				I	L	Siriano	
-srk				I	L	Serudung Murut	
-srl				I	L	Isirawa	
-srm				I	L	Saramaccan	
-srn	srn	srn		I	L	Sranan Tongo	
-sro				I	L	Campidanese Sardinian	
-srp	srp	srp	sr	I	L	Serbian	
-srq				I	L	Sirionó	
-srr	srr	srr		I	L	Serer	
-srs				I	L	Sarsi	
-srt				I	L	Sauri	
-sru				I	L	Suruí	
-srv				I	L	Southern Sorsoganon	
-srw				I	L	Serua	
-srx				I	L	Sirmauri	
-sry				I	L	Sera	
-srz				I	L	Shahmirzadi	
-ssb				I	L	Southern Sama	
-ssc				I	L	Suba-Simbiti	
-ssd				I	L	Siroi	
-sse				I	L	Balangingi	
-ssf				I	E	Thao	
-ssg				I	L	Seimat	
-ssh				I	L	Shihhi Arabic	
-ssi				I	L	Sansi	
-ssj				I	L	Sausi	
-ssk				I	L	Sunam	
-ssl				I	L	Western Sisaala	
-ssm				I	L	Semnam	
-ssn				I	L	Waata	
-sso				I	L	Sissano	
-ssp				I	L	Spanish Sign Language	
-ssq				I	L	So'a	
-ssr				I	L	Swiss-French Sign Language	
-sss				I	L	Sô	
-sst				I	L	Sinasina	
-ssu				I	L	Susuami	
-ssv				I	L	Shark Bay	
-ssw	ssw	ssw	ss	I	L	Swati	
-ssx				I	L	Samberigi	
-ssy				I	L	Saho	
-ssz				I	L	Sengseng	
-sta				I	L	Settla	
-stb				I	L	Northern Subanen	
-std				I	L	Sentinel	
-ste				I	L	Liana-Seti	
-stf				I	L	Seta	
-stg				I	L	Trieng	
-sth				I	L	Shelta	
-sti				I	L	Bulo Stieng	
-stj				I	L	Matya Samo	
-stk				I	L	Arammba	
-stl				I	L	Stellingwerfs	
-stm				I	L	Setaman	
-stn				I	L	Owa	
-sto				I	L	Stoney	
-stp				I	L	Southeastern Tepehuan	
-stq				I	L	Saterfriesisch	
-str				I	L	Straits Salish	
-sts				I	L	Shumashti	
-stt				I	L	Budeh Stieng	
-stu				I	L	Samtao	
-stv				I	L	Silt'e	
-stw				I	L	Satawalese	
-sty				I	L	Siberian Tatar	
-sua				I	L	Sulka	
-sub				I	L	Suku	
-suc				I	L	Western Subanon	
-sue				I	L	Suena	
-sug				I	L	Suganga	
-sui				I	L	Suki	
-suj				I	L	Shubi	
-suk	suk	suk		I	L	Sukuma	
-sun	sun	sun	su	I	L	Sundanese	
-suq				I	L	Suri	
-sur				I	L	Mwaghavul	
-sus	sus	sus		I	L	Susu	
-sut				I	E	Subtiaba	
-suv				I	L	Puroik	
-suw				I	L	Sumbwa	
-sux	sux	sux		I	A	Sumerian	
-suy				I	L	Suyá	
-suz				I	L	Sunwar	
-sva				I	L	Svan	
-svb				I	L	Ulau-Suain	
-svc				I	L	Vincentian Creole English	
-sve				I	L	Serili	
-svk				I	L	Slovakian Sign Language	
-svm				I	L	Slavomolisano	
-svs				I	L	Savosavo	
-svx				I	H	Skalvian	
-swa	swa	swa	sw	M	L	Swahili (macrolanguage)	
-swb				I	L	Maore Comorian	
-swc				I	L	Congo Swahili	
-swe	swe	swe	sv	I	L	Swedish	
-swf				I	L	Sere	
-swg				I	L	Swabian	
-swh				I	L	Swahili (individual language)	
-swi				I	L	Sui	
-swj				I	L	Sira	
-swk				I	L	Malawi Sena	
-swl				I	L	Swedish Sign Language	
-swm				I	L	Samosa	
-swn				I	L	Sawknah	
-swo				I	L	Shanenawa	
-swp				I	L	Suau	
-swq				I	L	Sharwa	
-swr				I	L	Saweru	
-sws				I	L	Seluwasan	
-swt				I	L	Sawila	
-swu				I	L	Suwawa	
-swv				I	L	Shekhawati	
-sww				I	E	Sowa	
-swx				I	L	Suruahá	
-swy				I	L	Sarua	
-sxb				I	L	Suba	
-sxc				I	A	Sicanian	
-sxe				I	L	Sighu	
-sxg				I	L	Shuhi	
-sxk				I	E	Southern Kalapuya	
-sxl				I	E	Selian	
-sxm				I	L	Samre	
-sxn				I	L	Sangir	
-sxo				I	A	Sorothaptic	
-sxr				I	L	Saaroa	
-sxs				I	L	Sasaru	
-sxu				I	L	Upper Saxon	
-sxw				I	L	Saxwe Gbe	
-sya				I	L	Siang	
-syb				I	L	Central Subanen	
-syc	syc	syc		I	H	Classical Syriac	
-syi				I	L	Seki	
-syk				I	L	Sukur	
-syl				I	L	Sylheti	
-sym				I	L	Maya Samo	
-syn				I	L	Senaya	
-syo				I	L	Suoy	
-syr	syr	syr		M	L	Syriac	
-sys				I	L	Sinyar	
-syw				I	L	Kagate	
-syx				I	L	Samay	
-syy				I	L	Al-Sayyid Bedouin Sign Language	
-sza				I	L	Semelai	
-szb				I	L	Ngalum	
-szc				I	L	Semaq Beri	
-szd				I	E	Seru	
-sze				I	L	Seze	
-szg				I	L	Sengele	
-szl				I	L	Silesian	
-szn				I	L	Sula	
-szp				I	L	Suabo	
-szs				I	L	Solomon Islands Sign Language	
-szv				I	L	Isu (Fako Division)	
-szw				I	L	Sawai	
-szy				I	L	Sakizaya	
-taa				I	L	Lower Tanana	
-tab				I	L	Tabassaran	
-tac				I	L	Lowland Tarahumara	
-tad				I	L	Tause	
-tae				I	L	Tariana	
-taf				I	L	Tapirapé	
-tag				I	L	Tagoi	
-tah	tah	tah	ty	I	L	Tahitian	
-taj				I	L	Eastern Tamang	
-tak				I	L	Tala	
-tal				I	L	Tal	
-tam	tam	tam	ta	I	L	Tamil	
-tan				I	L	Tangale	
-tao				I	L	Yami	
-tap				I	L	Taabwa	
-taq				I	L	Tamasheq	
-tar				I	L	Central Tarahumara	
-tas				I	E	Tay Boi	
-tat	tat	tat	tt	I	L	Tatar	
-tau				I	L	Upper Tanana	
-tav				I	L	Tatuyo	
-taw				I	L	Tai	
-tax				I	L	Tamki	
-tay				I	L	Atayal	
-taz				I	L	Tocho	
-tba				I	L	Aikanã	
-tbc				I	L	Takia	
-tbd				I	L	Kaki Ae	
-tbe				I	L	Tanimbili	
-tbf				I	L	Mandara	
-tbg				I	L	North Tairora	
-tbh				I	E	Dharawal	
-tbi				I	L	Gaam	
-tbj				I	L	Tiang	
-tbk				I	L	Calamian Tagbanwa	
-tbl				I	L	Tboli	
-tbm				I	L	Tagbu	
-tbn				I	L	Barro Negro Tunebo	
-tbo				I	L	Tawala	
-tbp				I	L	Taworta	
-tbr				I	L	Tumtum	
-tbs				I	L	Tanguat	
-tbt				I	L	Tembo (Kitembo)	
-tbu				I	E	Tubar	
-tbv				I	L	Tobo	
-tbw				I	L	Tagbanwa	
-tbx				I	L	Kapin	
-tby				I	L	Tabaru	
-tbz				I	L	Ditammari	
-tca				I	L	Ticuna	
-tcb				I	L	Tanacross	
-tcc				I	L	Datooga	
-tcd				I	L	Tafi	
-tce				I	L	Southern Tutchone	
-tcf				I	L	Malinaltepec Me'phaa	
-tcg				I	L	Tamagario	
-tch				I	L	Turks And Caicos Creole English	
-tci				I	L	Wára	
-tck				I	L	Tchitchege	
-tcl				I	E	Taman (Myanmar)	
-tcm				I	L	Tanahmerah	
-tcn				I	L	Tichurong	
-tco				I	L	Taungyo	
-tcp				I	L	Tawr Chin	
-tcq				I	L	Kaiy	
-tcs				I	L	Torres Strait Creole	
-tct				I	L	T'en	
-tcu				I	L	Southeastern Tarahumara	
-tcw				I	L	Tecpatlán Totonac	
-tcx				I	L	Toda	
-tcy				I	L	Tulu	
-tcz				I	L	Thado Chin	
-tda				I	L	Tagdal	
-tdb				I	L	Panchpargania	
-tdc				I	L	Emberá-Tadó	
-tdd				I	L	Tai Nüa	
-tde				I	L	Tiranige Diga Dogon	
-tdf				I	L	Talieng	
-tdg				I	L	Western Tamang	
-tdh				I	L	Thulung	
-tdi				I	L	Tomadino	
-tdj				I	L	Tajio	
-tdk				I	L	Tambas	
-tdl				I	L	Sur	
-tdm				I	L	Taruma	
-tdn				I	L	Tondano	
-tdo				I	L	Teme	
-tdq				I	L	Tita	
-tdr				I	L	Todrah	
-tds				I	L	Doutai	
-tdt				I	L	Tetun Dili	
-tdv				I	L	Toro	
-tdx				I	L	Tandroy-Mahafaly Malagasy	
-tdy				I	L	Tadyawan	
-tea				I	L	Temiar	
-teb				I	E	Tetete	
-tec				I	L	Terik	
-ted				I	L	Tepo Krumen	
-tee				I	L	Huehuetla Tepehua	
-tef				I	L	Teressa	
-teg				I	L	Teke-Tege	
-teh				I	L	Tehuelche	
-tei				I	L	Torricelli	
-tek				I	L	Ibali Teke	
-tel	tel	tel	te	I	L	Telugu	
-tem	tem	tem		I	L	Timne	
-ten				I	E	Tama (Colombia)	
-teo				I	L	Teso	
-tep				I	E	Tepecano	
-teq				I	L	Temein	
-ter	ter	ter		I	L	Tereno	
-tes				I	L	Tengger	
-tet	tet	tet		I	L	Tetum	
-teu				I	L	Soo	
-tev				I	L	Teor	
-tew				I	L	Tewa (USA)	
-tex				I	L	Tennet	
-tey				I	L	Tulishi	
-tez				I	L	Tetserret	
-tfi				I	L	Tofin Gbe	
-tfn				I	L	Tanaina	
-tfo				I	L	Tefaro	
-tfr				I	L	Teribe	
-tft				I	L	Ternate	
-tga				I	L	Sagalla	
-tgb				I	L	Tobilung	
-tgc				I	L	Tigak	
-tgd				I	L	Ciwogai	
-tge				I	L	Eastern Gorkha Tamang	
-tgf				I	L	Chalikha	
-tgh				I	L	Tobagonian Creole English	
-tgi				I	L	Lawunuia	
-tgj				I	L	Tagin	
-tgk	tgk	tgk	tg	I	L	Tajik	
-tgl	tgl	tgl	tl	I	L	Tagalog	
-tgn				I	L	Tandaganon	
-tgo				I	L	Sudest	
-tgp				I	L	Tangoa	
-tgq				I	L	Tring	
-tgr				I	L	Tareng	
-tgs				I	L	Nume	
-tgt				I	L	Central Tagbanwa	
-tgu				I	L	Tanggu	
-tgv				I	E	Tingui-Boto	
-tgw				I	L	Tagwana Senoufo	
-tgx				I	L	Tagish	
-tgy				I	E	Togoyo	
-tgz				I	E	Tagalaka	
-tha	tha	tha	th	I	L	Thai	
-thd				I	L	Kuuk Thaayorre	
-the				I	L	Chitwania Tharu	
-thf				I	L	Thangmi	
-thh				I	L	Northern Tarahumara	
-thi				I	L	Tai Long	
-thk				I	L	Tharaka	
-thl				I	L	Dangaura Tharu	
-thm				I	L	Aheu	
-thn				I	L	Thachanadan	
-thp				I	L	Thompson	
-thq				I	L	Kochila Tharu	
-thr				I	L	Rana Tharu	
-ths				I	L	Thakali	
-tht				I	L	Tahltan	
-thu				I	L	Thuri	
-thv				I	L	Tahaggart Tamahaq	
-thw				I	L	Thudam	
-thy				I	L	Tha	
-thz				I	L	Tayart Tamajeq	
-tia				I	L	Tidikelt Tamazight	
-tic				I	L	Tira	
-tif				I	L	Tifal	
-tig	tig	tig		I	L	Tigre	
-tih				I	L	Timugon Murut	
-tii				I	L	Tiene	
-tij				I	L	Tilung	
-tik				I	L	Tikar	
-til				I	E	Tillamook	
-tim				I	L	Timbe	
-tin				I	L	Tindi	
-tio				I	L	Teop	
-tip				I	L	Trimuris	
-tiq				I	L	Tiéfo	
-tir	tir	tir	ti	I	L	Tigrinya	
-tis				I	L	Masadiit Itneg	
-tit				I	L	Tinigua	
-tiu				I	L	Adasen	
-tiv	tiv	tiv		I	L	Tiv	
-tiw				I	L	Tiwi	
-tix				I	L	Southern Tiwa	
-tiy				I	L	Tiruray	
-tiz				I	L	Tai Hongjin	
-tja				I	L	Tajuasohn	
-tjg				I	L	Tunjung	
-tji				I	L	Northern Tujia	
-tjj				I	L	Tjungundji	
-tjl				I	L	Tai Laing	
-tjm				I	E	Timucua	
-tjn				I	E	Tonjon	
-tjo				I	L	Temacine Tamazight	
-tjp				I	L	Tjupany	
-tjs				I	L	Southern Tujia	
-tju				I	E	Tjurruru	
-tjw				I	L	Djabwurrung	
-tka				I	E	Truká	
-tkb				I	L	Buksa	
-tkd				I	L	Tukudede	
-tke				I	L	Takwane	
-tkf				I	E	Tukumanféd	
-tkg				I	L	Tesaka Malagasy	
-tkl	tkl	tkl		I	L	Tokelau	
-tkm				I	E	Takelma	
-tkn				I	L	Toku-No-Shima	
-tkp				I	L	Tikopia	
-tkq				I	L	Tee	
-tkr				I	L	Tsakhur	
-tks				I	L	Takestani	
-tkt				I	L	Kathoriya Tharu	
-tku				I	L	Upper Necaxa Totonac	
-tkv				I	L	Mur Pano	
-tkw				I	L	Teanu	
-tkx				I	L	Tangko	
-tkz				I	L	Takua	
-tla				I	L	Southwestern Tepehuan	
-tlb				I	L	Tobelo	
-tlc				I	L	Yecuatla Totonac	
-tld				I	L	Talaud	
-tlf				I	L	Telefol	
-tlg				I	L	Tofanma	
-tlh	tlh	tlh		I	C	Klingon	
-tli	tli	tli		I	L	Tlingit	
-tlj				I	L	Talinga-Bwisi	
-tlk				I	L	Taloki	
-tll				I	L	Tetela	
-tlm				I	L	Tolomako	
-tln				I	L	Talondo'	
-tlo				I	L	Talodi	
-tlp				I	L	Filomena Mata-Coahuitlán Totonac	
-tlq				I	L	Tai Loi	
-tlr				I	L	Talise	
-tls				I	L	Tambotalo	
-tlt				I	L	Sou Nama	
-tlu				I	L	Tulehu	
-tlv				I	L	Taliabu	
-tlx				I	L	Khehek	
-tly				I	L	Talysh	
-tma				I	L	Tama (Chad)	
-tmb				I	L	Katbol	
-tmc				I	L	Tumak	
-tmd				I	L	Haruai	
-tme				I	E	Tremembé	
-tmf				I	L	Toba-Maskoy	
-tmg				I	E	Ternateño	
-tmh	tmh	tmh		M	L	Tamashek	
-tmi				I	L	Tutuba	
-tmj				I	L	Samarokena	
-tmk				I	L	Northwestern Tamang	
-tml				I	L	Tamnim Citak	
-tmm				I	L	Tai Thanh	
-tmn				I	L	Taman (Indonesia)	
-tmo				I	L	Temoq	
-tmq				I	L	Tumleo	
-tmr				I	E	Jewish Babylonian Aramaic (ca. 200-1200 CE)	
-tms				I	L	Tima	
-tmt				I	L	Tasmate	
-tmu				I	L	Iau	
-tmv				I	L	Tembo (Motembo)	
-tmw				I	L	Temuan	
-tmy				I	L	Tami	
-tmz				I	E	Tamanaku	
-tna				I	L	Tacana	
-tnb				I	L	Western Tunebo	
-tnc				I	L	Tanimuca-Retuarã	
-tnd				I	L	Angosturas Tunebo	
-tng				I	L	Tobanga	
-tnh				I	L	Maiani	
-tni				I	L	Tandia	
-tnk				I	L	Kwamera	
-tnl				I	L	Lenakel	
-tnm				I	L	Tabla	
-tnn				I	L	North Tanna	
-tno				I	L	Toromono	
-tnp				I	L	Whitesands	
-tnq				I	E	Taino	
-tnr				I	L	Ménik	
-tns				I	L	Tenis	
-tnt				I	L	Tontemboan	
-tnu				I	L	Tay Khang	
-tnv				I	L	Tangchangya	
-tnw				I	L	Tonsawang	
-tnx				I	L	Tanema	
-tny				I	L	Tongwe	
-tnz				I	L	Ten'edn	
-tob				I	L	Toba	
-toc				I	L	Coyutla Totonac	
-tod				I	L	Toma	
-tof				I	L	Gizrra	
-tog	tog	tog		I	L	Tonga (Nyasa)	
-toh				I	L	Gitonga	
-toi				I	L	Tonga (Zambia)	
-toj				I	L	Tojolabal	
-tol				I	E	Tolowa	
-tom				I	L	Tombulu	
-ton	ton	ton	to	I	L	Tonga (Tonga Islands)	
-too				I	L	Xicotepec De Juárez Totonac	
-top				I	L	Papantla Totonac	
-toq				I	L	Toposa	
-tor				I	L	Togbo-Vara Banda	
-tos				I	L	Highland Totonac	
-tou				I	L	Tho	
-tov				I	L	Upper Taromi	
-tow				I	L	Jemez	
-tox				I	L	Tobian	
-toy				I	L	Topoiyo	
-toz				I	L	To	
-tpa				I	L	Taupota	
-tpc				I	L	Azoyú Me'phaa	
-tpe				I	L	Tippera	
-tpf				I	L	Tarpia	
-tpg				I	L	Kula	
-tpi	tpi	tpi		I	L	Tok Pisin	
-tpj				I	L	Tapieté	
-tpk				I	E	Tupinikin	
-tpl				I	L	Tlacoapa Me'phaa	
-tpm				I	L	Tampulma	
-tpn				I	E	Tupinambá	
-tpo				I	L	Tai Pao	
-tpp				I	L	Pisaflores Tepehua	
-tpq				I	L	Tukpa	
-tpr				I	L	Tuparí	
-tpt				I	L	Tlachichilco Tepehua	
-tpu				I	L	Tampuan	
-tpv				I	L	Tanapag	
-tpw				I	E	Tupí	
-tpx				I	L	Acatepec Me'phaa	
-tpy				I	L	Trumai	
-tpz				I	L	Tinputz	
-tqb				I	L	Tembé	
-tql				I	L	Lehali	
-tqm				I	L	Turumsa	
-tqn				I	L	Tenino	
-tqo				I	L	Toaripi	
-tqp				I	L	Tomoip	
-tqq				I	L	Tunni	
-tqr				I	E	Torona	
-tqt				I	L	Western Totonac	
-tqu				I	L	Touo	
-tqw				I	E	Tonkawa	
-tra				I	L	Tirahi	
-trb				I	L	Terebu	
-trc				I	L	Copala Triqui	
-trd				I	L	Turi	
-tre				I	L	East Tarangan	
-trf				I	L	Trinidadian Creole English	
-trg				I	L	Lishán Didán	
-trh				I	L	Turaka	
-tri				I	L	Trió	
-trj				I	L	Toram	
-trl				I	L	Traveller Scottish	
-trm				I	L	Tregami	
-trn				I	L	Trinitario	
-tro				I	L	Tarao Naga	
-trp				I	L	Kok Borok	
-trq				I	L	San Martín Itunyoso Triqui	
-trr				I	L	Taushiro	
-trs				I	L	Chicahuaxtla Triqui	
-trt				I	L	Tunggare	
-tru				I	L	Turoyo	
-trv				I	L	Taroko	
-trw				I	L	Torwali	
-trx				I	L	Tringgus-Sembaan Bidayuh	
-try				I	E	Turung	
-trz				I	E	Torá	
-tsa				I	L	Tsaangi	
-tsb				I	L	Tsamai	
-tsc				I	L	Tswa	
-tsd				I	L	Tsakonian	
-tse				I	L	Tunisian Sign Language	
-tsg				I	L	Tausug	
-tsh				I	L	Tsuvan	
-tsi	tsi	tsi		I	L	Tsimshian	
-tsj				I	L	Tshangla	
-tsk				I	L	Tseku	
-tsl				I	L	Ts'ün-Lao	
-tsm				I	L	Turkish Sign Language	
-tsn	tsn	tsn	tn	I	L	Tswana	
-tso	tso	tso	ts	I	L	Tsonga	
-tsp				I	L	Northern Toussian	
-tsq				I	L	Thai Sign Language	
-tsr				I	L	Akei	
-tss				I	L	Taiwan Sign Language	
-tst				I	L	Tondi Songway Kiini	
-tsu				I	L	Tsou	
-tsv				I	L	Tsogo	
-tsw				I	L	Tsishingini	
-tsx				I	L	Mubami	
-tsy				I	L	Tebul Sign Language	
-tsz				I	L	Purepecha	
-tta				I	E	Tutelo	
-ttb				I	L	Gaa	
-ttc				I	L	Tektiteko	
-ttd				I	L	Tauade	
-tte				I	L	Bwanabwana	
-ttf				I	L	Tuotomb	
-ttg				I	L	Tutong	
-tth				I	L	Upper Ta'oih	
-tti				I	L	Tobati	
-ttj				I	L	Tooro	
-ttk				I	L	Totoro	
-ttl				I	L	Totela	
-ttm				I	L	Northern Tutchone	
-ttn				I	L	Towei	
-tto				I	L	Lower Ta'oih	
-ttp				I	L	Tombelala	
-ttq				I	L	Tawallammat Tamajaq	
-ttr				I	L	Tera	
-tts				I	L	Northeastern Thai	
-ttt				I	L	Muslim Tat	
-ttu				I	L	Torau	
-ttv				I	L	Titan	
-ttw				I	L	Long Wat	
-tty				I	L	Sikaritai	
-ttz				I	L	Tsum	
-tua				I	L	Wiarumus	
-tub				I	E	Tübatulabal	
-tuc				I	L	Mutu	
-tud				I	E	Tuxá	
-tue				I	L	Tuyuca	
-tuf				I	L	Central Tunebo	
-tug				I	L	Tunia	
-tuh				I	L	Taulil	
-tui				I	L	Tupuri	
-tuj				I	L	Tugutil	
-tuk	tuk	tuk	tk	I	L	Turkmen	
-tul				I	L	Tula	
-tum	tum	tum		I	L	Tumbuka	
-tun				I	L	Tunica	
-tuo				I	L	Tucano	
-tuq				I	L	Tedaga	
-tur	tur	tur	tr	I	L	Turkish	
-tus				I	L	Tuscarora	
-tuu				I	L	Tututni	
-tuv				I	L	Turkana	
-tux				I	E	Tuxináwa	
-tuy				I	L	Tugen	
-tuz				I	L	Turka	
-tva				I	L	Vaghua	
-tvd				I	L	Tsuvadi	
-tve				I	L	Te'un	
-tvk				I	L	Southeast Ambrym	
-tvl	tvl	tvl		I	L	Tuvalu	
-tvm				I	L	Tela-Masbuar	
-tvn				I	L	Tavoyan	
-tvo				I	L	Tidore	
-tvs				I	L	Taveta	
-tvt				I	L	Tutsa Naga	
-tvu				I	L	Tunen	
-tvw				I	L	Sedoa	
-tvx				I	E	Taivoan	
-tvy				I	E	Timor Pidgin	
-twa				I	E	Twana	
-twb				I	L	Western Tawbuid	
-twc				I	E	Teshenawa	
-twd				I	L	Twents	
-twe				I	L	Tewa (Indonesia)	
-twf				I	L	Northern Tiwa	
-twg				I	L	Tereweng	
-twh				I	L	Tai Dón	
-twi	twi	twi	tw	I	L	Twi	
-twl				I	L	Tawara	
-twm				I	L	Tawang Monpa	
-twn				I	L	Twendi	
-two				I	L	Tswapong	
-twp				I	L	Ere	
-twq				I	L	Tasawaq	
-twr				I	L	Southwestern Tarahumara	
-twt				I	E	Turiwára	
-twu				I	L	Termanu	
-tww				I	L	Tuwari	
-twx				I	L	Tewe	
-twy				I	L	Tawoyan	
-txa				I	L	Tombonuo	
-txb				I	A	Tokharian B	
-txc				I	E	Tsetsaut	
-txe				I	L	Totoli	
-txg				I	A	Tangut	
-txh				I	A	Thracian	
-txi				I	L	Ikpeng	
-txj				I	L	Tarjumo	
-txm				I	L	Tomini	
-txn				I	L	West Tarangan	
-txo				I	L	Toto	
-txq				I	L	Tii	
-txr				I	A	Tartessian	
-txs				I	L	Tonsea	
-txt				I	L	Citak	
-txu				I	L	Kayapó	
-txx				I	L	Tatana	
-txy				I	L	Tanosy Malagasy	
-tya				I	L	Tauya	
-tye				I	L	Kyanga	
-tyh				I	L	O'du	
-tyi				I	L	Teke-Tsaayi	
-tyj				I	L	Tai Do	
-tyl				I	L	Thu Lao	
-tyn				I	L	Kombai	
-typ				I	E	Thaypan	
-tyr				I	L	Tai Daeng	
-tys				I	L	Tày Sa Pa	
-tyt				I	L	Tày Tac	
-tyu				I	L	Kua	
-tyv	tyv	tyv		I	L	Tuvinian	
-tyx				I	L	Teke-Tyee	
-tyz				I	L	Tày	
-tza				I	L	Tanzanian Sign Language	
-tzh				I	L	Tzeltal	
-tzj				I	L	Tz'utujil	
-tzl				I	C	Talossan	
-tzm				I	L	Central Atlas Tamazight	
-tzn				I	L	Tugun	
-tzo				I	L	Tzotzil	
-tzx				I	L	Tabriak	
-uam				I	E	Uamué	
-uan				I	L	Kuan	
-uar				I	L	Tairuma	
-uba				I	L	Ubang	
-ubi				I	L	Ubi	
-ubl				I	L	Buhi'non Bikol	
-ubr				I	L	Ubir	
-ubu				I	L	Umbu-Ungu	
-uby				I	E	Ubykh	
-uda				I	L	Uda	
-ude				I	L	Udihe	
-udg				I	L	Muduga	
-udi				I	L	Udi	
-udj				I	L	Ujir	
-udl				I	L	Wuzlam	
-udm	udm	udm		I	L	Udmurt	
-udu				I	L	Uduk	
-ues				I	L	Kioko	
-ufi				I	L	Ufim	
-uga	uga	uga		I	A	Ugaritic	
-ugb				I	E	Kuku-Ugbanh	
-uge				I	L	Ughele	
-ugn				I	L	Ugandan Sign Language	
-ugo				I	L	Ugong	
-ugy				I	L	Uruguayan Sign Language	
-uha				I	L	Uhami	
-uhn				I	L	Damal	
-uig	uig	uig	ug	I	L	Uighur	
-uis				I	L	Uisai	
-uiv				I	L	Iyive	
-uji				I	L	Tanjijili	
-uka				I	L	Kaburi	
-ukg				I	L	Ukuriguma	
-ukh				I	L	Ukhwejo	
-uki				I	L	Kui (India)	
-ukk				I	L	Muak Sa-aak	
-ukl				I	L	Ukrainian Sign Language	
-ukp				I	L	Ukpe-Bayobiri	
-ukq				I	L	Ukwa	
-ukr	ukr	ukr	uk	I	L	Ukrainian	
-uks				I	L	Urubú-Kaapor Sign Language	
-uku				I	L	Ukue	
-ukv				I	L	Kuku	
-ukw				I	L	Ukwuani-Aboh-Ndoni	
-uky				I	E	Kuuk-Yak	
-ula				I	L	Fungwa	
-ulb				I	L	Ulukwumi	
-ulc				I	L	Ulch	
-ule				I	E	Lule	
-ulf				I	L	Usku	
-uli				I	L	Ulithian	
-ulk				I	L	Meriam Mir	
-ull				I	L	Ullatan	
-ulm				I	L	Ulumanda'	
-uln				I	L	Unserdeutsch	
-ulu				I	L	Uma' Lung	
-ulw				I	L	Ulwa	
-uma				I	L	Umatilla	
-umb	umb	umb		I	L	Umbundu	
-umc				I	A	Marrucinian	
-umd				I	E	Umbindhamu	
-umg				I	E	Morrobalama	
-umi				I	L	Ukit	
-umm				I	L	Umon	
-umn				I	L	Makyan Naga	
-umo				I	E	Umotína	
-ump				I	L	Umpila	
-umr				I	E	Umbugarla	
-ums				I	L	Pendau	
-umu				I	L	Munsee	
-una				I	L	North Watut	
-und	und	und		S	S	Undetermined	
-une				I	L	Uneme	
-ung				I	L	Ngarinyin	
-unk				I	L	Enawené-Nawé	
-unm				I	E	Unami	
-unn				I	L	Kurnai	
-unr				I	L	Mundari	
-unu				I	L	Unubahe	
-unx				I	L	Munda	
-unz				I	L	Unde Kaili	
-upi				I	L	Umeda	
-upv				I	L	Uripiv-Wala-Rano-Atchin	
-ura				I	L	Urarina	
-urb				I	L	Urubú-Kaapor	
-urc				I	E	Urningangg	
-urd	urd	urd	ur	I	L	Urdu	
-ure				I	L	Uru	
-urf				I	E	Uradhi	
-urg				I	L	Urigina	
-urh				I	L	Urhobo	
-uri				I	L	Urim	
-urk				I	L	Urak Lawoi'	
-url				I	L	Urali	
-urm				I	L	Urapmin	
-urn				I	L	Uruangnirin	
-uro				I	L	Ura (Papua New Guinea)	
-urp				I	L	Uru-Pa-In	
-urr				I	L	Lehalurup	
-urt				I	L	Urat	
-uru				I	E	Urumi	
-urv				I	E	Uruava	
-urw				I	L	Sop	
-urx				I	L	Urimo	
-ury				I	L	Orya	
-urz				I	L	Uru-Eu-Wau-Wau	
-usa				I	L	Usarufa	
-ush				I	L	Ushojo	
-usi				I	L	Usui	
-usk				I	L	Usaghade	
-usp				I	L	Uspanteco	
-uss				I	L	us-Saare	
-usu				I	L	Uya	
-uta				I	L	Otank	
-ute				I	L	Ute-Southern Paiute	
-uth				I	L	ut-Hun	
-utp				I	L	Amba (Solomon Islands)	
-utr				I	L	Etulo	
-utu				I	L	Utu	
-uum				I	L	Urum	
-uun				I	L	Kulon-Pazeh	
-uur				I	L	Ura (Vanuatu)	
-uuu				I	L	U	
-uve				I	L	West Uvean	
-uvh				I	L	Uri	
-uvl				I	L	Lote	
-uwa				I	L	Kuku-Uwanh	
-uya				I	L	Doko-Uyanga	
-uzb	uzb	uzb	uz	M	L	Uzbek	
-uzn				I	L	Northern Uzbek	
-uzs				I	L	Southern Uzbek	
-vaa				I	L	Vaagri Booli	
-vae				I	L	Vale	
-vaf				I	L	Vafsi	
-vag				I	L	Vagla	
-vah				I	L	Varhadi-Nagpuri	
-vai	vai	vai		I	L	Vai	
-vaj				I	L	Sekele	
-val				I	L	Vehes	
-vam				I	L	Vanimo	
-van				I	L	Valman	
-vao				I	L	Vao	
-vap				I	L	Vaiphei	
-var				I	L	Huarijio	
-vas				I	L	Vasavi	
-vau				I	L	Vanuma	
-vav				I	L	Varli	
-vay				I	L	Wayu	
-vbb				I	L	Southeast Babar	
-vbk				I	L	Southwestern Bontok	
-vec				I	L	Venetian	
-ved				I	L	Veddah	
-vel				I	L	Veluws	
-vem				I	L	Vemgo-Mabas	
-ven	ven	ven	ve	I	L	Venda	
-veo				I	E	Ventureño	
-vep				I	L	Veps	
-ver				I	L	Mom Jango	
-vgr				I	L	Vaghri	
-vgt				I	L	Vlaamse Gebarentaal	
-vic				I	L	Virgin Islands Creole English	
-vid				I	L	Vidunda	
-vie	vie	vie	vi	I	L	Vietnamese	
-vif				I	L	Vili	
-vig				I	L	Viemo	
-vil				I	L	Vilela	
-vin				I	L	Vinza	
-vis				I	L	Vishavan	
-vit				I	L	Viti	
-viv				I	L	Iduna	
-vka				I	E	Kariyarra	
-vki				I	L	Ija-Zuba	
-vkj				I	L	Kujarge	
-vkk				I	L	Kaur	
-vkl				I	L	Kulisusu	
-vkm				I	E	Kamakan	
-vko				I	L	Kodeoha	
-vkp				I	L	Korlai Creole Portuguese	
-vkt				I	L	Tenggarong Kutai Malay	
-vku				I	L	Kurrama	
-vlp				I	L	Valpei	
-vls				I	L	Vlaams	
-vma				I	L	Martuyhunira	
-vmb				I	E	Barbaram	
-vmc				I	L	Juxtlahuaca Mixtec	
-vmd				I	L	Mudu Koraga	
-vme				I	L	East Masela	
-vmf				I	L	Mainfränkisch	
-vmg				I	L	Lungalunga	
-vmh				I	L	Maraghei	
-vmi				I	E	Miwa	
-vmj				I	L	Ixtayutla Mixtec	
-vmk				I	L	Makhuwa-Shirima	
-vml				I	E	Malgana	
-vmm				I	L	Mitlatongo Mixtec	
-vmp				I	L	Soyaltepec Mazatec	
-vmq				I	L	Soyaltepec Mixtec	
-vmr				I	L	Marenje	
-vms				I	E	Moksela	
-vmu				I	E	Muluridyi	
-vmv				I	E	Valley Maidu	
-vmw				I	L	Makhuwa	
-vmx				I	L	Tamazola Mixtec	
-vmy				I	L	Ayautla Mazatec	
-vmz				I	L	Mazatlán Mazatec	
-vnk				I	L	Vano	
-vnm				I	L	Vinmavis	
-vnp				I	L	Vunapu	
-vol	vol	vol	vo	I	C	Volapük	
-vor				I	L	Voro	
-vot	vot	vot		I	L	Votic	
-vra				I	L	Vera'a	
-vro				I	L	Võro	
-vrs				I	L	Varisi	
-vrt				I	L	Burmbar	
-vsi				I	L	Moldova Sign Language	
-vsl				I	L	Venezuelan Sign Language	
-vsv				I	L	Valencian Sign Language	
-vto				I	L	Vitou	
-vum				I	L	Vumbu	
-vun				I	L	Vunjo	
-vut				I	L	Vute	
-vwa				I	L	Awa (China)	
-waa				I	L	Walla Walla	
-wab				I	L	Wab	
-wac				I	E	Wasco-Wishram	
-wad				I	L	Wandamen	
-wae				I	L	Walser	
-waf				I	E	Wakoná	
-wag				I	L	Wa'ema	
-wah				I	L	Watubela	
-wai				I	L	Wares	
-waj				I	L	Waffa	
-wal	wal	wal		I	L	Wolaytta	
-wam				I	E	Wampanoag	
-wan				I	L	Wan	
-wao				I	E	Wappo	
-wap				I	L	Wapishana	
-waq				I	L	Wagiman	
-war	war	war		I	L	Waray (Philippines)	
-was	was	was		I	L	Washo	
-wat				I	L	Kaninuwa	
-wau				I	L	Waurá	
-wav				I	L	Waka	
-waw				I	L	Waiwai	
-wax				I	L	Watam	
-way				I	L	Wayana	
-waz				I	L	Wampur	
-wba				I	L	Warao	
-wbb				I	L	Wabo	
-wbe				I	L	Waritai	
-wbf				I	L	Wara	
-wbh				I	L	Wanda	
-wbi				I	L	Vwanji	
-wbj				I	L	Alagwa	
-wbk				I	L	Waigali	
-wbl				I	L	Wakhi	
-wbm				I	L	Wa	
-wbp				I	L	Warlpiri	
-wbq				I	L	Waddar	
-wbr				I	L	Wagdi	
-wbs				I	L	West Bengal Sign Language	
-wbt				I	L	Warnman	
-wbv				I	L	Wajarri	
-wbw				I	L	Woi	
-wca				I	L	Yanomámi	
-wci				I	L	Waci Gbe	
-wdd				I	L	Wandji	
-wdg				I	L	Wadaginam	
-wdj				I	L	Wadjiginy	
-wdk				I	E	Wadikali	
-wdu				I	E	Wadjigu	
-wdy				I	E	Wadjabangayi	
-wea				I	E	Wewaw	
-wec				I	L	Wè Western	
-wed				I	L	Wedau	
-weg				I	L	Wergaia	
-weh				I	L	Weh	
-wei				I	L	Kiunum	
-wem				I	L	Weme Gbe	
-weo				I	L	Wemale	
-wep				I	L	Westphalien	
-wer				I	L	Weri	
-wes				I	L	Cameroon Pidgin	
-wet				I	L	Perai	
-weu				I	L	Rawngtu Chin	
-wew				I	L	Wejewa	
-wfg				I	L	Yafi	
-wga				I	E	Wagaya	
-wgb				I	L	Wagawaga	
-wgg				I	E	Wangkangurru	
-wgi				I	L	Wahgi	
-wgo				I	L	Waigeo	
-wgu				I	E	Wirangu	
-wgy				I	L	Warrgamay	
-wha				I	L	Sou Upaa	
-whg				I	L	North Wahgi	
-whk				I	L	Wahau Kenyah	
-whu				I	L	Wahau Kayan	
-wib				I	L	Southern Toussian	
-wic				I	E	Wichita	
-wie				I	E	Wik-Epa	
-wif				I	E	Wik-Keyangan	
-wig				I	L	Wik Ngathan	
-wih				I	L	Wik-Me'anha	
-wii				I	L	Minidien	
-wij				I	L	Wik-Iiyanh	
-wik				I	L	Wikalkan	
-wil				I	E	Wilawila	
-wim				I	L	Wik-Mungkan	
-win				I	L	Ho-Chunk	
-wir				I	E	Wiraféd	
-wiu				I	L	Wiru	
-wiv				I	L	Vitu	
-wiy				I	E	Wiyot	
-wja				I	L	Waja	
-wji				I	L	Warji	
-wka				I	E	Kw'adza	
-wkb				I	L	Kumbaran	
-wkd				I	L	Wakde	
-wkl				I	L	Kalanadi	
-wkr				I	L	Keerray-Woorroong	
-wku				I	L	Kunduvadi	
-wkw				I	E	Wakawaka	
-wky				I	E	Wangkayutyuru	
-wla				I	L	Walio	
-wlc				I	L	Mwali Comorian	
-wle				I	L	Wolane	
-wlg				I	L	Kunbarlang	
-wlh				I	L	Welaun	
-wli				I	L	Waioli	
-wlk				I	E	Wailaki	
-wll				I	L	Wali (Sudan)	
-wlm				I	H	Middle Welsh	
-wln	wln	wln	wa	I	L	Walloon	
-wlo				I	L	Wolio	
-wlr				I	L	Wailapa	
-wls				I	L	Wallisian	
-wlu				I	E	Wuliwuli	
-wlv				I	L	Wichí Lhamtés Vejoz	
-wlw				I	L	Walak	
-wlx				I	L	Wali (Ghana)	
-wly				I	E	Waling	
-wma				I	E	Mawa (Nigeria)	
-wmb				I	L	Wambaya	
-wmc				I	L	Wamas	
-wmd				I	L	Mamaindé	
-wme				I	L	Wambule	
-wmh				I	L	Waima'a	
-wmi				I	E	Wamin	
-wmm				I	L	Maiwa (Indonesia)	
-wmn				I	E	Waamwang	
-wmo				I	L	Wom (Papua New Guinea)	
-wms				I	L	Wambon	
-wmt				I	L	Walmajarri	
-wmw				I	L	Mwani	
-wmx				I	L	Womo	
-wnb				I	L	Wanambre	
-wnc				I	L	Wantoat	
-wnd				I	E	Wandarang	
-wne				I	L	Waneci	
-wng				I	L	Wanggom	
-wni				I	L	Ndzwani Comorian	
-wnk				I	L	Wanukaka	
-wnm				I	E	Wanggamala	
-wnn				I	E	Wunumara	
-wno				I	L	Wano	
-wnp				I	L	Wanap	
-wnu				I	L	Usan	
-wnw				I	L	Wintu	
-wny				I	L	Wanyi	
-woa				I	L	Kuwema	
-wob				I	L	Wè Northern	
-woc				I	L	Wogeo	
-wod				I	L	Wolani	
-woe				I	L	Woleaian	
-wof				I	L	Gambian Wolof	
-wog				I	L	Wogamusin	
-woi				I	L	Kamang	
-wok				I	L	Longto	
-wol	wol	wol	wo	I	L	Wolof	
-wom				I	L	Wom (Nigeria)	
-won				I	L	Wongo	
-woo				I	L	Manombai	
-wor				I	L	Woria	
-wos				I	L	Hanga Hundi	
-wow				I	L	Wawonii	
-woy				I	E	Weyto	
-wpc				I	L	Maco	
-wra				I	L	Warapu	
-wrb				I	E	Waluwarra	
-wrd				I	L	Warduji	
-wrg				I	E	Warungu	
-wrh				I	E	Wiradjuri	
-wri				I	E	Wariyangga	
-wrk				I	L	Garrwa	
-wrl				I	L	Warlmanpa	
-wrm				I	L	Warumungu	
-wrn				I	L	Warnang	
-wro				I	E	Worrorra	
-wrp				I	L	Waropen	
-wrr				I	L	Wardaman	
-wrs				I	L	Waris	
-wru				I	L	Waru	
-wrv				I	L	Waruna	
-wrw				I	E	Gugu Warra	
-wrx				I	L	Wae Rana	
-wry				I	L	Merwari	
-wrz				I	E	Waray (Australia)	
-wsa				I	L	Warembori	
-wsg				I	L	Adilabad Gondi	
-wsi				I	L	Wusi	
-wsk				I	L	Waskia	
-wsr				I	L	Owenia	
-wss				I	L	Wasa	
-wsu				I	E	Wasu	
-wsv				I	E	Wotapuri-Katarqalai	
-wtf				I	L	Watiwa	
-wth				I	E	Wathawurrung	
-wti				I	L	Berta	
-wtk				I	L	Watakataui	
-wtm				I	L	Mewati	
-wtw				I	L	Wotu	
-wua				I	L	Wikngenchera	
-wub				I	L	Wunambal	
-wud				I	L	Wudu	
-wuh				I	L	Wutunhua	
-wul				I	L	Silimo	
-wum				I	L	Wumbvu	
-wun				I	L	Bungu	
-wur				I	E	Wurrugu	
-wut				I	L	Wutung	
-wuu				I	L	Wu Chinese	
-wuv				I	L	Wuvulu-Aua	
-wux				I	L	Wulna	
-wuy				I	L	Wauyai	
-wwa				I	L	Waama	
-wwb				I	E	Wakabunga	
-wwo				I	L	Wetamut	
-wwr				I	E	Warrwa	
-www				I	L	Wawa	
-wxa				I	L	Waxianghua	
-wxw				I	E	Wardandi	
-wya				I	L	Wyandot	
-wyb				I	L	Wangaaybuwan-Ngiyambaa	
-wyi				I	E	Woiwurrung	
-wym				I	L	Wymysorys	
-wyr				I	L	Wayoró	
-wyy				I	L	Western Fijian	
-xaa				I	H	Andalusian Arabic	
-xab				I	L	Sambe	
-xac				I	L	Kachari	
-xad				I	E	Adai	
-xae				I	A	Aequian	
-xag				I	A	Aghwan	
-xai				I	E	Kaimbé	
-xaj				I	E	Ararandewára	
-xak				I	E	Máku	
-xal	xal	xal		I	L	Kalmyk	
-xam				I	E	ǀXam	
-xan				I	L	Xamtanga	
-xao				I	L	Khao	
-xap				I	E	Apalachee	
-xaq				I	A	Aquitanian	
-xar				I	E	Karami	
-xas				I	E	Kamas	
-xat				I	L	Katawixi	
-xau				I	L	Kauwera	
-xav				I	L	Xavánte	
-xaw				I	L	Kawaiisu	
-xay				I	L	Kayan Mahakam	
-xbb				I	E	Lower Burdekin	
-xbc				I	A	Bactrian	
-xbd				I	E	Bindal	
-xbe				I	E	Bigambal	
-xbg				I	E	Bunganditj	
-xbi				I	L	Kombio	
-xbj				I	E	Birrpayi	
-xbm				I	H	Middle Breton	
-xbn				I	E	Kenaboi	
-xbo				I	H	Bolgarian	
-xbp				I	E	Bibbulman	
-xbr				I	L	Kambera	
-xbw				I	E	Kambiwá	
-xby				I	L	Batjala	
-xcb				I	H	Cumbric	
-xcc				I	A	Camunic	
-xce				I	A	Celtiberian	
-xcg				I	A	Cisalpine Gaulish	
-xch				I	E	Chemakum	
-xcl				I	H	Classical Armenian	
-xcm				I	E	Comecrudo	
-xcn				I	E	Cotoname	
-xco				I	A	Chorasmian	
-xcr				I	A	Carian	
-xct				I	H	Classical Tibetan	
-xcu				I	H	Curonian	
-xcv				I	E	Chuvantsy	
-xcw				I	E	Coahuilteco	
-xcy				I	E	Cayuse	
-xda				I	L	Darkinyung	
-xdc				I	A	Dacian	
-xdk				I	E	Dharuk	
-xdm				I	A	Edomite	
-xdo				I	L	Kwandu	
-xdy				I	L	Malayic Dayak	
-xeb				I	A	Eblan	
-xed				I	L	Hdi	
-xeg				I	E	ǁXegwi	
-xel				I	L	Kelo	
-xem				I	L	Kembayan	
-xep				I	A	Epi-Olmec	
-xer				I	L	Xerénte	
-xes				I	L	Kesawai	
-xet				I	L	Xetá	
-xeu				I	L	Keoru-Ahia	
-xfa				I	A	Faliscan	
-xga				I	A	Galatian	
-xgb				I	E	Gbin	
-xgd				I	E	Gudang	
-xgf				I	E	Gabrielino-Fernandeño	
-xgg				I	E	Goreng	
-xgi				I	E	Garingbal	
-xgl				I	H	Galindan	
-xgm				I	E	Dharumbal	
-xgr				I	E	Garza	
-xgu				I	L	Unggumi	
-xgw				I	E	Guwa	
-xha				I	A	Harami	
-xhc				I	A	Hunnic	
-xhd				I	A	Hadrami	
-xhe				I	L	Khetrani	
-xho	xho	xho	xh	I	L	Xhosa	
-xhr				I	A	Hernican	
-xht				I	A	Hattic	
-xhu				I	A	Hurrian	
-xhv				I	L	Khua	
-xib				I	A	Iberian	
-xii				I	L	Xiri	
-xil				I	A	Illyrian	
-xin				I	E	Xinca	
-xir				I	E	Xiriâna	
-xis				I	L	Kisan	
-xiv				I	A	Indus Valley Language	
-xiy				I	L	Xipaya	
-xjb				I	E	Minjungbal	
-xjt				I	E	Jaitmatang	
-xka				I	L	Kalkoti	
-xkb				I	L	Northern Nago	
-xkc				I	L	Kho'ini	
-xkd				I	L	Mendalam Kayan	
-xke				I	L	Kereho	
-xkf				I	L	Khengkha	
-xkg				I	L	Kagoro	
-xki				I	L	Kenyan Sign Language	
-xkj				I	L	Kajali	
-xkk				I	L	Kaco'	
-xkl				I	L	Mainstream Kenyah	
-xkn				I	L	Kayan River Kayan	
-xko				I	L	Kiorr	
-xkp				I	L	Kabatei	
-xkq				I	L	Koroni	
-xkr				I	E	Xakriabá	
-xks				I	L	Kumbewaha	
-xkt				I	L	Kantosi	
-xku				I	L	Kaamba	
-xkv				I	L	Kgalagadi	
-xkw				I	L	Kembra	
-xkx				I	L	Karore	
-xky				I	L	Uma' Lasan	
-xkz				I	L	Kurtokha	
-xla				I	L	Kamula	
-xlb				I	E	Loup B	
-xlc				I	A	Lycian	
-xld				I	A	Lydian	
-xle				I	A	Lemnian	
-xlg				I	A	Ligurian (Ancient)	
-xli				I	A	Liburnian	
-xln				I	A	Alanic	
-xlo				I	E	Loup A	
-xlp				I	A	Lepontic	
-xls				I	A	Lusitanian	
-xlu				I	A	Cuneiform Luwian	
-xly				I	A	Elymian	
-xma				I	L	Mushungulu	
-xmb				I	L	Mbonga	
-xmc				I	L	Makhuwa-Marrevone	
-xmd				I	L	Mbudum	
-xme				I	A	Median	
-xmf				I	L	Mingrelian	
-xmg				I	L	Mengaka	
-xmh				I	L	Kugu-Muminh	
-xmj				I	L	Majera	
-xmk				I	A	Ancient Macedonian	
-xml				I	L	Malaysian Sign Language	
-xmm				I	L	Manado Malay	
-xmn				I	H	Manichaean Middle Persian	
-xmo				I	L	Morerebi	
-xmp				I	E	Kuku-Mu'inh	
-xmq				I	E	Kuku-Mangk	
-xmr				I	A	Meroitic	
-xms				I	L	Moroccan Sign Language	
-xmt				I	L	Matbat	
-xmu				I	E	Kamu	
-xmv				I	L	Antankarana Malagasy	
-xmw				I	L	Tsimihety Malagasy	
-xmx				I	L	Maden	
-xmy				I	L	Mayaguduna	
-xmz				I	L	Mori Bawah	
-xna				I	A	Ancient North Arabian	
-xnb				I	L	Kanakanabu	
-xng				I	H	Middle Mongolian	
-xnh				I	L	Kuanhua	
-xni				I	E	Ngarigu	
-xnk				I	E	Nganakarti	
-xnm				I	E	Ngumbarl	
-xnn				I	L	Northern Kankanay	
-xno				I	H	Anglo-Norman	
-xnr				I	L	Kangri	
-xns				I	L	Kanashi	
-xnt				I	E	Narragansett	
-xnu				I	E	Nukunul	
-xny				I	L	Nyiyaparli	
-xnz				I	L	Kenzi	
-xoc				I	E	O'chi'chi'	
-xod				I	L	Kokoda	
-xog				I	L	Soga	
-xoi				I	L	Kominimung	
-xok				I	L	Xokleng	
-xom				I	L	Komo (Sudan)	
-xon				I	L	Konkomba	
-xoo				I	E	Xukurú	
-xop				I	L	Kopar	
-xor				I	L	Korubo	
-xow				I	L	Kowaki	
-xpa				I	E	Pirriya	
-xpb				I	E	Northeastern Tasmanian	
-xpc				I	H	Pecheneg	
-xpd				I	E	Oyster Bay Tasmanian	
-xpe				I	L	Liberia Kpelle	
-xpf				I	E	Southeast Tasmanian	
-xpg				I	A	Phrygian	
-xph				I	E	North Midlands Tasmanian	
-xpi				I	H	Pictish	
-xpj				I	E	Mpalitjanh	
-xpk				I	L	Kulina Pano	
-xpl				I	E	Port Sorell Tasmanian	
-xpm				I	E	Pumpokol	
-xpn				I	E	Kapinawá	
-xpo				I	E	Pochutec	
-xpp				I	A	Puyo-Paekche	
-xpq				I	E	Mohegan-Pequot	
-xpr				I	A	Parthian	
-xps				I	A	Pisidian	
-xpt				I	E	Punthamara	
-xpu				I	A	Punic	
-xpv				I	E	Northern Tasmanian	
-xpw				I	E	Northwestern Tasmanian	
-xpx				I	E	Southwestern Tasmanian	
-xpy				I	A	Puyo	
-xpz				I	E	Bruny Island Tasmanian	
-xqa				I	H	Karakhanid	
-xqt				I	A	Qatabanian	
-xra				I	L	Krahô	
-xrb				I	L	Eastern Karaboro	
-xrd				I	E	Gundungurra	
-xre				I	L	Kreye	
-xrg				I	E	Minang	
-xri				I	L	Krikati-Timbira	
-xrm				I	A	Armazic	
-xrn				I	E	Arin	
-xrr				I	A	Raetic	
-xrt				I	E	Aranama-Tamique	
-xru				I	L	Marriammu	
-xrw				I	L	Karawa	
-xsa				I	A	Sabaean	
-xsb				I	L	Sambal	
-xsc				I	A	Scythian	
-xsd				I	A	Sidetic	
-xse				I	L	Sempan	
-xsh				I	L	Shamang	
-xsi				I	L	Sio	
-xsj				I	L	Subi	
-xsl				I	L	South Slavey	
-xsm				I	L	Kasem	
-xsn				I	L	Sanga (Nigeria)	
-xso				I	E	Solano	
-xsp				I	L	Silopi	
-xsq				I	L	Makhuwa-Saka	
-xsr				I	L	Sherpa	
-xss				I	E	Assan	
-xsu				I	L	Sanumá	
-xsv				I	E	Sudovian	
-xsy				I	L	Saisiyat	
-xta				I	L	Alcozauca Mixtec	
-xtb				I	L	Chazumba Mixtec	
-xtc				I	L	Katcha-Kadugli-Miri	
-xtd				I	L	Diuxi-Tilantongo Mixtec	
-xte				I	L	Ketengban	
-xtg				I	A	Transalpine Gaulish	
-xth				I	E	Yitha Yitha	
-xti				I	L	Sinicahua Mixtec	
-xtj				I	L	San Juan Teita Mixtec	
-xtl				I	L	Tijaltepec Mixtec	
-xtm				I	L	Magdalena Peñasco Mixtec	
-xtn				I	L	Northern Tlaxiaco Mixtec	
-xto				I	A	Tokharian A	
-xtp				I	L	San Miguel Piedras Mixtec	
-xtq				I	H	Tumshuqese	
-xtr				I	A	Early Tripuri	
-xts				I	L	Sindihui Mixtec	
-xtt				I	L	Tacahua Mixtec	
-xtu				I	L	Cuyamecalco Mixtec	
-xtv				I	E	Thawa	
-xtw				I	L	Tawandê	
-xty				I	L	Yoloxochitl Mixtec	
-xua				I	L	Alu Kurumba	
-xub				I	L	Betta Kurumba	
-xud				I	E	Umiida	
-xug				I	L	Kunigami	
-xuj				I	L	Jennu Kurumba	
-xul				I	E	Ngunawal	
-xum				I	A	Umbrian	
-xun				I	E	Unggaranggu	
-xuo				I	L	Kuo	
-xup				I	E	Upper Umpqua	
-xur				I	A	Urartian	
-xut				I	E	Kuthant	
-xuu				I	L	Kxoe	
-xve				I	A	Venetic	
-xvi				I	L	Kamviri	
-xvn				I	A	Vandalic	
-xvo				I	A	Volscian	
-xvs				I	A	Vestinian	
-xwa				I	L	Kwaza	
-xwc				I	E	Woccon	
-xwd				I	E	Wadi Wadi	
-xwe				I	L	Xwela Gbe	
-xwg				I	L	Kwegu	
-xwj				I	E	Wajuk	
-xwk				I	E	Wangkumara	
-xwl				I	L	Western Xwla Gbe	
-xwo				I	E	Written Oirat	
-xwr				I	L	Kwerba Mamberamo	
-xwt				I	E	Wotjobaluk	
-xww				I	E	Wemba Wemba	
-xxb				I	E	Boro (Ghana)	
-xxk				I	L	Ke'o	
-xxm				I	E	Minkin	
-xxr				I	E	Koropó	
-xxt				I	E	Tambora	
-xya				I	E	Yaygir	
-xyb				I	E	Yandjibara	
-xyj				I	E	Mayi-Yapi	
-xyk				I	E	Mayi-Kulan	
-xyl				I	E	Yalakalore	
-xyt				I	E	Mayi-Thakurti	
-xyy				I	L	Yorta Yorta	
-xzh				I	A	Zhang-Zhung	
-xzm				I	E	Zemgalian	
-xzp				I	H	Ancient Zapotec	
-yaa				I	L	Yaminahua	
-yab				I	L	Yuhup	
-yac				I	L	Pass Valley Yali	
-yad				I	L	Yagua	
-yae				I	L	Pumé	
-yaf				I	L	Yaka (Democratic Republic of Congo)	
-yag				I	L	Yámana	
-yah				I	L	Yazgulyam	
-yai				I	L	Yagnobi	
-yaj				I	L	Banda-Yangere	
-yak				I	L	Yakama	
-yal				I	L	Yalunka	
-yam				I	L	Yamba	
-yan				I	L	Mayangna	
-yao	yao	yao		I	L	Yao	
-yap	yap	yap		I	L	Yapese	
-yaq				I	L	Yaqui	
-yar				I	L	Yabarana	
-yas				I	L	Nugunu (Cameroon)	
-yat				I	L	Yambeta	
-yau				I	L	Yuwana	
-yav				I	L	Yangben	
-yaw				I	L	Yawalapití	
-yax				I	L	Yauma	
-yay				I	L	Agwagwune	
-yaz				I	L	Lokaa	
-yba				I	L	Yala	
-ybb				I	L	Yemba	
-ybe				I	L	West Yugur	
-ybh				I	L	Yakha	
-ybi				I	L	Yamphu	
-ybj				I	L	Hasha	
-ybk				I	L	Bokha	
-ybl				I	L	Yukuben	
-ybm				I	L	Yaben	
-ybn				I	E	Yabaâna	
-ybo				I	L	Yabong	
-ybx				I	L	Yawiyo	
-yby				I	L	Yaweyuha	
-ych				I	L	Chesu	
-ycl				I	L	Lolopo	
-ycn				I	L	Yucuna	
-ycp				I	L	Chepya	
-yda				I	E	Yanda	
-ydd				I	L	Eastern Yiddish	
-yde				I	L	Yangum Dey	
-ydg				I	L	Yidgha	
-ydk				I	L	Yoidik	
-yea				I	L	Ravula	
-yec				I	L	Yeniche	
-yee				I	L	Yimas	
-yei				I	E	Yeni	
-yej				I	L	Yevanic	
-yel				I	L	Yela	
-yer				I	L	Tarok	
-yes				I	L	Nyankpa	
-yet				I	L	Yetfa	
-yeu				I	L	Yerukula	
-yev				I	L	Yapunda	
-yey				I	L	Yeyi	
-yga				I	E	Malyangapa	
-ygi				I	E	Yiningayi	
-ygl				I	L	Yangum Gel	
-ygm				I	L	Yagomi	
-ygp				I	L	Gepo	
-ygr				I	L	Yagaria	
-ygs				I	L	Yolŋu Sign Language	
-ygu				I	L	Yugul	
-ygw				I	L	Yagwoia	
-yha				I	L	Baha Buyang	
-yhd				I	L	Judeo-Iraqi Arabic	
-yhl				I	L	Hlepho Phowa	
-yhs				I	L	Yan-nhaŋu Sign Language	
-yia				I	L	Yinggarda	
-yid	yid	yid	yi	M	L	Yiddish	
-yif				I	L	Ache	
-yig				I	L	Wusa Nasu	
-yih				I	L	Western Yiddish	
-yii				I	L	Yidiny	
-yij				I	L	Yindjibarndi	
-yik				I	L	Dongshanba Lalo	
-yil				I	E	Yindjilandji	
-yim				I	L	Yimchungru Naga	
-yin				I	L	Riang Lai	
-yip				I	L	Pholo	
-yiq				I	L	Miqie	
-yir				I	L	North Awyu	
-yis				I	L	Yis	
-yit				I	L	Eastern Lalu	
-yiu				I	L	Awu	
-yiv				I	L	Northern Nisu	
-yix				I	L	Axi Yi	
-yiz				I	L	Azhe	
-yka				I	L	Yakan	
-ykg				I	L	Northern Yukaghir	
-yki				I	L	Yoke	
-ykk				I	L	Yakaikeke	
-ykl				I	L	Khlula	
-ykm				I	L	Kap	
-ykn				I	L	Kua-nsi	
-yko				I	L	Yasa	
-ykr				I	L	Yekora	
-ykt				I	L	Kathu	
-yku				I	L	Kuamasi	
-yky				I	L	Yakoma	
-yla				I	L	Yaul	
-ylb				I	L	Yaleba	
-yle				I	L	Yele	
-ylg				I	L	Yelogu	
-yli				I	L	Angguruk Yali	
-yll				I	L	Yil	
-ylm				I	L	Limi	
-yln				I	L	Langnian Buyang	
-ylo				I	L	Naluo Yi	
-ylr				I	E	Yalarnnga	
-ylu				I	L	Aribwaung	
-yly				I	L	Nyâlayu	
-ymb				I	L	Yambes	
-ymc				I	L	Southern Muji	
-ymd				I	L	Muda	
-yme				I	E	Yameo	
-ymg				I	L	Yamongeri	
-ymh				I	L	Mili	
-ymi				I	L	Moji	
-ymk				I	L	Makwe	
-yml				I	L	Iamalele	
-ymm				I	L	Maay	
-ymn				I	L	Yamna	
-ymo				I	L	Yangum Mon	
-ymp				I	L	Yamap	
-ymq				I	L	Qila Muji	
-ymr				I	L	Malasar	
-yms				I	A	Mysian	
-ymx				I	L	Northern Muji	
-ymz				I	L	Muzi	
-yna				I	L	Aluo	
-ynd				I	E	Yandruwandha	
-yne				I	L	Lang'e	
-yng				I	L	Yango	
-ynk				I	L	Naukan Yupik	
-ynl				I	L	Yangulam	
-ynn				I	E	Yana	
-yno				I	L	Yong	
-ynq				I	L	Yendang	
-yns				I	L	Yansi	
-ynu				I	E	Yahuna	
-yob				I	E	Yoba	
-yog				I	L	Yogad	
-yoi				I	L	Yonaguni	
-yok				I	L	Yokuts	
-yol				I	E	Yola	
-yom				I	L	Yombe	
-yon				I	L	Yongkom	
-yor	yor	yor	yo	I	L	Yoruba	
-yot				I	L	Yotti	
-yox				I	L	Yoron	
-yoy				I	L	Yoy	
-ypa				I	L	Phala	
-ypb				I	L	Labo Phowa	
-ypg				I	L	Phola	
-yph				I	L	Phupha	
-ypm				I	L	Phuma	
-ypn				I	L	Ani Phowa	
-ypo				I	L	Alo Phola	
-ypp				I	L	Phupa	
-ypz				I	L	Phuza	
-yra				I	L	Yerakai	
-yrb				I	L	Yareba	
-yre				I	L	Yaouré	
-yrk				I	L	Nenets	
-yrl				I	L	Nhengatu	
-yrm				I	L	Yirrk-Mel	
-yrn				I	L	Yerong	
-yro				I	L	Yaroamë	
-yrs				I	L	Yarsun	
-yrw				I	L	Yarawata	
-yry				I	L	Yarluyandi	
-ysc				I	E	Yassic	
-ysd				I	L	Samatao	
-ysg				I	L	Sonaga	
-ysl				I	L	Yugoslavian Sign Language	
-ysn				I	L	Sani	
-yso				I	L	Nisi (China)	
-ysp				I	L	Southern Lolopo	
-ysr				I	E	Sirenik Yupik	
-yss				I	L	Yessan-Mayo	
-ysy				I	L	Sanie	
-yta				I	L	Talu	
-ytl				I	L	Tanglang	
-ytp				I	L	Thopho	
-ytw				I	L	Yout Wam	
-yty				I	E	Yatay	
-yua				I	L	Yucateco	
-yub				I	E	Yugambal	
-yuc				I	L	Yuchi	
-yud				I	L	Judeo-Tripolitanian Arabic	
-yue				I	L	Yue Chinese	
-yuf				I	L	Havasupai-Walapai-Yavapai	
-yug				I	E	Yug	
-yui				I	L	Yurutí	
-yuj				I	L	Karkar-Yuri	
-yuk				I	E	Yuki	
-yul				I	L	Yulu	
-yum				I	L	Quechan	
-yun				I	L	Bena (Nigeria)	
-yup				I	L	Yukpa	
-yuq				I	L	Yuqui	
-yur				I	E	Yurok	
-yut				I	L	Yopno	
-yuw				I	L	Yau (Morobe Province)	
-yux				I	L	Southern Yukaghir	
-yuy				I	L	East Yugur	
-yuz				I	L	Yuracare	
-yva				I	L	Yawa	
-yvt				I	E	Yavitero	
-ywa				I	L	Kalou	
-ywg				I	L	Yinhawangka	
-ywl				I	L	Western Lalu	
-ywn				I	L	Yawanawa	
-ywq				I	L	Wuding-Luquan Yi	
-ywr				I	L	Yawuru	
-ywt				I	L	Xishanba Lalo	
-ywu				I	L	Wumeng Nasu	
-yww				I	E	Yawarawarga	
-yxa				I	E	Mayawali	
-yxg				I	E	Yagara	
-yxl				I	E	Yardliyawarra	
-yxm				I	E	Yinwum	
-yxu				I	E	Yuyu	
-yxy				I	E	Yabula Yabula	
-yyr				I	E	Yir Yoront	
-yyu				I	L	Yau (Sandaun Province)	
-yyz				I	L	Ayizi	
-yzg				I	L	E'ma Buyang	
-yzk				I	L	Zokhuo	
-zaa				I	L	Sierra de Juárez Zapotec	
-zab				I	L	Western Tlacolula Valley Zapotec	
-zac				I	L	Ocotlán Zapotec	
-zad				I	L	Cajonos Zapotec	
-zae				I	L	Yareni Zapotec	
-zaf				I	L	Ayoquesco Zapotec	
-zag				I	L	Zaghawa	
-zah				I	L	Zangwal	
-zai				I	L	Isthmus Zapotec	
-zaj				I	L	Zaramo	
-zak				I	L	Zanaki	
-zal				I	L	Zauzou	
-zam				I	L	Miahuatlán Zapotec	
-zao				I	L	Ozolotepec Zapotec	
-zap	zap	zap		M	L	Zapotec	
-zaq				I	L	Aloápam Zapotec	
-zar				I	L	Rincón Zapotec	
-zas				I	L	Santo Domingo Albarradas Zapotec	
-zat				I	L	Tabaa Zapotec	
-zau				I	L	Zangskari	
-zav				I	L	Yatzachi Zapotec	
-zaw				I	L	Mitla Zapotec	
-zax				I	L	Xadani Zapotec	
-zay				I	L	Zayse-Zergulla	
-zaz				I	L	Zari	
-zba				I	C	Balaibalan	
-zbc				I	L	Central Berawan	
-zbe				I	L	East Berawan	
-zbl	zbl	zbl		I	C	Blissymbols	
-zbt				I	L	Batui	
-zbw				I	L	West Berawan	
-zca				I	L	Coatecas Altas Zapotec	
-zch				I	L	Central Hongshuihe Zhuang	
-zdj				I	L	Ngazidja Comorian	
-zea				I	L	Zeeuws	
-zeg				I	L	Zenag	
-zeh				I	L	Eastern Hongshuihe Zhuang	
-zen	zen	zen		I	L	Zenaga	
-zga				I	L	Kinga	
-zgb				I	L	Guibei Zhuang	
-zgh	zgh	zgh		I	L	Standard Moroccan Tamazight	
-zgm				I	L	Minz Zhuang	
-zgn				I	L	Guibian Zhuang	
-zgr				I	L	Magori	
-zha	zha	zha	za	M	L	Zhuang	
-zhb				I	L	Zhaba	
-zhd				I	L	Dai Zhuang	
-zhi				I	L	Zhire	
-zhn				I	L	Nong Zhuang	
-zho	chi	zho	zh	M	L	Chinese	
-zhw				I	L	Zhoa	
-zia				I	L	Zia	
-zib				I	L	Zimbabwe Sign Language	
-zik				I	L	Zimakani	
-zil				I	L	Zialo	
-zim				I	L	Mesme	
-zin				I	L	Zinza		
-ziw				I	L	Zigula	
-ziz				I	L	Zizilivakan	
-zka				I	L	Kaimbulawa	
-zkb				I	E	Koibal	
-zkd				I	L	Kadu	
-zkg				I	A	Koguryo	
-zkh				I	H	Khorezmian	
-zkk				I	E	Karankawa	
-zkn				I	L	Kanan	
-zko				I	E	Kott	
-zkp				I	E	São Paulo Kaingáng	
-zkr				I	L	Zakhring	
-zkt				I	H	Kitan	
-zku				I	L	Kaurna	
-zkv				I	E	Krevinian	
-zkz				I	H	Khazar	
-zlj				I	L	Liujiang Zhuang	
-zlm				I	L	Malay (individual language)	
-zln				I	L	Lianshan Zhuang	
-zlq				I	L	Liuqian Zhuang	
-zma				I	L	Manda (Australia)	
-zmb				I	L	Zimba	
-zmc				I	E	Margany	
-zmd				I	L	Maridan	
-zme				I	E	Mangerr	
-zmf				I	L	Mfinu	
-zmg				I	L	Marti Ke	
-zmh				I	E	Makolkol	
-zmi				I	L	Negeri Sembilan Malay	
-zmj				I	L	Maridjabin	
-zmk				I	E	Mandandanyi	
-zml				I	E	Matngala	
-zmm				I	L	Marimanindji	
-zmn				I	L	Mbangwe	
-zmo				I	L	Molo	
-zmp				I	L	Mpuono	
-zmq				I	L	Mituku	
-zmr				I	L	Maranunggu	
-zms				I	L	Mbesa	
-zmt				I	L	Maringarr	
-zmu				I	E	Muruwari	
-zmv				I	E	Mbariman-Gudhinma	
-zmw				I	L	Mbo (Democratic Republic of Congo)	
-zmx				I	L	Bomitaba	
-zmy				I	L	Mariyedi	
-zmz				I	L	Mbandja	
-zna				I	L	Zan Gula	
-zne				I	L	Zande (individual language)	
-zng				I	L	Mang	
-znk				I	E	Manangkari	
-zns				I	L	Mangas	
-zoc				I	L	Copainalá Zoque	
-zoh				I	L	Chimalapa Zoque	
-zom				I	L	Zou	
-zoo				I	L	Asunción Mixtepec Zapotec	
-zoq				I	L	Tabasco Zoque	
-zor				I	L	Rayón Zoque	
-zos				I	L	Francisco León Zoque	
-zpa				I	L	Lachiguiri Zapotec	
-zpb				I	L	Yautepec Zapotec	
-zpc				I	L	Choapan Zapotec	
-zpd				I	L	Southeastern Ixtlán Zapotec	
-zpe				I	L	Petapa Zapotec	
-zpf				I	L	San Pedro Quiatoni Zapotec	
-zpg				I	L	Guevea De Humboldt Zapotec	
-zph				I	L	Totomachapan Zapotec	
-zpi				I	L	Santa María Quiegolani Zapotec	
-zpj				I	L	Quiavicuzas Zapotec	
-zpk				I	L	Tlacolulita Zapotec	
-zpl				I	L	Lachixío Zapotec	
-zpm				I	L	Mixtepec Zapotec	
-zpn				I	L	Santa Inés Yatzechi Zapotec	
-zpo				I	L	Amatlán Zapotec	
-zpp				I	L	El Alto Zapotec	
-zpq				I	L	Zoogocho Zapotec	
-zpr				I	L	Santiago Xanica Zapotec	
-zps				I	L	Coatlán Zapotec	
-zpt				I	L	San Vicente Coatlán Zapotec	
-zpu				I	L	Yalálag Zapotec	
-zpv				I	L	Chichicapan Zapotec	
-zpw				I	L	Zaniza Zapotec	
-zpx				I	L	San Baltazar Loxicha Zapotec	
-zpy				I	L	Mazaltepec Zapotec	
-zpz				I	L	Texmelucan Zapotec	
-zqe				I	L	Qiubei Zhuang	
-zra				I	A	Kara (Korea)	
-zrg				I	L	Mirgan	
-zrn				I	L	Zerenkel	
-zro				I	L	Záparo	
-zrp				I	E	Zarphatic	
-zrs				I	L	Mairasi	
-zsa				I	L	Sarasira	
-zsk				I	A	Kaskean	
-zsl				I	L	Zambian Sign Language	
-zsm				I	L	Standard Malay	
-zsr				I	L	Southern Rincon Zapotec	
-zsu				I	L	Sukurum	
-zte				I	L	Elotepec Zapotec	
-ztg				I	L	Xanaguía Zapotec	
-ztl				I	L	Lapaguía-Guivini Zapotec	
-ztm				I	L	San Agustín Mixtepec Zapotec	
-ztn				I	L	Santa Catarina Albarradas Zapotec	
-ztp				I	L	Loxicha Zapotec	
-ztq				I	L	Quioquitani-Quierí Zapotec	
-zts				I	L	Tilquiapan Zapotec	
-ztt				I	L	Tejalapan Zapotec	
-ztu				I	L	Güilá Zapotec	
-ztx				I	L	Zaachila Zapotec	
-zty				I	L	Yatee Zapotec	
-zua				I	L	Zeem	
-zuh				I	L	Tokano	
-zul	zul	zul	zu	I	L	Zulu	
-zum				I	L	Kumzari	
-zun	zun	zun		I	L	Zuni	
-zuy				I	L	Zumaya	
-zwa				I	L	Zay	
-zxx	zxx	zxx		S	S	No linguistic content	
-zyb				I	L	Yongbei Zhuang	
-zyg				I	L	Yang Zhuang	
-zyj				I	L	Youjiang Zhuang	
-zyn				I	L	Yongnan Zhuang	
-zyp				I	L	Zyphe Chin	
-zza	zza	zza		M	L	Zaza	
-zzj				I	L	Zuojiang Zhuang	
-
-M_Id	I_Id	I_Status
-aka	fat	A
-aka	twi	A
-ara	aao	A
-ara	abh	A
-ara	abv	A
-ara	acm	A
-ara	acq	A
-ara	acw	A
-ara	acx	A
-ara	acy	A
-ara	adf	A
-ara	aeb	A
-ara	aec	A
-ara	afb	A
-ara	ajp	A
-ara	apc	A
-ara	apd	A
-ara	arb	A
-ara	arq	A
-ara	ars	A
-ara	ary	A
-ara	arz	A
-ara	auz	A
-ara	avl	A
-ara	ayh	A
-ara	ayl	A
-ara	ayn	A
-ara	ayp	A
-ara	bbz	R
-ara	pga	A
-ara	shu	A
-ara	ssh	A
-aym	ayc	A
-aym	ayr	A
-aze	azb	A
-aze	azj	A
-bal	bcc	A
-bal	bgn	A
-bal	bgp	A
-bik	bcl	A
-bik	bhk	R
-bik	bln	A
-bik	bto	A
-bik	cts	A
-bik	fbl	A
-bik	lbl	A
-bik	rbl	A
-bik	ubl	A
-bnc	ebk	A
-bnc	lbk	A
-bnc	obk	A
-bnc	rbk	A
-bnc	vbk	A
-bua	bxm	A
-bua	bxr	A
-bua	bxu	A
-chm	mhr	A
-chm	mrj	A
-cre	crj	A
-cre	crk	A
-cre	crl	A
-cre	crm	A
-cre	csw	A
-cre	cwd	A
-del	umu	A
-del	unm	A
-den	scs	A
-den	xsl	A
-din	dib	A
-din	dik	A
-din	dip	A
-din	diw	A
-din	dks	A
-doi	dgo	A
-doi	xnr	A
-est	ekk	A
-est	vro	A
-fas	pes	A
-fas	prs	A
-ful	ffm	A
-ful	fub	A
-ful	fuc	A
-ful	fue	A
-ful	fuf	A
-ful	fuh	A
-ful	fui	A
-ful	fuq	A
-ful	fuv	A
-gba	bdt	A
-gba	gbp	A
-gba	gbq	A
-gba	gmm	A
-gba	gso	A
-gba	gya	A
-gba	mdo	R
-gon	esg	A
-gon	ggo	R
-gon	gno	A
-gon	wsg	A
-grb	gbo	A
-grb	gec	A
-grb	grj	A
-grb	grv	A
-grb	gry	A
-grn	gnw	A
-grn	gug	A
-grn	gui	A
-grn	gun	A
-grn	nhd	A
-hai	hax	A
-hai	hdn	A
-hbs	bos	A
-hbs	cnr	A
-hbs	hrv	A
-hbs	srp	A
-hmn	blu	R
-hmn	cqd	A
-hmn	hea	A
-hmn	hma	A
-hmn	hmc	A
-hmn	hmd	A
-hmn	hme	A
-hmn	hmg	A
-hmn	hmh	A
-hmn	hmi	A
-hmn	hmj	A
-hmn	hml	A
-hmn	hmm	A
-hmn	hmp	A
-hmn	hmq	A
-hmn	hms	A
-hmn	hmw	A
-hmn	hmy	A
-hmn	hmz	A
-hmn	hnj	A
-hmn	hrm	A
-hmn	huj	A
-hmn	mmr	A
-hmn	muq	A
-hmn	mww	A
-hmn	sfm	A
-iku	ike	A
-iku	ikt	A
-ipk	esi	A
-ipk	esk	A
-jrb	ajt	A
-jrb	aju	A
-jrb	jye	A
-jrb	yhd	A
-jrb	yud	A
-kau	kby	A
-kau	knc	A
-kau	krt	A
-kln	enb	A
-kln	eyo	A
-kln	niq	A
-kln	oki	A
-kln	pko	A
-kln	sgc	A
-kln	spy	A
-kln	tec	A
-kln	tuy	A
-kok	gom	A
-kok	knn	A
-kom	koi	A
-kom	kpv	A
-kon	kng	A
-kon	kwy	A
-kon	ldi	A
-kpe	gkp	A
-kpe	xpe	A
-kur	ckb	A
-kur	kmr	A
-kur	sdh	A
-lah	hnd	A
-lah	hno	A
-lah	jat	A
-lah	phr	A
-lah	pmu	R
-lah	pnb	A
-lah	skr	A
-lah	xhe	A
-lav	ltg	A
-lav	lvs	A
-luy	bxk	A
-luy	ida	A
-luy	lkb	A
-luy	lko	A
-luy	lks	A
-luy	lri	A
-luy	lrm	A
-luy	lsm	A
-luy	lto	A
-luy	lts	A
-luy	lwg	A
-luy	nle	A
-luy	nyd	A
-luy	rag	A
-man	emk	A
-man	mku	A
-man	mlq	A
-man	mnk	A
-man	msc	A
-man	mwk	A
-man	myq	R
-mlg	bhr	A
-mlg	bjq	R
-mlg	bmm	A
-mlg	bzc	A
-mlg	msh	A
-mlg	plt	A
-mlg	skg	A
-mlg	tdx	A
-mlg	tkg	A
-mlg	txy	A
-mlg	xmv	A
-mlg	xmw	A
-mon	khk	A
-mon	mvf	A
-msa	bjn	A
-msa	btj	A
-msa	bve	A
-msa	bvu	A
-msa	coa	A
-msa	dup	A
-msa	hji	A
-msa	ind	A
-msa	jak	A
-msa	jax	A
-msa	kvb	A
-msa	kvr	A
-msa	kxd	A
-msa	lce	A
-msa	lcf	A
-msa	liw	A
-msa	max	A
-msa	meo	A
-msa	mfa	A
-msa	mfb	A
-msa	min	A
-msa	mly	R
-msa	mqg	A
-msa	msi	A
-msa	mui	A
-msa	orn	A
-msa	ors	A
-msa	pel	A
-msa	pse	A
-msa	tmw	A
-msa	urk	A
-msa	vkk	A
-msa	vkt	A
-msa	xmm	A
-msa	zlm	A
-msa	zmi	A
-msa	zsm	A
-mwr	dhd	A
-mwr	mtr	A
-mwr	mve	A
-mwr	rwr	A
-mwr	swv	A
-mwr	wry	A
-nep	dty	A
-nep	npi	A
-nor	nno	A
-nor	nob	A
-oji	ciw	A
-oji	ojb	A
-oji	ojc	A
-oji	ojg	A
-oji	ojs	A
-oji	ojw	A
-oji	otw	A
-ori	ory	A
-ori	spv	A
-orm	gax	A
-orm	gaz	A
-orm	hae	A
-orm	orc	A
-pus	pbt	A
-pus	pbu	A
-pus	pst	A
-que	cqu	R
-que	qub	A
-que	qud	A
-que	quf	A
-que	qug	A
-que	quh	A
-que	quk	A
-que	qul	A
-que	qup	A
-que	qur	A
-que	qus	A
-que	quw	A
-que	qux	A
-que	quy	A
-que	quz	A
-que	qva	A
-que	qvc	A
-que	qve	A
-que	qvh	A
-que	qvi	A
-que	qvj	A
-que	qvl	A
-que	qvm	A
-que	qvn	A
-que	qvo	A
-que	qvp	A
-que	qvs	A
-que	qvw	A
-que	qvz	A
-que	qwa	A
-que	qwc	A
-que	qwh	A
-que	qws	A
-que	qxa	A
-que	qxc	A
-que	qxh	A
-que	qxl	A
-que	qxn	A
-que	qxo	A
-que	qxp	A
-que	qxr	A
-que	qxt	A
-que	qxu	A
-que	qxw	A
-raj	bgq	A
-raj	gda	A
-raj	gju	A
-raj	hoj	A
-raj	mup	A
-raj	wbr	A
-rom	rmc	A
-rom	rmf	A
-rom	rml	A
-rom	rmn	A
-rom	rmo	A
-rom	rmw	A
-rom	rmy	A
-sqi	aae	A
-sqi	aat	A
-sqi	aln	A
-sqi	als	A
-srd	sdc	A
-srd	sdn	A
-srd	src	A
-srd	sro	A
-swa	swc	A
-swa	swh	A
-syr	aii	A
-syr	cld	A
-tmh	taq	A
-tmh	thv	A
-tmh	thz	A
-tmh	ttq	A
-uzb	uzn	A
-uzb	uzs	A
-yid	ydd	A
-yid	yih	A
-zap	zaa	A
-zap	zab	A
-zap	zac	A
-zap	zad	A
-zap	zae	A
-zap	zaf	A
-zap	zai	A
-zap	zam	A
-zap	zao	A
-zap	zaq	A
-zap	zar	A
-zap	zas	A
-zap	zat	A
-zap	zav	A
-zap	zaw	A
-zap	zax	A
-zap	zca	A
-zap	zoo	A
-zap	zpa	A
-zap	zpb	A
-zap	zpc	A
-zap	zpd	A
-zap	zpe	A
-zap	zpf	A
-zap	zpg	A
-zap	zph	A
-zap	zpi	A
-zap	zpj	A
-zap	zpk	A
-zap	zpl	A
-zap	zpm	A
-zap	zpn	A
-zap	zpo	A
-zap	zpp	A
-zap	zpq	A
-zap	zpr	A
-zap	zps	A
-zap	zpt	A
-zap	zpu	A
-zap	zpv	A
-zap	zpw	A
-zap	zpx	A
-zap	zpy	A
-zap	zpz	A
-zap	zsr	A
-zap	ztc	R
-zap	zte	A
-zap	ztg	A
-zap	ztl	A
-zap	ztm	A
-zap	ztn	A
-zap	ztp	A
-zap	ztq	A
-zap	zts	A
-zap	ztt	A
-zap	ztu	A
-zap	ztx	A
-zap	zty	A
-zha	ccx	R
-zha	ccy	R
-zha	zch	A
-zha	zeh	A
-zha	zgb	A
-zha	zgm	A
-zha	zgn	A
-zha	zhd	A
-zha	zhn	A
-zha	zlj	A
-zha	zln	A
-zha	zlq	A
-zha	zqe	A
-zha	zyb	A
-zha	zyg	A
-zha	zyj	A
-zha	zyn	A
-zha	zzj	A
-zho	cdo	A
-zho	cjy	A
-zho	cmn	A
-zho	cnp	A
-zho	cpx	A
-zho	csp	A
-zho	czh	A
-zho	czo	A
-zho	gan	A
-zho	hak	A
-zho	hsn	A
-zho	lzh	A
-zho	mnp	A
-zho	nan	A
-zho	wuu	A
-zho	yue	A
-zza	diq	A
-zza	kiu	A
-
-NS_Id	Id	Part1	M_Id	Ref_Name
-cmn		zh_cn	zho	Chinese Mandarin (simplified)
-cmn		zh_tw	zho	Chinese Mandarin (traditional)
-kmr		ku_Latn	kur	Northern Kurdish
-ckb		ku_Arab	kur	Central Kurdish
-yue		zh_hk	zho	Cantonese
-eng-simple		simple	eng	Simplified English
-ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles
-jpn		jp	jpn	Japanese	# misspelled 2-letter code
-ces		cz	ces	Czech	# misspelled 2-letter code
-zhs		zh_cn	zho	Chinese (simplified)
-zht		zh_tw	zho	Chinese (traditional)
-gre		gr	ell	Greek
-cycl				Cyc Language
-cnr		me	cnr	Montenegrin
-mol		mo	ron	Moldavian
-toki				Toki Pona
-
-
-Id	Ref_Name	Ret_Reason	Change_To	Ret_Remedy	Effective
-fri	Western Frisian	C	fry		2007-02-01
-auv	Auvergnat	M	oci		2007-03-14
-gsc	Gascon	M	oci		2007-03-14
-lms	Limousin	M	oci		2007-03-14
-lnc	Languedocien	M	oci		2007-03-14
-prv	Provençal	M	oci		2007-03-14
-amd	Amapá Creole	N			2007-07-18
-bgh	Bogan	D	bbh		2007-07-18
-bnh	Banawá	M	jaa		2007-07-18
-bvs	Belgian Sign Language	S		Split into Langue des signes de Belgique Francophone [sfb], and Vlaamse Gebarentaal [vgt]	2007-07-18
-ccy	Southern Zhuang	S		Split into five languages: Nong Zhuang [zhn];  Yang Zhuang [zyg]; Yongnan Zhuang [zyn]; Zuojiang Zhuang [zzj]; Dai Zhuang [zhd].	2007-07-18
-cit	Chittagonian	S		Split into Rohingya [rhg], and Chittagonian (new identifier [ctg])	2007-07-18
-flm	Falam Chin	S		Split into Ranglong [rnl], and Falam Chin (new identifier [cfm]).	2007-07-18
-jap	Jaruára	M	jaa		2007-07-18
-kob	Kohoroxitari	M	xsu		2007-07-18
-mob	Moinba	S		Split into five languages: Chug [cvg]; Lish [lsh];  Kalaktang Monpa [kkf]; Tawang Monpa [twm]; Sartang [onp]	2007-07-18
-mzf	Aiku	S		Split into four languages: Ambrak [aag]; Yangum Dey [yde]; Yangum Gel [ygl]; Yangum Mon [ymo]	2007-07-18
-nhj	Tlalitzlipa Nahuatl	M	nhi		2007-07-18
-nhs	Southeastern Puebla Nahuatl	S		Split into Sierra Negra Nahuatl [nsu] and Southeastern Puebla Nahuatl [npl]	2007-07-18
-occ	Occidental	D	ile		2007-07-18
-tmx	Tomyang	M	ybi		2007-07-18
-tot	Patla-Chicontla Totonac	S		Split into Upper Necaxa Totonac [tku] and Tecpatlán Totonac [tcw]	2007-07-18
-xmi	Miarrã	N			2007-07-18
-yib	Yinglish	M	eng		2007-07-18
-ztc	Lachirioag Zapotec	M	zty		2007-07-18
-atf	Atuence	N			2007-08-10
-bqe	Navarro-Labourdin Basque	M	eus		2007-08-10
-bsz	Souletin Basque	M	eus		2007-08-10
-aex	Amerax	M	eng		2008-01-14
-ahe	Ahe	M	knx		2008-01-14
-aiz	Aari	S		Split into Aari [aiw] (new identifier) and Gayil [gyl]	2008-01-14
-akn	Amikoana	N			2008-01-14
-arf	Arafundi	S		Split into three languages: Andai [afd]; Nanubae [afk]; Tapei [afp]	2008-01-14
-azr	Adzera	S		Split into three languages: Adzera [adz] (new identifier), Sukurum [zsu] and Sarasira [zsa]	2008-01-14
-bcx	Pamona	S		Split into Pamona [pmf] (new identifier) and Batui [zbt]	2008-01-14
-bii	Bisu	S		Split into Bisu [bzi] (new identifier) and Laomian [lwm]	2008-01-14
-bke	Bengkulu	M	pse		2008-01-14
-blu	Hmong Njua	S		Split into four languages: Hmong Njua [hnj] (new identifier); Chuanqiandian Cluster Miao [cqd]; Horned Miao [hrm]; Small Flowery Miao [sfm]	2008-01-14
-boc	Bakung Kenyah	M	xkl		2008-01-14
-bsd	Sarawak Bisaya	M	bsb		2008-01-14
-bwv	Bahau River Kenyah	N			2008-01-14
-bxt	Buxinhua	D	bgk		2008-01-14
-byu	Buyang	S		Split into three languages: E'ma Buyang [yzg]; Langnian Buyang [yln]; Baha Buyang [yha]	2008-01-14
-ccx	Northern Zhuang	S		Split into ten languages: Guibian Zh [zgn]; Liujiang Zh [zlj]; Qiubei Zh [zqe]; Guibei Zh [zgb]; Youjiang Zh [zyj]; Central Hongshuihe Zh [zch]; Eastern Hongshuihe Zh [zeh]; Liuqian Zh [zlq]; Yongbei Zh [zyb]; Lianshan Zh [zln].	2008-01-14
-cru	Carútana	M	bwi		2008-01-14
-dat	Darang Deng	D	mhu		2008-01-14
-dyk	Land Dayak	N			2008-01-14
-eni	Enim	M	pse		2008-01-14
-fiz	Izere	S		Split into Ganang [gne] and Izere [izr] (new identifier)	2008-01-14
-gen	Geman Deng	D	mxj		2008-01-14
-ggh	Garreh-Ajuran	S		Split between Borana [gax] and Somali [som]	2008-01-14
-itu	Itutang	M	mzu		2008-01-14
-kds	Lahu Shi	S		Split into Kucong [lkc] and Lahu Shi [lhi] (new identifier)	2008-01-14
-knh	Kayan River Kenyah	N			2008-01-14
-krg	North Korowai	M	khe		2008-01-14
-krq	Krui	M	ljp		2008-01-14
-kxg	Katingan	M	nij		2008-01-14
-lmt	Lematang	M	mui		2008-01-14
-lnt	Lintang	M	pse		2008-01-14
-lod	Berawan	S		Split into three languages: West Berawan [zbw], Central Berawan [zbc], and East Berawan [zbe]	2008-01-14
-mbg	Northern Nambikuára	S		Split into six languages: Alapmunte [apv]; Lakondê [lkd]; Latundê [ltn]; Mamaindé [wmd]; Tawandê [xtw]; Yalakalore [xyl]	2008-01-14
-mdo	Southwest Gbaya	S		Split into Southwest Gbaya [gso] (new identifier) and Gbaya-Mbodomo [gmm]	2008-01-14
-mhv	Arakanese	S		Split into Marma [rmz] and Rakhine [rki]	2008-01-14
-miv	Mimi	M	amj		2008-01-14
-mqd	Madang	M	xkl		2008-01-14
-nky	Khiamniungan Naga	S		Split into three languages: Khiamniungan Naga [kix] (new identifier); Para Naga [pzn]; Makuri Naga [jmn]	2008-01-14
-nxj	Nyadu	M	byd		2008-01-14
-ogn	Ogan	M	pse		2008-01-14
-ork	Orokaiva	S		Split into Orokaiva [okv] (new identifier), Aeka [aez] and Hunjara-Kaina Ke [hkk]	2008-01-14
-paj	Ipeka-Tapuia	M	kpc		2008-01-14
-pec	Southern Pesisir	M	ljp		2008-01-14
-pen	Penesak	M	mui		2008-01-14
-plm	Palembang	M	mui		2008-01-14
-poj	Lower Pokomo	M	pkb		2008-01-14
-pun	Pubian	M	ljp		2008-01-14
-rae	Ranau	M	ljp		2008-01-14
-rjb	Rajbanshi	S		Split into Kamta (India) / Rangpuri (Bangladesh) [rkt] and Rajbanshi (Nepal) [rjs]	2008-01-14
-rws	Rawas	M	mui		2008-01-14
-sdd	Semendo	M	pse		2008-01-14
-sdi	Sindang Kelingi	M	liw		2008-01-14
-skl	Selako	M	knx		2008-01-14
-slb	Kahumamahon Saluan	M	loe		2008-01-14
-srj	Serawai	M	pse		2008-01-14
-suf	Tarpia	S		Split into Tarpia [tpf] (new identifier) and Kaptiau [kbi]	2008-01-14
-suh	Suba	S		Split into Suba [sxb] (Kenya) and Suba-Simbita [ssc] (Tanzania)	2008-01-14
-suu	Sungkai	M	ljp		2008-01-14
-szk	Sizaki	M	ikz		2008-01-14
-tle	Southern Marakwet	M	enb		2008-01-14
-tnj	Tanjong	M	kxn		2008-01-14
-ttx	Tutong 1	M	bsb		2008-01-14
-ubm	Upper Baram Kenyah	N			2008-01-14
-vky	Kayu Agung	M	kge		2008-01-14
-vmo	Muko-Muko	M	min		2008-01-14
-wre	Ware	N			2008-01-14
-xah	Kahayan	M	nij		2008-01-14
-xkm	Mahakam Kenyah	N			2008-01-14
-xuf	Kunfal	M	awn		2008-01-14
-yio	Dayao Yi	M	lpo		2008-01-14
-ymj	Muji Yi	S		Split into five languages: Muji, Southern [ymc], Mojii [ymi], Qila Muji [ymq], Northern Muji [ymx], and Muzi [ymz]	2008-01-14
-ypl	Pula Yi	S		Split into three languages: Phola [ypg], Phala [ypa] and Alo Phola [ypo]	2008-01-14
-ypw	Puwa Yi	S		Split into three languages: Hlepho Phowa [yhl], Labo Phowa [ypb], and Ani Phowa [ypn]	2008-01-14
-ywm	Wumeng Yi	M	ywu		2008-01-14
-yym	Yuanjiang-Mojiang Yi	S		Split into Southern Nisu [nsd] and Southwestern Nisu [nsv]	2008-01-14
-mly	Malay (individual language)	S		Split into four languages: Standard Malay [zsm], Haji [hji], Papuan Malay [pmy] and Malay (individual language) [zlm]	2008-02-18
-muw	Mundari	S		Split into Munda [unx] and Mundari [unr] (new identifier)	2008-02-18
-xst	Silt'e	S		Split into Wolane [wle] and Silt'e [stv] (new identifier)	2008-02-28
-ope	Old Persian	D	peo		2008-04-18
-scc	Serbian	D	srp		2008-06-28
-scr	Croatian	D	hrv		2008-06-28
-xsk	Sakan	D	kho		2008-10-23
-mol	Moldavian	M	ron		2008-11-03
-aay	Aariya	N			2009-01-16
-acc	Cubulco Achí	M	acr		2009-01-16
-cbm	Yepocapa Southwestern Cakchiquel	M	cak		2009-01-16
-chs	Chumash	S		Chumash is actually a family name, not a language name. Language family members already have code elements: Barbareño [boi], Cruzeño [crz], Ineseño [inz], Obispeño [obi], Purisimeño [puy], and Ventureño [veo]	2009-01-16
-ckc	Northern Cakchiquel	M	cak		2009-01-16
-ckd	South Central Cakchiquel	M	cak		2009-01-16
-cke	Eastern Cakchiquel	M	cak		2009-01-16
-ckf	Southern Cakchiquel	M	cak		2009-01-16
-cki	Santa María De Jesús Cakchiquel	M	cak		2009-01-16
-ckj	Santo Domingo Xenacoj Cakchiquel	M	cak		2009-01-16
-ckk	Acatenango Southwestern Cakchiquel	M	cak		2009-01-16
-ckw	Western Cakchiquel	M	cak		2009-01-16
-cnm	Ixtatán Chuj	M	cac		2009-01-16
-cti	Tila Chol	M	ctu		2009-01-16
-cun	Cunén Quiché	M	quc		2009-01-16
-eml	Emiliano-Romagnolo	S		Split into Emilian [egl] and Romagnol [rgn]	2009-01-16
-eur	Europanto	N			2009-01-16
-gmo	Gamo-Gofa-Dawro	S		Split into three languages: Gamo [gmv], Gofa [gof], and Dawro [dwr]	2009-01-16
-hsf	Southeastern Huastec	M	hus		2009-01-16
-hva	San Luís Potosí Huastec	M	hus		2009-01-16
-ixi	Nebaj Ixil	M	ixl		2009-01-16
-ixj	Chajul Ixil	M	ixl		2009-01-16
-jai	Western Jacalteco	M	jac		2009-01-16
-mms	Southern Mam	M	mam		2009-01-16
-mpf	Tajumulco Mam	M	mam		2009-01-16
-mtz	Tacanec	M	mam		2009-01-16
-mvc	Central Mam	M	mam		2009-01-16
-mvj	Todos Santos Cuchumatán Mam	M	mam		2009-01-16
-poa	Eastern Pokomam	M	poc		2009-01-16
-pob	Western Pokomchí	M	poh		2009-01-16
-pou	Southern Pokomam	M	poc		2009-01-16
-ppv	Papavô	N			2009-01-16
-quj	Joyabaj Quiché	M	quc		2009-01-16
-qut	West Central Quiché	M	quc		2009-01-16
-quu	Eastern Quiché	M	quc		2009-01-16
-qxi	San Andrés Quiché	M	quc		2009-01-16
-sic	Malinguat	S		Split into Keak [keh] and Sos Kundi [sdk]	2009-01-16
-stc	Santa Cruz	S		Split into Natügu [ntu] and Nalögo [nlz]	2009-01-16
-tlz	Toala'	M	rob		2009-01-16
-tzb	Bachajón Tzeltal	M	tzh		2009-01-16
-tzc	Chamula Tzotzil	M	tzo		2009-01-16
-tze	Chenalhó Tzotzil	M	tzo		2009-01-16
-tzs	San Andrés Larrainzar Tzotzil	M	tzo		2009-01-16
-tzt	Western Tzutujil	M	tzj		2009-01-16
-tzu	Huixtán Tzotzil	M	tzo		2009-01-16
-tzz	Zinacantán Tzotzil	M	tzo		2009-01-16
-vlr	Vatrata	S		Split into Vera'a [vra] and Lemerig [lrz]	2009-01-16
-yus	Chan Santa Cruz Maya	M	yua		2009-01-16
-nfg	Nyeng	M	nfd		2009-01-26
-nfk	Shakara	M	nfd		2009-01-26
-agp	Paranan	S		Split into Pahanan Agta [apf] and Paranan [prf] (new identifier)	2010-01-18
-bhk	Albay Bicolano	S		Split into Buhi'non Bikol [ubl]; Libon Bikol [lbl]; Miraya Bikol [rbl]; West Albay Bikol [fbl]	2010-01-18
-bkb	Finallig	S		Split into Eastern Bontok [ebk] and Southern Bontok [obk]	2010-01-18
-btb	Beti (Cameroon)	S		Beti is a group name, not an individual language name. Member languages are Bebele [beb], Bebil [bxp], Bulu [bum], Eton [eto], Ewondo [ewo], Fang [fan], and Mengisa [mct], all of which already have their own code elements.	2010-01-18
-cjr	Chorotega	M	mom		2010-01-18
-cmk	Chimakum	D	xch		2010-01-18
-drh	Darkhat	M	khk		2010-01-18
-drw	Darwazi	M	prs		2010-01-18
-gav	Gabutamon	M	dev		2010-01-18
-mof	Mohegan-Montauk-Narragansett	S		split into Mohegan-Pequot [xpq] and Narragansett [xnt]	2010-01-18
-mst	Cataelano Mandaya	M	mry		2010-01-18
-myt	Sangab Mandaya	M	mry		2010-01-18
-rmr	Caló	S		split into Caló [rmq] and Erromintxela [emx]	2010-01-18
-sgl	Sanglechi-Ishkashimi	S		split into Sanglechi [sgy] and Ishkashimi [isk]	2010-01-18
-sul	Surigaonon	S		Split into Tandaganon [tgn] and Surigaonon [sgd] (new identifier)	2010-01-18
-sum	Sumo-Mayangna	S		Split into Mayangna [yan] and Ulwa [ulw]	2010-01-18
-tnf	Tangshewi	M	prs		2010-01-18
-wgw	Wagawaga	S		Split into Yaleba [ylb] and Wagawaga [wgb] (new identifier)	2010-01-18
-ayx	Ayi (China)	D	nun		2011-05-18
-bjq	Southern Betsimisaraka Malagasy	S		split into Southern Betsimisaraka [bzc] and Tesaka Malagasy [tkg]	2011-05-18
-dha	Dhanwar (India)	N			2011-05-18
-dkl	Kolum So Dogon	S		split into Ampari Dogon [aqd] and Mombo Dogon [dmb]	2011-05-18
-mja	Mahei	N			2011-05-18
-nbf	Naxi	S		split into Naxi [nxq] and Narua [nru]	2011-05-18
-noo	Nootka	S		Split into [dtd] Ditidaht and [nuk] Nuu-chah-nulth	2011-05-18
-tie	Tingal	M	ras		2011-05-18
-tkk	Takpa	D	twm		2011-05-18
-baz	Tunen	S		Split Tunen [baz]  into Tunen [tvu] and Nyokon [nvo]	2012-02-03
-bjd	Bandjigali	M	drl		2012-02-03
-ccq	Chaungtha	M	rki		2012-02-03
-cka	Khumi Awa Chin	M	cmr		2012-02-03
-dap	Nisi (India)	S		Split into Nyishi [njz] and Tagin [tgj]	2012-02-03
-dwl	Walo Kumbe Dogon	S		Split into Dogon, Bankan Tey (Walo) [dbw]  and Dogon, Ben Tey (Beni) [dbt]	2012-02-03
-elp	Elpaputih	N			2012-02-03
-gbc	Garawa	S		Split into Garrwa [wrk] and Wanyi [wny]	2012-02-03
-gio	Gelao	S		split into Qau [gqu] and A'ou [aou] with some going to Green Gelao [gig], some to Red Gelao [gir], and some to White Gelao [giw]	2012-02-03
-hrr	Horuru	M	jal		2012-02-03
-ibi	Ibilo	M	opa		2012-02-03
-jar	Jarawa (Nigeria)	S		split into Gwak [jgk] and Bankal [jjr]	2012-02-03
-kdv	Kado	S		split into Kadu [zkd] and Kanan [zkn]	2012-02-03
-kgh	Upper Tanudan Kalinga	M	kml		2012-02-03
-kpp	Paku Karen	S		Split into Paku Karen [jkp] and Mobwa Karen [jkm]	2012-02-03
-kzh	Kenuzi-Dongola	S		Split into Andaandi (Dongolawi) [dgl] and Kenzi (Mattoki) [xnz]	2012-02-03
-lcq	Luhu	M	ppr		2012-02-03
-mgx	Omati	S		Split into Barikewa [jbk] and Mouwase [jmw]	2012-02-03
-nln	Durango Nahuatl	S		Split into Eastern Durango Nahuatl [azd] and Western Durango Nahuatl [azn]	2012-02-03
-pbz	Palu	N			2012-02-03
-pgy	Pongyong	N			2012-02-03
-sca	Sansu	M	hle		2012-02-03
-tlw	South Wemale	M	weo		2012-02-03
-unp	Worora	S		Split into Worrorra [wro] and Unggumi [xgu].	2012-02-03
-wiw	Wirangu	S		Split into Wirangu [wgu] and Nauo [nwo]	2012-02-03
-ybd	Yangbye	M	rki		2012-02-03
-yen	Yendang	S		Split into Yendang [ynq] and Yotti [yot]	2012-02-03
-yma	Yamphe	M	lrr		2012-02-03
-daf	Dan	S		Split into Dan [dnj] and Kla-Dan [lda]	2013-01-23
-djl	Djiwarli	S		Split into Djiwarli [dze] and Thiin [iin]	2013-01-23
-ggr	Aghu Tharnggalu	S		Split into Aghu-Tharnggala [gtu], Gugu-Mini [ggm], and Ikarranggal [ikr]	2013-01-23
-ilw	Talur	M	gal		2013-01-23
-izi	Izi-Ezaa-Ikwo-Mgbo	S		Split into Izii [izz], Ezaa [eza], Ikwo [iqw], Mgbolizhia [gmz]	2013-01-23
-meg	Mea	M	cir		2013-01-23
-mld	Malakhel	N			2013-01-23
-mnt	Maykulan	S		Split into Mayi-Kulan [xyk], Mayi-Thakurti [xyt], Mayi-Yapi [xyj], and Wunumara [wnn]	2013-01-23
-mwd	Mudbura	S		Split into Karranga [xrq] and Mudburra [dmw]	2013-01-23
-myq	Forest Maninka	N			2013-01-23
-nbx	Ngura	S		Split into Eastern Karnic [ekc], Garlali [gll], Punthamara [xpt], Wangkumara [xwk], and Badjiri [jbi]	2013-01-23
-nlr	Ngarla	S		Split into Ngarla [nrk] and Yinhawangka [ywg]	2013-01-23
-pcr	Panang	M	adx		2013-01-23
-ppr	Piru	M	lcq		2013-01-23
-tgg	Tangga	S		Split into Fanamaket [bjp], Niwer Mil [hrc], and Warwar Feni [hrw]	2013-01-23
-wit	Wintu	S		Split into Wintu [wnw], Nomlaki [nol], and Patwin [pwi]	2013-01-23
-xia	Xiandao	M	acn		2013-01-23
-yiy	Yir Yoront	S		Split into Yir Yoront [yyr] and Yirrk-Mel [yrm]	2013-01-23
-yos	Yos	M	zom		2013-01-23
-emo	Emok	N			2014-02-03
-ggm	Gugu Mini	N			2014-02-03
-leg	Lengua	S		Split into Enlhet [enl] and Enxet [enx]	2014-02-03
-lmm	Lamam	M	rmx		2014-02-03
-mhh	Maskoy Pidgin	N			2014-02-03
-puz	Purum Naga	M	pub		2014-02-03
-sap	Sanapaná	S		Split into Sanapaná [spn] and Angaité [aqt]	2014-02-03
-yuu	Yugh	M	yug		2014-02-03
-aam	Aramanik	M	aas		2015-01-12
-adp	Adap	M	dzo		2015-01-12
-aue	ǂKxʼauǁʼein	D	ktz		2015-01-12
-bmy	Bemba (Democratic Republic of Congo)	N			2015-01-12
-bxx	Borna (Democratic Republic of Congo)	N			2015-01-12
-byy	Buya	N			2015-01-12
-dzd	Daza	N			2015-01-12
-gfx	Mangetti Dune ǃXung	M	vaj		2015-01-12
-gti	Gbati-ri	M	nyc		2015-01-12
-ime	Imeraguen	N			2015-01-12
-kbf	Kakauhua	N			2015-01-12
-koj	Sara Dunjo	M	kwv		2015-01-12
-kwq	Kwak	M	yam		2015-01-12
-kxe	Kakihum	M	tvd		2015-01-12
-lii	Lingkhim	M	raq		2015-01-12
-mwj	Maligo	M	vaj		2015-01-12
-nnx	Ngong	M	ngv		2015-01-12
-oun	ǃOǃung	M	vaj		2015-01-12
-pmu	Mirpur Panjabi	M	phr		2015-01-12
-sgo	Songa	N			2015-01-12
-thx	The	D	oyb		2015-01-12
-tsf	Southwestern Tamang	M	taj		2015-01-12
-uok	Uokha	M	ema		2015-01-12
-xsj	Subi	D	suj		2015-01-12
-yds	Yiddish Sign Language	N			2015-01-12
-ymt	Mator-Taygi-Karagas	D	ymt		2015-01-12
-ynh	Yangho	N			2015-01-12
-bgm	Baga Mboteni	D	bcg		2016-01-15
-btl	Bhatola	N			2016-01-15
-cbe	Chipiajes	N			2016-01-15
-cbh	Cagua	N			2016-01-15
-coy	Coyaima	M	pij		2016-01-15
-cqu	Chilean Quechua	M	quh		2016-01-15
-cum	Cumeral	N			2016-01-15
-duj	Dhuwal	S		split into [dwu] Dhuwal and [dwy] Dhuwaya	2016-01-15
-ggn	Eastern Gurung	M	gvr		2016-01-15
-ggo	Southern Gondi	S		split into [esg] Aheri Gondi and [wsg] Adilabad Gondi	2016-01-15
-guv	Gey	M	guv		2016-01-15
-iap	Iapama	N			2016-01-15
-ill	Iranun	S		Split into Iranun (Philippines) [ilp] and Iranun (Malaysia) [ilm]	2016-01-15
-kgc	Kasseng	D	tdf		2016-01-15
-kox	Coxima	N			2016-01-15
-ktr	Kota Marudu Tinagas	M	dtp		2016-01-15
-kvs	Kunggara	D	gdj		2016-01-15
-kzj	Coastal Kadazan	M	dtp		2016-01-15
-kzt	Tambunan Dusun	M	dtp		2016-01-15
-nad	Nijadali	D	xny		2016-01-15
-nts	Natagaimas	M	pij		2016-01-15
-ome	Omejes	N			2016-01-15
-pmc	Palumata	D	huw		2016-01-15
-pod	Ponares	N			2016-01-15
-ppa	Pao	M	bfy		2016-01-15
-pry	Pray 3	D	prt		2016-01-15
-rna	Runa	N			2016-01-15
-svr	Savara	N			2016-01-15
-tdu	Tempasuk Dusun	M	dtp		2016-01-15
-thc	Tai Hang Tong	M	tpo		2016-01-15
-tid	Tidong	S		Split into Northern Tidung [ntd] and Southern Tidung [itd]	2016-01-15
-tmp	Tai Mène	M	tyj		2016-01-15
-tne	Tinoc Kallahan	M	kak		2016-01-15
-toe	Tomedes	N			2016-01-15
-xba	Kamba (Brazil)	D	cax		2016-01-15
-xbx	Kabixí	N			2016-01-15
-xip	Xipináwa	N			2016-01-15
-xkh	Karahawyana	D	waw		2016-01-15
-yri	Yarí	N			2016-01-15
-jeg	Jeng	M	oyb		2017-01-31
-kgd	Kataang	S		Split into [ncq] Northern Katang and [sct] Southern Katang	2017-01-31
-krm	Krim	M	bmf		2017-01-31
-prb	Lua'	N			2017-01-31
-puk	Pu Ko	N			2017-01-31
-rie	Rien	N			2017-01-31
-rsi	Rennellese Sign Language	N			2017-01-31
-skk	Sok	M	oyb		2017-01-31
-snh	Shinabo	N			2017-01-31
-lsg	Lyons Sign Language	N			2018-01-23
-mwx	Mediak	N			2018-01-23
-mwy	Mosiro	N			2018-01-23
-ncp	Ndaktup	M	kdz		2018-01-23
-ais	Nataoran Amis	S		Split by part going to Amis [ami] and creating Sakizaya [szy] with the remaining part	2019-01-25
-asd	Asas	M	snz		2019-01-25
-dit	Dirari	M	dif		2019-01-25
-dud	Hun-Saare	S		Split into ut-Hun [uth] and us-Saare [uss]	2019-01-25
-lba	Lui	N			2019-01-25
-llo	Khlor	D	ngt		2019-01-25
-myd	Maramba	M	aog		2019-01-25
-myi	Mina (India)	N			2019-01-25
-nns	Ningye	M	nbr		2019-01-25
-aoh	Arma	N			2020-01-23
-ayy	Tayabas Ayta	N			2020-01-23
-bbz	Babalia Creole Arabic	N			2020-01-23
-bpb	Barbacoas	N			2020-01-23
-cca	Cauca	N			2020-01-23
-cdg	Chamari	N			2020-01-23
-dgu	Degaru	N			2020-01-23
-drr	Dororo	M	kzk		2020-01-23
-ekc	Eastern Karnic	N			2020-01-23
-gli	Guliguli	M	kzk		2020-01-23
-kjf	Khalaj	N			2020-01-23
-kxl	Nepali Kurux	M	kru		2020-01-23
-kxu	Kui (India)	S		Split into [dwk] Dawik Kui and [uki] Kui (India)	2020-01-23
-lmz	Lumbee	N			2020-01-23
-nxu	Narau	M	bpp		2020-01-23
-plp	Palpa	N			2020-01-23
-sdm	Semandang	S		Split into Semandang [sdq], Beginci [ebc] and Gerai [gef]	2020-01-23
-tbb	Tapeba	N			2020-01-23
-xrq	Karranga	M	dmw		2020-01-23
-xtz	Tasmanian	S		Split into [xpv] Northern Tasman,  [xph] North Midlands Tasman, [xpb] Northeastern Tasman, [xpd] Oyster Bay Tasmanian, [xpf] Southeast Tasma, [xpx] Southwestern Tasman, [xpw] Northwestern Tasman., [xpl] Port Sorell Tasman. and [xpz] Bruny Island Tasman.	2020-01-23
-zir	Ziriya	D	scv		2020-01-23
-
-C_Id	Part1	Ref_name
-afa		Afro-Asiatic languages
-alg		Algonquian languages
-apa		Apache languages
-art		artificial languages
-ath		Athapascan languages
-aus		Australian languages
-bad		Banda languages
-bai		Bamileke languages
-bat		Baltic languages
-ber		Berber languages
-bih	bh	Bihari languages
-bnt		Bantu languages
-btk		Batak languages
-cai		Central American Indian languages
-cau		Caucasian languages
-cel		Celtic languages
-cmc		Chamic languages
-cpe		creoles and pidgins, English-based
-cpf		creoles and pidgins, French-based
-cpp		creoles and pidgins, Portuguese-based
-crp		creoles and pidgins
-cus		Cushitic languages
-day		Land Dayak languages
-dra		Dravidian languages
-fiu		Finno-Ugrian languages
-gem		Germanic languages
-ijo		Ijo languages
-inc		Indic languages
-ine		Indo-European languages
-ira		Iranian languages
-iro		Iroquoian languages
-kar		Karen languages
-khi		Khoisan languages
-kro		Kru languages
-map		Austronesian languages
-mkh		Mon–Khmer languages
-mno		Manobo languages
-mun		Munda languages
-myn		Mayan languages
-nah		Nahuatl languages
-nai		North American Indian languages
-nic		Niger-Kordofanian languages
-nub		Nubian languages
-oto		Otomian languages
-paa		Papuan languages
-phi		Philippine languages
-pra		Prakrit languages
-roa		Romance languages
-sai		South American Indian languages
-sal		Salishan languages
-sem		Semitic languages
-sgn		sign languages
-sio		Siouan languages
-sit		Sino-Tibetan languages
-sla		Slavic languages
-smi		Sami languages
-son		Songhai languages
-ssa		Nilo-Saharan languages
-tai		Tai languages
-tup		Tupi languages
-tut		Altaic languages
-wak		Wakashan languages
-wen		Sorbian languages
-ypk		Yupik languages
-znd		Zande languages
-
-
-URI	code	Label (English)	Label (French)
-http://id.loc.gov/vocabulary/iso639-5/aav	aav	Austro-Asiatic languages	austro-asiatiques, langues
-http://id.loc.gov/vocabulary/iso639-5/afa	afa	Afro-Asiatic languages	afro-asiatiques, langues
-http://id.loc.gov/vocabulary/iso639-5/alg	alg	Algonquian languages	algonquines, langues
-http://id.loc.gov/vocabulary/iso639-5/alv	alv	Atlantic-Congo languages	atlantique-congo, langues
-http://id.loc.gov/vocabulary/iso639-5/apa	apa	Apache languages	apaches, langues
-http://id.loc.gov/vocabulary/iso639-5/aqa	aqa	Alacalufan languages	alacalufanes, langues
-http://id.loc.gov/vocabulary/iso639-5/aql	aql	Algic languages	algiques, langues
-http://id.loc.gov/vocabulary/iso639-5/art	art	Artificial languages	artificielles, langues
-http://id.loc.gov/vocabulary/iso639-5/ath	ath	Athapascan languages	athapascanes, langues
-http://id.loc.gov/vocabulary/iso639-5/auf	auf	Arauan languages	arauanes, langues
-http://id.loc.gov/vocabulary/iso639-5/aus	aus	Australian languages	australiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/awd	awd	Arawakan languages	arawak, langues
-http://id.loc.gov/vocabulary/iso639-5/azc	azc	Uto-Aztecan languages	uto-aztèques, langues
-http://id.loc.gov/vocabulary/iso639-5/bad	bad	Banda languages	banda, langues
-http://id.loc.gov/vocabulary/iso639-5/bai	bai	Bamileke languages	bamiléké, langues
-http://id.loc.gov/vocabulary/iso639-5/bat	bat	Baltic languages	baltes, langues
-http://id.loc.gov/vocabulary/iso639-5/ber	ber	Berber languages	berbères, langues
-http://id.loc.gov/vocabulary/iso639-5/bih	bih	Bihari languages	langues biharis
-http://id.loc.gov/vocabulary/iso639-5/bnt	bnt	Bantu languages	bantou, langues
-http://id.loc.gov/vocabulary/iso639-5/btk	btk	Batak languages	batak, langues
-http://id.loc.gov/vocabulary/iso639-5/cai	cai	Central American Indian languages	amérindiennes de l'Amérique centrale, langues
-http://id.loc.gov/vocabulary/iso639-5/cau	cau	Caucasian languages	caucasiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/cba	cba	Chibchan languages	chibcha, langues
-http://id.loc.gov/vocabulary/iso639-5/ccn	ccn	North Caucasian languages	caucasiennes du Nord, langues
-http://id.loc.gov/vocabulary/iso639-5/ccs	ccs	South Caucasian languages	caucasiennes du Sud, langues
-http://id.loc.gov/vocabulary/iso639-5/cdc	cdc	Chadic languages	tchadiques, langues
-http://id.loc.gov/vocabulary/iso639-5/cdd	cdd	Caddoan languages	caddoanes, langues
-http://id.loc.gov/vocabulary/iso639-5/cel	cel	Celtic languages	celtiques, langues; celtes, langues
-http://id.loc.gov/vocabulary/iso639-5/cmc	cmc	Chamic languages	chames, langues
-http://id.loc.gov/vocabulary/iso639-5/cpe	cpe	Creoles and pidgins, English‑based	créoles et pidgins basés sur l'anglais
-http://id.loc.gov/vocabulary/iso639-5/cpf	cpf	Creoles and pidgins, French‑based	créoles et pidgins basés sur le français
-http://id.loc.gov/vocabulary/iso639-5/cpp	cpp	Creoles and pidgins, Portuguese-based	créoles et pidgins basés sur le portugais
-http://id.loc.gov/vocabulary/iso639-5/crp	crp	Creoles and pidgins	créoles et pidgins
-http://id.loc.gov/vocabulary/iso639-5/csu	csu	Central Sudanic languages	soudaniques centrales, langues
-http://id.loc.gov/vocabulary/iso639-5/cus	cus	Cushitic languages	couchitiques, langues
-http://id.loc.gov/vocabulary/iso639-5/day	day	Land Dayak languages	dayak, langues
-http://id.loc.gov/vocabulary/iso639-5/dmn	dmn	Mande languages	mandé, langues
-http://id.loc.gov/vocabulary/iso639-5/dra	dra	Dravidian languages	dravidiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/egx	egx	Egyptian languages	égyptiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/esx	esx	Eskimo-Aleut languages	esquimaudes-aléoutiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/euq	euq	Basque (family)	basque (famille)
-http://id.loc.gov/vocabulary/iso639-5/fiu	fiu	Finno-Ugrian languages	finno-ougriennes, langues
-http://id.loc.gov/vocabulary/iso639-5/fox	fox	Formosan languages	formosanes, langues
-http://id.loc.gov/vocabulary/iso639-5/gem	gem	Germanic languages	germaniques, langues
-http://id.loc.gov/vocabulary/iso639-5/gme	gme	East Germanic languages	germaniques orientales, langues
-http://id.loc.gov/vocabulary/iso639-5/gmq	gmq	North Germanic languages	germaniques septentrionales, langues
-http://id.loc.gov/vocabulary/iso639-5/gmw	gmw	West Germanic languages	germaniques occidentales, langues
-http://id.loc.gov/vocabulary/iso639-5/grk	grk	Greek languages	grecques, langues
-http://id.loc.gov/vocabulary/iso639-5/hmx	hmx	Hmong-Mien languages	hmong-mien, langues
-http://id.loc.gov/vocabulary/iso639-5/hok	hok	Hokan languages	hoka, langues
-http://id.loc.gov/vocabulary/iso639-5/hyx	hyx	Armenian (family)	arménien (famille)
-http://id.loc.gov/vocabulary/iso639-5/iir	iir	Indo-Iranian languages	indo-iraniennes, langues
-http://id.loc.gov/vocabulary/iso639-5/ijo	ijo	Ijo languages	ijo, langues
-http://id.loc.gov/vocabulary/iso639-5/inc	inc	Indic languages	indo-aryennes, langues
-http://id.loc.gov/vocabulary/iso639-5/ine	ine	Indo-European languages	indo-européennes, langues
-http://id.loc.gov/vocabulary/iso639-5/ira	ira	Iranian languages	iraniennes, langues
-http://id.loc.gov/vocabulary/iso639-5/iro	iro	Iroquoian languages	iroquoises, langues
-http://id.loc.gov/vocabulary/iso639-5/itc	itc	Italic languages	italiques, langues
-http://id.loc.gov/vocabulary/iso639-5/jpx	jpx	Japanese (family)	japonais (famille)
-http://id.loc.gov/vocabulary/iso639-5/kar	kar	Karen languages	karen, langues
-http://id.loc.gov/vocabulary/iso639-5/kdo	kdo	Kordofanian languages	kordofaniennes, langues
-http://id.loc.gov/vocabulary/iso639-5/khi	khi	Khoisan languages	khoïsan, langues
-http://id.loc.gov/vocabulary/iso639-5/kro	kro	Kru languages	krou, langues
-http://id.loc.gov/vocabulary/iso639-5/map	map	Austronesian languages	austronésiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/mkh	mkh	Mon-Khmer languages	môn-khmer, langues
-http://id.loc.gov/vocabulary/iso639-5/mno	mno	Manobo languages	manobo, langues
-http://id.loc.gov/vocabulary/iso639-5/mun	mun	Munda languages	mounda, langues
-http://id.loc.gov/vocabulary/iso639-5/myn	myn	Mayan languages	maya, langues
-http://id.loc.gov/vocabulary/iso639-5/nah	nah	Nahuatl languages	nahuatl, langues
-http://id.loc.gov/vocabulary/iso639-5/nai	nai	North American Indian languages	nord-amérindiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/ngf	ngf	Trans-New Guinea languages	trans-nouvelle-guinée, langues
-http://id.loc.gov/vocabulary/iso639-5/nic	nic	Niger-Kordofanian languages	nigéro-kordofaniennes, langues
-http://id.loc.gov/vocabulary/iso639-5/nub	nub	Nubian languages	nubiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/omq	omq	Oto-Manguean languages	otomangue, langues
-http://id.loc.gov/vocabulary/iso639-5/omv	omv	Omotic languages	omotiques, langues
-http://id.loc.gov/vocabulary/iso639-5/oto	oto	Otomian languages	otomi, langues
-http://id.loc.gov/vocabulary/iso639-5/paa	paa	Papuan languages	papoues, langues
-http://id.loc.gov/vocabulary/iso639-5/phi	phi	Philippine languages	philippines, langues
-http://id.loc.gov/vocabulary/iso639-5/plf	plf	Central Malayo-Polynesian languages	malayo-polynésiennes centrales, langues
-http://id.loc.gov/vocabulary/iso639-5/poz	poz	Malayo-Polynesian languages	malayo-polynésiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/pqe	pqe	Eastern Malayo-Polynesian languages	malayo-polynésiennes orientales, langues
-http://id.loc.gov/vocabulary/iso639-5/pqw	pqw	Western Malayo-Polynesian languages	malayo-polynésiennes occidentales, langues
-http://id.loc.gov/vocabulary/iso639-5/pra	pra	Prakrit languages	prâkrit, langues
-http://id.loc.gov/vocabulary/iso639-5/qwe	qwe	Quechuan (family)	quechua (famille)
-http://id.loc.gov/vocabulary/iso639-5/roa	roa	Romance languages	romanes, langues
-http://id.loc.gov/vocabulary/iso639-5/sai	sai	South American Indian languages	sud-amérindiennes, langues
-http://id.loc.gov/vocabulary/iso639-5/sal	sal	Salishan languages	salishennes, langues
-http://id.loc.gov/vocabulary/iso639-5/sdv	sdv	Eastern Sudanic languages	soudaniques orientales, langues
-http://id.loc.gov/vocabulary/iso639-5/sem	sem	Semitic languages	sémitiques, langues
-http://id.loc.gov/vocabulary/iso639-5/sgn	sgn	sign languages	langues des signes
-http://id.loc.gov/vocabulary/iso639-5/sio	sio	Siouan languages	sioux, langues
-http://id.loc.gov/vocabulary/iso639-5/sit	sit	Sino-Tibetan languages	sino-tibétaines, langues
-http://id.loc.gov/vocabulary/iso639-5/sla	sla	Slavic languages	slaves, langues
-http://id.loc.gov/vocabulary/iso639-5/smi	smi	Sami languages	sames, langues
-http://id.loc.gov/vocabulary/iso639-5/son	son	Songhai languages	songhai, langues
-http://id.loc.gov/vocabulary/iso639-5/sqj	sqj	Albanian languages	albanaises, langues
-http://id.loc.gov/vocabulary/iso639-5/ssa	ssa	Nilo-Saharan languages	nilo-sahariennes, langues
-http://id.loc.gov/vocabulary/iso639-5/syd	syd	Samoyedic languages	samoyèdes, langues
-http://id.loc.gov/vocabulary/iso639-5/tai	tai	Tai languages	tai, langues
-http://id.loc.gov/vocabulary/iso639-5/tbq	tbq	Tibeto-Burman languages	tibéto-birmanes, langues
-http://id.loc.gov/vocabulary/iso639-5/trk	trk	Turkic languages	turques, langues
-http://id.loc.gov/vocabulary/iso639-5/tup	tup	Tupi languages	tupi, langues
-http://id.loc.gov/vocabulary/iso639-5/tut	tut	Altaic languages	altaïques, langues
-http://id.loc.gov/vocabulary/iso639-5/tuw	tuw	Tungus languages	toungouses, langues
-http://id.loc.gov/vocabulary/iso639-5/urj	urj	Uralic languages	ouraliennes, langues
-http://id.loc.gov/vocabulary/iso639-5/wak	wak	Wakashan languages	wakashanes, langues
-http://id.loc.gov/vocabulary/iso639-5/wen	wen	Sorbian languages	sorabes, langues
-http://id.loc.gov/vocabulary/iso639-5/xgn	xgn	Mongolian languages	mongoles, langues
-http://id.loc.gov/vocabulary/iso639-5/xnd	xnd	Na-Dene languages	na-déné, langues
-http://id.loc.gov/vocabulary/iso639-5/ypk	ypk	Yupik languages	yupik, langues
-http://id.loc.gov/vocabulary/iso639-5/zhx	zhx	Chinese (family)	chinois (famille)
-http://id.loc.gov/vocabulary/iso639-5/zle	zle	East Slavic languages	slaves orientales, langues
-http://id.loc.gov/vocabulary/iso639-5/zls	zls	South Slavic languages	slaves méridionales, langues
-http://id.loc.gov/vocabulary/iso639-5/zlw	zlw	West Slavic languages	slaves occidentales, langues
-http://id.loc.gov/vocabulary/iso639-5/znd	znd	Zande languages	zandé, langues

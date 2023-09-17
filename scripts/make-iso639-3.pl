@@ -91,7 +91,8 @@ sub _read_retired_code_table{
 	next unless ($f[0]);
 	unless (exists $ThreeToThree{$f[0]}){
 	    $ThreeToName{$f[0]} = $f[1];
-	    $ThreeToThree{$f[0]} = $f[3] ? $f[3] : $f[0];
+	    $ThreeToThree{$f[0]} = $f[3] if ($f[3]);
+	    # $ThreeToThree{$f[0]} = $f[3] ? $f[3] : $f[0];
 	}
     }
 }
@@ -104,7 +105,7 @@ sub _read_macrolanguage_table{
 	last unless ($_);
 	my @f = split(/\t/);
 	next unless ($f[0]);
-	$ThreeToThree{$f[1]} = $f[1];
+	# $ThreeToThree{$f[1]} = $f[1];
 	$ThreeToMacro{$f[1]} = $f[0];
     }
 }
@@ -118,7 +119,7 @@ sub _read_collective_language_table{
 	my @f = split(/\t/);
 	next unless ($f[0]);
 	unless (exists $ThreeToThree{$f[0]}){
-	    $ThreeToThree{$f[0]} = $f[0];
+	    # $ThreeToThree{$f[0]} = $f[0];
 	    if ($f[1]){
 		$ThreeToTwo{$f[0]} = $f[1];
 		$TwoToThree{$f[1]} = $f[0];
@@ -144,7 +145,8 @@ sub _read_nonstandard_code_table{
 	my @f = split(/\t/);
 	next unless ($f[0]);
 	unless (exists $ThreeToThree{$f[0]}){
-	    $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
+	    # $ThreeToThree{$f[0]} = $f[1] ? $f[1] : $f[0];
+	    $ThreeToThree{$f[0]} = $f[1] if ($f[1]);
 	    if ($f[2]){
 		$ThreeToTwo{$f[0]}   = $f[2];
 	    }
@@ -160,7 +162,7 @@ sub _read_nonstandard_code_table{
 	    }
 	}
 	if ($f[2]){
-	    $TwoToThree{$f[2]} = $f[0] unless (exists $TwoToThree{$f[2]});
+	    $TwoToThree{$f[2]} = $f[1] ? $f[1] : $f[0] unless (exists $TwoToThree{$f[2]});
 	    if ($f[4]){
 		$TwoToName{$f[2]} = $f[4] unless (exists $TwoToName{$f[2]});
 	    }
@@ -176,7 +178,7 @@ sub _read_main_code_table{
 	my @f = split(/\t/);
 	next unless ($f[0]);
 	$ThreeToName{$f[0]} = $f[6];
-	$ThreeToThree{$f[0]} = $f[0];
+	# $ThreeToThree{$f[0]} = $f[0];
 	$NameToThree{lc($f[6])} = $f[0];
 	if ($f[3]){
 	    $ThreeToTwo{$f[0]}    = $f[3];

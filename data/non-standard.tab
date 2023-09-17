@@ -1,16 +1,14 @@
 NS_Id	Id	Part1	M_Id	Ref_Name
-cmn		zh_cn	zho	Chinese Mandarin (simplified)
-cmn		zh_tw	zho	Chinese Mandarin (traditional)
 kmr		ku_Latn	kur	Northern Kurdish
 ckb		ku_Arab	kur	Central Kurdish
-yue		zh_hk	zho	Cantonese
 eng-simple		simple	eng	Simplified English
-ze_zh		zh	zho	Chinese	# strange code from bilingual subtitles
+zho	zho	ze_zh	zho	Chinese	# strange code from bilingual subtitles
+eng	eng	ze_en	eng	English	# strange code from bilingual subtitles
 jpn		jp	jpn	Japanese	# misspelled 2-letter code
 ces		cz	ces	Czech	# misspelled 2-letter code
-zhs		zh_cn	zho	Chinese (simplified)
-zht		zh_tw	zho	Chinese (traditional)
-gre		gr	ell	Greek
+zhs	zho	zh_CN	zho	Chinese (simplified)
+zht	zho	zh_TW	zho	Chinese (traditional)
+gre	ell	gr	ell	Greek
 cycl				Cyc Language
 cnr		me	cnr	Montenegrin
 mol		mo	ron	Moldavian

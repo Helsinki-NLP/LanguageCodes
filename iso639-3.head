@@ -83,6 +83,7 @@ This converts all language codes given as LANGCODE to corresponding language nam
 
 our $TwoToThree   = {};
 our $ThreeToTwo   = {};
+our $TwoToTwo     = {};
 our $ThreeToThree = {};
 our $ThreeToMacro = {};
 our $NameToTwo    = {};

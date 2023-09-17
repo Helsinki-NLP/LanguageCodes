@@ -28,18 +28,9 @@ ISO-15924:
 		--email=tiedemann@cpan.org
 
 
-## Alt 1:
-## with plain data read on-the-fly
 ISO-639-3/lib/ISO/639/3.pm: iso639
 	mkdir -p ${dir $@}
 	cp $< $@
-
-## Alt 2:
-## with variables generated from plain data tables
-##
-# ISO-639-3/lib/ISO/639/3.pm: iso639-3.head iso639-3.data iso639-3.tail
-#	mkdir -p ${dir $@}
-#	cat $^ > $@
 
 ISO3_DATA_FILES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
 	data/iso-639-3_Code_Tables_20200130/iso-639-3-macrolanguages_20200130.tab \
@@ -50,6 +41,11 @@ ISO3_DATA_FILES = data/iso-639-3_Code_Tables_20200130/iso-639-3_20200130.tab \
 
 iso639-3.data: scripts/make-iso639-3.pl ${ISO3_DATA_FILES}
 	perl $< > $@
+
+iso639: iso639-3.head iso639-3.data iso639-3.tail
+	cat $^ > $@
+	chmod +x $@
+
 
 
 ISO-639-5/lib/ISO/639/5.pm: iso639-5.head iso639-5.data iso639-5.tail
@@ -74,8 +70,11 @@ iso15924.data: scripts/make-script-table.pl
 	perl $< > $@
 
 
-## NOTE: tables ond with newline! need to add them one-by-one
-iso639: iso639.in ${ISO639_TABLES}
+## Alterantive script:
+##
+## with plain data read on-the-fly
+## NOTE: tables with newline! need to add them one-by-one
+iso639-old: iso639.in ${ISO639_TABLES}
 	cat $<    > $@
 	@tr -d "\r" < $(word 2,$^) >> $@
 	@echo "" >> $@
@@ -159,3 +158,19 @@ test-m: iso639
 	@./iso639 -m -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
 	@paste tt1 tt2
 
+
+ttt:
+	@echo '${OPUSLANGS}' | tr ' ' "\n"  | grep . > tt1
+	@time ./iso639 -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@time ./iso639 -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@time ./iso639 -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@time ./iso639 -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt2
+	@paste tt1 tt2 > tt22
+	@echo ""
+	@time ./iso639-new -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt3
+	@time ./iso639-new -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt3
+	@time ./iso639-new -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt3
+	@time ./iso639-new -3 -k ${OPUSLANGS} | tr ' ' "\n"  > tt3
+	@echo ""
+	@paste tt1 tt3 > tt33
+	diff tt22 tt33

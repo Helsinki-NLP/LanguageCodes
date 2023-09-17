@@ -21,6 +21,8 @@ sub run{
 }
 
 
+
+
 =head1 SUBROUTINES
 
 =head2 $converted = convert_iso639( $type, $id )
@@ -30,13 +32,10 @@ Convert the language code or language name given in C<$id>. The C<$type> specifi
 =cut
 
 sub convert_iso639{
-    my $code = $_[1];
-    # my $code = lc($_[1]);
-    # $code=~s/[\-\_].*$//;
-    return get_iso639_1($code,$_[2])       if ($_[0] eq 'iso639-1');
-    return get_iso639_3($code,$_[2])       if ($_[0] eq 'iso639-3');
-    return get_macro_language($code,$_[2]) if ($_[0] eq 'macro');
-    return get_language_name($code);
+    return get_iso639_1($_[1],$_[2])       if ($_[0] eq 'iso639-1');
+    return get_iso639_3($_[1],$_[2])       if ($_[0] eq 'iso639-3');
+    return get_macro_language($_[1],$_[2]) if ($_[0] eq 'macro');
+    return get_language_name($_[1]);
 }
 
 
@@ -47,20 +46,20 @@ Return the ISO 639-1 code for a given language or three-letter code. Returns the
 =cut
 
 sub get_iso639_1{
-    return $_[0]               if (exists $TwoToName{$_[0]});
-    return $_[0]               if (exists $TwoToThree{$_[0]});
-    return $ThreeToTwo{$_[0]}  if (exists $ThreeToTwo{$_[0]});
+    return $$ThreeToTwo{$$TwoToThree{$_[0]}} if (exists $$TwoToThree{$_[0]});
+    return $$ThreeToTwo{$_[0]}               if (exists $$ThreeToTwo{$_[0]});
+    return $_[0]                             if (exists $$TwoToName{$_[0]});
     my $lc = lc($_[0]);
-    return $lc                 if (exists $TwoToName{$lc});
-    return $ThreeToTwo{$lc}    if (exists $ThreeToTwo{$lc});
-    return $NameToTwo{$lc}     if (exists $NameToTwo{$lc});
-    return $lc                 if (exists $TwoToThree{$lc});
+    return $$ThreeToTwo{$$TwoToThree{$lc}}   if (exists $$TwoToThree{$lc});    
+    return $$ThreeToTwo{$lc}                 if (exists $$ThreeToTwo{$lc});
+    return $$NameToTwo{$lc}                  if (exists $$NameToTwo{$lc});
+    return $lc                               if (exists $$TwoToName{$lc});
     
     ## TODO: is it OK to fallback to macro language in this conversion?
     ##       (should we add some regional code?)
-    if (exists $ThreeToMacro{$_[0]}){
-	return $ThreeToTwo{$ThreeToMacro{$_[0]}} 
-	if (exists $ThreeToTwo{$ThreeToMacro{$_[0]}});
+    if (exists $$ThreeToMacro{$_[0]}){
+	return $$ThreeToTwo{$$ThreeToMacro{$_[0]}} 
+	if (exists $$ThreeToTwo{$$ThreeToMacro{$_[0]}});
     }
     ## try without regional/script extension
     if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
@@ -78,14 +77,14 @@ Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx
 =cut
 
 sub get_iso639_3{
-    return $_[0]                    if (exists $ThreeToName{$_[0]});
-    return $TwoToThree{$_[0]}       if (exists $TwoToThree{$_[0]});
-    return $ThreeToThree{$_[0]}     if (exists $ThreeToThree{$_[0]});
+    return $$TwoToThree{$_[0]}      if (exists $$TwoToThree{$_[0]});
+    return $$ThreeToThree{$_[0]}    if (exists $$ThreeToThree{$_[0]});
+    return $_[0]                    if (exists $$ThreeToName{$_[0]});
     my $lc = lc($_[0]);
-    return $lc                      if (exists $ThreeToName{$lc});
-    return $TwoToThree{$lc}         if (exists $TwoToThree{$lc});
-    return $NameToThree{$lc}        if (exists $NameToThree{$lc});
-    return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
+    return $$TwoToThree{$lc}        if (exists $$TwoToThree{$lc});
+    return $$ThreeToThree{$lc}      if (exists $$ThreeToThree{$lc});
+    return $$NameToThree{$lc}       if (exists $$NameToThree{$lc});
+    return $lc                      if (exists $$ThreeToName{$lc});
 
     if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
 	return &get_iso639_3($1).$2 if ($_[1]);
@@ -119,7 +118,9 @@ sub get_language_name{
     return $$TwoToName{$_[0]}        if (exists $$TwoToName{$_[0]});
     return $$ThreeToName{$_[0]}      if (exists $$ThreeToName{$_[0]});
     return $_[0]                     if (exists $$NameToThree{$_[0]});
-    return &get_language_name($_[0]) if ($_[0]=~s/[\-\_].*$//);
+    if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
+	return &get_language_name($1);
+    }
     return &get_language_name(lc($_[0])) if ($_[0] ne lc($_[0]));
     return 'unknown';
 }

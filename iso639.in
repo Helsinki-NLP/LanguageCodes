@@ -170,14 +170,14 @@ Return the ISO 639-3 code for a given language or any ISO 639 code. Returns 'xxx
 =cut
 
 sub get_iso639_3{
-    return $_[0]                    if (exists $ThreeToName{$_[0]});
     return $TwoToThree{$_[0]}       if (exists $TwoToThree{$_[0]});
     return $ThreeToThree{$_[0]}     if (exists $ThreeToThree{$_[0]});
+    return $_[0]                    if (exists $ThreeToName{$_[0]});
     my $lc = lc($_[0]);
-    return $lc                      if (exists $ThreeToName{$lc});
     return $TwoToThree{$lc}         if (exists $TwoToThree{$lc});
-    return $NameToThree{$lc}        if (exists $NameToThree{$lc});
     return $ThreeToThree{$lc}       if (exists $ThreeToThree{$lc});
+    return $NameToThree{$lc}        if (exists $NameToThree{$lc});
+    return $lc                      if (exists $ThreeToName{$lc});
 
     if ($_[0]=~/^([^\-\_]+)([\-\_].*)$/){
 	return &get_iso639_3($1).$2 if ($_[1]);
@@ -335,7 +335,7 @@ sub _read_nonstandard_code_table{
 	    }
 	}
 	if ($f[2]){
-	    $TwoToThree{$f[2]} = $f[0] unless (exists $TwoToThree{$f[2]});
+	    $TwoToThree{$f[2]} = $f[1] ? $f[1] : $f[0] unless (exists $TwoToThree{$f[2]});
 	    if ($f[4]){
 		$TwoToName{$f[2]} = $f[4] unless (exists $TwoToName{$f[2]});
 	    }
