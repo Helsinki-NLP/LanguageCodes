@@ -24,6 +24,12 @@ read_cldr_data($DataParser,$cldrData);
 my $MetaDataParser = new XML::Parser(Handlers => {Start => \&cldrMetaDataTag});
 read_cldr_data($MetaDataParser,$cldrMetaData);
 
+
+## ladino with Latin script is missing
+## TODO: is this correct to set as secondary?
+
+$Lang2Script{lad}{Latn} = 2;
+
 set_default_scripts();
 set_default_territories();
 
@@ -61,6 +67,7 @@ sub read_iso15924{
     open F,"<$file" || die "cannot read from $file\n";
     # binmode(F,":utf8");
     while (<F>){
+	chomp;
 	next if (/^\#/);
 	next unless (/\S/);
 	my ($code, $id, $english, $french, $name, $version, $date) = split(/\;/);
@@ -101,6 +108,7 @@ sub set_default_scripts{
     $DefaultScript{'no'} = 'Latn';
     $DefaultScript{'kmr'} = 'Latn';
     $DefaultScript{'ckb'} = 'Arab';
+    $DefaultScript{'lad'} = 'Hebr';
 }
 
 
