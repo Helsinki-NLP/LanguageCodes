@@ -88,12 +88,13 @@ while (<>){
 	if ($opt_l){
 	    # if ($opt_1){ push( @output, &get_iso639_1($opt_l, 1) ); }
 	    # elsif ($opt_3){ push( @output, &get_iso639_3($opt_l, 1) ); }
-	    if ($opt_l eq 'ku'){
-		$opt_l .= '_'.$script;
-		$DefaultScript = &get_default_script(&get_iso639_3($opt_l));
+	    my $langid = $opt_l;
+	    if ($opt_l eq 'ku' || $opt_l eq 'kur'){
+		$langid = 'ku_'.$script;
+		$DefaultScript = &get_default_script(&get_iso639_3($langid));
 	    }
-	    if ($opt_1){ push( @output, &get_iso639_1($opt_l) ); }
-	    elsif ($opt_3){ push( @output, &get_iso639_3($opt_l) ); }
+	    if ($opt_1){ push( @output, &get_iso639_1($langid) ); }
+	    elsif ($opt_3){ push( @output, &get_iso639_3($langid) ); }
 	}
 
 	unless ( $opt_D && ( ($script eq $DefaultScript) || ($script eq 'Zyyy') ) ){
